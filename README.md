@@ -285,7 +285,7 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 
 ---
 
-## �🚀 Development Process
+## 🚀 Development Process
 
 Follow this process strictly to avoid conflicts and maintain a clean workflow.
 
