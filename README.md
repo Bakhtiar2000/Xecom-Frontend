@@ -146,7 +146,9 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 * **`forms/`** - Form components with validation logic
 * **`admin/`** - Components exclusive to admin panel
 * **`customer/`** - Components exclusive to customer-facing pages
-* **Rule:** Components should be PascalCase (e.g., `ProductCard.tsx`)
+
+> [!NOTE]
+> **📌 Rule:** Components should be PascalCase (e.g., `ProductCard.tsx`)
 
 ---
 
@@ -159,7 +161,9 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 * `loading.tsx` - Loading UI (optional)
 * `error.tsx` - Error UI (optional)
 * `not-found.tsx` - 404 page
-* **Rule:** All pages go here, not in a separate `pages/` folder (Next.js 13+ App Router)
+
+> [!NOTE]
+> **📌 Rule:** All pages go here, not in a separate `pages/` folder (Next.js 13+ App Router)
 
 ---
 
@@ -171,7 +175,9 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
   * `axios.ts` - Axios instance with interceptors
   * `validators.ts` - Zod/Yup validation schemas
   * `api-client.ts` - Reusable API client logic
-* **Rule:** Library-specific configurations go here
+
+> [!NOTE]
+> **📌 Rule:** Library-specific configurations go here
 
 ---
 
@@ -183,7 +189,9 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
   * `formatDate.ts` - Date formatting functions
   * `generateSlug.ts` - URL slug generation
   * `calculatePrice.ts` - Price/discount calculations
-* **Rule:** camelCase naming (e.g., `verifyToken.ts`)
+
+> [!NOTE]
+> **📌 Rule:** camelCase naming (e.g., `verifyToken.ts`)
 
 ---
 
@@ -195,7 +203,9 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
   * `global.ts` - Global constants (`API_URL`, `APP_NAME`, `MAX_FILE_SIZE`)
   * `routes.ts` - Route path constants
   * `messages.ts` - Error/success message templates
-* **Rule:** UPPER_SNAKE_CASE for constants, PascalCase for enums
+
+> [!NOTE]
+> **📌 Rule:** UPPER_SNAKE_CASE for constants, PascalCase for enums
 
 ---
 
@@ -207,7 +217,9 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
   * `user.type.ts` - User, Profile, UserResponse
   * `product.type.ts` - Product, Category, ProductFilters
   * `api.type.ts` - API request/response types
-* **Rule:** Use `.type.ts` extension, PascalCase for types
+
+> [!NOTE]
+> **📌 Rule:** Use `.type.ts` extension, PascalCase for types
 
 ---
 
@@ -220,7 +232,9 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
   * Each feature has its own folder
   * Use `.api.ts` for RTK Query endpoints
   * Use `.slice.ts` for Redux slices
-* **Rule:** Follow feature-based organization
+
+> [!NOTE]
+> **📌 Rule:** Follow feature-based organization
 
 ---
 
@@ -228,7 +242,9 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 
 * **Purpose:** Static assets served directly
 * Organize by type: `images/`, `icons/`, `fonts/`, `videos/`
-* **Rule:** Use descriptive names, optimize images before adding
+
+> [!NOTE]
+> **📌 Rule:** Use descriptive names, optimize images before adding
 
 ---
 
