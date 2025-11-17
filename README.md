@@ -66,6 +66,9 @@ dev  ←  your-branch
 Your PR will be reviewed.
 Fix requested changes, update commits, and push again.
 
+> [!TIP]
+> **✅ DO:** Always Choose a Reviewer
+
 ---
 
 ### 6. Merge Into `dev`
