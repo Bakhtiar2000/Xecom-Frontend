@@ -54,8 +54,10 @@ All PRs must be created **from your branch → into `dev`**.
 dev  ←  your-branch
 ```
 
-Do **NOT** create PRs into `main`.
-Do **NOT** push directly to `main`.
+> [!CAUTION]
+> **Do NOT create PRs into `main`.**
+> 
+> **Do NOT push directly to `main`.**
 
 ---
 
