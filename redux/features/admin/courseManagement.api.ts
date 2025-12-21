@@ -3,7 +3,7 @@
 ===========================================================================================
     This component is just for example to show how redux api services are created. 
 ===========================================================================================
-*/
+
 
 import {
   TAcademicSemester,
@@ -208,3 +208,5 @@ export const {
   useGetCourseFacultiesQuery,
   useCreateOfferedCourseMutation,
 } = courseManagementApi;
+
+*/
