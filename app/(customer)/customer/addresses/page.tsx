@@ -32,7 +32,7 @@ export default function CustomerAddresses() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {addresses.map((address) => (
-          <Card key={address.id} className="card-elevated">
+          <Card key={address.id} className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
             <CardHeader>
               <div className="flex justify-between items-start">
                 <CardTitle className="flex items-center space-x-2">
@@ -76,7 +76,7 @@ export default function CustomerAddresses() {
         ))}
       </div>
 
-      <Card className="card-elevated">
+      <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
         <CardContent className="p-8 text-center border-2 border-dashed border-gray-300">
           <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

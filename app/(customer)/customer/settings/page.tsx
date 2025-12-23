@@ -8,7 +8,7 @@ export default function CustomerSettings() {
       <h1 className="text-3xl font-bold text-gray-900">Account Settings</h1>
 
       {/* Profile Settings */}
-      <Card className="card-elevated">
+      <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
           <CardTitle>Profile Information</CardTitle>
         </CardHeader>
@@ -47,7 +47,7 @@ export default function CustomerSettings() {
       </Card>
 
       {/* Password Settings */}
-      <Card className="card-elevated">
+      <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
           <CardTitle>Change Password</CardTitle>
         </CardHeader>
@@ -78,7 +78,7 @@ export default function CustomerSettings() {
       </Card>
 
       {/* Notification Settings */}
-      <Card className="card-elevated">
+      <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
           <CardTitle>Notification Preferences</CardTitle>
         </CardHeader>
@@ -116,7 +116,7 @@ export default function CustomerSettings() {
       </Card>
 
       {/* Account Actions */}
-      <Card className="card-elevated">
+      <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
           <CardTitle>Account Actions</CardTitle>
         </CardHeader>

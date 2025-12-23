@@ -13,7 +13,7 @@ export default function CustomerProfile() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Profile Information */}
                 <div className="lg:col-span-2">
-                    <Card className="card-elevated">
+                    <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                         <CardHeader>
                             <CardTitle>Personal Information</CardTitle>
                             <CardDescription>
@@ -52,7 +52,7 @@ export default function CustomerProfile() {
 
                 {/* Profile Picture */}
                 <div>
-                    <Card className="card-elevated">
+                    <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                         <CardHeader>
                             <CardTitle>Profile Picture</CardTitle>
                             <CardDescription>
@@ -72,7 +72,7 @@ export default function CustomerProfile() {
             </div>
 
             {/* Account Security */}
-            <Card className="card-elevated">
+            <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
                     <CardTitle>Security Settings</CardTitle>
                     <CardDescription>

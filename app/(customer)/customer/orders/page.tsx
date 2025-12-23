@@ -49,7 +49,7 @@ export default function CustomerOrders() {
 
             <div className="space-y-4">
                 {orders.map((order) => (
-                    <Card key={order.id} className="card-elevated">
+                    <Card key={order.id} className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                         <CardHeader>
                             <div className="flex justify-between items-start">
                                 <div>
@@ -99,7 +99,7 @@ export default function CustomerOrders() {
             </div>
 
             {/* Order Filters */}
-            <Card className="card-elevated">
+            <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
                     <CardTitle>Filter Orders</CardTitle>
                 </CardHeader>

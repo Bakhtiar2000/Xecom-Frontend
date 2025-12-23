@@ -41,7 +41,7 @@ export default function CustomerWishlist() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {wishlistItems.map((item) => (
-          <Card key={item.id} className="card-elevated">
+          <Card key={item.id} className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
             <CardContent className="p-4">
               <div className="aspect-square bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
                 <span className="text-gray-400">Product Image</span>
@@ -79,7 +79,7 @@ export default function CustomerWishlist() {
       </div>
 
       {wishlistItems.length === 0 && (
-        <Card className="card-elevated">
+        <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
           <CardContent className="p-12 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

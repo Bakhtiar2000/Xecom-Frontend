@@ -7,7 +7,7 @@ export default function AdminDashboard() {
         <div className="space-y-6">
             {/* Stats Overview */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="card-elevated">
+                <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-600">Total Revenue</CardTitle>
                     </CardHeader>
@@ -17,7 +17,7 @@ export default function AdminDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="card-elevated">
+                <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-600">Total Orders</CardTitle>
                     </CardHeader>
@@ -27,7 +27,7 @@ export default function AdminDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="card-elevated">
+                <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-600">Active Products</CardTitle>
                     </CardHeader>
@@ -37,7 +37,7 @@ export default function AdminDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="card-elevated">
+                <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-600">Total Customers</CardTitle>
                     </CardHeader>
@@ -49,7 +49,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Recent Orders */}
-            <Card className="card-elevated">
+            <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <CardTitle>Recent Orders</CardTitle>
@@ -89,7 +89,7 @@ export default function AdminDashboard() {
 
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card className="card-elevated card-interactive">
+                <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
                     <CardContent className="p-6 text-center">
                         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,7 +104,7 @@ export default function AdminDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="card-elevated card-interactive">
+                <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
                     <CardContent className="p-6 text-center">
                         <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="card-elevated card-interactive">
+                <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
                     <CardContent className="p-6 text-center">
                         <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +134,7 @@ export default function AdminDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="card-elevated card-interactive">
+                <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
                     <CardContent className="p-6 text-center">
                         <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -149,7 +149,7 @@ export default function AdminDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="card-elevated card-interactive">
+                <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
                     <CardContent className="p-6 text-center">
                         <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="card-elevated card-interactive">
+                <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
                     <CardContent className="p-6 text-center">
                         <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
