@@ -2,6 +2,20 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/sections/shared/ThemeToggle";
 import { adminRoutes, adminFooterRoutes } from "@/route/admin.route";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
+import { LogOut } from "lucide-react";
 
 export default function AdminLayout({
   children,
@@ -9,76 +23,92 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen bg-muted overflow-hidden">
-      {/* Sidebar */}
-      <aside className="w-64 bg-background shadow-lg flex-0 overflow-y-auto scrollbar-none">
-        <div className="p-4">
-          <Link
-            href="/"
-            className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity block mb-4"
-          >
-            Xecom Admin
-          </Link>
+    <SidebarProvider>
+      <div className="flex h-screen w-full overflow-hidden">
+        <Sidebar>
+          <SidebarHeader>
+            <Link
+              href="/"
+              className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity px-2"
+            >
+              Xecom Admin
+            </Link>
+          </SidebarHeader>
 
-          <nav className="space-y-2">
+          <SidebarContent>
             {adminRoutes.map((group, groupIndex) => (
-              <div key={groupIndex} className={group.title ? "mt-4" : ""}>
+              <SidebarGroup key={groupIndex}>
                 {group.title && (
-                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                    {group.title}
-                  </h3>
+                  <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
                 )}
-                {group.routes.map((route) => (
-                  <Link
-                    key={route.href}
-                    href={route.href}
-                    className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium block py-2 px-4 rounded-md hover:bg-muted"
-                  >
-                    {route.label}
-                  </Link>
-                ))}
-              </div>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {group.routes.map((route) => {
+                      const Icon = route.icon;
+                      return (
+                        <SidebarMenuItem key={route.href}>
+                          <SidebarMenuButton asChild>
+                            <Link href={route.href}>
+                              {Icon && <Icon className="h-4 w-4" />}
+                              <span>{route.label}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    })}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
             ))}
+          </SidebarContent>
 
-            <hr className="my-4" />
+          <SidebarFooter>
+            <SidebarMenu>
+              {adminFooterRoutes.map((route) => {
+                const Icon = route.icon;
+                return (
+                  <SidebarMenuItem key={route.href}>
+                    <SidebarMenuButton asChild>
+                      <Link href={route.href}>
+                        {Icon && <Icon className="h-4 w-4" />}
+                        <span>{route.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <LogOut className="h-4 w-4" />
+                  <span>Logout</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
 
-            {adminFooterRoutes.map((route) => (
-              <Link
-                key={route.href}
-                href={route.href}
-                className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium block py-2 px-4 rounded-md hover:bg-muted"
-              >
-                {route.label}
-              </Link>
-            ))}
-            <Button variant="outline" className="w-full mt-4">
-              Logout
-            </Button>
-          </nav>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="bg-background shadow-sm border-b px-4 py-4 flex-0">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-semibold text-foreground">
-              Admin Dashboard
-            </h1>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <span className="text-muted-foreground">Welcome, Admin!</span>
-              <div className="w-8 h-8 bg-danger rounded-full flex items-center justify-center text-primary-foreground font-medium">
-                A
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Header */}
+          <header className="bg-background shadow-sm border-b px-4 py-4 flex-shrink-0">
+            <div className="flex justify-between items-center">
+              <h1 className="text-2xl font-semibold text-foreground">
+                Admin Dashboard
+              </h1>
+              <div className="flex items-center space-x-4">
+                <ThemeToggle />
+                <span className="text-muted-foreground">Welcome, Admin!</span>
+                <div className="w-8 h-8 bg-danger rounded-full flex items-center justify-center text-primary-foreground font-medium">
+                  A
+                </div>
               </div>
             </div>
-          </div>
-        </header>
+          </header>
 
-        {/* Content Area */}
-        <main className="flex-1 overflow-y-auto p-4">{children}</main>
+          {/* Content Area */}
+          <main className="flex-1 overflow-y-auto p-4">{children}</main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
