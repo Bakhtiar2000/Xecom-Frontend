@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import ThemeToggle from "@/components/sections/shared/ThemeToggle";
 
 export default function CustomerLayout({
   children,
@@ -81,7 +82,10 @@ export default function CustomerLayout({
               Customer Dashboard
             </h1>
             <div className="flex items-center space-x-4">
-              <span className="text-muted-foreground">Welcome back, Customer!</span>
+              <ThemeToggle />
+              <span className="text-muted-foreground">
+                Welcome back, Customer!
+              </span>
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-medium">
                 C
               </div>

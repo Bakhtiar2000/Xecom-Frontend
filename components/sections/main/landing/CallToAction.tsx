@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function CallToAction() {
   return (
-    <section className="py-4 bg-primary text-primary-foreground">
+    <section className="py-4 bg-primary text-primary-foreground mb-4">
       <div className="container">
         <h2 className="text-3xl font-bold mb-4 text-center">
           Ready to Start Shopping?

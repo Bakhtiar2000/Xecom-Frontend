@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import ThemeToggle from "@/components/sections/shared/ThemeToggle";
 
 export default function Navbar() {
   return (
@@ -46,6 +47,7 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center space-x-4">
+          <ThemeToggle />
           <Link href="/login">
             <Button variant="outline" size="sm">
               Login

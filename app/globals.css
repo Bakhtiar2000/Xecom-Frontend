@@ -2,46 +2,28 @@
 @import "tw-animate-css";
 
 @theme {
-  /* Container Configuration */
-  --container-center: true;
-  --container-padding: 1.5rem;
-  --container-screens-sm: 600px;
-  --container-screens-md: 728px;
-  --container-screens-lg: 984px;
-  --container-screens-xl: 1240px;
-  --container-screens-2xl: 1440px;
-
+  /* --------------------- Light Mode ------------------------- */
   /* Primary Color System */
-  --color-primary: #000000;
+  --color-primary: #10b981;
   --color-primary-foreground: #ffffff;
-  --color-primary-light: #333333;
-  --color-primary-dark: #000000;
 
   /* Secondary Colors */
   --color-secondary: #666666;
-  --color-secondary-light: #999999;
-  --color-secondary-dark: #444444;
+  --color-secondary-foreground: #ffffff;
 
   /* Semantic Colors */
   --color-success: #2d5016;
-  --color-success-light: #4a7c2c;
-  --color-success-dark: #1a3009;
-
+  --color-success-foreground: #d1fae5;
   --color-danger: #7f1d1d;
-  --color-danger-light: #b91c1c;
-  --color-danger-dark: #450a0a;
-
+  --color-danger-foreground: #fca5a5;
   --color-warning: #78350f;
-  --color-warning-light: #b45309;
-  --color-warning-dark: #451a03;
-
+  --color-warning-foreground: #fcd34d;
   --color-info: #0c4a6e;
-  --color-info-light: #0369a1;
-  --color-info-dark: #082f49;
+  --color-info-foreground: #7dd3fc;
 
-  /* Shadcn UI Colors (Light Mode) */
+  /* Shadcn UI Colors */
   --color-background: #ffffff; /* Main page background */
-  --color-foreground: #000000; /* Primary text color */
+  --color-foreground: #000000; /* Main text color */
   --color-card: #fafafa; /* Card/container backgrounds */
   --color-card-foreground: #000000; /* Text inside cards */
   --color-popover: #ffffff; /* Dropdown/modal backgrounds */
@@ -62,9 +44,6 @@
   /* Sidebar Colors */
   --color-sidebar: #fafafa;
   --color-sidebar-foreground: #171717;
-  --color-sidebar-primary: #000000;
-  --color-sidebar-primary-foreground: #ffffff;
-  --color-sidebar-border: #e5e5e5;
 
   /* Animations */
   --animate-fade-in: fadeIn 0.3s ease-in-out;
@@ -93,6 +72,25 @@
 
 /* Dark Mode Colors */
 :root.dark {
+  /*  Dark Mode Primary Colors - unchanged */
+  --color-primary: #10b981;
+  --color-primary-foreground: #ffffff;
+
+  /* Dark Mode Secondary Colors -unchanged */
+  --color-secondary: #666666;
+  --color-secondary-foreground: #ffffff;
+
+  /* Dark mode semantic colors */
+  --color-success: #86efac;
+  --color-success-foreground: #4ade80;
+  --color-danger: #fca5a5;
+  --color-danger-foreground: #f87171;
+  --color-warning: #fcd34d;
+  --color-warning-foreground: #fcd34d;
+  --color-info: #7dd3fc;
+  --color-info-foreground: #38bdf8;
+
+  /* Dark mode semantic colors */
   --color-background: #0a0a0a;
   --color-foreground: #fafafa;
   --color-card: #171717;
@@ -105,23 +103,6 @@
   --color-accent-foreground: #fafafa;
   --color-border: #404040;
 
-  /* Dark mode semantic colors - lighter tints for dark background */
-  --color-success: #86efac; /* Light green */
-  --color-success-light: #bbf7d0;
-  --color-success-dark: #4ade80;
-
-  --color-danger: #fca5a5; /* Light red */
-  --color-danger-light: #fecaca;
-  --color-danger-dark: #f87171;
-
-  --color-warning: #fcd34d; /* Light yellow */
-  --color-warning-light: #fde047;
-  --color-warning-dark: #facc15;
-
-  --color-info: #7dd3fc; /* Light blue */
-  --color-info-light: #bae6fd;
-  --color-info-dark: #38bdf8;
-
   /* Dark mode chart colors */
   --color-chart-1: #fafafa;
   --color-chart-2: #d4d4d4;
@@ -132,9 +113,6 @@
   /* Dark mode sidebar colors */
   --color-sidebar: #171717;
   --color-sidebar-foreground: #fafafa;
-  --color-sidebar-primary: #ffffff;
-  --color-sidebar-primary-foreground: #0a0a0a;
-  --color-sidebar-border: #404040;
 }
 
 @layer base {
@@ -151,3 +129,11 @@
 }
 
 /* \b(text|bg|border)-[a-z]+-\d{2,3}\b  - VS Code pattern search for finding out tailwind color classes implementation */
+
+/* 
+
+✔ PascalCase → components, sections, layouts
+✔ camelCase → logic, hooks, utils
+✔ kebab-case → folders, routes
+
+*/
