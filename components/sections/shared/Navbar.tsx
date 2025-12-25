@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/sections/shared/ThemeToggle";
+import { mainRoutes } from "@/route/main.route";
 
 export default function Navbar() {
   return (
@@ -14,36 +15,15 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden md:flex gap-4">
-          <Link
-            href="/"
-            className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
-          >
-            Home
-          </Link>
-          <Link
-            href="/products"
-            className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
-          >
-            Products
-          </Link>
-          <Link
-            href="/categories"
-            className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
-          >
-            Categories
-          </Link>
-          <Link
-            href="/deals"
-            className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
-          >
-            Deals
-          </Link>
-          <Link
-            href="/contact"
-            className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
-          >
-            Contact
-          </Link>
+          {mainRoutes.map((route) => (
+            <Link
+              key={route.href}
+              href={route.href}
+              className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
+            >
+              {route.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center space-x-4">
