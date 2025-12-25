@@ -96,36 +96,36 @@ export default function DealsPage() {
     ];
 
     return (
-        <div className="mx-auto px-4 py-8 max-w-7xl">
-            <div className="mb-8">
+        <div className="container">
+            <div className="mb-4">
                 <h1 className="text-4xl font-bold mb-4">🔥 Hot Deals & Offers</h1>
-                <p className="text-gray-600 text-lg">
+                <p className="text-muted-foreground text-lg">
                     Don't miss out on these amazing limited-time deals and discounts!
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {deals.map((deal) => (
-                    <Card key={deal.id} className="hover:shadow-lg transition-shadow border-2 border-red-200">
+                    <Card key={deal.id} className="hover:shadow-lg transition-shadow border-2 border-border">
                         <CardHeader>
                             <div className="relative">
                                 <div className="text-6xl mb-4 text-center">{deal.icon}</div>
-                                <div className="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                                <div className="absolute top-0 right-0 bg-danger text-primary-foreground px-3 py-1 rounded-full text-sm font-bold">
                                     {deal.discount} OFF
                                 </div>
                             </div>
                             <CardTitle>{deal.name}</CardTitle>
                             <CardDescription>{deal.category}</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-3">
+                        <CardContent className="space-y-2">
                             <div className="flex items-center gap-3">
-                                <span className="text-gray-400 line-through">{deal.originalPrice}</span>
-                                <span className="text-2xl font-bold text-red-600">{deal.salePrice}</span>
+                                <span className="text-muted-foreground line-through">{deal.originalPrice}</span>
+                                <span className="text-2xl font-bold text-primary">{deal.salePrice}</span>
                             </div>
-                            <div className="text-sm text-orange-600 font-medium">
+                            <div className="text-sm text-warning font-medium">
                                 ⏰ Ends in {deal.endsIn}
                             </div>
-                            <Button className="w-full bg-red-500 hover:bg-red-600">Grab This Deal</Button>
+                            <Button className="w-full bg-danger hover:bg-danger">Grab This Deal</Button>
                         </CardContent>
                     </Card>
                 ))}

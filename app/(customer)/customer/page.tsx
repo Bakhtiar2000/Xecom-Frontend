@@ -10,12 +10,12 @@ import {
 
 export default function CustomerDashboard() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-2">
       {/* Dashboard Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Total Orders
             </CardTitle>
           </CardHeader>
@@ -25,9 +25,9 @@ export default function CustomerDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Total Spent
             </CardTitle>
           </CardHeader>
@@ -39,9 +39,9 @@ export default function CustomerDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Wishlist Items
             </CardTitle>
           </CardHeader>
@@ -51,9 +51,9 @@ export default function CustomerDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Reward Points
             </CardTitle>
           </CardHeader>
@@ -65,7 +65,7 @@ export default function CustomerDashboard() {
       </div>
 
       {/* Recent Orders */}
-      <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+      <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
           <div className="flex justify-between items-center">
             <CardTitle>Recent Orders</CardTitle>
@@ -77,7 +77,7 @@ export default function CustomerDashboard() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-2">
             {[
               {
                 id: "#ORD-001",
@@ -104,17 +104,17 @@ export default function CustomerDashboard() {
               >
                 <div>
                   <p className="font-medium">{order.id}</p>
-                  <p className="text-sm text-gray-600">{order.date}</p>
+                  <p className="text-sm text-muted-foreground">{order.date}</p>
                 </div>
                 <div className="text-right">
                   <p className="font-medium">{order.amount}</p>
                   <span
                     className={`text-xs px-2 py-1 rounded-full ${
                       order.status === "Delivered"
-                        ? "bg-green-100 text-green-800"
+                        ? "bg-accent text-success"
                         : order.status === "In Transit"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-yellow-100 text-yellow-800"
+                        ? "bg-accent text-info"
+                        : "bg-accent text-accent-foreground"
                     }`}
                   >
                     {order.status}
@@ -127,12 +127,12 @@ export default function CustomerDashboard() {
       </Card>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-          <CardContent className="p-6 text-center">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+          <CardContent className="p-4 text-center">
+            <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
-                className="w-6 h-6 text-blue-600"
+                className="w-6 h-6 text-primary"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -146,7 +146,7 @@ export default function CustomerDashboard() {
               </svg>
             </div>
             <h3 className="font-semibold mb-2">Continue Shopping</h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               Explore our latest products and deals
             </p>
             <Link href="/">
@@ -155,11 +155,11 @@ export default function CustomerDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-          <CardContent className="p-6 text-center">
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+          <CardContent className="p-4 text-center">
+            <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
-                className="w-6 h-6 text-purple-600"
+                className="w-6 h-6 text-primary"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -173,7 +173,7 @@ export default function CustomerDashboard() {
               </svg>
             </div>
             <h3 className="font-semibold mb-2">My Wishlist</h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               View and manage your saved items
             </p>
             <Link href="/customer/wishlist">
@@ -184,11 +184,11 @@ export default function CustomerDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
-          <CardContent className="p-6 text-center">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+          <CardContent className="p-4 text-center">
+            <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
-                className="w-6 h-6 text-green-600"
+                className="w-6 h-6 text-primary"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -208,7 +208,7 @@ export default function CustomerDashboard() {
               </svg>
             </div>
             <h3 className="font-semibold mb-2">Manage Addresses</h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               Update your delivery addresses
             </p>
             <Link href="/customer/addresses">

@@ -24,7 +24,7 @@ export default function ForgetPasswordPage() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-2">
                     <div className="space-y-2">
                         <label htmlFor="email" className="text-sm font-medium">
                             Email Address
@@ -44,7 +44,7 @@ export default function ForgetPasswordPage() {
                     </Button>
 
                     <div className="text-center text-sm">
-                        <Link href="/login" className="text-blue-600 hover:underline">
+                        <Link href="/login" className="text-primary hover:underline">
                             Back to Login
                         </Link>
                     </div>

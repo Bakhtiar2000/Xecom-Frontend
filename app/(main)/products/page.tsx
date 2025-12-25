@@ -15,16 +15,16 @@ export default function ProductsPage() {
     ];
 
     return (
-        <div className="mx-auto px-4 py-8 max-w-7xl">
-            <div className="mb-8">
+        <div className="container">
+            <div className="mb-4">
                 <h1 className="text-4xl font-bold mb-4">All Products</h1>
-                <p className="text-gray-600 text-lg">
+                <p className="text-muted-foreground text-lg">
                     Browse our wide selection of quality products across multiple categories.
                 </p>
             </div>
 
             {/* Filter Section */}
-            <div className="mb-6 flex gap-4">
+            <div className="mb-4 flex gap-4">
                 <Button variant="outline">All Categories</Button>
                 <Button variant="outline">Electronics</Button>
                 <Button variant="outline">Fashion</Button>
@@ -32,7 +32,7 @@ export default function ProductsPage() {
                 <Button variant="outline">Sports</Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {products.map((product) => (
                     <Card key={product.id} className="hover:shadow-lg transition-shadow">
                         <CardHeader>
@@ -42,8 +42,8 @@ export default function ProductsPage() {
                         </CardHeader>
                         <CardContent>
                             <div className="mb-3">
-                                <span className="text-yellow-500">{'⭐'.repeat(Math.floor(product.rating))}</span>
-                                <span className="text-gray-400 text-sm ml-2">({product.rating})</span>
+                                <span className="text-warning">{'⭐'.repeat(Math.floor(product.rating))}</span>
+                                <span className="text-muted-foreground text-sm ml-2">({product.rating})</span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-2xl font-bold" style={{ color: "var(--color-primary)" }}>

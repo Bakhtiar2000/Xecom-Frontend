@@ -20,51 +20,51 @@
   /* Secondary Colors */
   --color-secondary: #666666;
   --color-secondary-light: #999999;
-  --color-secondary-dark: #333333;
+  --color-secondary-dark: #444444;
 
   /* Semantic Colors */
-  --color-success: #000000;
-  --color-success-light: #333333;
-  --color-success-dark: #000000;
+  --color-success: #2d5016;
+  --color-success-light: #4a7c2c;
+  --color-success-dark: #1a3009;
 
-  --color-danger: #000000;
-  --color-danger-light: #333333;
-  --color-danger-dark: #000000;
+  --color-danger: #7f1d1d;
+  --color-danger-light: #b91c1c;
+  --color-danger-dark: #450a0a;
 
-  --color-warning: #000000;
-  --color-warning-light: #333333;
-  --color-warning-dark: #000000;
+  --color-warning: #78350f;
+  --color-warning-light: #b45309;
+  --color-warning-dark: #451a03;
 
-  --color-info: #000000;
-  --color-info-light: #333333;
-  --color-info-dark: #000000;
+  --color-info: #0c4a6e;
+  --color-info-light: #0369a1;
+  --color-info-dark: #082f49;
 
   /* Shadcn UI Colors (Light Mode) */
   --color-background: #ffffff; /* Main page background */
   --color-foreground: #000000; /* Primary text color */
-  --color-card: #ffffff; /* Card/container backgrounds */
+  --color-card: #fafafa; /* Card/container backgrounds */
   --color-card-foreground: #000000; /* Text inside cards */
   --color-popover: #ffffff; /* Dropdown/modal backgrounds */
   --color-popover-foreground: #000000; /* Text in dropdowns/modals */
   --color-muted: #f5f5f5; /* Subtle backgrounds (badges, secondary sections) */
-  --color-muted-foreground: #666666; /* Secondary/less important text */
+  --color-muted-foreground: #737373; /* Secondary/less important text */
   --color-accent: #f0f0f0; /* Highlight backgrounds (hover states) */
-  --color-accent-foreground: #000000; /* Text on accent backgrounds */
-  --color-border: #e0e0e0; /* Dividers and element borders */
+  --color-accent-foreground: #171717; /* Text on accent backgrounds */
+  --color-border: #e5e5e5; /* Dividers and element borders */
 
-  /* Chart Colors */
-  --color-chart-1: #000000;
-  --color-chart-2: #333333;
-  --color-chart-3: #666666;
-  --color-chart-4: #999999;
-  --color-chart-5: #cccccc;
+  /* Chart Colors - Distinct grayscale values */
+  --color-chart-1: #171717;
+  --color-chart-2: #404040;
+  --color-chart-3: #737373;
+  --color-chart-4: #a3a3a3;
+  --color-chart-5: #d4d4d4;
 
   /* Sidebar Colors */
   --color-sidebar: #fafafa;
-  --color-sidebar-foreground: #000000;
+  --color-sidebar-foreground: #171717;
   --color-sidebar-primary: #000000;
   --color-sidebar-primary-foreground: #ffffff;
-  --color-sidebar-border: #e0e0e0;
+  --color-sidebar-border: #e5e5e5;
 
   /* Animations */
   --animate-fade-in: fadeIn 0.3s ease-in-out;
@@ -93,31 +93,48 @@
 
 /* Dark Mode Colors */
 :root.dark {
-  --color-background: #000000;
-  --color-foreground: #ffffff;
-  --color-card: #0a0a0a;
-  --color-card-foreground: #ffffff;
-  --color-popover: #0a0a0a;
-  --color-popover-foreground: #ffffff;
-  --color-muted: #1a1a1a;
-  --color-muted-foreground: #999999;
-  --color-accent: #1a1a1a;
-  --color-accent-foreground: #ffffff;
-  --color-border: #333333;
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
+  --color-card: #171717;
+  --color-card-foreground: #fafafa;
+  --color-popover: #171717;
+  --color-popover-foreground: #fafafa;
+  --color-muted: #262626;
+  --color-muted-foreground: #a3a3a3;
+  --color-accent: #262626;
+  --color-accent-foreground: #fafafa;
+  --color-border: #404040;
+
+  /* Dark mode semantic colors - lighter tints for dark background */
+  --color-success: #86efac; /* Light green */
+  --color-success-light: #bbf7d0;
+  --color-success-dark: #4ade80;
+
+  --color-danger: #fca5a5; /* Light red */
+  --color-danger-light: #fecaca;
+  --color-danger-dark: #f87171;
+
+  --color-warning: #fcd34d; /* Light yellow */
+  --color-warning-light: #fde047;
+  --color-warning-dark: #facc15;
+
+  --color-info: #7dd3fc; /* Light blue */
+  --color-info-light: #bae6fd;
+  --color-info-dark: #38bdf8;
 
   /* Dark mode chart colors */
-  --color-chart-1: #ffffff;
-  --color-chart-2: #cccccc;
-  --color-chart-3: #999999;
-  --color-chart-4: #666666;
-  --color-chart-5: #333333;
+  --color-chart-1: #fafafa;
+  --color-chart-2: #d4d4d4;
+  --color-chart-3: #a3a3a3;
+  --color-chart-4: #737373;
+  --color-chart-5: #525252;
 
   /* Dark mode sidebar colors */
-  --color-sidebar: #0a0a0a;
-  --color-sidebar-foreground: #ffffff;
+  --color-sidebar: #171717;
+  --color-sidebar-foreground: #fafafa;
   --color-sidebar-primary: #ffffff;
-  --color-sidebar-primary-foreground: #000000;
-  --color-sidebar-border: #333333;
+  --color-sidebar-primary-foreground: #0a0a0a;
+  --color-sidebar-border: #404040;
 }
 
 @layer base {
@@ -129,9 +146,8 @@
   }
 }
 
-/* These classes are for reusable css implementations */
-@layer components {
-  .demo-example {
-    @apply bg-background text-foreground border border-border p-4 rounded-lg shadow-sm;
-  }
+.container {
+  @apply mx-auto px-4 py-2 max-w-[600px] md:max-w-[728px] lg:max-w-[984px] xl:max-w-[1240px] 2xl:max-w-[1440px];
 }
+
+/* \b(text|bg|border)-[a-z]+-\d{2,3}\b  - VS Code pattern search for finding out tailwind color classes implementation */

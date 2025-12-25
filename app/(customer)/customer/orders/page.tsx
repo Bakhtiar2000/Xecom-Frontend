@@ -39,7 +39,7 @@ export default function CustomerOrders() {
     ];
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-2">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">My Orders</h2>
                 <Link href="/">
@@ -47,9 +47,9 @@ export default function CustomerOrders() {
                 </Link>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-2">
                 {orders.map((order) => (
-                    <Card key={order.id} className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+                    <Card key={order.id} className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
                         <CardHeader>
                             <div className="flex justify-between items-start">
                                 <div>
@@ -60,10 +60,10 @@ export default function CustomerOrders() {
                                 </div>
                                 <div className="text-right">
                                     <div className="text-lg font-semibold">{order.total}</div>
-                                    <span className={`text-xs px-2 py-1 rounded-full ${order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                                            order.status === 'In Transit' ? 'bg-blue-100 text-blue-800' :
-                                                order.status === 'Processing' ? 'bg-yellow-100 text-yellow-800' :
-                                                    'bg-gray-100 text-gray-800'
+                                    <span className={`text-xs px-2 py-1 rounded-full ${order.status === 'Delivered' ? 'bg-accent text-success' :
+                                            order.status === 'In Transit' ? 'bg-accent text-info' :
+                                                order.status === 'Processing' ? 'bg-accent text-accent-foreground' :
+                                                    'bg-muted text-foreground'
                                         }`}>
                                         {order.status}
                                     </span>
@@ -73,7 +73,7 @@ export default function CustomerOrders() {
                         <CardContent>
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-muted-foreground">
                                         Tracking Number: {order.trackingNumber}
                                     </p>
                                 </div>
@@ -99,7 +99,7 @@ export default function CustomerOrders() {
             </div>
 
             {/* Order Filters */}
-            <Card className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+            <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
                     <CardTitle>Filter Orders</CardTitle>
                 </CardHeader>

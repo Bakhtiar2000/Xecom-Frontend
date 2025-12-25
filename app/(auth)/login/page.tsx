@@ -97,16 +97,16 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-muted py-4 px-4 sm:px-4 lg:px-4">
+      <div className="max-w-md w-full space-y-2">
         <div className="text-center">
           <Link href="/" className="text-3xl font-bold text-primary">
             Xecom
           </Link>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+          <h2 className="mt-4 text-3xl font-bold text-foreground">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-muted-foreground">
             Or{" "}
             <Link
               href="/register"
@@ -125,9 +125,9 @@ const Login = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
               <div>
-                <label htmlFor="userId" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="userId" className="block text-sm font-medium text-muted-foreground">
                   User ID / Email
                 </label>
                 <div className="mt-1">
@@ -137,16 +137,16 @@ const Login = () => {
                     })}
                     type="text"
                     placeholder="Enter your user ID or email"
-                    className={errors.userId ? "border-red-500" : ""}
+                    className={errors.userId ? "border-danger" : ""}
                   />
                   {errors.userId && (
-                    <p className="mt-1 text-sm text-red-600">{errors.userId.message}</p>
+                    <p className="mt-1 text-sm text-primary">{errors.userId.message}</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="password" className="block text-sm font-medium text-muted-foreground">
                   Password
                 </label>
                 <div className="mt-1">
@@ -160,10 +160,10 @@ const Login = () => {
                     })}
                     type="password"
                     placeholder="Enter your password"
-                    className={errors.password ? "border-red-500" : ""}
+                    className={errors.password ? "border-danger" : ""}
                   />
                   {errors.password && (
-                    <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                    <p className="mt-1 text-sm text-primary">{errors.password.message}</p>
                   )}
                 </div>
               </div>
@@ -195,7 +195,7 @@ const Login = () => {
 
         {/* Forgot Password Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-primary flex items-center justify-center z-50">
             <Card className="w-full max-w-md mx-4">
               <CardHeader>
                 <CardTitle>Reset Password</CardTitle>
@@ -204,9 +204,9 @@ const Login = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmitForgot(handleForgotSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmitForgot(handleForgotSubmit)} className="space-y-2">
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="email" className="block text-sm font-medium text-muted-foreground">
                       Email Address
                     </label>
                     <div className="mt-1">
@@ -220,10 +220,10 @@ const Login = () => {
                         })}
                         type="email"
                         placeholder="Enter your email"
-                        className={forgotErrors.email ? "border-red-500" : ""}
+                        className={forgotErrors.email ? "border-danger" : ""}
                       />
                       {forgotErrors.email && (
-                        <p className="mt-1 text-sm text-red-600">errorrrr</p>
+                        <p className="mt-1 text-sm text-primary">errorrrr</p>
                       )}
                     </div>
                   </div>

@@ -63,16 +63,16 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-muted py-4 px-4 sm:px-4 lg:px-4">
+      <div className="max-w-md w-full space-y-2">
         <div className="text-center">
           <Link href="/" className="text-3xl font-bold text-primary">
             Xecom
           </Link>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+          <h2 className="mt-4 text-3xl font-bold text-foreground">
             Create your account
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
               href="/login"
@@ -91,9 +91,9 @@ const Register = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="name" className="block text-sm font-medium text-muted-foreground">
                   Full Name
                 </label>
                 <div className="mt-1">
@@ -107,16 +107,16 @@ const Register = () => {
                     })}
                     type="text"
                     placeholder="Enter your full name"
-                    className={errors.name ? "border-red-500" : ""}
+                    className={errors.name ? "border-danger" : ""}
                   />
                   {errors.name && (
-                    <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                    <p className="mt-1 text-sm text-primary">{errors.name.message}</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email" className="block text-sm font-medium text-muted-foreground">
                   Email Address
                 </label>
                 <div className="mt-1">
@@ -130,16 +130,16 @@ const Register = () => {
                     })}
                     type="email"
                     placeholder="Enter your email"
-                    className={errors.email ? "border-red-500" : ""}
+                    className={errors.email ? "border-danger" : ""}
                   />
                   {errors.email && (
-                    <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                    <p className="mt-1 text-sm text-primary">{errors.email.message}</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="phoneNumber" className="block text-sm font-medium text-muted-foreground">
                   Phone Number
                 </label>
                 <div className="mt-1">
@@ -153,16 +153,16 @@ const Register = () => {
                     })}
                     type="tel"
                     placeholder="Enter your phone number"
-                    className={errors.phoneNumber ? "border-red-500" : ""}
+                    className={errors.phoneNumber ? "border-danger" : ""}
                   />
                   {errors.phoneNumber && (
-                    <p className="mt-1 text-sm text-red-600">{errors.phoneNumber.message}</p>
+                    <p className="mt-1 text-sm text-primary">{errors.phoneNumber.message}</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="password" className="block text-sm font-medium text-muted-foreground">
                   Password
                 </label>
                 <div className="mt-1">
@@ -180,16 +180,16 @@ const Register = () => {
                     })}
                     type="password"
                     placeholder="Create a strong password"
-                    className={errors.password ? "border-red-500" : ""}
+                    className={errors.password ? "border-danger" : ""}
                   />
                   {errors.password && (
-                    <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                    <p className="mt-1 text-sm text-primary">{errors.password.message}</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-muted-foreground">
                   Confirm Password
                 </label>
                 <div className="mt-1">
@@ -201,15 +201,15 @@ const Register = () => {
                     })}
                     type="password"
                     placeholder="Confirm your password"
-                    className={errors.confirmPassword ? "border-red-500" : ""}
+                    className={errors.confirmPassword ? "border-danger" : ""}
                   />
                   {errors.confirmPassword && (
-                    <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+                    <p className="mt-1 text-sm text-primary">{errors.confirmPassword.message}</p>
                   )}
                 </div>
               </div>
 
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-muted-foreground">
                 <p>
                   By creating an account, you agree to our{" "}
                   <Link href="/terms" className="text-primary hover:text-primary/80">

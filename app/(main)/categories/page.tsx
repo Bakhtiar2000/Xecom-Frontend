@@ -69,15 +69,15 @@ export default function CategoriesPage() {
     ];
 
     return (
-        <div className="mx-auto px-4 py-8 max-w-7xl">
-            <div className="mb-8">
+        <div className="container">
+            <div className="mb-4">
                 <h1 className="text-4xl font-bold mb-4">Shop by Category</h1>
-                <p className="text-gray-600 text-lg">
+                <p className="text-muted-foreground text-lg">
                     Browse our wide range of product categories to find exactly what you need.
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {categories.map((category) => (
                     <Link key={category.id} href={`/products?category=${category.name.toLowerCase()}`}>
                         <Card className="hover:shadow-lg transition-all hover:scale-105 cursor-pointer h-full">
@@ -87,7 +87,7 @@ export default function CategoriesPage() {
                                 <CardDescription>{category.description}</CardDescription>
                             </CardHeader>
                             <CardContent className="text-center">
-                                <p className="text-sm text-gray-500">
+                                <p className="text-sm text-muted-foreground">
                                     {category.productCount.toLocaleString()} products
                                 </p>
                             </CardContent>

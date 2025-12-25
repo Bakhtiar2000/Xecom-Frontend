@@ -34,7 +34,7 @@ export default function ResetPasswordPage() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-2">
                     <div className="space-y-2">
                         <label htmlFor="password" className="text-sm font-medium">
                             New Password
@@ -70,7 +70,7 @@ export default function ResetPasswordPage() {
                     </Button>
 
                     <div className="text-center text-sm">
-                        <Link href="/login" className="text-blue-600 hover:underline">
+                        <Link href="/login" className="text-primary hover:underline">
                             Back to Login
                         </Link>
                     </div>
