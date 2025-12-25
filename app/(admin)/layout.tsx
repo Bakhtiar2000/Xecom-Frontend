@@ -1,21 +1,34 @@
+"use client";
+
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/sections/shared/ThemeToggle";
-import { adminRoutes, adminFooterRoutes } from "@/route/admin.route";
+import {
+  adminRoutes,
+  adminMainRoutes,
+  adminFooterRoutes,
+} from "@/route/admin.route";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarProvider,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { LogOut } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown, LogOut, ShoppingBag } from "lucide-react";
 
 export default function AdminLayout({
   children,
@@ -25,41 +38,84 @@ export default function AdminLayout({
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full overflow-hidden">
-        <Sidebar>
+        <Sidebar collapsible="icon">
           <SidebarHeader>
-            <Link
-              href="/"
-              className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity px-2"
-            >
-              Xecom Admin
-            </Link>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton size="lg" asChild>
+                  <Link href="/">
+                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                      <ShoppingBag className="size-4" />
+                    </div>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold">Xecom</span>
+                      <span className="truncate text-xs">Admin Panel</span>
+                    </div>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
           </SidebarHeader>
 
           <SidebarContent>
-            {adminRoutes.map((group, groupIndex) => (
-              <SidebarGroup key={groupIndex}>
-                {group.title && (
-                  <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
-                )}
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {group.routes.map((route) => {
-                      const Icon = route.icon;
-                      return (
-                        <SidebarMenuItem key={route.href}>
-                          <SidebarMenuButton asChild>
-                            <Link href={route.href}>
-                              {Icon && <Icon className="h-4 w-4" />}
-                              <span>{route.label}</span>
-                            </Link>
+            {/* Dashboard - Single Item */}
+            <SidebarGroup className="py-0">
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {adminMainRoutes.map((route) => {
+                    const Icon = route.icon;
+                    return (
+                      <SidebarMenuItem key={route.href}>
+                        <SidebarMenuButton asChild tooltip={route.label}>
+                          <Link href={route.href}>
+                            {Icon && <Icon />}
+                            <span>{route.label}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            {/* Collapsible Menu Items */}
+            <SidebarGroup className="py-0">
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {adminRoutes.map((group, groupIndex) => (
+                    <Collapsible
+                      key={groupIndex}
+                      defaultOpen
+                      className="group/collapsible"
+                    >
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton tooltip={group.title}>
+                            <group.icon />
+                            <span>{group.title}</span>
+                            <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
                           </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      );
-                    })}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-            ))}
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {group.routes.map((route) => (
+                              <SidebarMenuSubItem key={route.href}>
+                                <SidebarMenuSubButton asChild>
+                                  <Link href={route.href}>
+                                    <span>{route.label}</span>
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
           </SidebarContent>
 
           <SidebarFooter>
@@ -68,9 +124,9 @@ export default function AdminLayout({
                 const Icon = route.icon;
                 return (
                   <SidebarMenuItem key={route.href}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild tooltip={route.label}>
                       <Link href={route.href}>
-                        {Icon && <Icon className="h-4 w-4" />}
+                        <Icon />
                         <span>{route.label}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -78,8 +134,8 @@ export default function AdminLayout({
                 );
               })}
               <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <LogOut className="h-4 w-4" />
+                <SidebarMenuButton tooltip="Logout">
+                  <LogOut />
                   <span>Logout</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -90,11 +146,14 @@ export default function AdminLayout({
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
-          <header className="bg-background shadow-sm border-b px-4 py-4 flex-shrink-0">
+          <header className="bg-background shadow-sm border-b px-4 py-4 shrink-0">
             <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-semibold text-foreground">
-                Admin Dashboard
-              </h1>
+              <div className="flex items-center gap-2">
+                <SidebarTrigger />
+                <h1 className="text-2xl font-semibold text-foreground">
+                  Admin Dashboard
+                </h1>
+              </div>
               <div className="flex items-center space-x-4">
                 <ThemeToggle />
                 <span className="text-muted-foreground">Welcome, Admin!</span>

@@ -1,5 +1,4 @@
 import {
-  LayoutDashboard,
   User,
   ShoppingBag,
   Heart,
@@ -12,15 +11,10 @@ import {
 export interface RouteItem {
   label: string;
   href: string;
-  icon?: LucideIcon;
+  icon: LucideIcon;
 }
 
 export const customerRoutes: RouteItem[] = [
-  {
-    label: "Dashboard",
-    href: "/customer",
-    icon: LayoutDashboard,
-  },
   {
     label: "Profile",
     href: "/customer/profile",
@@ -48,7 +42,21 @@ export const customerRoutes: RouteItem[] = [
   },
 ];
 
-export const customerFooterRoutes: RouteItem[] = [
+export const customerMainRoutes: RouteItem[] = [
+  {
+    label: "Dashboard",
+    href: "/customer",
+    icon: User,
+  },
+];
+
+export interface FooterRouteItem {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+}
+
+export const customerFooterRoutes: FooterRouteItem[] = [
   {
     label: "Back to Store",
     href: "/",

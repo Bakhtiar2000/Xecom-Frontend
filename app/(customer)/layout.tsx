@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/sections/shared/ThemeToggle";
-import { customerRoutes, customerFooterRoutes } from "@/route/customer.route";
+import {
+  customerRoutes,
+  customerMainRoutes,
+  customerFooterRoutes,
+} from "@/route/customer.route";
 import {
   Sidebar,
   SidebarContent,
@@ -13,8 +18,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { LogOut } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 
 export default function CustomerLayout({
   children,
@@ -24,27 +30,58 @@ export default function CustomerLayout({
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full overflow-hidden">
-        <Sidebar>
+        <Sidebar collapsible="icon">
           <SidebarHeader>
-            <Link
-              href="/"
-              className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity px-2"
-            >
-              Xecom
-            </Link>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton size="lg" asChild>
+                  <Link href="/">
+                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                      <User className="size-4" />
+                    </div>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold">Xecom</span>
+                      <span className="truncate text-xs">Customer Portal</span>
+                    </div>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
           </SidebarHeader>
 
           <SidebarContent>
-            <SidebarGroup>
+            {/* Dashboard - Main Route */}
+            <SidebarGroup className="py-0">
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {customerMainRoutes.map((route) => {
+                    const Icon = route.icon;
+                    return (
+                      <SidebarMenuItem key={route.href}>
+                        <SidebarMenuButton asChild tooltip={route.label}>
+                          <Link href={route.href}>
+                            <Icon />
+                            <span>{route.label}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            {/* Other Routes */}
+            <SidebarGroup className="py-0">
               <SidebarGroupContent>
                 <SidebarMenu>
                   {customerRoutes.map((route) => {
                     const Icon = route.icon;
                     return (
                       <SidebarMenuItem key={route.href}>
-                        <SidebarMenuButton asChild>
+                        <SidebarMenuButton asChild tooltip={route.label}>
                           <Link href={route.href}>
-                            {Icon && <Icon className="h-4 w-4" />}
+                            <Icon />
                             <span>{route.label}</span>
                           </Link>
                         </SidebarMenuButton>
@@ -62,9 +99,9 @@ export default function CustomerLayout({
                 const Icon = route.icon;
                 return (
                   <SidebarMenuItem key={route.href}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild tooltip={route.label}>
                       <Link href={route.href}>
-                        {Icon && <Icon className="h-4 w-4" />}
+                        <Icon />
                         <span>{route.label}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -72,8 +109,8 @@ export default function CustomerLayout({
                 );
               })}
               <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <LogOut className="h-4 w-4" />
+                <SidebarMenuButton tooltip="Logout">
+                  <LogOut />
                   <span>Logout</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -84,11 +121,14 @@ export default function CustomerLayout({
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
-          <header className="bg-background shadow-sm border-b px-4 py-4 flex-shrink-0">
+          <header className="bg-background shadow-sm border-b px-4 py-4 shrink-0">
             <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-semibold text-foreground">
-                Customer Dashboard
-              </h1>
+              <div className="flex items-center gap-2">
+                <SidebarTrigger />
+                <h1 className="text-2xl font-semibold text-foreground">
+                  Customer Dashboard
+                </h1>
+              </div>
               <div className="flex items-center space-x-4">
                 <ThemeToggle />
                 <span className="text-muted-foreground">

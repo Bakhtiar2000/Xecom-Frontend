@@ -1,15 +1,11 @@
 import {
   LayoutDashboard,
   Package,
-  PackagePlus,
-  FolderTree,
   ShoppingCart,
-  Clock,
   Users,
-  UserCircle,
   BarChart3,
-  TrendingUp,
   Store,
+  ShoppingBag,
   type LucideIcon,
 } from "lucide-react";
 
@@ -20,88 +16,89 @@ export interface RouteItem {
 }
 
 export interface RouteGroup {
-  title?: string;
+  title: string;
+  icon: LucideIcon;
   routes: RouteItem[];
 }
 
 export const adminRoutes: RouteGroup[] = [
   {
-    routes: [
-      {
-        label: "Dashboard",
-        href: "/admin",
-        icon: LayoutDashboard,
-      },
-    ],
-  },
-  {
     title: "Products",
+    icon: Package,
     routes: [
       {
         label: "All Products",
         href: "/admin/products",
-        icon: Package,
       },
       {
         label: "Add Product",
         href: "/admin/products/add",
-        icon: PackagePlus,
       },
       {
         label: "Categories",
         href: "/admin/categories",
-        icon: FolderTree,
       },
     ],
   },
   {
     title: "Orders",
+    icon: ShoppingCart,
     routes: [
       {
         label: "All Orders",
         href: "/admin/orders",
-        icon: ShoppingCart,
       },
       {
         label: "Pending Orders",
         href: "/admin/orders/pending",
-        icon: Clock,
       },
     ],
   },
   {
     title: "Users",
+    icon: Users,
     routes: [
       {
         label: "All Users",
         href: "/admin/users",
-        icon: Users,
       },
       {
         label: "Customers",
         href: "/admin/users/customers",
-        icon: UserCircle,
       },
     ],
   },
   {
     title: "Analytics",
+    icon: BarChart3,
     routes: [
       {
         label: "Reports",
         href: "/admin/analytics",
-        icon: BarChart3,
       },
       {
         label: "Sales Analytics",
         href: "/admin/analytics/sales",
-        icon: TrendingUp,
       },
     ],
   },
 ];
 
-export const adminFooterRoutes: RouteItem[] = [
+export const adminMainRoutes: RouteItem[] = [
+  {
+    label: "Dashboard",
+    href: "/admin",
+    icon: LayoutDashboard,
+  },
+];
+
+export interface FooterRouteItem {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+}
+
+export const adminFooterRoutes: FooterRouteItem[] = [
   {
     label: "View Store",
     href: "/",
