@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/sections/shared/ThemeToggle";
@@ -30,6 +31,14 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDown, LogOut, ShoppingBag } from "lucide-react";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function AdminLayout({
   children,
@@ -37,6 +46,35 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+
+  // Generate breadcrumb items from pathname
+  const generateBreadcrumbs = () => {
+    const paths = pathname.split("/").filter(Boolean);
+    const breadcrumbs = [{ label: "Dashboard", href: "/admin" }];
+
+    if (paths.length > 1) {
+      // Find the route group and label
+      for (let i = 1; i < paths.length; i++) {
+        const currentPath = "/" + paths.slice(0, i + 1).join("/");
+
+        // Check in adminRoutes for nested routes
+        for (const group of adminRoutes) {
+          const route = group.routes.find((r) => r.href === currentPath);
+          if (route) {
+            if (i === 1) {
+              breadcrumbs.push({ label: group.title, href: "" });
+            }
+            breadcrumbs.push({ label: route.label, href: currentPath });
+            break;
+          }
+        }
+      }
+    }
+
+    return breadcrumbs;
+  };
+
+  const breadcrumbs = generateBreadcrumbs();
 
   return (
     <SidebarProvider>
@@ -163,11 +201,34 @@ export default function AdminLayout({
           {/* Header */}
           <header className="bg-background shadow-sm border-b px-4 py-4 shrink-0">
             <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
                 <SidebarTrigger />
-                <h1 className="text-2xl font-semibold text-foreground">
-                  Admin Dashboard
-                </h1>
+                <div className="flex flex-col gap-1">
+                  <Breadcrumb>
+                    <BreadcrumbList>
+                      {breadcrumbs.map((crumb, index) => (
+                        <React.Fragment key={crumb.href || crumb.label}>
+                          <BreadcrumbItem>
+                            {index === breadcrumbs.length - 1 ? (
+                              <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                            ) : crumb.href ? (
+                              <BreadcrumbLink asChild>
+                                <Link href={crumb.href}>{crumb.label}</Link>
+                              </BreadcrumbLink>
+                            ) : (
+                              <span className="text-muted-foreground">
+                                {crumb.label}
+                              </span>
+                            )}
+                          </BreadcrumbItem>
+                          {index < breadcrumbs.length - 1 && (
+                            <BreadcrumbSeparator />
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                </div>
               </div>
               <div className="flex items-center space-x-4">
                 <ThemeToggle />

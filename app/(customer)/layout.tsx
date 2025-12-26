@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/sections/shared/ThemeToggle";
@@ -22,6 +23,14 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { LogOut, User } from "lucide-react";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function CustomerLayout({
   children,
@@ -29,6 +38,25 @@ export default function CustomerLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+
+  // Generate breadcrumb items from pathname
+  const generateBreadcrumbs = () => {
+    const breadcrumbs = [{ label: "Dashboard", href: "/customer" }];
+
+    if (pathname !== "/customer") {
+      // Find the current route
+      const allRoutes = [...customerMainRoutes, ...customerRoutes];
+      const currentRoute = allRoutes.find((r) => r.href === pathname);
+
+      if (currentRoute) {
+        breadcrumbs.push({ label: currentRoute.label, href: pathname });
+      }
+    }
+
+    return breadcrumbs;
+  };
+
+  const breadcrumbs = generateBreadcrumbs();
 
   return (
     <SidebarProvider>
@@ -134,11 +162,30 @@ export default function CustomerLayout({
           {/* Header */}
           <header className="bg-background shadow-sm border-b px-4 py-4 shrink-0">
             <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
                 <SidebarTrigger />
-                <h1 className="text-2xl font-semibold text-foreground">
-                  Customer Dashboard
-                </h1>
+                <div className="flex flex-col gap-1">
+                  <Breadcrumb>
+                    <BreadcrumbList>
+                      {breadcrumbs.map((crumb, index) => (
+                        <React.Fragment key={crumb.href}>
+                          <BreadcrumbItem>
+                            {index === breadcrumbs.length - 1 ? (
+                              <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                            ) : (
+                              <BreadcrumbLink asChild>
+                                <Link href={crumb.href}>{crumb.label}</Link>
+                              </BreadcrumbLink>
+                            )}
+                          </BreadcrumbItem>
+                          {index < breadcrumbs.length - 1 && (
+                            <BreadcrumbSeparator />
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                </div>
               </div>
               <div className="flex items-center space-x-4">
                 <ThemeToggle />

@@ -28,15 +28,15 @@ export const adminRoutes: RouteGroup[] = [
     routes: [
       {
         label: "All Products",
-        href: "/admin/products",
+        href: "/admin/products/all-products",
       },
       {
         label: "Add Product",
-        href: "/admin/products/add",
+        href: "/admin/products/add-product",
       },
       {
         label: "Categories",
-        href: "/admin/categories",
+        href: "/admin/products/categories",
       },
     ],
   },
@@ -46,7 +46,7 @@ export const adminRoutes: RouteGroup[] = [
     routes: [
       {
         label: "All Orders",
-        href: "/admin/orders",
+        href: "/admin/orders/all-orders",
       },
       {
         label: "Pending Orders",
@@ -60,7 +60,7 @@ export const adminRoutes: RouteGroup[] = [
     routes: [
       {
         label: "All Users",
-        href: "/admin/users",
+        href: "/admin/users/all-users",
       },
       {
         label: "Customers",
@@ -74,7 +74,7 @@ export const adminRoutes: RouteGroup[] = [
     routes: [
       {
         label: "Reports",
-        href: "/admin/analytics",
+        href: "/admin/analytics/reports",
       },
       {
         label: "Sales Analytics",
