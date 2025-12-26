@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/sections/shared/ThemeToggle";
 import {
   adminRoutes,
@@ -35,6 +36,8 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full overflow-hidden">
@@ -66,7 +69,11 @@ export default function AdminLayout({
                     const Icon = route.icon;
                     return (
                       <SidebarMenuItem key={route.href}>
-                        <SidebarMenuButton asChild tooltip={route.label}>
+                        <SidebarMenuButton
+                          asChild
+                          tooltip={route.label}
+                          isActive={pathname === route.href}
+                        >
                           <Link href={route.href}>
                             {Icon && <Icon />}
                             <span>{route.label}</span>
@@ -91,7 +98,12 @@ export default function AdminLayout({
                     >
                       <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
-                          <SidebarMenuButton tooltip={group.title}>
+                          <SidebarMenuButton
+                            tooltip={group.title}
+                            isActive={group.routes.some(
+                              (route) => pathname === route.href
+                            )}
+                          >
                             <group.icon />
                             <span>{group.title}</span>
                             <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
@@ -101,7 +113,10 @@ export default function AdminLayout({
                           <SidebarMenuSub>
                             {group.routes.map((route) => (
                               <SidebarMenuSubItem key={route.href}>
-                                <SidebarMenuSubButton asChild>
+                                <SidebarMenuSubButton
+                                  asChild
+                                  isActive={pathname === route.href}
+                                >
                                   <Link href={route.href}>
                                     <span>{route.label}</span>
                                   </Link>

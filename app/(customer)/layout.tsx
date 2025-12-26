@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/sections/shared/ThemeToggle";
 import {
   customerRoutes,
@@ -27,6 +28,8 @@ export default function CustomerLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full overflow-hidden">
@@ -58,7 +61,11 @@ export default function CustomerLayout({
                     const Icon = route.icon;
                     return (
                       <SidebarMenuItem key={route.href}>
-                        <SidebarMenuButton asChild tooltip={route.label}>
+                        <SidebarMenuButton
+                          asChild
+                          tooltip={route.label}
+                          isActive={pathname === route.href}
+                        >
                           <Link href={route.href}>
                             <Icon />
                             <span>{route.label}</span>
@@ -79,7 +86,11 @@ export default function CustomerLayout({
                     const Icon = route.icon;
                     return (
                       <SidebarMenuItem key={route.href}>
-                        <SidebarMenuButton asChild tooltip={route.label}>
+                        <SidebarMenuButton
+                          asChild
+                          tooltip={route.label}
+                          isActive={pathname === route.href}
+                        >
                           <Link href={route.href}>
                             <Icon />
                             <span>{route.label}</span>
