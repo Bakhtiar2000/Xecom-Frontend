@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function HeroSection() {
   return (
-    <section className="bg-primary text-primary-foreground py-4">
+    <section className="bg-primary text-primary-foreground py-16">
       <div className="container">
         <h1 className="text-5xl font-bold mb-4 text-center animate-fade-in">
           Welcome to Xecom

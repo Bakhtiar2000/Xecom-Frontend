@@ -9,7 +9,7 @@ export default function Navbar() {
       <div className="container flex justify-between items-center gap-4">
         <Link
           href="/"
-          className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity"
+          className="text-2xl font-bold text-foreground hover:opacity-80 transition-opacity"
         >
           Xecom
         </Link>
@@ -19,7 +19,7 @@ export default function Navbar() {
             <Link
               key={route.href}
               href={route.href}
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
+              className="text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium"
             >
               {route.label}
             </Link>

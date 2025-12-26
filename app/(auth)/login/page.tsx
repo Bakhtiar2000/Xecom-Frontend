@@ -14,6 +14,7 @@ import { setUser } from "@/redux/features/auth/authSlice";
 import { verifyToken } from "@/utils/verifyToken";
 import { TUser } from "@/redux/features/auth/authSlice";
 import { TResponse } from "@/types/global.type";
+import { UserRole } from "@/constants/enum";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -84,7 +85,7 @@ const Login = () => {
       if (res?.data?.needsPasswordChange) {
         router.push("/change-password");
       } else {
-        if (user.role === "CUSTOMER") {
+        if (user.role === UserRole.CUSTOMER) {
           router.push("/");
         } else {
           router.push(`/${user.role.toLowerCase()}/dashboard`);

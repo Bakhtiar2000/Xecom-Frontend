@@ -4,50 +4,70 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* --------------------- Light Mode ------------------------- */
-  /* Primary Color System */
-  --color-primary: #10b981;
-  --color-primary-foreground: #ffffff;
+  /* =====================================================
+     LIGHT MODE - Premium Black & White Foundation
+     ===================================================== */
 
-  /* Secondary Colors */
-  --color-secondary: #666666;
-  --color-secondary-foreground: #ffffff;
+  /* Primary Color System - Pure Monochrome Authority */
+  --color-primary: #000000; /* Deep black - commands attention */
+  --color-primary-foreground: #ffffff; /* Pure white - maximum contrast */
 
-  /* Semantic Colors */
-  --color-success: #2d5016;
-  --color-success-foreground: #d1fae5;
-  --color-danger: #7f1d1d;
-  --color-danger-foreground: #fca5a5;
-  --color-warning: #78350f;
-  --color-warning-foreground: #fcd34d;
-  --color-info: #0c4a6e;
-  --color-info-foreground: #7dd3fc;
+  /* Secondary Colors - Sophisticated Gray Depth */
+  --color-secondary: #1a1a1a; /* Rich charcoal - subtle depth */
+  --color-secondary-foreground: #f5f5f5; /* Warm white - softened contrast */
 
-  /* Shadcn UI Colors */
-  --color-background: #ffffff; /* Main page background */
-  --color-foreground: #000000; /* Main text color */
-  --color-card: #fafafa; /* Card/container backgrounds */
-  --color-card-foreground: #000000; /* Text inside cards */
-  --color-popover: #ffffff; /* Dropdown/modal backgrounds */
-  --color-popover-foreground: #000000; /* Text in dropdowns/modals */
-  --color-muted: #f5f5f5; /* Subtle backgrounds (badges, secondary sections) */
-  --color-muted-foreground: #737373; /* Secondary/less important text */
-  --color-accent: #f0f0f0; /* Highlight backgrounds (hover states) */
-  --color-accent-foreground: #171717; /* Text on accent backgrounds */
-  --color-border: #e5e5e5; /* Dividers and element borders */
+  /* Semantic Colors - Muted, Refined Accents */
+  --color-success: #1a3a1a; /* Forest black-green - understated achievement */
+  --color-success-foreground: #d4e8d4; /* Pale sage - gentle affirmation */
 
-  /* Chart Colors - Distinct grayscale values */
-  --color-chart-1: #171717;
-  --color-chart-2: #404040;
-  --color-chart-3: #737373;
-  --color-chart-4: #a3a3a3;
-  --color-chart-5: #d4d4d4;
+  --color-danger: #3a1a1a; /* Wine black-red - dignified warning */
+  --color-danger-foreground: #f2d5d5; /* Blush pink - soft alert */
 
-  /* Sidebar Colors */
+  --color-warning: #3a2f1a; /* Sepia black-gold - refined caution */
+  --color-warning-foreground: #f5efd5; /* Champagne - elegant notice */
+
+  --color-info: #1a2533; /* Midnight blue-black - calm intelligence */
+  --color-info-foreground: #d5dfe8; /* Porcelain blue - gentle information */
+
+  /* Core UI Foundation - Layered Sophistication */
+  --color-background: #ffffff; /* Pure white canvas - premium clarity */
+  --color-foreground: #0a0a0a; /* Near-black ink - crisp readability */
+
+  --color-card: #fafafa; /* Whisper gray - subtle elevation */
+  --color-card-foreground: #0a0a0a; /* Near-black - maintained hierarchy */
+
+  --color-popover: #f8f8f8; /* Cloud white - floating distinction */
+  --color-popover-foreground: #0a0a0a; /* Near-black - clear content */
+
+  /* Muted Elements - Quiet Luxury */
+  --color-muted: #f0f0f0; /* Pearl gray - secondary surfaces */
+  --color-muted-foreground: #666666; /* Graphite - subdued text */
+
+  /* Accent & Interaction - Refined Touch */
+  --color-accent: #e8e8e8; /* Silver mist - hover elegance */
+  --color-accent-foreground: #1a1a1a; /* Rich charcoal - clear interaction */
+
+  /* Borders & Dividers - Architectural Lines */
+  --color-border: #e0e0e0; /* Platinum - defined boundaries */
+
+  /* Chart Colors - Monochrome Data Visualization */
+  --color-chart-1: #000000; /* Pure black - primary data */
+  --color-chart-2: #333333; /* Charcoal - secondary series */
+  --color-chart-3: #666666; /* Slate - tertiary information */
+  --color-chart-4: #999999; /* Silver - supporting data */
+  --color-chart-5: #cccccc; /* Platinum - background context */
+
+  /* Sidebar Navigation - Consistent Hierarchy */
   --color-sidebar: #fafafa;
-  --color-sidebar-foreground: #171717;
+  --color-sidebar-foreground: #3f3f46;
+  --color-sidebar-primary: #18181b;
+  --color-sidebar-primary-foreground: #fafafa;
+  --color-sidebar-accent: #f4f4f5;
+  --color-sidebar-accent-foreground: #18181b;
+  --color-sidebar-border: #e4e4e7;
+  --color-sidebar-ring: #3b82f6;
 
-  /* Animations */
+  /* Animations - Smooth Transitions */
   --animate-fade-in: fadeIn 0.3s ease-in-out;
   --animate-slide-up: slideIn 0.4s ease;
 
@@ -72,49 +92,69 @@
   }
 }
 
-/* Dark Mode Colors */
+/* =====================================================
+   DARK MODE - Inverted Premium Aesthetic
+   ===================================================== */
+
 :root.dark {
-  /*  Dark Mode Primary Colors - unchanged */
-  --color-primary: #10b981;
-  --color-primary-foreground: #ffffff;
+  /* Primary Color System - Inverted Monochrome (unchanged) */
+  --color-primary: #000000; /* Maintained black - brand consistency */
+  --color-primary-foreground: #ffffff; /* Pure white - clear contrast */
 
-  /* Dark Mode Secondary Colors -unchanged */
-  --color-secondary: #666666;
-  --color-secondary-foreground: #ffffff;
+  /* Secondary Colors - Deep Shadow Tones (unchanged) */
+  --color-secondary: #1a1a1a; /* Rich charcoal - consistent depth */
+  --color-secondary-foreground: #f5f5f5; /* Warm white - maintained softness */
 
-  /* Dark mode semantic colors */
-  --color-success: #86efac;
-  --color-success-foreground: #4ade80;
-  --color-danger: #fca5a5;
-  --color-danger-foreground: #f87171;
-  --color-warning: #fcd34d;
-  --color-warning-foreground: #fcd34d;
-  --color-info: #7dd3fc;
-  --color-info-foreground: #38bdf8;
+  /* Semantic Colors - Luminous Against Dark */
+  --color-success: #d4e8d4; /* Pale sage - glowing affirmation */
+  --color-success-foreground: #2a4a2a; /* Deep forest - readable on light */
 
-  /* Dark mode semantic colors */
-  --color-background: #0a0a0a;
-  --color-foreground: #fafafa;
-  --color-card: #171717;
-  --color-card-foreground: #fafafa;
-  --color-popover: #171717;
-  --color-popover-foreground: #fafafa;
-  --color-muted: #262626;
-  --color-muted-foreground: #a3a3a3;
-  --color-accent: #262626;
-  --color-accent-foreground: #fafafa;
-  --color-border: #404040;
+  --color-danger: #f2d5d5; /* Blush pink - gentle alert glow */
+  --color-danger-foreground: #4a2a2a; /* Deep wine - clear warning text */
 
-  /* Dark mode chart colors */
-  --color-chart-1: #fafafa;
-  --color-chart-2: #d4d4d4;
-  --color-chart-3: #a3a3a3;
-  --color-chart-4: #737373;
-  --color-chart-5: #525252;
+  --color-warning: #f5efd5; /* Champagne - sophisticated notice */
+  --color-warning-foreground: #4a3f2a; /* Deep sepia - warm legibility */
 
-  /* Dark mode sidebar colors */
-  --color-sidebar: #171717;
-  --color-sidebar-foreground: #fafafa;
+  --color-info: #d5dfe8; /* Porcelain blue - calm illumination */
+  --color-info-foreground: #2a3543; /* Deep midnight - clear info text */
+
+  /* Core UI Foundation - Deep Luxury */
+  --color-background: #0a0a0a; /* Near-black void - premium depth */
+  --color-foreground: #f5f5f5; /* Warm white - soft readability */
+
+  --color-card: #1a1a1a; /* Charcoal elevation - layered depth */
+  --color-card-foreground: #f5f5f5; /* Warm white - clear hierarchy */
+
+  --color-popover: #141414; /* Shadow lift - floating distinction */
+  --color-popover-foreground: #f5f5f5; /* Warm white - readable overlays */
+
+  /* Muted Elements - Subdued Richness */
+  --color-muted: #262626; /* Deep graphite - quiet surfaces */
+  --color-muted-foreground: #999999; /* Silver - muted information */
+
+  /* Accent & Interaction - Subtle Highlight */
+  --color-accent: #2a2a2a; /* Smoke gray - gentle hover */
+  --color-accent-foreground: #f0f0f0; /* Pearl white - clear interaction */
+
+  /* Borders & Dividers - Ghost Lines */
+  --color-border: #333333; /* Dim platinum - refined boundaries */
+
+  /* Chart Colors - Inverted Data Hierarchy */
+  --color-chart-1: #f5f5f5; /* Warm white - primary visibility */
+  --color-chart-2: #cccccc; /* Light platinum - secondary data */
+  --color-chart-3: #999999; /* Silver - mid-level information */
+  --color-chart-4: #666666; /* Slate - supporting context */
+  --color-chart-5: #404040; /* Deep charcoal - background data */
+
+  /* Sidebar Navigation - Consistent Dark Hierarchy */
+  --sidebar: #18181b;
+  --sidebar-foreground: #f4f4f5;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #27272a;
+  --sidebar-accent-foreground: #f4f4f5;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #3b82f6;
 }
 
 @layer base {
