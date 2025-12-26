@@ -1,4 +1,4 @@
-import { RootState } from "../store";
+import { RootState } from "@/redux/store";
 import {
   BaseQueryApi,
   BaseQueryFn,
@@ -7,7 +7,7 @@ import {
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-import { logout, setUser } from "../features/auth/authSlice";
+import { logout, setUser } from "@/redux/features/auth/authSlice";
 import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({

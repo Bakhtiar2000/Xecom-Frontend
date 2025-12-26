@@ -8,64 +8,45 @@
      LIGHT MODE - Premium Black & White Foundation
      ===================================================== */
 
-  /* Primary Color System - Pure Monochrome Authority */
-  --color-primary: #000000; /* Deep black - commands attention */
-  --color-primary-foreground: #ffffff; /* Pure white - maximum contrast */
+  /* Primary Color System */
+  --color-primary: #000000;
+  --color-primary-foreground: #ffffff;
 
-  /* Secondary Colors - Sophisticated Gray Depth */
-  --color-secondary: #1a1a1a; /* Rich charcoal - subtle depth */
-  --color-secondary-foreground: #f5f5f5; /* Warm white - softened contrast */
+  /* Secondary Colors */
+  --color-secondary: #1a1a1a;
+  --color-secondary-foreground: #f5f5f5;
 
-  /* Semantic Colors - Muted, Refined Accents */
-  --color-success: #1a3a1a; /* Forest black-green - understated achievement */
-  --color-success-foreground: #d4e8d4; /* Pale sage - gentle affirmation */
+  /* Semantic Colors */
+  --color-success: #1a3a1a;
+  --color-success-foreground: #d4e8d4;
+  --color-danger: #3a1a1a;
+  --color-danger-foreground: #f2d5d5;
+  --color-warning: #3a2f1a;
+  --color-warning-foreground: #f5efd5;
+  --color-info: #1a2533;
+  --color-info-foreground: #d5dfe8;
 
-  --color-danger: #3a1a1a; /* Wine black-red - dignified warning */
-  --color-danger-foreground: #f2d5d5; /* Blush pink - soft alert */
+  /* Core UI Foundation */
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+  --color-card: #fafafa;
+  --color-card-foreground: #0a0a0a;
+  --color-popover: #f8f8f8;
+  --color-popover-foreground: #0a0a0a;
+  --color-muted: #f0f0f0;
+  --color-muted-foreground: #666666;
+  --color-accent: #e8e8e8;
+  --color-accent-foreground: #1a1a1a;
 
-  --color-warning: #3a2f1a; /* Sepia black-gold - refined caution */
-  --color-warning-foreground: #f5efd5; /* Champagne - elegant notice */
+  /* Border */
+  --color-border: #e0e0e0;
 
-  --color-info: #1a2533; /* Midnight blue-black - calm intelligence */
-  --color-info-foreground: #d5dfe8; /* Porcelain blue - gentle information */
-
-  /* Core UI Foundation - Layered Sophistication */
-  --color-background: #ffffff; /* Pure white canvas - premium clarity */
-  --color-foreground: #0a0a0a; /* Near-black ink - crisp readability */
-
-  --color-card: #fafafa; /* Whisper gray - subtle elevation */
-  --color-card-foreground: #0a0a0a; /* Near-black - maintained hierarchy */
-
-  --color-popover: #f8f8f8; /* Cloud white - floating distinction */
-  --color-popover-foreground: #0a0a0a; /* Near-black - clear content */
-
-  /* Muted Elements - Quiet Luxury */
-  --color-muted: #f0f0f0; /* Pearl gray - secondary surfaces */
-  --color-muted-foreground: #666666; /* Graphite - subdued text */
-
-  /* Accent & Interaction - Refined Touch */
-  --color-accent: #e8e8e8; /* Silver mist - hover elegance */
-  --color-accent-foreground: #1a1a1a; /* Rich charcoal - clear interaction */
-
-  /* Borders & Dividers - Architectural Lines */
-  --color-border: #e0e0e0; /* Platinum - defined boundaries */
-
-  /* Chart Colors - Monochrome Data Visualization */
-  --color-chart-1: #000000; /* Pure black - primary data */
-  --color-chart-2: #333333; /* Charcoal - secondary series */
-  --color-chart-3: #666666; /* Slate - tertiary information */
-  --color-chart-4: #999999; /* Silver - supporting data */
-  --color-chart-5: #cccccc; /* Platinum - background context */
-
-  /* Sidebar Navigation - Consistent Hierarchy */
-  --color-sidebar: #fafafa;
-  --color-sidebar-foreground: #3f3f46;
-  --color-sidebar-primary: #18181b;
-  --color-sidebar-primary-foreground: #fafafa;
-  --color-sidebar-accent: #f4f4f5;
-  --color-sidebar-accent-foreground: #18181b;
-  --color-sidebar-border: #e4e4e7;
-  --color-sidebar-ring: #3b82f6;
+  /* Chart Colors */
+  --color-chart-1: #000000;
+  --color-chart-2: #333333;
+  --color-chart-3: #666666;
+  --color-chart-4: #999999;
+  --color-chart-5: #cccccc;
 
   /* Animations - Smooth Transitions */
   --animate-fade-in: fadeIn 0.3s ease-in-out;
@@ -97,64 +78,38 @@
    ===================================================== */
 
 :root.dark {
-  /* Primary Color System - Inverted Monochrome (unchanged) */
-  --color-primary: #000000; /* Maintained black - brand consistency */
-  --color-primary-foreground: #ffffff; /* Pure white - clear contrast */
+  --color-primary: #000000;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #1a1a1a;
+  --color-secondary-foreground: #f5f5f5;
 
-  /* Secondary Colors - Deep Shadow Tones (unchanged) */
-  --color-secondary: #1a1a1a; /* Rich charcoal - consistent depth */
-  --color-secondary-foreground: #f5f5f5; /* Warm white - maintained softness */
+  --color-success: #d4e8d4;
+  --color-success-foreground: #2a4a2a;
+  --color-danger: #f2d5d5;
+  --color-danger-foreground: #4a2a2a;
+  --color-warning: #f5efd5;
+  --color-warning-foreground: #4a3f2a;
+  --color-info: #d5dfe8;
+  --color-info-foreground: #2a3543;
 
-  /* Semantic Colors - Luminous Against Dark */
-  --color-success: #d4e8d4; /* Pale sage - glowing affirmation */
-  --color-success-foreground: #2a4a2a; /* Deep forest - readable on light */
+  --color-background: #0a0a0a;
+  --color-foreground: #f5f5f5;
+  --color-card: #1a1a1a;
+  --color-card-foreground: #f5f5f5;
+  --color-popover: #141414;
+  --color-popover-foreground: #f5f5f5;
+  --color-muted: #262626;
+  --color-muted-foreground: #999999;
+  --color-accent: #2a2a2a;
+  --color-accent-foreground: #f0f0f0;
 
-  --color-danger: #f2d5d5; /* Blush pink - gentle alert glow */
-  --color-danger-foreground: #4a2a2a; /* Deep wine - clear warning text */
+  --color-border: #333333;
 
-  --color-warning: #f5efd5; /* Champagne - sophisticated notice */
-  --color-warning-foreground: #4a3f2a; /* Deep sepia - warm legibility */
-
-  --color-info: #d5dfe8; /* Porcelain blue - calm illumination */
-  --color-info-foreground: #2a3543; /* Deep midnight - clear info text */
-
-  /* Core UI Foundation - Deep Luxury */
-  --color-background: #0a0a0a; /* Near-black void - premium depth */
-  --color-foreground: #f5f5f5; /* Warm white - soft readability */
-
-  --color-card: #1a1a1a; /* Charcoal elevation - layered depth */
-  --color-card-foreground: #f5f5f5; /* Warm white - clear hierarchy */
-
-  --color-popover: #141414; /* Shadow lift - floating distinction */
-  --color-popover-foreground: #f5f5f5; /* Warm white - readable overlays */
-
-  /* Muted Elements - Subdued Richness */
-  --color-muted: #262626; /* Deep graphite - quiet surfaces */
-  --color-muted-foreground: #999999; /* Silver - muted information */
-
-  /* Accent & Interaction - Subtle Highlight */
-  --color-accent: #2a2a2a; /* Smoke gray - gentle hover */
-  --color-accent-foreground: #f0f0f0; /* Pearl white - clear interaction */
-
-  /* Borders & Dividers - Ghost Lines */
-  --color-border: #333333; /* Dim platinum - refined boundaries */
-
-  /* Chart Colors - Inverted Data Hierarchy */
-  --color-chart-1: #f5f5f5; /* Warm white - primary visibility */
-  --color-chart-2: #cccccc; /* Light platinum - secondary data */
-  --color-chart-3: #999999; /* Silver - mid-level information */
-  --color-chart-4: #666666; /* Slate - supporting context */
-  --color-chart-5: #404040; /* Deep charcoal - background data */
-
-  /* Sidebar Navigation - Consistent Dark Hierarchy */
-  --sidebar: #18181b;
-  --sidebar-foreground: #f4f4f5;
-  --sidebar-primary: #2563eb;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #27272a;
-  --sidebar-accent-foreground: #f4f4f5;
-  --sidebar-border: #27272a;
-  --sidebar-ring: #3b82f6;
+  --color-chart-1: #f5f5f5;
+  --color-chart-2: #cccccc;
+  --color-chart-3: #999999;
+  --color-chart-4: #666666;
+  --color-chart-5: #404040;
 }
 
 @layer base {
@@ -166,30 +121,9 @@
   }
 }
 
-.container {
-  @apply mx-auto px-4 py-2 max-w-[600px] md:max-w-[728px] lg:max-w-[984px] xl:max-w-[1240px] 2xl:max-w-[1440px];
-}
-
-.scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* \b(text|bg|border)-[a-z]+-\d{2,3}\b  - VS Code pattern search for finding out tailwind color classes implementation */
-
-/* 
-
-✔ PascalCase → components, sections, layouts
-✔ camelCase → logic, hooks, utils
-✔ kebab-case → folders, routes
-
-*/
-
+/* =====================================================
+   Sidebar Specific Colors
+   ===================================================== */
 :root {
   --sidebar: hsl(0 0% 98%);
   --sidebar-foreground: hsl(240 5.3% 26.1%);
@@ -223,11 +157,28 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@layer base {
-  * {
-    @apply border-border;
+/* =====================================================
+   Central CSS Styles for Consistent Layouts
+   ===================================================== */
+
+.container {
+  @apply mx-auto px-4 py-2 max-w-150 md:max-w-182 lg:max-w-246 xl:max-w-310 2xl:max-w-360;
+}
+
+.section-header {
+  @apply text-2xl font-semibold mb-4;
+}
+
+.dashboard-title {
+  @apply text-3xl font-bold mb-4;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }

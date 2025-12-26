@@ -1,7 +1,9 @@
+import Title from "@/components/sections/shared/Title";
+
 export default function PendingOrdersPage() {
   return (
     <div>
-      <h2 className="text-3xl font-bold">Pending Orders</h2>
+      <Title mainTitle="Pending Orders" />
     </div>
   );
 }

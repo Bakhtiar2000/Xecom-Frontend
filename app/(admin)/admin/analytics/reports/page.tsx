@@ -1,7 +1,9 @@
+import Title from "@/components/sections/shared/Title";
+
 export default function AnalyticsPage() {
   return (
     <div>
-      <h2 className="text-3xl font-bold">Reports</h2>
+      <Title mainTitle="Analytics Reports" />
     </div>
   );
 }

@@ -1,7 +1,10 @@
+import Title from "@/components/sections/shared/Title";
+
+
 export default function AllOrdersPage() {
   return (
     <div>
-      <h2 className="text-3xl font-bold">All Orders</h2>
+      <Title mainTitle="All Orders" />
     </div>
   );
 }

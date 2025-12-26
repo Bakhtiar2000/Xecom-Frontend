@@ -1,5 +1,5 @@
+import { baseApi } from "@/redux/api/baseApi";
 import { TAdmin, TCustomer, TResponseRedux, TStaff } from "@/types";
-import { baseApi } from "../../api/baseApi";
 
 const user = baseApi.injectEndpoints({
     endpoints: (builder) => ({

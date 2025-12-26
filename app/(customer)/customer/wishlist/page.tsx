@@ -1,3 +1,4 @@
+import Title from "@/components/sections/shared/Title";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -35,7 +36,7 @@ export default function CustomerWishlist() {
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-foreground">My Wishlist</h1>
+        <Title mainTitle="My Wishlist" />
         <p className="text-muted-foreground">{wishlistItems.length} items</p>
       </div>
 
