@@ -41,15 +41,85 @@ export default function CustomerLayout({
 
   // Generate breadcrumb items from pathname
   const generateBreadcrumbs = () => {
-    const breadcrumbs = [{ label: "Dashboard", href: "/customer" }];
+    const paths = pathname.split("/").filter(Boolean);
+    const breadcrumbs: Array<{
+      label: string;
+      href: string;
+      clickable: boolean;
+    }> = [];
 
-    if (pathname !== "/customer") {
-      // Find the current route
+    // Only show Dashboard breadcrumb if we're on the main customer page
+    if (pathname === "/customer") {
+      breadcrumbs.push({
+        label: "Dashboard",
+        href: "/customer",
+        clickable: true,
+      });
+      return breadcrumbs;
+    }
+
+    if (paths.length > 1) {
+      // paths[0] is 'customer', paths[1] is the main section (e.g., 'profile', 'orders')
+      const section = paths[1];
+
+      // Find the current route in the defined routes
       const allRoutes = [...customerMainRoutes, ...customerRoutes];
-      const currentRoute = allRoutes.find((r) => r.href === pathname);
+      const sectionRoute = allRoutes.find((r) =>
+        r.href.startsWith(`/customer/${section}`)
+      );
 
-      if (currentRoute) {
-        breadcrumbs.push({ label: currentRoute.label, href: pathname });
+      if (sectionRoute && paths.length === 2) {
+        // Simple route with just two segments
+        breadcrumbs.push({
+          label: sectionRoute.label,
+          href: sectionRoute.href,
+          clickable: false,
+        });
+      } else if (paths.length > 2) {
+        // Nested route - add first segment as non-clickable
+        if (sectionRoute) {
+          breadcrumbs.push({
+            label: sectionRoute.label,
+            href: "",
+            clickable: false,
+          });
+        } else {
+          // Fallback: capitalize the section name
+          const label = section
+            .split("-")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+          breadcrumbs.push({ label: label, href: "", clickable: false });
+        }
+
+        // Add remaining segments
+        for (let i = 2; i < paths.length; i++) {
+          const currentPath = "/" + paths.slice(0, i + 1).join("/");
+          const isLastSegment = i === paths.length - 1;
+
+          // Check if this path is a defined route
+          const route = allRoutes.find((r) => r.href === currentPath);
+
+          if (route) {
+            breadcrumbs.push({
+              label: route.label,
+              href: currentPath,
+              clickable: !isLastSegment,
+            });
+          } else {
+            // For dynamic/nested routes, use the path segment
+            const label = paths[i]
+              .split("-")
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ");
+
+            breadcrumbs.push({
+              label: label,
+              href: currentPath,
+              clickable: !isLastSegment,
+            });
+          }
+        }
       }
     }
 
@@ -168,14 +238,18 @@ export default function CustomerLayout({
                   <Breadcrumb>
                     <BreadcrumbList>
                       {breadcrumbs.map((crumb, index) => (
-                        <React.Fragment key={crumb.href}>
+                        <React.Fragment key={crumb.href || crumb.label}>
                           <BreadcrumbItem>
                             {index === breadcrumbs.length - 1 ? (
                               <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-                            ) : (
+                            ) : crumb.clickable && crumb.href ? (
                               <BreadcrumbLink asChild>
                                 <Link href={crumb.href}>{crumb.label}</Link>
                               </BreadcrumbLink>
+                            ) : (
+                              <span className="text-muted-foreground">
+                                {crumb.label}
+                              </span>
                             )}
                           </BreadcrumbItem>
                           {index < breadcrumbs.length - 1 && (

@@ -50,22 +50,61 @@ export default function AdminLayout({
   // Generate breadcrumb items from pathname
   const generateBreadcrumbs = () => {
     const paths = pathname.split("/").filter(Boolean);
-    const breadcrumbs = [{ label: "Dashboard", href: "/admin" }];
+    const breadcrumbs: Array<{
+      label: string;
+      href: string;
+      clickable: boolean;
+    }> = [];
+
+    // Only show Dashboard breadcrumb if we're on the main admin page
+    if (pathname === "/admin") {
+      breadcrumbs.push({ label: "Dashboard", href: "/admin", clickable: true });
+      return breadcrumbs;
+    }
 
     if (paths.length > 1) {
-      // Find the route group and label
-      for (let i = 1; i < paths.length; i++) {
-        const currentPath = "/" + paths.slice(0, i + 1).join("/");
+      // paths[0] is 'admin', paths[1] is the category (e.g., 'orders', 'products')
+      const category = paths[1];
 
-        // Check in adminRoutes for nested routes
-        for (const group of adminRoutes) {
-          const route = group.routes.find((r) => r.href === currentPath);
-          if (route) {
-            if (i === 1) {
-              breadcrumbs.push({ label: group.title, href: "" });
+      // Find the matching group for this category
+      const group = adminRoutes.find((g) =>
+        g.routes.some((r) => r.href.startsWith(`/admin/${category}`))
+      );
+
+      if (group) {
+        // Add the category/group title as non-clickable (first segment)
+        breadcrumbs.push({ label: group.title, href: "", clickable: false });
+
+        // Process all remaining path segments
+        if (paths.length > 2) {
+          // Start from the third segment (after 'admin' and category)
+          for (let i = 2; i < paths.length; i++) {
+            const currentPath = "/" + paths.slice(0, i + 1).join("/");
+            const isLastSegment = i === paths.length - 1;
+
+            // Check if this path is a defined route
+            const route = group.routes.find((r) => r.href === currentPath);
+
+            if (route) {
+              // Use the route label from the config
+              breadcrumbs.push({
+                label: route.label,
+                href: currentPath,
+                clickable: !isLastSegment,
+              });
+            } else {
+              // For dynamic/nested routes not in config, use the path segment
+              const label = paths[i]
+                .split("-")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
+
+              breadcrumbs.push({
+                label: label,
+                href: currentPath,
+                clickable: !isLastSegment,
+              });
             }
-            breadcrumbs.push({ label: route.label, href: currentPath });
-            break;
           }
         }
       }
@@ -211,7 +250,7 @@ export default function AdminLayout({
                           <BreadcrumbItem>
                             {index === breadcrumbs.length - 1 ? (
                               <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-                            ) : crumb.href ? (
+                            ) : crumb.clickable && crumb.href ? (
                               <BreadcrumbLink asChild>
                                 <Link href={crumb.href}>{crumb.label}</Link>
                               </BreadcrumbLink>
