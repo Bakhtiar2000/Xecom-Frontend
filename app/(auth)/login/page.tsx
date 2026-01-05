@@ -30,7 +30,7 @@ const Login = () => {
     reset
   } = useForm({
     defaultValues: {
-      userId: "",
+      email: "",
       password: "",
     },
   });
@@ -72,7 +72,7 @@ const Login = () => {
     console.log(data);
     const loginToastId = toast.loading("Logging In");
     const userInfo = {
-      id: data.userId,
+      email: data.email,
       password: data.password,
     };
 
@@ -88,7 +88,7 @@ const Login = () => {
         if (user.role === UserRole.CUSTOMER) {
           router.push("/");
         } else {
-          router.push(`/${user.role.toLowerCase()}/dashboard`);
+          router.push(`/${user.role.toLowerCase()}`);
         }
       }
     } catch (error) {
@@ -128,20 +128,20 @@ const Login = () => {
           <CardContent>
             <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
               <div>
-                <label htmlFor="userId" className="block text-sm font-medium text-muted-foreground">
+                <label htmlFor="email" className="block text-sm font-medium text-muted-foreground">
                   User ID / Email
                 </label>
                 <div className="mt-1">
                   <Input
-                    {...register("userId", {
+                    {...register("email", {
                       required: "User ID is required",
                     })}
                     type="text"
                     placeholder="Enter your user ID or email"
-                    className={errors.userId ? "border-danger" : ""}
+                    className={errors.email ? "border-danger" : ""}
                   />
-                  {errors.userId && (
-                    <p className="mt-1 text-sm text-primary">{errors.userId.message}</p>
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-primary">{errors.email.message}</p>
                   )}
                 </div>
               </div>
