@@ -30,7 +30,7 @@ export default function Hero_Section() {
                     <div className="text-center">
 
                         <motion.h1
-                            className="text-[40px] lg:mt-15 mt-5 sm:text-[60px] md:text-[80px] lg:text-[120px] font-bold leading-none tracking-tight cursor-pointer"
+                            className="text-[40px]  mt-5 sm:text-[60px] md:text-[80px] lg:text-[120px] font-bold leading-none tracking-tight cursor-pointer"
                             initial={{ opacity: 0, y: 40 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
@@ -66,7 +66,7 @@ export default function Hero_Section() {
                     {/* MAIN CONTENT */}
                     <div className="flex flex-col lg:h-[95vh] lg:flex-row justify-between  items-center px-4 sm:px-8 lg:px-12  sm:pb-16 gap-10 sm:gap-16 overflow-hidden">
                         {/* RIGHT SIDE IMAGE + TAGS */}
-                        <div className="relative  w-full lg:w-1/2 h-[50vh] lg:h-[60vh] mx-auto flex items-center justify-center overflow-hidden">
+                        <div className="relative lg:-mt-35  w-full lg:w-1/2 h-[50vh] lg:h-[60vh] mx-auto flex items-center justify-center overflow-hidden">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={shoe?.id}
@@ -135,7 +135,7 @@ export default function Hero_Section() {
                         </div>
 
                         {/* LEFT SIDE TEXT */}
-                        <div className="w-full  lg:w-1/2 relative z-10 lg:-mb-35 mb-5 ">
+                        <div className="w-full  lg:w-1/2 relative z-10 lg:-mb-25 mb-5 ">
                             <div className=" rounded-xl border  px-6 sm:px-8 py-5 flex flex-col justify-between items-start gap-8 lg:-mr-12  shadow-lg">
                                 <div className="w-full space-y-2">
                                     <motion.div

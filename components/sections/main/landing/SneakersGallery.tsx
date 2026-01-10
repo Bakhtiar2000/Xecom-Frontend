@@ -97,7 +97,7 @@ const SneakerMosaicGallery = () => {
 
                                 <button
                                     onClick={(e) => toggleLike(item.id, e)}
-                                    className="absolute top-4 right-4 p-2 rounded-fullbackdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+                                    className="absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
                                 >
                                     <Heart className={`w-5 h-5 ${likedImages.includes(item.id)
                                         ? "fill-red-500 text-red-500"
