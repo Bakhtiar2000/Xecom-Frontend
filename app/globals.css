@@ -272,3 +272,35 @@
   display: flex;
   animation: scroll-reverse 40s linear infinite;
 }
+
+.shine-text {
+  position: relative;
+  display: inline-block;
+
+  /* Black → Dark Gray → Light Gray → Dark Gray → Black */
+  background: linear-gradient(90deg,
+      #000000 0%,
+      #645f5f 20%,
+      #504545 40%,
+      #221f1f 60%,
+      #3d3b3b 80%,
+      #000000 100%);
+
+  background-size: 200%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Slow, smooth shine */
+  animation: shine 10s linear infinite;
+}
+
+
+@keyframes shine {
+  0% {
+    background-position: 200%;
+  }
+
+  100% {
+    background-position: -200%;
+  }
+}
