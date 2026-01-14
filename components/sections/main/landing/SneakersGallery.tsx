@@ -50,7 +50,7 @@ const SneakerMosaicGallery = () => {
 
 
 
-                    <h1 className="text-4xl mb-5 font-light  merriweather-font">
+                    <h1 className="lg:text-5xl text-3xl mb-5 font-light  merriweather-font">
                         Sneaker <span className="font-medium">Gallery</span>
                     </h1>
 
@@ -68,7 +68,7 @@ const SneakerMosaicGallery = () => {
                             transition={{ duration: 0.4, delay: index * 0.05 }}
                             viewport={{ once: true }}
                             whileHover={{ scale: 1.02 }}
-                            className={`relative overflow-hidden rounded-lg cursor-pointer group ${item.className}`}
+                            className={`relative overflow-hidden rounded-lg text-black cursor-pointer group ${item.className}`}
                             onClick={() => openImage(item)}
                         >
 
@@ -99,14 +99,14 @@ const SneakerMosaicGallery = () => {
                                     onClick={(e) => toggleLike(item.id, e)}
                                     className="absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
                                 >
-                                    <Heart className={`w-5 h-5 ${likedImages.includes(item.id)
+                                    <Heart className={`w-5  h-5 ${likedImages.includes(item.id)
                                         ? "fill-red-500 text-red-500"
                                         : ""
                                         }`} />
                                 </button>
 
 
-                                <div className="absolute bottom-0 left-0 right-0  transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                                <div className="absolute bottom-0 left-0 right-0  text-secondary-foreground bg-tertiary transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                     <div className=" backdrop-blur-sm  px-4 py-8">
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-xs font-medium ">{item.brand}</span>
@@ -124,7 +124,7 @@ const SneakerMosaicGallery = () => {
 
 
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div className="w-12 h-12 rounded-full  backdrop-blur-sm flex items-center justify-center">
+                                    <div className="w-12 h-12 rounded-full   backdrop-blur-sm flex items-center justify-center">
                                         <ZoomIn className="w-6 h-6 " />
                                     </div>
                                 </div>
@@ -143,7 +143,7 @@ const SneakerMosaicGallery = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                        className="fixed inset-0  z-50 flex items-center justify-center p-4"
                         onClick={closeImage}
                     >
                         <motion.div
@@ -158,7 +158,7 @@ const SneakerMosaicGallery = () => {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="relative max-w-5xl w-full max-h-[90vh]  rounded-2xl overflow-hidden"
+                            className="relative max-w-5xl w-full max-h-[90vh] bg-secondary shadow-lg  rounded-2xl overflow-hidden"
                             onClick={(e) => e.stopPropagation()}
                         >
 
@@ -185,9 +185,9 @@ const SneakerMosaicGallery = () => {
                                         className="absolute top-4 left-4 p-3 rounded-full backdrop-blur-sm hover:scale-110 transition-transform"
                                     >
                                         <Heart
-                                            className={`w-6 h-6 ${likedImages.includes(selectedImage.id)
+                                            className={`w-6  h-6 ${likedImages.includes(selectedImage.id)
                                                 ? "fill-red-500 text-red-500"
-                                                : ""
+                                                : " text-foreground"
                                                 }`}
                                         />
                                     </button>
@@ -202,7 +202,7 @@ const SneakerMosaicGallery = () => {
                                                 {selectedImage.brand}
                                             </span>
                                             {selectedImage.featured && (
-                                                <span className="px-2 py-1 rounded-full  text-xs">
+                                                <span className="px-2 py-1 bg-batch rounded-full  text-xs">
                                                     Featured
                                                 </span>
                                             )}
@@ -212,7 +212,7 @@ const SneakerMosaicGallery = () => {
                                             {selectedImage.alt}
                                         </h2>
 
-                                        <div className="flex items-center gap-4 text-sm ">
+                                        <div className="flex text-muted-foreground items-center gap-4 text-sm ">
                                             <span>{selectedImage.category}</span>
                                             <span>•</span>
                                             <span>Color: {selectedImage.colorway}</span>

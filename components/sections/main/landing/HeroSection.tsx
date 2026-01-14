@@ -8,7 +8,7 @@ import { shoes } from "@/data/shoes_data";
 export default function Hero_Section() {
 
 
-    const letters = ["T", "r", "e", "n", "d", "m", "a", "r", "K" ];
+    const letters = ["T", "r", "e", "n", "d", "m", "a", "r", "k" ];
 
     const [current, setCurrent] = useState(0);
 
@@ -23,14 +23,14 @@ export default function Hero_Section() {
     const shoe = shoes[current];
 
     return (
-        <div className="">
+        <div className="poppins-font">
             <section className="relative w-11/12 pt-5   mx-auto  overflow-hidden">
                 {/* HEADER TEXT */}
                 <div className="">
                     <div className="text-center">
 
                         <motion.h1
-                            className="text-[40px]  mt-5 sm:text-[60px] md:text-[80px] lg:text-[120px] font-bold leading-none tracking-tight cursor-pointer"
+                            className="text-[40px] merriweather-font  mt-5 sm:text-[60px] md:text-[80px] lg:text-[120px] font-bold leading-none tracking-tight cursor-pointer"
                             initial={{ opacity: 0, y: 40 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
@@ -39,7 +39,7 @@ export default function Hero_Section() {
                             {letters.map((letter, index) => (
                                 <motion.span
                                     key={index}
-                                    className="inline-block"
+                                    className="inline-block text-foreground"
                                     variants={{
                                         hover: {
                                             y: [0, -15, 0],
@@ -58,7 +58,7 @@ export default function Hero_Section() {
 
 
 
-                        <p className="sm:text-lg  font-medium mt-2 ">
+                        <p className="sm:text-lg  font-medium mt-2 merriweather-font text-muted-foreground">
                             Sneakers 2026 Limited Edition
                         </p>
                     </div>
@@ -102,13 +102,13 @@ export default function Hero_Section() {
                                     }}
                                 >
                                     <div className="rounded-full shadow-lg p-1.5">
-                                        <Plus size={14} className="text-secondary" />
+                                        <Plus size={14} className="text-secondary-foreground" />
                                     </div>
 
                                     {/* Card with full-width hover button */}
-                                    <div className="relative   group  shadow-lg rounded-xl mt-2 w-32 sm:w-35 overflow-hidden transition-all">
+                                    <div className="relative bg-gray-300  group  shadow-lg rounded-xl mt-2 w-32 sm:w-35 overflow-hidden transition-all">
                                         {/* Content */}
-                                        <div className="p-2 flex  items-center justify-between">
+                                        {/* <div className="p-2 flex  items-center justify-between">
                                             <Image
                                                 src={part.img}
                                                 alt={part.title}
@@ -123,11 +123,11 @@ export default function Hero_Section() {
                                         </div>
 
 
-                                        <div className="absolute bottom-0 left-0 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div className="absolute bg-secondary bottom-0 left-0 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                             <button className="w-full  py-2 text-xs sm:text-sm font-semibold uppercase">
                                                 Shop Now
                                             </button>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </motion.div>
                             ))}
@@ -136,7 +136,7 @@ export default function Hero_Section() {
 
                         {/* LEFT SIDE TEXT */}
                         <div className="w-full  lg:w-1/2 relative z-10 lg:-mb-25 mb-5 ">
-                            <div className=" rounded-xl border  px-6 sm:px-8 py-5 flex flex-col justify-between items-start gap-8 lg:-mr-12  shadow-lg">
+                            <div className="bg-primary rounded-xl border  px-6 sm:px-8 py-5 flex flex-col justify-between items-start gap-8 lg:-mr-12  shadow-lg">
                                 <div className="w-full space-y-2">
                                     <motion.div
                                         key={shoe?.id}
@@ -145,7 +145,7 @@ export default function Hero_Section() {
                                         exit={{ opacity: 0, x: 20 }}
                                         transition={{ duration: 0.5, ease: "easeOut" }}
                                     >
-                                        <div className="flex items-baseline gap-3">
+                                        <div className="flex text-primary-foreground items-baseline gap-3">
                                             <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold">
                                                 {shoe?.name}
                                             </h1>
@@ -155,11 +155,11 @@ export default function Hero_Section() {
                                         </div>
                                     </motion.div>
 
-                                    <div className="space-y-4">
-                                        <p className="uppercase text-xs  tracking-wider font-semibold">
+                                    <div className="space-y-4 text-primary-foreground">
+                                        <p className="uppercase text-primary-foreground text-xs  tracking-wider font-semibold">
                                             {shoe?.trademark}
                                         </p>
-                                        <p className="text-sm  leading-relaxed border-l-2 border-opacity-30 pl-4">
+                                        <p className="text-sm text-secondary-foreground leading-relaxed border-l-2 border-opacity-30 pl-4">
                                             {shoe?.description}
                                         </p>
                                         <button className="uppercase text-xs font-medium  transition-colors duration-200 flex items-center gap-1 group">
@@ -169,7 +169,7 @@ export default function Hero_Section() {
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-3  text-lg w-full justify-between border-t border-opacity-20 pt-4">
+                                <div className="flex  text-primary-foreground  items-center gap-3  text-lg w-full justify-between border-t border-opacity-20 pt-4">
                                     <span className="text-sm font-medium">Actions</span>
 
 
