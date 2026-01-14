@@ -3,6 +3,9 @@ import SneakerMosaicGallery from "@/components/sections/main/landing/SneakersGal
 import MegaWinterSell from "@/components/sections/main/landing/MegaWinterSell";
 import PremiumShoes from "@/components/sections/main/landing/PremiumShoes";
 import ShoesVideo from "@/components/sections/main/landing/ShoesVideo";
+import HowToVooking from "@/components/sections/main/landing/HowToBooking";
+import HowToBooking from "@/components/sections/main/landing/HowToBooking";
+import ReviewGrid from "@/components/sections/main/landing/ReviewGrid";
 
 export default function HomePage() {
   return (
@@ -12,6 +15,8 @@ export default function HomePage() {
       <PremiumShoes></PremiumShoes>
       <MegaWinterSell></MegaWinterSell>
       <ShoesVideo></ShoesVideo>
+      <HowToBooking></HowToBooking>
+      <ReviewGrid></ReviewGrid>
     </div>
   );
 }

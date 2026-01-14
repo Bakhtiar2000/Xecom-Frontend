@@ -238,3 +238,37 @@
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
+
+
+
+.animate-scroll {
+  display: flex;
+  animation: scroll 40s linear infinite;
+}
+
+/* skills section scroll animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+
+.animate-scroll-reverse {
+  display: flex;
+  animation: scroll-reverse 40s linear infinite;
+}
