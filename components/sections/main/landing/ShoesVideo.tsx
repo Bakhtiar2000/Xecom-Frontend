@@ -5,7 +5,7 @@ import React from "react";
 const ShoesVideo: React.FC = () => {
   return (
     <div className="container  bg-linear-to-b from-blue-50 to-gray-50 dark:from-gray-800 dark:to-gray-900">
-      <div className="min-h-screen ">
+      <div className="min-h-screen">
         <div className="max-w-6xl mx-auto">
           {/* Subtle Header */}
           <div className="text-center mb-16">

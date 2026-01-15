@@ -91,7 +91,7 @@ const SneakerMosaicGallery = () => {
                   />
                 </button>
 
-                <div className="absolute bottom-0 left-0 right-0  text-secondary-foreground bg-tertiary transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <div className="absolute bottom-0 left-0 right-0  text-white bg-tertiary transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                   <div className=" backdrop-blur-sm  px-4 py-8">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-medium ">{item.brand}</span>

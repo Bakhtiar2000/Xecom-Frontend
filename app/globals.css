@@ -199,20 +199,16 @@
    ===================================================== */
 
 .container {
-  @apply mx-auto px-4 py-15
-         md:max-w-182 
-         lg:max-w-11/12 
-         xl:max-w-11/12 
-         2xl:max-w-11/12;
+  @apply mx-auto px-4 py-15 md:max-w-182  lg:max-w-11/12 ;
 }
 
 
 .title-text {
-  @apply text-4xl font-bold   ;
+  @apply text-4xl font-bold;
 }
 
 .description-text {
-  @apply text-lg font-thin  ;
+  @apply text-lg font-thin text-muted-foreground;
 }
 
 .scrollbar-none {
