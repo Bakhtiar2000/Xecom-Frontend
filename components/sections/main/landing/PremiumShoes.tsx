@@ -7,14 +7,12 @@ import Link from "next/link";
 import { Sparkles, TrendingUp, Trophy } from "lucide-react";
 import { trendingSneakers, Sneaker } from "@/data/premium_shoes";
 
-
 type TabType = "trending" | "bestsellers" | "new";
 
 type ProductCardProps = {
   product: Sneaker;
   index: number;
 };
-
 
 const PremiumShoes = (): React.JSX.Element => {
   const [activeTab, setActiveTab] = useState<TabType>("trending");
@@ -110,9 +108,7 @@ const PremiumShoes = (): React.JSX.Element => {
                 <svg
                   key={i}
                   className={`w-4 h-4 text-rating ${
-                    i < Math.floor(product.rating)
-                      ? "fill-current"
-                      : ""
+                    i < Math.floor(product.rating) ? "fill-current" : ""
                   }`}
                   viewBox="0 0 20 20"
                 >
@@ -170,15 +166,15 @@ const PremiumShoes = (): React.JSX.Element => {
   return (
     <section
       ref={sectionRef}
-      className="mx-auto overflow-hidden pt-20 bg-linear-to-b  poppins-font"
+      className="container overflow-hidden   poppins-font"
     >
-      <div className="w-11/12 mx-auto px-4 relative z-10">
+      <div className="  relative z-10">
         {/* Header */}
-        <div className="text-center mb-5">
-          <p className="Discription-text-primary text-sm uppercase tracking-wider mb-2 merriweather-font">
+        <div className="text-center">
+          <p className="description-text  text-muted-foreground merriweather-font">
             Sneaker
           </p>
-          <h1 className="text-4xl font-light Title-text-primary merriweather-font">
+          <h1 className="title-text merriweather-font mb-2">
             Premium Sneaker <span className="font-medium">Collection</span>
           </h1>
         </div>
@@ -209,10 +205,8 @@ const PremiumShoes = (): React.JSX.Element => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
-                className={`px-6 py-4 font-semibold flex items-center space-x-2 ${
-                  activeTab === tab.id
-                    ? "border-b-2 border-primary"
-                    : ""
+                className={`px-6 cursor-pointer py-4 font-semibold flex items-center space-x-2 ${
+                  activeTab === tab.id ? "border-b-2 border-primary" : ""
                 }`}
               >
                 {tab.icon}
@@ -226,13 +220,9 @@ const PremiumShoes = (): React.JSX.Element => {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 ">
           {getProductsByTab().map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              index={index}
-            />
+            <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>
       </div>
@@ -240,4 +230,4 @@ const PremiumShoes = (): React.JSX.Element => {
   );
 };
 
-export default  PremiumShoes;
+export default PremiumShoes;

@@ -1,27 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
-
-
 .merriweather-font {
   font-family: "Merriweather", serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-variation-settings:
-    100;
+  font-variation-settings: 100;
 }
-
 
 .poppins-font {
   font-family: "Poppins", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-variation-settings:
-    100;
+  font-variation-settings: 100;
 }
 
 @theme {
@@ -34,11 +29,11 @@
   --color-primary-foreground: #ffffff;
 
   /* Secondary Colors */
-  --color-secondary: #FFFFFF;
-  --color-secondary-foreground: #FFFFFF;
+  --color-secondary: #ffffff;
+  --color-secondary-foreground: #ffffff;
 
   /* tertiary color */
-  --color-tertiary: linear-gradient(to top, #000000CC, transparent);
+  --color-tertiary: linear-gradient(to top, #000000cc, transparent);
   --color-tertiary-foreground: #fdba74;
 
   /* Semantic Colors */
@@ -56,15 +51,15 @@
   --color-foreground: #111827;
   --color-card-primary: #ffffff;
   --color-card-primary-foreground: #0a0a0a;
-  --color-batch: #B5E6FF;
+  --color-batch: #b5e6ff;
   --color-batch-foreground: #f5f5f5;
-  --color-rating: #FBBF24;
+  --color-rating: #fbbf24;
   --color-button-primary: #111827;
   --color-button-secondary: #f08a1e;
   --color-popover: #f8f8f8;
   --color-popover-foreground: #0a0a0a;
   --color-muted: #f0f0f0;
-  --color-muted-foreground: #4B5563;
+  --color-muted-foreground: #4b5563;
   --color-accent: #e8e8e8;
   --color-accent-foreground: #1a1a1a;
 
@@ -110,14 +105,13 @@
    ===================================================== */
 
 :root.dark {
-
   --color-primary: #0f172a;
   --color-primary-foreground: #ffffff;
 
   --color-secondary: #000000;
   --color-secondary-foreground: #000000;
 
-  --color-tertiary: linear-gradient(to top, #000000CC, transparent);
+  --color-tertiary: linear-gradient(to top, #000000cc, transparent);
   --color-tertiary-foreground: #fdba74;
 
   --color-success: #d4e8d4;
@@ -133,11 +127,11 @@
   --color-foreground: #f5f5f5;
   --color-card-primary: #0f172a;
   --color-card-primary-foreground: #f5f5f5;
-  --color-batch: #FFD6CC;
+  --color-batch: #ffd6cc;
   --color-batch-foreground: #f5f5f5;
-  --color-button-primary: #9CA3AF;
+  --color-button-primary: #9ca3af;
   --color-button-secondary: #f08a1e;
-  --color-rating: #FBBF24;
+  --color-rating: #fbbf24;
   --color-popover: #141414;
   --color-popover-foreground: #f5f5f5;
   --color-muted: #262626;
@@ -205,26 +199,20 @@
    ===================================================== */
 
 .container {
-  @apply mx-auto px-4 py-2 max-w-150 md:max-w-182 lg:max-w-246 xl:max-w-310 2xl:max-w-360;
+  @apply mx-auto px-4 py-15
+         md:max-w-182 
+         lg:max-w-11/12 
+         xl:max-w-11/12 
+         2xl:max-w-11/12;
 }
 
-.section-header {
-  @apply text-2xl font-semibold mb-4;
+
+.title-text {
+  @apply text-4xl font-bold   ;
 }
 
-.dashboard-title {
-  @apply text-3xl font-bold mb-4;
-}
-
-.mega-sale-bg {
-  background: linear-gradient(135deg,
-      #020617,
-      /* Slate-950 */
-      #3b0764,
-      /* Purple-950 */
-      #020617
-      /* Slate-950 */
-    );
+.description-text {
+  @apply text-lg font-thin  ;
 }
 
 .scrollbar-none {
@@ -237,70 +225,4 @@
 
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-}
-
-
-
-.animate-scroll {
-  display: flex;
-  animation: scroll 40s linear infinite;
-}
-
-/* skills section scroll animation */
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes scroll-reverse {
-  0% {
-    transform: translateX(-50%);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-
-.animate-scroll-reverse {
-  display: flex;
-  animation: scroll-reverse 40s linear infinite;
-}
-
-.shine-text {
-  position: relative;
-  display: inline-block;
-
-  /* Black → Dark Gray → Light Gray → Dark Gray → Black */
-  background: linear-gradient(90deg,
-      #000000 0%,
-      #645f5f 20%,
-      #504545 40%,
-      #221f1f 60%,
-      #3d3b3b 80%,
-      #000000 100%);
-
-  background-size: 200%;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  /* Slow, smooth shine */
-  animation: shine 10s linear infinite;
-}
-
-
-@keyframes shine {
-  0% {
-    background-position: 200%;
-  }
-
-  100% {
-    background-position: -200%;
-  }
 }

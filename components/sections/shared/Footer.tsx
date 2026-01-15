@@ -1,7 +1,16 @@
 "use client";
 
 import React from "react";
-import { Facebook, Heart, Instagram, Mail, MapPin, Phone, X, Youtube } from "lucide-react";
+import {
+  Facebook,
+  Heart,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  X,
+  Youtube,
+} from "lucide-react";
 import Link from "next/link";
 
 // Type for social links
@@ -20,10 +29,30 @@ interface QuickLink {
 
 const Footer: React.FC = () => {
   const socialLinks: SocialLink[] = [
-    { name: "Facebook", icon: <Facebook className="w-5 h-5" />, url: "https://facebook.com", color: "hover:text-blue-600" },
-    { name: "X", icon: <X className="w-5 h-5" />, url: "https://x.com", color: "hover:text-black dark:hover:text-gray-300" },
-    { name: "Instagram", icon: <Instagram className="w-5 h-5" />, url: "https://instagram.com", color: "hover:text-pink-600" },
-    { name: "YouTube", icon: <Youtube className="w-5 h-5" />, url: "https://youtube.com", color: "hover:text-red-600" },
+    {
+      name: "Facebook",
+      icon: <Facebook className="w-5 h-5" />,
+      url: "https://facebook.com",
+      color: "hover:text-blue-600",
+    },
+    {
+      name: "X",
+      icon: <X className="w-5 h-5" />,
+      url: "https://x.com",
+      color: "hover:text-black dark:hover:text-gray-300",
+    },
+    {
+      name: "Instagram",
+      icon: <Instagram className="w-5 h-5" />,
+      url: "https://instagram.com",
+      color: "hover:text-pink-600",
+    },
+    {
+      name: "YouTube",
+      icon: <Youtube className="w-5 h-5" />,
+      url: "https://youtube.com",
+      color: "hover:text-red-600",
+    },
   ];
 
   const quickLinks: QuickLink[] = [
@@ -31,26 +60,60 @@ const Footer: React.FC = () => {
     { name: "Component", path: "/BrowseProperties" },
     { name: "More", path: "/become-host" },
   ];
+  const shineStyle: React.CSSProperties = {
+    position: "relative",
+    display: "inline-block",
+    background: `linear-gradient(
+    90deg,
+    #000000 0%,
+    #645f5f 20%,
+    #504545 40%,
+    #221f1f 60%,
+    #3d3b3b 80%,
+    #000000 100%
+  )`,
+    backgroundSize: "200%",
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    animation: "shine 10s linear infinite",
+  };
 
   return (
     <div>
-      <div className="border-t-2 footer-border bg-gray-900 poppins-font">
-        <div className="max-w-11/12 mx-auto px-6 py-16">
+      <style jsx>{`
+        @keyframes shine {
+          0% {
+            background-position: 200%;
+          }
+          100% {
+            background-position: -200%;
+          }
+        }
+      `}</style>
+
+      <div className="border-t-2 footer-border  py-16 bg-gray-900 poppins-font">
+        <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Brand Section */}
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-6">
                 <div>
                   <h1 className="text-2xl font-bold">
-                    <span className="text-gray-100 merriweather-font">STEPS</span>
+                    <span className="text-gray-100 merriweather-font">
+                      STEPS
+                    </span>
                   </h1>
-                  <p className="text-sm text-gray-300">SOLE – Sneakers Simplified</p>
+                  <p className="text-sm text-gray-300">
+                    SOLE – Sneakers Simplified
+                  </p>
                 </div>
               </div>
 
               <div>
                 <p className="text-gray-300 leading-relaxed mb-6">
-                  Minimal design. Maximum comfort. Sneakers made for everyday life with timeless style.
+                  Minimal design. Maximum comfort. Sneakers made for everyday
+                  life with timeless style.
                 </p>
 
                 {/* Social Media Links */}
@@ -73,7 +136,9 @@ const Footer: React.FC = () => {
 
             {/* Quick Links */}
             <div className="lg:col-span-1">
-              <h3 className="text-lg font-semibold text-gray-200 mb-6">Quick Links</h3>
+              <h3 className="text-lg font-semibold text-gray-200 mb-6">
+                Quick Links
+              </h3>
               <ul className="space-y-3">
                 {quickLinks.map((link) => (
                   <li key={link.name}>
@@ -91,59 +156,77 @@ const Footer: React.FC = () => {
 
             {/* Contact Info */}
             <div className="lg:col-span-2">
-              <h3 className="text-lg font-semibold text-center text-gray-200 mb-6">Contact Info</h3>
+              <h3 className="text-lg font-semibold  text-center text-gray-200 mb-6">
+                Contact Info
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Address */}
-                <div className="flex items-start gap-4 p-4 dark:border-gray-700 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
+                <div className="flex items-start cursor-pointer gap-4 p-4 dark:border-gray-700 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
                   <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center flex-shrink-0">
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-200 mb-1">Our Location</h4>
+                    <h4 className="font-semibold text-gray-200 mb-1">
+                      Our Location
+                    </h4>
                     <p className="text-gray-300 text-sm leading-relaxed">
-                      Sylhet, Bangladesh<br />
+                      Sylhet, Bangladesh
+                      <br />
                       Merrick Way, FL 12345
                     </p>
                   </div>
                 </div>
 
                 {/* Phone */}
-                <div className="flex items-start gap-4 p-4 dark:border-gray-700 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
+                <div className="flex items-start cursor-pointer gap-4 p-4 dark:border-gray-700 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
                   <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center flex-shrink-0">
                     <Phone className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-200 mb-1">Phone Number</h4>
-                    <a href="tel:+8801902042884" className="text-gray-300 text-sm hover:text-emerald-600 transition-colors duration-300">
+                    <h4 className="font-semibold text-gray-200 mb-1">
+                      Phone Number
+                    </h4>
+                    <a
+                      href="tel:+8801902042884"
+                      className="text-gray-300 text-sm hover:text-emerald-600 transition-colors duration-300"
+                    >
                       +880 1902-042884
                     </a>
                   </div>
                 </div>
 
                 {/* Email */}
-                <div className="flex items-start gap-4 p-4 dark:bg-gray-900 rounded-2xl border border-gray-700 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-800 transition-all duration-300">
+                <div className="flex items-start cursor-pointer gap-4 p-4 dark:bg-gray-900 rounded-2xl border border-gray-700 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-800 transition-all duration-300">
                   <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center flex-shrink-0">
                     <Mail className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-200 mb-1">Email Address</h4>
-                    <a href="mailto:endgameprogramm10@gmail.com" className="text-gray-300 text-sm hover:text-emerald-600 transition-colors duration-300">
+                    <h4 className="font-semibold text-gray-200 mb-1">
+                      Email Address
+                    </h4>
+                    <a
+                      href="mailto:endgameprogramm10@gmail.com"
+                      className="text-gray-300 text-sm hover:text-emerald-600 transition-colors duration-300"
+                    >
                       support@ezrent.com
                     </a>
                   </div>
                 </div>
 
                 {/* Business Hours */}
-                <div className="flex items-start dark:border-gray-700 gap-4 p-4 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
+                <div className="flex items-start cursor-pointer dark:border-gray-700 gap-4 p-4 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
                   <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
                     <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
                       <div className="w-3 h-3 bg-amber-500 rounded-full" />
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-200 mb-1">Business Hours</h4>
+                    <h4 className="font-semibold text-gray-200 mb-1">
+                      Business Hours
+                    </h4>
                     <p className="text-gray-300 text-sm leading-relaxed">
-                      Mon - Sun: 24/7<br />
+                      Mon - Sun: 24/7
+                      <br />
                       Support Available
                     </p>
                   </div>
@@ -153,7 +236,12 @@ const Footer: React.FC = () => {
           </div>
 
           <h1 className="text-[60px] xs:text-[80px] hidden lg:block sm:text-[120px] md:text-[160px] lg:text-[200px] xl:text-[250px] w-full text-center font-bold leading-[0.8]">
-            <span className="inline-block shine-text w-full py-2 px-4 merriweather-font">STEPS SHOES</span>
+            <span
+              style={shineStyle}
+              className="inline-block w-full py-2 px-4 merriweather-font"
+            >
+              STEPS SHOES
+            </span>
           </h1>
         </div>
 
@@ -161,12 +249,17 @@ const Footer: React.FC = () => {
         <div className="border-t">
           <div className="max-w-7xl mx-auto px-6 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-              <div className="text-gray-300">© {new Date().getFullYear()} STEPS. All rights reserved.</div>
+              <div className="text-gray-300">
+                © {new Date().getFullYear()} STEPS. All rights reserved.
+              </div>
               <div className="flex items-center gap-1 text-gray-300">
                 Made with
                 <Heart className="w-4 h-4 text-red-500 fill-current" />
                 by{" "}
-                <a href="#" className="text-emerald-600 font-medium hover:underline transition-colors duration-300">
+                <a
+                  href="#"
+                  className="text-emerald-600 font-medium hover:underline transition-colors duration-300"
+                >
                   Md . Shakib Khan
                 </a>
               </div>

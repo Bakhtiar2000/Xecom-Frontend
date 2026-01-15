@@ -32,7 +32,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
         transition={{ duration: 0.5, delay: index * 0.1 }}
         className="group relative"
       >
-        <div className="relative hover:shadow-lg bg-secondary rounded-lg p-6 shadow-sm border ">
+        <div className="relative hover:shadow-lg bg-card-primary rounded-lg p-6 shadow-sm border ">
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <div>
@@ -92,7 +92,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
 
             <button
               onClick={() => setLiked((prev) => !prev)}
-              className="flex items-center gap-1 text-gray-500 hover:text-red-500 transition-colors"
+              className="flex items-center gap-1 cursor-pointer text-gray-500 hover:text-red-500 transition-colors"
             >
               <Heart
                 className={`w-5 h-5 ${

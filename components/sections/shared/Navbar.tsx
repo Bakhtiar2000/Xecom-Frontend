@@ -69,7 +69,7 @@ const Navbar = () => {
           }`}
       >
 
-        <div className={`flex justify-between  items-center ${isSticky ? "px-6" : "px-6 lg:px-16 "}`}>
+        <div className={`flex justify-between  items-center max-w-11/12 mx-auto px-4`}>
           <div className="flex justify-center items-center gap-20">
             <div className="text-3xl font-extrabold tracking-widest merriweather-font">STEPS</div>
 
@@ -106,7 +106,7 @@ const Navbar = () => {
 
             <div className="flex gap-6">
               <Select value={language} onValueChange={(value) => setLanguage(value as "en" | "bn")}>
-                <SelectTrigger className="">
+                <SelectTrigger className="cursor-pointer">
                   <SelectValue placeholder="Language" />
                 </SelectTrigger>
 

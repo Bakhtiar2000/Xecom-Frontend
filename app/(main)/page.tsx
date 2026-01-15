@@ -10,7 +10,7 @@ import ReviewGrid from "@/components/sections/main/landing/ReviewGrid";
 export default function HomePage() {
   return (
     <div className="bg-background ">
-      <HeroSection />
+      <HeroSection></HeroSection>
       <SneakerMosaicGallery></SneakerMosaicGallery>
       <PremiumShoes></PremiumShoes>
       <MegaWinterSell></MegaWinterSell>

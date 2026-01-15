@@ -20,11 +20,6 @@ const MotionSection = motion.section;
 
 type VariantType = "modern";
 
-interface StyleVariant {
-  card: string;
-  header: string;
-  accent: string;
-}
 
 interface SneakerStep {
   number: string;
@@ -40,14 +35,6 @@ interface HowtoBookingProps {
   variant?: VariantType;
 }
 
-
-const styleVariants: Record<VariantType, StyleVariant> = {
-  modern: {
-    card: "bg-linear-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 shadow-xl",
-    header: "text-4xl lg:text-5xl font-extrabold",
-    accent: "from-red-500 to-orange-500 dark:from-red-400 dark:to-orange-400",
-  },
-};
 
 const sneakerSteps: SneakerStep[] = [
   {
@@ -142,7 +129,6 @@ const sneakerSteps: SneakerStep[] = [
 
 
 const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
-  const styles = styleVariants[variant];
 
   return (
     <MotionSection
@@ -150,7 +136,7 @@ const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8 }}
-      className="relative max-w-11/12 mx-auto px-4 py-16 lg:py-20 poppins-font"
+      className="relative container poppins-font"
     >
       <div className="relative text-center mb-16">
         <MotionDiv
@@ -159,11 +145,11 @@ const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <h1 className="text-4xl font-light mb-5 Title-text-primary merriweather-font">
+          <h1 className="title-text merriweather-font mb-2">
             How to Get Your <span className="font-medium">Sneakers</span>
           </h1>
 
-          <p className="Discription-text-primary text-sm merriweather-font uppercase tracking-wider mb-2">
+          <p className="description-text text-muted-foreground mb-8 merriweather-font">
             From browsing to doorstep, getting your perfect pair has never
             <br />
             been easier. Follow these simple steps to own your dream sneakers.
