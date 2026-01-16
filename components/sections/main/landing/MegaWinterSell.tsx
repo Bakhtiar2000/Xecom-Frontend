@@ -71,7 +71,7 @@ export default function MegaWinterSell() {
   return (
     <section className="container  ">
       <div className="bg-linear-to-br from-slate-950 via-purple-950 to-slate-950 rounded-2xl min-h-screen relative overflow-hidden  text-white  poppins-font">
-        <div className="relative z-10 max-w-7xl mx-auto  py-16">
+        <div className="relative z-10 max-w-7xl mx-auto  lg:py-16 p-5 text-center lg:text-left">
           <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -138,12 +138,12 @@ export default function MegaWinterSell() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
-                className="flex flex-wrap gap-4"
+                className="flex lg:flex-wrap  gap-4"
               >
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg- px-8 py-4 rounded-full cursor-pointer bg-button-secondary font-bold shadow-2xl flex items-center gap-3 group"
+                  className="px-4 lg:px-8 py-2 lg:py-4 rounded-full text-sm cursor-pointer bg-button-secondary font-bold shadow-2xl flex items-center gap-3 group"
                 >
                   <ShoppingBag className="w-5 h-5" />
                   Shop Collection
@@ -153,7 +153,7 @@ export default function MegaWinterSell() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="border-2 border-white/30 cursor-pointer  px-8 py-4 rounded-full font-bold backdrop-blur-sm hover:bg-white/10 transition-all"
+                  className="border-2 border-white/30 cursor-pointer text-sm  px-4 py-2 lg:px-8 lg:py-4 rounded-full font-bold backdrop-blur-sm hover:bg-white/10 transition-all"
                 >
                   View Deals
                 </motion.button>

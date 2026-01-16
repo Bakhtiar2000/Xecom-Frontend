@@ -39,8 +39,16 @@ const Navbar = () => {
   return (
     <div className="w-full poppins-font bg-secondary">
       {/* Top Bar */}
-      <div className="hidden w-11/12 mx-auto lg:flex bg-primary text-white text-sm">
-        <div className="   w-1/2 flex items-center justify-between px-8 py-1">
+      <div
+        className={`hidden lg:flex w-11/12 mx-auto bg-primary text-white text-sm
+  transition-all duration-300 ease-in-out overflow-hidden
+  ${
+    isSticky
+      ? "max-h-0 opacity-0 -translate-y-4"
+      : "max-h-20 opacity-100 translate-y-0"
+  }`}
+      >
+        <div className="w-1/2 flex items-center justify-between px-8 py-1">
           <p className="flex items-center gap-2">
             <span className="font-semibold flex gap-1">
               <Navigation size={20} /> 7 Days A Week
@@ -49,7 +57,7 @@ const Navbar = () => {
           </p>
         </div>
 
-        <div className="  w-1/2 flex items-center justify-end gap-4 py-1 pr-8">
+        <div className="w-1/2 flex items-center justify-end gap-4 py-1 pr-8">
           <div className="text-sm">
             Call Us: <span className="font-semibold">610-403-403</span>
           </div>
@@ -79,11 +87,11 @@ const Navbar = () => {
                   <Link
                     key={route.href}
                     href={route.href}
-                    className={`relative font-thin transition-colors
+                    className={`relative font-thin text-sm transition-colors
           ${
             isActive
               ? "text-primary dark:text-gray-300 font-semibold after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-primary"
-              : "text-muted-foreground hover:text-foreground"
+              : "text-foreground hover:text-foreground"
           }
         `}
                   >
@@ -101,7 +109,7 @@ const Navbar = () => {
                       <li className="row-span-3 ">
                         <NavigationMenuLink asChild>
                           <Link
-                            href="/ManProducts"
+                            href="/manProducts"
                             className="flex flex-col justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-4 md:p-6 no-underline outline-none transition-all duration-200 hover:shadow-md"
                           >
                             <h1 className="mb-2 text-lg font-medium sm:mt-4">

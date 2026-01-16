@@ -30,7 +30,7 @@
 
   /* Secondary Colors */
   --color-secondary: #ffffff;
-  --color-secondary-foreground: #ffffff;
+  --color-secondary-foreground: #000000;
 
   /* tertiary color */
   --color-tertiary: linear-gradient(to top, #000000cc, transparent);
@@ -199,16 +199,16 @@
    ===================================================== */
 
 .container {
-  @apply mx-auto px-4 py-15 md:max-w-182  lg:max-w-11/12 ;
+  @apply mx-auto px-4 py-5 lg:py-15 md:max-w-182  lg:max-w-11/12 ;
 }
 
 
 .title-text {
-  @apply text-4xl font-bold;
+  @apply   text-2xl lg:text-4xl  font-bold;
 }
 
 .description-text {
-  @apply text-lg font-thin text-muted-foreground;
+  @apply text-sm lg:text-lg font-thin text-muted-foreground;
 }
 
 .scrollbar-none {

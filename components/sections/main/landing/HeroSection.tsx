@@ -22,7 +22,7 @@ export default function Hero_Section() {
 
   return (
     <div className="poppins-font">
-      <section className="relative min-h-screen container mx-auto overflow-hidden ">
+      <section className="relative min-h-screen max-w-11/12  py-5 mx-auto overflow-hidden ">
         <div className="text-center lg:mt-5">
           <motion.h1
             className="text-[40px] merriweather-font  mt-5 sm:text-[60px] md:text-[80px] lg:text-[120px] font-bold leading-none tracking-tight cursor-pointer"
@@ -57,7 +57,7 @@ export default function Hero_Section() {
         </div>
 
         {/* MAIN CONTENT */}
-        <div className="flex flex-col  lg:flex-row justify-between  items-end px-4 sm:px-8 lg:px-12   gap-10 sm:gap-16 overflow-hidden">
+        <div className="flex flex-col  lg:flex-row justify-between  items-end  lg:px-12   gap-10 sm:gap-16 overflow-hidden">
           {/* RIGHT SIDE IMAGE + TAGS */}
           <div className="relative   w-full lg:w-1/2 h-[50vh] lg:h-[60vh] mx-auto flex items-center justify-center overflow-hidden">
             <AnimatePresence mode="wait">

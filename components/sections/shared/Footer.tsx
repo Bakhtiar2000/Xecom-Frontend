@@ -92,7 +92,7 @@ const Footer: React.FC = () => {
         }
       `}</style>
 
-      <div className="border-t-2 footer-border  py-16 bg-gray-900 poppins-font">
+      <div className="border-t-2 footer-border   bg-gray-900 poppins-font">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Brand Section */}
@@ -238,7 +238,7 @@ const Footer: React.FC = () => {
           <h1 className="text-[60px] xs:text-[80px] hidden lg:block sm:text-[120px] md:text-[160px] lg:text-[200px] xl:text-[250px] w-full text-center font-bold leading-[0.8]">
             <span
               style={shineStyle}
-              className="inline-block w-full py-2 px-4 merriweather-font"
+              className="inline-block w-full pt-5 px-4 merriweather-font"
             >
               STEPS SHOES
             </span>
