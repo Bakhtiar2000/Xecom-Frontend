@@ -59,7 +59,7 @@ export default function Hero_Section() {
         {/* MAIN CONTENT */}
         <div className="flex flex-col  lg:flex-row justify-between  items-end  lg:px-12   gap-10 sm:gap-16 overflow-hidden">
           {/* RIGHT SIDE IMAGE + TAGS */}
-          <div className="relative   w-full lg:w-1/2 h-[50vh] lg:h-[60vh] mx-auto flex items-center justify-center overflow-hidden">
+          <div className="relative  z-10  w-full lg:w-1/2 h-[50vh] lg:h-[60vh] mx-auto flex items-center justify-center overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={shoe?.id}
@@ -94,33 +94,36 @@ export default function Hero_Section() {
                   left: part.left,
                 }}
               >
-                <div className="rounded-full shadow-lg p-1.5">
-                  <Plus size={14} className="text-secondary-foreground" />
+                <div className="rounded-full bg-card-primary shadow-lg p-1.5">
+                  <Plus size={14} className="" />
                 </div>
 
                 {/* Card with full-width hover button */}
-                <div className="relative bg-gray-300  group  shadow-lg rounded-xl mt-2 w-32 sm:w-35 overflow-hidden transition-all">
+                <div className="relative bg-card-primary  group  shadow-lg rounded-xl mt-2 w-32 sm:w-35 overflow-hidden transition-all">
                   {/* Content */}
-                  {/* <div className="p-2 flex  items-center justify-between">
-                                            <Image
-                                                src={part.img}
-                                                alt={part.title}
-                                                width={40}
-                                                height={40}
-                                                className="rounded-lg"
-                                            />
-                                            <div>
-                                                <p className="text-xs sm:text-sm font-semibold">{shoe.name}</p>
-                                                <p className="text-[10px] sm:text-xs Hero-text-primary">{part.title}</p>
-                                            </div>
-                                        </div>
+                  <div className="p-2 flex items-center justify-between">
+                    <Image
+                      src={part.img}
+                      alt={part.title}
+                      width={40}
+                      height={40}
+                      className="rounded-lg"
+                    />
+                    <div>
+                      <p className="text-xs sm:text-sm font-semibold">
+                        {shoe.name}
+                      </p>
+                      <p className="text-[10px] sm:text-xs Hero-text-primary">
+                        {part.title}
+                      </p>
+                    </div>
+                  </div>
 
-
-                                        <div className="absolute bg-secondary bottom-0 left-0 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <button className="w-full  py-2 text-xs sm:text-sm font-semibold uppercase">
-                                                Shop Now
-                                            </button>
-                                        </div> */}
+                  <div className="absolute bg-gray-200 dark:bg-gray-950  bottom-0 left-0 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button className="w-full  py-2 text-xs sm:text-sm font-semibold uppercase">
+                      Shop Now
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             ))}

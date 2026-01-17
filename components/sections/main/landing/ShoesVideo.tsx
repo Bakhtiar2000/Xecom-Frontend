@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import SectionTitle from "../../shared/SectionTitle";
 
 const ShoesVideo: React.FC = () => {
   return (
@@ -10,12 +11,8 @@ const ShoesVideo: React.FC = () => {
           <div className="max-w-6xl mx-auto">
             {/* Subtle Header */}
             <div className="text-center mb-16">
-              <p className="description-text text-muted-foreground merriweather-font">
-                Video Showcase
-              </p>
-              <h1 className="title-text  merriweather-font">
-                Sneakers in <span className="font-medium">Motion</span>
-              </h1>
+              <SectionTitle subtitle="Video Showcase" />
+              <SectionTitle title="Sneakers in Motion" className="mb-8" />
             </div>
 
             {/* Interactive Video Section */}

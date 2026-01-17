@@ -65,7 +65,7 @@ const Navbar = () => {
       </div>
 
       <nav
-        className={`w-full  left-0 z-50 bg-secondary transition-all duration-300 ${
+        className={`w-full  left-0 z-100 bg-secondary transition-all duration-300 ${
           isSticky ? "fixed top-0  shadow-md py-3" : "relative  py-3  shadow-sm"
         }`}
       >
@@ -121,7 +121,7 @@ const Navbar = () => {
                       <li className="row-span-3 ">
                         <NavigationMenuLink asChild>
                           <Link
-                            href="/WomanProducts"
+                            href="/womanProducts"
                             className=" justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-4 md:p-6 no-underline outline-none transition-all duration-200 hover:shadow-md"
                           >
                             <h1 className="mb-2 text-lg font-medium sm:mt-4">

@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { Sparkles, TrendingUp, Trophy } from "lucide-react";
 import { trendingSneakers, Sneaker } from "@/data/premium_shoes";
 import ProductCard from "@/components/ui/productCard";
+import SectionTitle from "../../shared/SectionTitle";
 
 type TabType = "trending" | "bestsellers" | "new";
 
@@ -45,12 +46,8 @@ const PremiumShoes = (): React.JSX.Element => {
       <div className="  relative z-10">
         {/* Header */}
         <div className="text-center">
-          <p className="description-text  text-muted-foreground merriweather-font">
-            Sneaker
-          </p>
-          <h1 className="title-text merriweather-font mb-2">
-            Premium Sneaker <span className="font-medium">Collection</span>
-          </h1>
+          <SectionTitle subtitle="Sneaker" />
+          <SectionTitle title=" Premium Sneaker Collection" className="mb-2" />
         </div>
 
         {/* Tabs */}

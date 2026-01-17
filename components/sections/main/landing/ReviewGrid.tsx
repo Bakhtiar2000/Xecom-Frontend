@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import ReviewCard from "@/components/ui/reviewcard";
 import { testimonials } from "@/data/review";
+import SectionTitle from "../../shared/SectionTitle";
 
 // Define the type for a single review
 export interface Review {
@@ -54,14 +55,8 @@ const ReviewsGrid: React.FC = () => {
       `}</style>
       <div className="relative  overflow-hidden">
         <div className="text-center mb-12">
-          <h1 className="title-text merriweather-font mb-2">
-            Real Reviews{" "}
-            <span className="font-medium">From Real Customers</span>
-          </h1>
-          <p className="text-muted-foreground description-text merriweather-font">
-            Don&apos;t just take our word for it. See what sneaker enthusiasts
-            are <br /> saying about their purchases.
-          </p>
+          <SectionTitle title="Real Reviews" className="mb-2" />
+          <SectionTitle className="mb-6" description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers." />
         </div>
 
         {/* Reviews Grid */}

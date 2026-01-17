@@ -12,6 +12,7 @@ import {
   Ruler,
 } from "lucide-react";
 import StepCard from "@/components/ui/StepCard";
+import SectionTitle from "../../shared/SectionTitle";
 
 
 
@@ -145,15 +146,9 @@ const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <h1 className="title-text merriweather-font mb-2">
-            How to Get Your <span className="font-medium">Sneakers</span>
-          </h1>
-
-          <p className="description-text text-muted-foreground mb-8 merriweather-font">
-            From browsing to doorstep, getting your perfect pair has never
-            <br />
-            been easier. Follow these simple steps to own your dream sneakers.
-          </p>
+          <SectionTitle title="How to Get Your Sneakers"  className="mb-2"/>
+          <SectionTitle className="mb-6" description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers." />
+         
         </MotionDiv>
       </div>
 

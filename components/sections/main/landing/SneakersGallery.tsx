@@ -6,6 +6,7 @@ import { X, ZoomIn, Heart, Share2 } from "lucide-react";
 import Image from "next/image";
 import { sneakersGallery } from "@/data/shoes_data";
 import { SneakerGalleryItem } from "@/types/shoes.types";
+import SectionTitle from "../../shared/SectionTitle";
 
 const SneakerMosaicGallery = () => {
   const [selectedImage, setSelectedImage] = useState<SneakerGalleryItem | null>(
@@ -38,13 +39,8 @@ const SneakerMosaicGallery = () => {
         </div>
 
         <div className="text-center mb-12 -mt-30">
-          <p className="description-text text-muted-foreground merriweather-font">
-            Explore our collection
-          </p>
-
-          <h1 className="title-text  merriweather-font">
-            Sneaker <span className="font-medium">Gallery</span>
-          </h1>
+          <SectionTitle subtitle="  Explore our collection" />
+          <SectionTitle title=" SneakerGallery" />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[300px] gap-4">
@@ -72,7 +68,7 @@ const SneakerMosaicGallery = () => {
 
                 {item.featured && (
                   <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full  text-xs font-medium">
+                    <span className="px-3 py-1 rounded-full text-white  text-xs font-medium">
                       Featured
                     </span>
                   </div>
@@ -80,13 +76,13 @@ const SneakerMosaicGallery = () => {
 
                 <button
                   onClick={(e) => toggleLike(item.id, e)}
-                  className="absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+                  className="absolute top-4 right-4 bg-card-primary p-2 rounded-full backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
                 >
                   <Heart
                     className={`w-5  h-5 ${
                       likedImages.includes(item.id)
                         ? "fill-red-500 text-red-500"
-                        : ""
+                        : "dark:text-white"
                     }`}
                   />
                 </button>
@@ -149,7 +145,7 @@ const SneakerMosaicGallery = () => {
             >
               <button
                 onClick={closeImage}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full  backdrop-blur-sm flex items-center justify-center  transition-colors z-10"
+                className="absolute top-4 right-4 w-10 h-10 bg-card-primary rounded-full  backdrop-blur-sm flex items-center justify-center  transition-colors z-10"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -165,7 +161,7 @@ const SneakerMosaicGallery = () => {
 
                   <button
                     onClick={(e) => toggleLike(selectedImage.id, e)}
-                    className="absolute top-4 left-4 p-3 rounded-full backdrop-blur-sm hover:scale-110 transition-transform"
+                    className="absolute top-4 left-4 p-3 bg-card-primary rounded-full backdrop-blur-sm hover:scale-110 transition-transform"
                   >
                     <Heart
                       className={`w-6  h-6 ${

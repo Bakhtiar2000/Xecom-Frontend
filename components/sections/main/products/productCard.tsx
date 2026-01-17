@@ -117,7 +117,10 @@ export default function ProductCard({
         {/* CTA */}
         <Link
           href={`/Product/${product.id}`}
-          className="text-secondary-foreground bg-button-primary py-3 px-4 rounded-lg font-semibold flex justify-center"
+          className={`text-secondary bg-button-primary py-3 px-4 rounded-lg font-semibold flex justify-center
+    ${viewMode === "grid" ? "w-full" : "w-40"}
+
+  `}
         >
           Add to Cart
         </Link>
