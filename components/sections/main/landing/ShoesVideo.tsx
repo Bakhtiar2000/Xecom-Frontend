@@ -11,8 +11,7 @@ const ShoesVideo: React.FC = () => {
           <div className="max-w-6xl mx-auto">
             {/* Subtle Header */}
             <div className="text-center mb-16">
-              <SectionTitle subtitle="Video Showcase" />
-              <SectionTitle title="Sneakers in Motion" className="mb-8" />
+              <SectionTitle subtitle="Video Showcase"  title="Sneakers in Motion" className="mb-8" />
             </div>
 
             {/* Interactive Video Section */}

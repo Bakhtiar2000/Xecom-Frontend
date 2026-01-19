@@ -146,8 +146,8 @@ const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <SectionTitle title="How to Get Your Sneakers"  className="mb-2"/>
-          <SectionTitle className="mb-6" description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers." />
+          <SectionTitle description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers." title="How to Get Your Sneakers"  className="mb-2"/>
+         
          
         </MotionDiv>
       </div>

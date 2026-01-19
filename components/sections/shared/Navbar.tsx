@@ -157,7 +157,7 @@ const Navbar = () => {
 
               <ThemeToggle />
               <Link
-                href="/SignIn"
+                href="/login"
                 className="flex hover-button items-center gap-1  transition"
               >
                 <User size={22} /> Sign In

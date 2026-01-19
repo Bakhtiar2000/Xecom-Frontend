@@ -46,8 +46,7 @@ const PremiumShoes = (): React.JSX.Element => {
       <div className="  relative z-10">
         {/* Header */}
         <div className="text-center">
-          <SectionTitle subtitle="Sneaker" />
-          <SectionTitle title=" Premium Sneaker Collection" className="mb-2" />
+          <SectionTitle subtitle="Sneaker"  title=" Premium Sneaker Collection" className="mb-2" />
         </div>
 
         {/* Tabs */}
