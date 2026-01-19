@@ -1,6 +1,6 @@
 export interface SectionTitleProps {
   className?: string;
-  title?: string;
+  title: string;
   subtitle?: string;
   description?: string;
 }
@@ -12,13 +12,13 @@ export default function SectionTitle({
   description,
 }: SectionTitleProps) {
   return (
-    <header className={`${className || ""}`}>
+    <header className={`mb-4 lg:mb-8 ${className || ""}`}>
       {subtitle && <h2 className="mb-2 text-muted-foreground">{subtitle}</h2>}
-      <h1 className="font-bold merriweather-font lg:text-4xl text-2xl">
+      <h1 className="font-bold merriweather-font lg:text-4xl text-2xl mb-2">
         {title}
       </h1>
       {description && (
-        <p className="mb-8 text-muted-foreground">{description}</p>
+        <p className="text-muted-foreground max-w-150 mx-auto">{description}</p>
       )}
     </header>
   );

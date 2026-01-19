@@ -55,8 +55,8 @@ const ReviewsGrid: React.FC = () => {
       `}</style>
       <div className="relative  overflow-hidden">
         <div className="text-center mb-12">
-          <SectionTitle title="Real Reviews" className="mb-2" />
-          <SectionTitle className="mb-6" description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers." />
+          <SectionTitle title="Real Reviews" description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers." className="mb-2" />
+          
         </div>
 
         {/* Reviews Grid */}

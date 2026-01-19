@@ -10,7 +10,7 @@ import SectionTitle from "../../shared/SectionTitle";
 
 const SneakerMosaicGallery = () => {
   const [selectedImage, setSelectedImage] = useState<SneakerGalleryItem | null>(
-    null
+    null,
   );
   const [likedImages, setLikedImages] = useState<number[]>([]);
 
@@ -21,7 +21,7 @@ const SneakerMosaicGallery = () => {
   const toggleLike = (id: number, e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setLikedImages((prev) =>
-      prev.includes(id) ? prev.filter((imgId) => imgId !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((imgId) => imgId !== id) : [...prev, id],
     );
   };
 
@@ -39,8 +39,10 @@ const SneakerMosaicGallery = () => {
         </div>
 
         <div className="text-center mb-12 -mt-30">
-          <SectionTitle subtitle="  Explore our collection" />
-          <SectionTitle title=" SneakerGallery" />
+          <SectionTitle
+            title=" SneakerGallery"
+            subtitle="  Explore our collection"
+          />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[300px] gap-4">
@@ -228,7 +230,7 @@ const SneakerMosaicGallery = () => {
                           key={img.id}
                           onClick={() => {
                             const index = sneakersGallery.findIndex(
-                              (i) => i.id === img.id
+                              (i) => i.id === img.id,
                             );
                             setSelectedImage(img);
                           }}

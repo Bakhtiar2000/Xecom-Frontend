@@ -15,7 +15,7 @@ export default function ProductCard({
 }: Props) {
   return (
     <div
-      className={`group relative bg-card-primary  rounded-sm overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 transform hover:-translate-y-2 ${
+      className={`group relative bg-card-primary  rounded-sm overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 transform ${
         viewMode === "list" ? "flex flex-col md:flex-row" : ""
       }`}
     >
@@ -40,7 +40,7 @@ export default function ProductCard({
           src={product.image}
           alt={product.name}
           fill
-          className="object-contain transition-transform duration-700 group-hover:scale-110"
+          className="object-contain transition-transform duration-500 hover:scale-105 "
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
