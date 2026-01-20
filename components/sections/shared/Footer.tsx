@@ -124,7 +124,7 @@ const Footer: React.FC = () => {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`w-10 h-10 bg-white border-gray-700 rounded-xl flex items-center justify-center text-gray-800 transition-all duration-300 hover:border-emerald-300 hover:shadow-md ${social.color}`}
+                      className={`w-10 h-10 bg-white/20 border-gray-700 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:border-emerald-300 hover:shadow-md ${social.color}`}
                       aria-label={social.name}
                     >
                       {social.icon}
@@ -246,7 +246,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-border">
+        <div className="border-t border-gray-700">
           <div className="max-w-7xl mx-auto px-6 py-2">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
               <div className="text-gray-300">

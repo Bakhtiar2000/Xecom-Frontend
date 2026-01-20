@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,23 @@ import {
 } from "@/components/ui/card";
 import { useRegisterMutation } from "@/redux/features/auth/authApi";
 import { TResponse } from "@/types/global.type";
-import AnimatedSneakerImage from "@/components/ui/annimationSneakersImage";
+import AnnimatedSneakerImage from "@/components/custom/AnnimationSneakersImage";
+
+// Define form data interface
+interface RegisterFormData {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
+}
+
+// Define API error interface
+interface ApiError {
+  data?: {
+    message?: string;
+  };
+}
 
 const Register = () => {
   const router = useRouter();
@@ -27,7 +43,7 @@ const Register = () => {
     formState: { errors },
     watch,
     reset,
-  } = useForm({
+  } = useForm<RegisterFormData>({
     defaultValues: {
       name: "",
       email: "",
@@ -39,7 +55,7 @@ const Register = () => {
 
   const password = watch("password");
 
-  const onSubmit = async (data: FieldValues) => {
+  const onSubmit = async (data: RegisterFormData) => {
     console.log(data);
     const registerToastId = toast.loading("Creating Account...");
 
@@ -50,11 +66,16 @@ const Register = () => {
       password: data.password,
     };
 
+    console.log('register' , userInfo);
+
     try {
-      const res = (await register(userInfo)) as TResponse<any>;
+      const res = (await register(userInfo)) as TResponse<unknown>;
 
       if (res.error) {
-        toast.error(res.error.data.message, { id: registerToastId });
+        const apiError = res.error as ApiError;
+        toast.error(apiError?.data?.message || "Registration failed", { 
+          id: registerToastId 
+        });
       } else {
         toast.success("Account created successfully! Please login.", {
           id: registerToastId,
@@ -75,15 +96,15 @@ const Register = () => {
   const handleSocialLogin = (provider: string) => alert(provider);
 
   return (
-    <div className="min-h-screen container   grid grid-cols-1 lg:grid-cols-2 items-center  gap-10 px-6 poppins-font">
+    <div className="min-h-screen container bg-background  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  poppins-font">
       <div className="lg:flex justify-center hidden">
-        <AnimatedSneakerImage />
+        <AnnimatedSneakerImage />
       </div>
 
       <div className="flex justify-center ">
         <div className="max-w-md w-full space-y-2">
           <div className="text-center">
-            <Link href="/" className="text-3xl font-bold text-primary">
+            <Link href="/" className="text-3xl font-bold">
               Xecom
             </Link>
             <h2 className="mt-4 text-3xl font-bold text-foreground">
@@ -93,7 +114,7 @@ const Register = () => {
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-semibold text-primary hover:text-primary/80"
+                className="font-semibold"
               >
                 Sign in here
               </Link>
@@ -112,7 +133,7 @@ const Register = () => {
                 <div>
                   <label
                     htmlFor="name"
-                    className="block text-sm font-medium text-muted-foreground"
+                    className="block text-sm font-medium "
                   >
                     Full Name
                   </label>
@@ -140,7 +161,7 @@ const Register = () => {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-muted-foreground"
+                    className="block text-sm font-medium "
                   >
                     Email Address
                   </label>
@@ -168,7 +189,7 @@ const Register = () => {
                 <div>
                   <label
                     htmlFor="phoneNumber"
-                    className="block text-sm font-medium text-muted-foreground"
+                    className="block text-sm font-medium "
                   >
                     Phone Number
                   </label>
@@ -196,7 +217,7 @@ const Register = () => {
                 <div>
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium text-muted-foreground"
+                    className="block text-sm font-medium "
                   >
                     Password
                   </label>
@@ -229,7 +250,7 @@ const Register = () => {
                 <div>
                   <label
                     htmlFor="confirmPassword"
-                    className="block text-sm font-medium text-muted-foreground"
+                    className="block text-sm font-medium "
                   >
                     Confirm Password
                   </label>
@@ -257,7 +278,7 @@ const Register = () => {
                     By creating an account, you agree to our{" "}
                     <Link
                       href="/terms"
-                      className="text-primary hover:text-primary/80"
+                      className=" font-bold "
                     >
                       Terms of Service
                     </Link>{" "}
@@ -282,7 +303,7 @@ const Register = () => {
                   {/* <div className="w-full border-t border-gray-300 dark:border-gray-600"></div> */}
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-transparent text-gray-500 dark:text-gray-400">
+                  <span className="px-2 bg-transparent text-muted-foreground ">
                     Or continue with
                   </span>
                 </div>
@@ -291,7 +312,7 @@ const Register = () => {
               <div className="flex justify-center mt-4">
                 <button
                   onClick={() => handleSocialLogin("google")}
-                  className="flex items-center justify-center gap-3 w-full py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-medium shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+                  className="flex items-center justify-center gap-3 w-full py-3 rounded-xl  font-medium shadow-sm bg-white  dark:bg-white/10 cursor-pointer transition-all"
                 >
                   <svg
                     className="w-6 h-6"

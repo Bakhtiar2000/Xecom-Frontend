@@ -11,7 +11,7 @@ import {
   RefreshCw,
   Ruler,
 } from "lucide-react";
-import StepCard from "@/components/ui/StepCard";
+import StepCard from "@/components/custom/StepCard";
 import SectionTitle from "../../shared/SectionTitle";
 
 

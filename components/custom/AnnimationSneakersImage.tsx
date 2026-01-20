@@ -8,7 +8,7 @@ import Link from "next/link";
 
 type HoverEffect = "float" | string;
 
-const AnimatedSneakerImage: FC = () => {
+const AnnimatedSneakerImage: FC = () => {
   const [hoverEffect, setHoverEffect] = useState<HoverEffect>("float");
   const [isHovered, setIsHovered] = useState<boolean>(true);
   const [isLiked, setIsLiked] = useState<boolean>(false);
@@ -149,4 +149,4 @@ const AnimatedSneakerImage: FC = () => {
   );
 };
 
-export default AnimatedSneakerImage;
+export default AnnimatedSneakerImage;

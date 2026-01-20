@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FieldValues, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,9 +22,18 @@ import {
 import { setUser } from "@/redux/features/auth/authSlice";
 import { verifyToken } from "@/utils/verifyToken";
 import { TUser } from "@/redux/features/auth/authSlice";
-import { TResponse } from "@/types/global.type";
 import { UserRole } from "@/constants/enum";
-import AnimatedSneakerImage2 from "@/components/ui/annimationSneakersImage2";
+import AnimatedSneakerImage2 from "@/components/custom/AnnimationSneakersImage2";
+
+// Define form types
+interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+interface ForgotPasswordFormData {
+  email: string;
+}
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -37,8 +46,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-  } = useForm({
+  } = useForm<LoginFormData>({
     defaultValues: {
       email: "",
       password: "",
@@ -50,9 +58,9 @@ const Login = () => {
     handleSubmit: handleSubmitForgot,
     formState: { errors: forgotErrors },
     reset: resetForgot,
-  } = useForm();
+  } = useForm<ForgotPasswordFormData>();
 
-  const handleForgotSubmit = async (data: { email: string }) => {
+  const handleForgotSubmit = async (data: ForgotPasswordFormData) => {
     const toastId = toast.loading("Sending request ...");
 
     try {
@@ -60,8 +68,9 @@ const Login = () => {
       toast.success(res.message || "Please check your mail", { id: toastId });
       setIsModalOpen(false);
       resetForgot();
-    } catch (err: any) {
-      toast.error(err?.data?.message || "Something went wrong", {
+    } catch (err) {
+      const error = err as { data?: { message?: string } };
+      toast.error(error?.data?.message || "Something went wrong", {
         id: toastId,
       });
     }
@@ -76,13 +85,14 @@ const Login = () => {
     resetForgot();
   };
 
-  const onSubmit = async (data: FieldValues) => {
+  const onSubmit = async (data: LoginFormData) => {
     console.log(data);
     const loginToastId = toast.loading("Logging In");
     const userInfo = {
       email: data.email,
       password: data.password,
     };
+    console.log('login ', userInfo);
 
     try {
       const res = await login(userInfo).unwrap();
@@ -114,9 +124,9 @@ const Login = () => {
       </div>
 
       <div className="flex justify-center ">
-        <div className="max-w-md w-full space-y-2">
+        <div className="max-w-md w-full  space-y-2">
           <div className="text-center">
-            <Link href="/" className="text-3xl font-bold text-primary">
+            <Link href="/" className="text-3xl font-bold ">
               Xecom
             </Link>
             <h2 className="mt-4 text-3xl font-bold text-foreground">
@@ -126,7 +136,7 @@ const Login = () => {
               Or{" "}
               <Link
                 href="/register"
-                className="font-semibold text-primary hover:text-primary/80"
+                className="font-semibold"
               >
                 create a new account
               </Link>
@@ -145,7 +155,7 @@ const Login = () => {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-muted-foreground"
+                    className="block text-sm font-medium"
                   >
                     User ID / Email
                   </label>
@@ -169,7 +179,7 @@ const Login = () => {
                 <div>
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium text-muted-foreground"
+                    className="block text-sm font-medium "
                   >
                     Password
                   </label>
@@ -199,7 +209,7 @@ const Login = () => {
                     <button
                       type="button"
                       onClick={showModal}
-                      className="font-medium text-primary hover:text-primary/80"
+                      className="font-medium "
                     >
                       Forgot your password?
                     </button>
@@ -217,7 +227,7 @@ const Login = () => {
                   {/* <div className="w-full border-t border-gray-300 dark:border-gray-600"></div> */}
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-transparent text-gray-500 dark:text-gray-400">
+                  <span className="px-2 bg-transparent text-muted-foreground">
                     Or continue with
                   </span>
                 </div>
@@ -226,7 +236,7 @@ const Login = () => {
               <div className="flex justify-center mt-4">
                 <button
                   onClick={() => handleSocialLogin("google")}
-                  className="flex items-center justify-center gap-3 w-full py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-medium shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+                  className="flex items-center justify-center gap-3 w-full py-3 rounded-xl  font-medium shadow-sm bg-white  dark:bg-white/10 cursor-pointer transition-all"
                 >
                 
                   <svg
@@ -260,7 +270,7 @@ const Login = () => {
 
           {/* Forgot Password Modal */}
           {isModalOpen && (
-            <div className="fixed inset-0 bg-primary flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
               <Card className="w-full max-w-md mx-4">
                 <CardHeader>
                   <CardTitle>Reset Password</CardTitle>
@@ -275,7 +285,7 @@ const Login = () => {
                   >
                     <div>
                       <label
-                        htmlFor="email"
+                        htmlFor="forgot-email"
                         className="block text-sm font-medium text-muted-foreground"
                       >
                         Email Address
@@ -294,7 +304,9 @@ const Login = () => {
                           className={forgotErrors.email ? "border-danger" : ""}
                         />
                         {forgotErrors.email && (
-                          <p className="mt-1 text-sm text-primary">errorrrr</p>
+                          <p className="mt-1 text-sm text-primary">
+                            {forgotErrors.email.message}
+                          </p>
                         )}
                       </div>
                     </div>

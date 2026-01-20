@@ -70,8 +70,8 @@ export default function MegaWinterSell() {
 
   return (
     <section className="container  ">
-      <div className="bg-linear-to-br from-slate-950 via-purple-950 to-slate-950 rounded-2xl min-h-screen relative overflow-hidden  text-white  poppins-font">
-        <div className="relative z-10 max-w-11/12 lg:max-w-7xl mx-auto  py-16 ">
+      <div className="bg-linear-to-br from-slate-950 via-purple-950 to-slate-950 rounded-2xl lg:min-h-screen relative overflow-hidden  text-white  poppins-font">
+        <div className="relative z-10 max-w-7xl mx-auto  lg:py-16 p-10 text-center lg:text-left">
           <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -129,7 +129,7 @@ export default function MegaWinterSell() {
                           {key}
                         </span>
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               </motion.div>
@@ -138,7 +138,7 @@ export default function MegaWinterSell() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
-                className="flex lg:flex-wrap  gap-4"
+                className="flex lg:flex-wrap items-center justify-center  gap-4"
               >
                 <motion.button
                   whileHover={{ scale: 1.05 }}

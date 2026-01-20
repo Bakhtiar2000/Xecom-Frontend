@@ -12,8 +12,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, FC, ChangeEvent, FormEvent } from "react";
-import AnimatedSneakerImage from "@/components/ui/annimationSneakersImage";
-import AnimatedSneakerImage2 from "@/components/ui/annimationSneakersImage2";
+import AnimatedSneakerImage2 from "@/components/custom/AnnimationSneakersImage2";
+import AnnimatedSneakerImage from "@/components/custom/annimationSneakersImage";
 
 /* =======================
    InputField Types
@@ -150,7 +150,7 @@ const SignIn: FC = () => {
   return (
     <div className="min-h-screen container  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10 px-6 poppins-font">
       <div className="lg:flex justify-center hidden">
-        {!isLogin ? <AnimatedSneakerImage /> : <AnimatedSneakerImage2 />}
+        {!isLogin ? <AnnimatedSneakerImage /> : <AnimatedSneakerImage2 />}
       </div>
 
       <div className="flex justify-center ">
