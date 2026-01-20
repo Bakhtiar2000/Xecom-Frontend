@@ -57,7 +57,7 @@ export default function Hero_Section() {
         </div>
 
         {/* MAIN CONTENT */}
-        <div className="flex flex-col  lg:flex-row justify-between  items-end  lg:px-12   gap-10 sm:gap-16 overflow-hidden">
+        <div className="flex flex-col  lg:flex-row justify-between  items-end px-4 sm:px-8 lg:px-12   gap-10 sm:gap-16 overflow-hidden">
           {/* RIGHT SIDE IMAGE + TAGS */}
           <div className="relative  z-10  w-full lg:w-1/2 h-[50vh] lg:h-[60vh] mx-auto flex items-center justify-center overflow-hidden">
             <AnimatePresence mode="wait">
@@ -130,8 +130,8 @@ export default function Hero_Section() {
           </div>
 
           {/* LEFT SIDE TEXT */}
-          <div className="w-full  lg:w-1/2 relative z-10  ">
-            <div className="bg-primary rounded-xl border  px-6 sm:px-8 py-5 flex flex-col justify-between items-start gap-8 lg:-mr-12  shadow-lg">
+          <div className="w-full  lg:w-1/2 relative z-10 lg:mb-10 ">
+            <div className="bg-primary rounded-xl border  px-6 sm:px-8 py-5 flex flex-col justify-between  gap-8  shadow-lg">
               <div className="w-full space-y-2">
                 <motion.div
                   key={shoe?.id}
