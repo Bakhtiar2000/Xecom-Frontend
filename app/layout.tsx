@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "sonner";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Xecom - Your Trusted E-commerce Platform",
-  description: "Discover amazing products at unbeatable prices. Shop from thousands of items with fast delivery.",
+  description:
+    "Discover amazing products at unbeatable prices. Shop from thousands of items with fast delivery.",
 };
 
 export default function RootLayout({
@@ -30,8 +32,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          {children}
-          <Toaster />
+          <AuthProvider>
+            <Toaster />
+            {children}
+          </AuthProvider>
         </Providers>
       </body>
     </html>

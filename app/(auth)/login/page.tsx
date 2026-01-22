@@ -19,9 +19,14 @@ import {
   useLoginMutation,
   useForgotPasswordMutation,
 } from "@/redux/features/auth/authApi";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import AnimatedSneakerImage2 from "@/components/customComponents/AnnimationSneakersImage2";
+import { useAuth } from "@/context/AuthContext";
 
 // Define form types
 interface LoginFormData {
@@ -34,12 +39,11 @@ interface ForgotPasswordFormData {
 }
 
 const Login = () => {
-  const dispatch = useAppDispatch();
+
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [forgotPassword] = useForgotPasswordMutation();
-  const [login] = useLoginMutation();
-
+  const { logIn, signInWithGoogle } = useAuth();
   const {
     register,
     handleSubmit,
@@ -87,20 +91,74 @@ const Login = () => {
     const toastId = toast.loading("Logging in...");
 
     try {
-      await signInWithEmailAndPassword(auth, data.email, data.password);
+      await logIn(data.email, data.password);
 
       toast.success("Logged in successfully!", {
         id: toastId,
         duration: 2000,
       });
+
+     
+      router.push("/");
     } catch (error: any) {
-      toast.error(error.message || "Invalid email or password", {
+      let errorMessage = "Invalid email or password";
+
+    
+      if (error.code === "auth/user-not-found") {
+        errorMessage = "No user found with this email";
+      } else if (error.code === "auth/wrong-password") {
+        errorMessage = "Incorrect password";
+      } else if (error.code === "auth/invalid-email") {
+        errorMessage = "Invalid email format";
+      } else if (error.code === "auth/user-disabled") {
+        errorMessage = "This account has been disabled";
+      } else if (error.code === "auth/too-many-requests") {
+        errorMessage = "Too many failed attempts. Please try again later";
+      } else if (error.code === "auth/invalid-credential") {
+        errorMessage =
+          "Invalid credentials. Please check your email and password";
+      }
+
+      toast.error(errorMessage, {
         id: toastId,
       });
     }
   };
 
-  const handleSocialLogin = (provider: string) => alert(provider);
+  // Google Sign 
+  const handleGoogleSignIn = async () => {
+    const toastId = toast.loading("Signing in with Google...");
+
+    try {
+      await signInWithGoogle();
+
+      toast.success("Welcome! Signed in with Google successfully", {
+        id: toastId,
+        duration: 2000,
+      });
+
+      
+      router.push("/");
+    } catch (error: any) {
+      let errorMessage = "Failed to sign in with Google";
+      if (error.code === "auth/popup-closed-by-user") {
+        errorMessage = "Sign-in popup was closed";
+      } else if (error.code === "auth/popup-blocked") {
+        errorMessage = "Popup was blocked by browser";
+      } else if (error.code === "auth/cancelled-popup-request") {
+        errorMessage = "Sign-in was cancelled";
+      } else if (
+        error.code === "auth/account-exists-with-different-credential"
+      ) {
+        errorMessage = "Account already exists with different sign-in method";
+      }
+
+      toast.error(errorMessage, {
+        id: toastId,
+      });
+    }
+  };
+
 
   return (
     <div className=" container  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  poppins-font">
@@ -214,7 +272,7 @@ const Login = () => {
 
               <div className="flex justify-center mt-4">
                 <button
-                  onClick={() => handleSocialLogin("google")}
+                  onClick={() => handleGoogleSignIn()}
                   className="flex items-center justify-center gap-3 w-full py-3 rounded-xl  font-medium shadow-sm bg-white  dark:bg-white/10 cursor-pointer transition-all"
                 >
                   <svg

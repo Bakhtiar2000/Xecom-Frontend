@@ -99,7 +99,7 @@ export default function Hero_Section() {
                 </div>
 
                 {/* Card with full-width hover button */}
-                <div className="relative bg-card-primary  group  shadow-lg rounded-xl mt-2 w-32 sm:w-35 overflow-hidden transition-all">
+                <div className="relative bg-card-primary group shadow-lg rounded-xl mt-2 w-32 sm:w-35 overflow-hidden transition-all">
                   {/* Content */}
                   <div className="p-2 flex items-center justify-between">
                     <Image
@@ -119,8 +119,22 @@ export default function Hero_Section() {
                     </div>
                   </div>
 
-                  <div className="absolute bg-gray-200 dark:bg-gray-950  bottom-0 left-0 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button className="w-full  py-2 text-xs sm:text-sm font-semibold uppercase">
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {/* Blur Layer */}
+                    <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+
+                    {/* Text Layer */}
+                    <button
+                      className="
+        relative z-10
+        w-full h-full
+        flex items-center justify-center
+        text-xs sm:text-sm font-semibold uppercase
+        text-white
+        tracking-wide
+      "
+                    >
                       Shop Now
                     </button>
                   </div>

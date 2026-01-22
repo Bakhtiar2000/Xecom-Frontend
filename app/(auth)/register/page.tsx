@@ -17,6 +17,7 @@ import { TResponse } from "@/types/global.type";
 import AnnimatedSneakerImage from "@/components/customComponents/AnnimationSneakersImage";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { useAuth } from "@/context/AuthContext";
 
 // Define form data interface
 interface RegisterFormData {
@@ -54,20 +55,23 @@ const Register = () => {
   });
 
   const password = watch("password");
+  const { signUp, signInWithGoogle } = useAuth();
 
   const onSubmit = async (data: RegisterFormData) => {
     const toastId = toast.loading("Creating account...");
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password,
-      );
+      // Use signUp from AuthContext
+      await signUp(data.email, data.password);
 
-      await updateProfile(userCredential.user, {
-        displayName: data.name,
-      });
+      // Update user profile with display name
+      // Note: We need to import auth to get current user
+      const { auth } = await import("@/lib/firebase");
+      if (auth.currentUser) {
+        await updateProfile(auth.currentUser, {
+          displayName: data.name,
+        });
+      }
 
       toast.success("Account created successfully!", {
         id: toastId,
@@ -75,14 +79,63 @@ const Register = () => {
       });
 
       reset();
+
+      // Redirect to dashboard or home page
+      router.push("/");
     } catch (error: any) {
-      toast.error(error.message || "Something went wrong", {
+      let errorMessage = "Something went wrong";
+
+      // Handle specific Firebase errors
+      if (error.code === "auth/email-already-in-use") {
+        errorMessage = "Email already in use. Please try another email.";
+      } else if (error.code === "auth/invalid-email") {
+        errorMessage = "Invalid email address";
+      } else if (error.code === "auth/weak-password") {
+        errorMessage = "Password is too weak. Please use a stronger password.";
+      } else if (error.code === "auth/operation-not-allowed") {
+        errorMessage = "Email/password accounts are not enabled";
+      }
+
+      toast.error(errorMessage, {
         id: toastId,
       });
     }
   };
 
-  const handleSocialLogin = (provider: string) => alert(provider);
+  // Google Sign Up using AuthContext
+  const handleGoogleSignUp = async () => {
+    const toastId = toast.loading("Signing up with Google...");
+
+    try {
+      await signInWithGoogle();
+
+      toast.success("Account created successfully with Google!", {
+        id: toastId,
+        duration: 2000,
+      });
+      
+      router.push("/");
+    } catch (error: any) {
+      let errorMessage = "Failed to sign up with Google";
+
+      // Handle specific Firebase errors
+      if (error.code === "auth/popup-closed-by-user") {
+        errorMessage = "Sign-up popup was closed";
+      } else if (error.code === "auth/popup-blocked") {
+        errorMessage = "Popup was blocked by browser";
+      } else if (error.code === "auth/cancelled-popup-request") {
+        errorMessage = "Sign-up was cancelled";
+      } else if (
+        error.code === "auth/account-exists-with-different-credential"
+      ) {
+        errorMessage = "Account already exists with different sign-in method";
+      }
+
+      toast.error(errorMessage, {
+        id: toastId,
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen container bg-background  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  poppins-font">
@@ -288,7 +341,7 @@ const Register = () => {
 
               <div className="flex justify-center mt-4">
                 <button
-                  onClick={() => handleSocialLogin("google")}
+                  onClick={() => handleGoogleSignUp()}
                   className="flex items-center justify-center gap-3 w-full py-3 rounded-xl  font-medium shadow-sm bg-white  dark:bg-white/10 cursor-pointer transition-all"
                 >
                   <svg

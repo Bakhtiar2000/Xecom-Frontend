@@ -20,12 +20,28 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { useAuth } from "@/context/AuthContext";
+import Image from "next/image";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const pathname = usePathname();
+  const { user, logOut } = useAuth();
 
+  console.log("user is :", user?.email);
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 20);
@@ -65,8 +81,10 @@ const Navbar = () => {
       </div>
 
       <nav
-        className={`w-full  left-0 z-100 bg-secondary transition-all duration-300 ${
-          isSticky ? "fixed top-0  shadow-md py-3" : "relative  py-3  shadow-sm"
+        className={`w-full  left-0  bg-secondary transition-all duration-300 ${
+          isSticky
+            ? "fixed top-0 z-100  shadow-md py-3"
+            : "relative  py-3  shadow-sm"
         }`}
       >
         <div
@@ -141,6 +159,12 @@ const Navbar = () => {
             <div className="relative flex items-center flex-1"></div>
 
             <div className="flex gap-6">
+              <Link
+                href={"/Cart"}
+                className="flex hover-button items-center gap-1  transition"
+              >
+                <ShoppingCart size={22} /> Cart(0)
+              </Link>
               <Select
                 value={language}
                 onValueChange={(value) => setLanguage(value as "en" | "bn")}
@@ -156,18 +180,58 @@ const Navbar = () => {
               </Select>
 
               <ThemeToggle />
-              <Link
-                href="/login"
-                className="flex hover-button items-center gap-1  transition"
-              >
-                <User size={22} /> Sign In
-              </Link>
-              <Link
-                href={"/Cart"}
-                className="flex hover-button items-center gap-1  transition"
-              >
-                <ShoppingCart size={22} /> Cart(0)
-              </Link>
+              {user ? (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button className="flex items-center">
+                      {user?.photoURL ? (
+                        <Image
+                          src={user.photoURL}
+                          alt="User Avatar"
+                          width={32}
+                          height={32}
+                          className="rounded-full object-cover border cursor-pointer"
+                        />
+                      ) : (
+                        <Avatar className="w-8 h-8 cursor-pointer">
+                          <AvatarImage src="/avatar.png" alt="User Avatar" />
+                          <AvatarFallback>
+                            {user?.email?.charAt(0).toUpperCase() ?? "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+                    </button>
+                  </AlertDialogTrigger>
+
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Logout</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to log out of your account?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={async () => {
+                          await logOut();
+                        }}
+                        className="bg-danger text-danger-foreground hover:bg-danger"
+                      >
+                        Logout
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              ) : (
+                <Link
+                  href="/login"
+                  className="flex hover-button items-center gap-1 transition"
+                >
+                  <User size={22} /> Sign In
+                </Link>
+              )}
             </div>
           </div>
 
