@@ -442,7 +442,7 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <Link href="/CheckOut">
+                <Link href="/checkOut">
                   <button
                     className="w-full bg-button-primary
                                  text-white font-semibold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] mt-6"
