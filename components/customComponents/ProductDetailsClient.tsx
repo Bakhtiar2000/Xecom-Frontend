@@ -73,22 +73,10 @@ export default function ProductDetailsClient({ id }: { id: string }) {
 
   return (
     <div className="min-h-screen bg-background">
-   
-      <div className="container mx-auto px-4 py-4">
-        <nav className="flex cursor-pointer items-center text-sm Hero-title-text mb-6">
-          <Link
-            href="/"
-            className=""
-          >
-            Home
-          </Link>
-          <ChevronLeft className="w-4 h-4 mx-2" />
-          <span className="font-medium">White Viscose Straight</span>
-        </nav>
-      </div>
+
 
       {/* Main Product Section */}
-      <div className="w-11/12  mx-auto px-4  lg:pb-16">
+      <div className="w-11/12  mx-auto px-4 my-5 lg:my-10  lg:pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="md:flex md:gap-4 ">
             <div className="flex md:flex-col py-5 md:-mt-5 flex-row gap-3">
@@ -96,7 +84,7 @@ export default function ProductDetailsClient({ id }: { id: string }) {
                 <button
                   key={image.id}
                   onClick={() => setSelectedImage(index)}
-                  className={`relative w-20 h-20 rounded-md  cursor-pointer bg-card-primary  p-2 overflow-hidden border-2 ${
+                  className={`relative w-20 h-20 rounded-md  cursor-pointer bg-card-primary   overflow-hidden border-2 ${
                     selectedImage === index ? "border-black" : "border-border"
                   }`}
                 >
@@ -206,7 +194,7 @@ export default function ProductDetailsClient({ id }: { id: string }) {
                     className={`w-14 lg:h-14 h-10 flex items-center cursor-pointer justify-center border-2 rounded-lg font-medium transition-all ${
                       selectedSize === size
                         ? "border-black bg-black text-white"
-                        : "border-border hover:border-border/80"
+                        : "border-border bg-white dark:bg-card-primary hover:border-border/80"
                     }`}
                   >
                     {size}
@@ -220,7 +208,7 @@ export default function ProductDetailsClient({ id }: { id: string }) {
                   <button
                     key={image.id}
                     onClick={() => setSelectedImage(index)}
-                    className={`relative w-15 h-15 cursor-pointer rounded-full overflow-hidden border-2 ${
+                    className={`relative w-15 h-15 cursor-pointer bg-card-primary rounded-full overflow-hidden border-2 ${
                       selectedImage === index
                         ? "border-black"
                         : "border-border"
