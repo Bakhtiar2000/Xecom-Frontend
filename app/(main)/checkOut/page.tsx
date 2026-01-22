@@ -148,7 +148,7 @@ const CheckoutPage = () => {
               <div className="flex items-center justify-between mb-8 flex-wrap gap-2">
                 <button
                   onClick={() => setActiveStep("items")}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
+                  className={`flex cursor-pointer items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
                     activeStep === "items"
                       ? "text-button-secondary"
                       : "text-muted-foreground"
@@ -160,7 +160,7 @@ const CheckoutPage = () => {
                 <ArrowRight className="hidden sm:block" />
                 <button
                   onClick={() => setActiveStep("info")}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
+                  className={`flex cursor-pointer items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
                     activeStep === "info"
                       ? "text-button-secondary"
                       : "text-muted-foreground"
@@ -177,7 +177,7 @@ const CheckoutPage = () => {
                     }
                   }}
                   disabled={!formValid}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
+                  className={`flex cursor-pointer items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
                     !formValid
                       ? "text-muted-foreground cursor-not-allowed opacity-50"
                       : activeStep === "payment"

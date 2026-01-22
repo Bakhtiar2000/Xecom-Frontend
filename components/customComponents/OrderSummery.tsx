@@ -92,7 +92,7 @@ const AllOrderSummery = ({ items, Totals, activeStep, onProceed, isDisabled = fa
               <button
                 type="button"
                 className={`w-full flex justify-center font-semibold py-3 px-4 rounded-lg mt-6
-       bg-black/90 border-border shadow-sm cursor-not-allowed`}
+       bg-black/10 border-border shadow-sm cursor-not-allowed`}
               >
                 <Lock className="mr-2" size={20} />
                 {getButtonText()}
@@ -115,7 +115,7 @@ const AllOrderSummery = ({ items, Totals, activeStep, onProceed, isDisabled = fa
             : <button
               onClick={onProceed}
               disabled={isDisabled}
-              className={`w-full flex justify-center font-semibold py-3 px-4 rounded-lg mt-6
+              className={`w-full flex cursor-pointer justify-center font-semibold py-3 px-4 rounded-lg mt-6
     transition-all transform
     ${isDisabled
                   ? 'bg-muted-foreground '
