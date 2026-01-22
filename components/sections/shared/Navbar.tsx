@@ -41,12 +41,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { CartData } from "@/data/cart";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const pathname = usePathname();
   const { user, logOut } = useAuth();
+  const [cartItems, setCartItems] = useState(CartData);
 
   console.log("user is :", user?.email);
   useEffect(() => {
@@ -167,10 +169,10 @@ const Navbar = () => {
 
             <div className="flex gap-6">
               <Link
-                href={"/Cart"}
+                href={"/cart"}
                 className="flex hover-button items-center gap-1  transition"
               >
-                <ShoppingCart size={22} /> Cart(0)
+                <ShoppingCart size={22} /> Cart({cartItems?.length})
               </Link>
               <Select
                 value={language}
@@ -296,14 +298,14 @@ const Navbar = () => {
                     href="/manProducts"
                     className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
                   >
-                  1. Man Products
+                    1. Man Products
                   </Link>
 
                   <Link
                     href="/womanProducts"
                     className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
                   >
-                  2. Woman Products
+                    2. Woman Products
                   </Link>
                 </div>
               </div>
@@ -311,7 +313,7 @@ const Navbar = () => {
               {/* Actions */}
               <div className="mt-8 border-t pt-6 space-y-1">
                 <Link
-                  href="/Cart"
+                  href="/cart"
                   className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted"
                 >
                   <ShoppingCart size={18} />
