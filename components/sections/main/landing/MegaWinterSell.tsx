@@ -71,7 +71,7 @@ export default function MegaWinterSell() {
   return (
     <section className="container  ">
       <div className="bg-linear-to-br from-slate-950 via-purple-950 to-slate-950 rounded-2xl lg:min-h-screen relative overflow-hidden  text-white  poppins-font">
-        <div className="relative z-10 max-w-7xl mx-auto  lg:py-16 p-10 text-center lg:text-left">
+        <div className="relative z-10 max-w-7xl mx-auto  lg:py-16 px-5 py-10 text-center lg:text-left">
           <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
             <motion.div
               initial={{ opacity: 0, x: -50 }}

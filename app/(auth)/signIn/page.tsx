@@ -12,7 +12,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, FC, ChangeEvent, FormEvent } from "react";
-import AnimatedSneakerImage2 from "@/components/custom/AnnimationSneakersImage2";
+import AnimatedSneakerImage2 from "@/components/customComponents/AnnimationSneakersImage2";
 import AnnimatedSneakerImage from "@/components/custom/annimationSneakersImage";
 
 /* =======================

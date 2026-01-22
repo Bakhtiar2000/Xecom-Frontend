@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { Sparkles, TrendingUp, Trophy } from "lucide-react";
 import { trendingSneakers, Sneaker } from "@/data/premium_shoes";
 import SectionTitle from "../../shared/SectionTitle";
-import ProductCard from "@/components/custom/ProductCard";
+import ProductCard from "@/components/customComponents/ProductCard";
 
 type TabType = "trending" | "bestsellers" | "new";
 

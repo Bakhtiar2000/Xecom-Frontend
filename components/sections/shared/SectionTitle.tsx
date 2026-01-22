@@ -13,7 +13,7 @@ export default function SectionTitle({
 }: SectionTitleProps) {
   return (
     <header className={`mb-4 lg:mb-8 ${className || ""}`}>
-      {subtitle && <h2 className="mb-2 text-muted-foreground">{subtitle}</h2>}
+      {subtitle && <h2 className="lg:mb-2 text-sm md:text-lg text-muted-foreground">{subtitle}</h2>}
       <h1 className="font-bold merriweather-font lg:text-4xl text-2xl mb-2">
         {title}
       </h1>

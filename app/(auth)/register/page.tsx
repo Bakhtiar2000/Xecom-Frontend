@@ -13,9 +13,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useRegisterMutation } from "@/redux/features/auth/authApi";
 import { TResponse } from "@/types/global.type";
-import AnnimatedSneakerImage from "@/components/custom/AnnimationSneakersImage";
+import AnnimatedSneakerImage from "@/components/customComponents/AnnimationSneakersImage";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 // Define form data interface
 interface RegisterFormData {
@@ -35,7 +36,6 @@ interface ApiError {
 
 const Register = () => {
   const router = useRouter();
-  const [register] = useRegisterMutation();
 
   const {
     register: registerForm,
@@ -56,39 +56,28 @@ const Register = () => {
   const password = watch("password");
 
   const onSubmit = async (data: RegisterFormData) => {
-    console.log(data);
-    const registerToastId = toast.loading("Creating Account...");
-
-    const userInfo = {
-      name: data.name,
-      email: data.email,
-      phoneNumber: data.phoneNumber,
-      password: data.password,
-    };
-
-    console.log('register' , userInfo);
+    const toastId = toast.loading("Creating account...");
 
     try {
-      const res = (await register(userInfo)) as TResponse<unknown>;
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password,
+      );
 
-      if (res.error) {
-        const apiError = res.error as ApiError;
-        toast.error(apiError?.data?.message || "Registration failed", { 
-          id: registerToastId 
-        });
-      } else {
-        toast.success("Account created successfully! Please login.", {
-          id: registerToastId,
-          duration: 3000,
-        });
-        reset();
-        router.push("/login");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong", {
-        id: registerToastId,
-        duration: 2000,
+      await updateProfile(userCredential.user, {
+        displayName: data.name,
+      });
+
+      toast.success("Account created successfully!", {
+        id: toastId,
+        duration: 3000,
+      });
+
+      reset();
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong", {
+        id: toastId,
       });
     }
   };
@@ -112,10 +101,7 @@ const Register = () => {
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link
-                href="/login"
-                className="font-semibold"
-              >
+              <Link href="/login" className="font-semibold">
                 Sign in here
               </Link>
             </p>
@@ -131,10 +117,7 @@ const Register = () => {
             <CardContent>
               <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium "
-                  >
+                  <label htmlFor="name" className="block text-sm font-medium ">
                     Full Name
                   </label>
                   <div className="mt-1">
@@ -159,10 +142,7 @@ const Register = () => {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium "
-                  >
+                  <label htmlFor="email" className="block text-sm font-medium ">
                     Email Address
                   </label>
                   <div className="mt-1">
@@ -276,10 +256,7 @@ const Register = () => {
                 <div className="text-sm text-muted-foreground">
                   <p>
                     By creating an account, you agree to our{" "}
-                    <Link
-                      href="/terms"
-                      className=" font-bold "
-                    >
+                    <Link href="/terms" className=" font-bold ">
                       Terms of Service
                     </Link>{" "}
                     and{" "}

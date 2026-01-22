@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {  useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,11 +19,9 @@ import {
   useLoginMutation,
   useForgotPasswordMutation,
 } from "@/redux/features/auth/authApi";
-import { setUser } from "@/redux/features/auth/authSlice";
-import { verifyToken } from "@/utils/verifyToken";
-import { TUser } from "@/redux/features/auth/authSlice";
-import { UserRole } from "@/constants/enum";
-import AnimatedSneakerImage2 from "@/components/custom/AnnimationSneakersImage2";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import AnimatedSneakerImage2 from "@/components/customComponents/AnnimationSneakersImage2";
 
 // Define form types
 interface LoginFormData {
@@ -86,44 +84,31 @@ const Login = () => {
   };
 
   const onSubmit = async (data: LoginFormData) => {
-    console.log(data);
-    const loginToastId = toast.loading("Logging In");
-    const userInfo = {
-      email: data.email,
-      password: data.password,
-    };
-    console.log('login ', userInfo);
+    const toastId = toast.loading("Logging in...");
 
     try {
-      const res = await login(userInfo).unwrap();
-      const user = verifyToken(res.data.accessToken) as TUser;
-      dispatch(setUser({ user: user, token: res.data.accessToken }));
-      toast.success("Logged In", { id: loginToastId, duration: 2000 });
+      await signInWithEmailAndPassword(auth, data.email, data.password);
 
-      if (res?.data?.needsPasswordChange) {
-        router.push("/change-password");
-      } else {
-        if (user.role === UserRole.CUSTOMER) {
-          router.push("/");
-        } else {
-          router.push(`/${user.role.toLowerCase()}`);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong", { id: loginToastId, duration: 2000 });
+      toast.success("Logged in successfully!", {
+        id: toastId,
+        duration: 2000,
+      });
+    } catch (error: any) {
+      toast.error(error.message || "Invalid email or password", {
+        id: toastId,
+      });
     }
   };
 
   const handleSocialLogin = (provider: string) => alert(provider);
 
   return (
-    <div className="min-h-screen container  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10 px-6 poppins-font">
+    <div className=" container  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  poppins-font">
       <div className="lg:flex justify-center hidden">
         <AnimatedSneakerImage2 />
       </div>
 
-      <div className="flex justify-center ">
+      <div className="flex justify-center  ">
         <div className="max-w-md w-full  space-y-2">
           <div className="text-center">
             <Link href="/" className="text-3xl font-bold ">
@@ -134,10 +119,7 @@ const Login = () => {
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Or{" "}
-              <Link
-                href="/register"
-                className="font-semibold"
-              >
+              <Link href="/register" className="font-semibold">
                 create a new account
               </Link>
             </p>
@@ -153,10 +135,7 @@ const Login = () => {
             <CardContent>
               <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium"
-                  >
+                  <label htmlFor="email" className="block text-sm font-medium">
                     User ID / Email
                   </label>
                   <div className="mt-1">
@@ -238,7 +217,6 @@ const Login = () => {
                   onClick={() => handleSocialLogin("google")}
                   className="flex items-center justify-center gap-3 w-full py-3 rounded-xl  font-medium shadow-sm bg-white  dark:bg-white/10 cursor-pointer transition-all"
                 >
-                
                   <svg
                     className="w-6 h-6"
                     viewBox="0 0 533.5 544.3"
