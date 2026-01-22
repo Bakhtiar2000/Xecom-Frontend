@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { FirebaseError } from "firebase/app";
+
 import {
   Card,
   CardContent,
@@ -13,10 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TResponse } from "@/types/global.type";
 import AnnimatedSneakerImage from "@/components/customComponents/AnnimationSneakersImage";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { updateProfile } from "firebase/auth";
 import { useAuth } from "@/context/AuthContext";
 
 // Define form data interface
@@ -26,13 +26,6 @@ interface RegisterFormData {
   phoneNumber: string;
   password: string;
   confirmPassword: string;
-}
-
-// Define API error interface
-interface ApiError {
-  data?: {
-    message?: string;
-  };
 }
 
 const Register = () => {
@@ -82,23 +75,28 @@ const Register = () => {
 
       // Redirect to dashboard or home page
       router.push("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
       let errorMessage = "Something went wrong";
 
-      // Handle specific Firebase errors
-      if (error.code === "auth/email-already-in-use") {
-        errorMessage = "Email already in use. Please try another email.";
-      } else if (error.code === "auth/invalid-email") {
-        errorMessage = "Invalid email address";
-      } else if (error.code === "auth/weak-password") {
-        errorMessage = "Password is too weak. Please use a stronger password.";
-      } else if (error.code === "auth/operation-not-allowed") {
-        errorMessage = "Email/password accounts are not enabled";
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            errorMessage = "Email already in use. Please try another email.";
+            break;
+          case "auth/invalid-email":
+            errorMessage = "Invalid email address";
+            break;
+          case "auth/weak-password":
+            errorMessage =
+              "Password is too weak. Please use a stronger password.";
+            break;
+          case "auth/operation-not-allowed":
+            errorMessage = "Email/password accounts are not enabled";
+            break;
+        }
       }
 
-      toast.error(errorMessage, {
-        id: toastId,
-      });
+      toast.error(errorMessage, { id: toastId });
     }
   };
 
@@ -113,27 +111,30 @@ const Register = () => {
         id: toastId,
         duration: 2000,
       });
-      
+
       router.push("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
       let errorMessage = "Failed to sign up with Google";
 
-      // Handle specific Firebase errors
-      if (error.code === "auth/popup-closed-by-user") {
-        errorMessage = "Sign-up popup was closed";
-      } else if (error.code === "auth/popup-blocked") {
-        errorMessage = "Popup was blocked by browser";
-      } else if (error.code === "auth/cancelled-popup-request") {
-        errorMessage = "Sign-up was cancelled";
-      } else if (
-        error.code === "auth/account-exists-with-different-credential"
-      ) {
-        errorMessage = "Account already exists with different sign-in method";
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/popup-closed-by-user":
+            errorMessage = "Sign-up popup was closed";
+            break;
+          case "auth/popup-blocked":
+            errorMessage = "Popup was blocked by browser";
+            break;
+          case "auth/cancelled-popup-request":
+            errorMessage = "Sign-up was cancelled";
+            break;
+          case "auth/account-exists-with-different-credential":
+            errorMessage =
+              "Account already exists with different sign-in method";
+            break;
+        }
       }
 
-      toast.error(errorMessage, {
-        id: toastId,
-      });
+      toast.error(errorMessage, { id: toastId });
     }
   };
 

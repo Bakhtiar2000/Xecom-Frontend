@@ -14,19 +14,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useAppDispatch } from "@/redux/hooks";
-import {
-  useLoginMutation,
-  useForgotPasswordMutation,
-} from "@/redux/features/auth/authApi";
-import {
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { useForgotPasswordMutation } from "@/redux/features/auth/authApi";
+
 import AnimatedSneakerImage2 from "@/components/customComponents/AnnimationSneakersImage2";
 import { useAuth } from "@/context/AuthContext";
+import { FirebaseError } from "firebase/app";
 
 // Define form types
 interface LoginFormData {
@@ -39,7 +31,6 @@ interface ForgotPasswordFormData {
 }
 
 const Login = () => {
-
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [forgotPassword] = useForgotPasswordMutation();
@@ -98,34 +89,39 @@ const Login = () => {
         duration: 2000,
       });
 
-     
       router.push("/");
-    } catch (error: any) {
+    } catch (error) {
       let errorMessage = "Invalid email or password";
 
-    
-      if (error.code === "auth/user-not-found") {
-        errorMessage = "No user found with this email";
-      } else if (error.code === "auth/wrong-password") {
-        errorMessage = "Incorrect password";
-      } else if (error.code === "auth/invalid-email") {
-        errorMessage = "Invalid email format";
-      } else if (error.code === "auth/user-disabled") {
-        errorMessage = "This account has been disabled";
-      } else if (error.code === "auth/too-many-requests") {
-        errorMessage = "Too many failed attempts. Please try again later";
-      } else if (error.code === "auth/invalid-credential") {
-        errorMessage =
-          "Invalid credentials. Please check your email and password";
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/user-not-found":
+            errorMessage = "No user found with this email";
+            break;
+          case "auth/wrong-password":
+            errorMessage = "Incorrect password";
+            break;
+          case "auth/invalid-email":
+            errorMessage = "Invalid email format";
+            break;
+          case "auth/user-disabled":
+            errorMessage = "This account has been disabled";
+            break;
+          case "auth/too-many-requests":
+            errorMessage = "Too many failed attempts. Please try again later";
+            break;
+          case "auth/invalid-credential":
+            errorMessage =
+              "Invalid credentials. Please check your email and password";
+            break;
+        }
       }
 
-      toast.error(errorMessage, {
-        id: toastId,
-      });
+      toast.error(errorMessage, { id: toastId });
     }
   };
 
-  // Google Sign 
+  // Google Sign
   const handleGoogleSignIn = async () => {
     const toastId = toast.loading("Signing in with Google...");
 
@@ -137,28 +133,34 @@ const Login = () => {
         duration: 2000,
       });
 
-      
       router.push("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
       let errorMessage = "Failed to sign in with Google";
-      if (error.code === "auth/popup-closed-by-user") {
-        errorMessage = "Sign-in popup was closed";
-      } else if (error.code === "auth/popup-blocked") {
-        errorMessage = "Popup was blocked by browser";
-      } else if (error.code === "auth/cancelled-popup-request") {
-        errorMessage = "Sign-in was cancelled";
-      } else if (
-        error.code === "auth/account-exists-with-different-credential"
-      ) {
-        errorMessage = "Account already exists with different sign-in method";
+
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/popup-closed-by-user":
+            errorMessage = "Sign-in popup was closed";
+            break;
+
+          case "auth/popup-blocked":
+            errorMessage = "Popup was blocked by the browser";
+            break;
+
+          case "auth/cancelled-popup-request":
+            errorMessage = "Sign-in was cancelled";
+            break;
+
+          case "auth/account-exists-with-different-credential":
+            errorMessage =
+              "An account already exists with a different sign-in method";
+            break;
+        }
       }
 
-      toast.error(errorMessage, {
-        id: toastId,
-      });
+      toast.error(errorMessage, { id: toastId });
     }
   };
-
 
   return (
     <div className=" container  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  poppins-font">
