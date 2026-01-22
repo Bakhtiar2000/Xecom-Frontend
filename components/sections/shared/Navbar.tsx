@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, Search, ShoppingCart, User, X, Navigation } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
@@ -34,6 +34,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -235,50 +242,119 @@ const Navbar = () => {
             </div>
           </div>
 
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden hover-button p-4 rounded-md"
-          >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className="lg:hidden hover-button p-4 rounded-md">
+                <Menu size={24} />
+              </button>
+            </SheetTrigger>
+
+            <SheetContent
+              side="left"
+              className="z-100 w-[300px] sm:w-[340px] px-6 py-6"
+            >
+              {/* Header / Brand */}
+              <SheetHeader className="border-b pb-4">
+                <SheetTitle className="text-2xl font-extrabold tracking-widest">
+                  STEPS
+                </SheetTitle>
+              </SheetHeader>
+
+              {/* Navigation */}
+              <nav className="mt-6 space-y-1">
+                {mainRoutes.map((route) => {
+                  const isActive =
+                    pathname === route.href ||
+                    (route.href !== "/" && pathname.startsWith(route.href));
+
+                  return (
+                    <Link
+                      key={route.href}
+                      href={route.href}
+                      className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors
+            ${
+              isActive
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            }
+          `}
+                    >
+                      {route.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              {/* Products Section */}
+              <div className="mt-8">
+                <p className="mb-3 text-xs font-bold uppercase tracking-wide ">
+                  Products
+                </p>
+
+                <div className="">
+                  <Link
+                    href="/manProducts"
+                    className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
+                  >
+                  1. Man Products
+                  </Link>
+
+                  <Link
+                    href="/womanProducts"
+                    className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
+                  >
+                  2. Woman Products
+                  </Link>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="mt-8 border-t pt-6 space-y-1">
+                <Link
+                  href="/Cart"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted"
+                >
+                  <ShoppingCart size={18} />
+                  <span>Cart (0)</span>
+                </Link>
+
+                <Select
+                  value={language}
+                  onValueChange={(value) => setLanguage(value as "en" | "bn")}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="bn">বাংলা</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <ThemeToggle />
+
+                {user ? (
+                  <button
+                    onClick={logOut}
+                    className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-red-500 hover:bg-red-500/10"
+                  >
+                    <User size={18} />
+                    Logout
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted"
+                  >
+                    <User size={18} />
+                    Sign In
+                  </Link>
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </nav>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="lg:hidden bg-secondary border-t">
-          <div className="border-t px-6 py-3 space-y-3">
-            <button className="flex hover-button items-center gap-1 text-sm hover-button">
-              <Search size={18} /> Search
-            </button>
-            <button className="flex  hover-button items-center gap-1 text-sm hover-button">
-              <User size={18} /> My Profile
-            </button>
-            <Link
-              href={"/ChartsProducts"}
-              className="flex hover-button items-center gap-1 text-sm hover-button"
-            >
-              <ShoppingCart size={18} /> Cart(0)
-            </Link>
-
-            <Select
-              value={language}
-              onValueChange={(value) => setLanguage(value as "en" | "bn")}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Language" />
-              </SelectTrigger>
-
-              <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="bn">বাংলা</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <ThemeToggle />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
