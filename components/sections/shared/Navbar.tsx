@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, Search, ShoppingCart, User, X, Navigation } from "lucide-react";
+import { Menu, ShoppingCart, User, Navigation } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { mainRoutes } from "@/route/main.route";
 import { usePathname } from "next/navigation";
@@ -42,9 +42,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { CartData } from "@/data/cart";
+import CartSheet from "@/components/customComponents/ChartSheet";
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const pathname = usePathname();
   const { user, logOut } = useAuth();
@@ -60,6 +60,8 @@ const Navbar = () => {
   }, []);
 
   const [language, setLanguage] = useState<"en" | "bn">("en");
+
+  const [cartOpen, setCartOpen] = useState(false);
 
   return (
     <div className="w-full poppins-font bg-secondary">
@@ -117,7 +119,7 @@ const Navbar = () => {
                     className={`relative font-thin text-sm transition-colors
           ${
             isActive
-              ? "text-primary dark:text-gray-300 font-semibold after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-primary"
+              ? "text-primary dark:text-gray-300 font-semibold after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:bg-primary"
               : "text-foreground hover:text-foreground"
           }
         `}
@@ -168,12 +170,10 @@ const Navbar = () => {
             <div className="relative flex items-center flex-1"></div>
 
             <div className="flex gap-6">
-              <Link
-                href={"/cart"}
-                className="flex hover-button items-center gap-1  transition"
-              >
-                <ShoppingCart size={22} /> Cart({cartItems?.length})
-              </Link>
+              <button className="flex items-center gap-1" onClick={() => setCartOpen(true)}>
+                <ShoppingCart /> Cart ({cartItems.length})
+              </button>
+              <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
               <Select
                 value={language}
                 onValueChange={(value) => setLanguage(value as "en" | "bn")}
@@ -187,7 +187,6 @@ const Navbar = () => {
                   <SelectItem value="bn">বাংলা</SelectItem>
                 </SelectContent>
               </Select>
-
               <ThemeToggle />
               {user ? (
                 <AlertDialog>
@@ -251,10 +250,7 @@ const Navbar = () => {
               </button>
             </SheetTrigger>
 
-            <SheetContent
-              side="left"
-              className="z-100 w-[300px] sm:w-[340px] px-6 py-6"
-            >
+            <SheetContent side="left" className="z-100 w-75 sm:w-85 px-6 py-6">
               {/* Header / Brand */}
               <SheetHeader className="border-b pb-4">
                 <SheetTitle className="text-2xl font-extrabold tracking-widest">

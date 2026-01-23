@@ -121,7 +121,7 @@ const ProductCard = ({
           href={`/Product/${product.id}`}
           className="text-secondary bg-button-primary py-3 px-4 rounded-lg font-semibold flex justify-center"
         >
-          Add to Cart
+          View Details
         </Link>
       </div>
     </div>

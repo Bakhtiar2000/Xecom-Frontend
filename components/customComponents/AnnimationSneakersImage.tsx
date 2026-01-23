@@ -3,11 +3,7 @@
 import React, { FC, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Heart,
-  RotateCw,
-  Sparkles,
   ChevronLeft,
-  Maximize2,
   Zap,
 } from "lucide-react";
 import Image from "next/image";

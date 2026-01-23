@@ -28,8 +28,8 @@ const CheckoutPage = () => {
   const phoneRef = useRef<HTMLInputElement>(null);
   const addressRef = useRef<HTMLTextAreaElement>(null);
 
-  const [activeStep, setActiveStep] = useState<"items" | "info" | "payment">(
-    "items",
+  const [activeStep, setActiveStep] = useState<"info" | "payment">(
+    "info",
   );
   const [selectedMethod, setSelectedMethod] = useState<string>("cod");
 
@@ -147,18 +147,6 @@ const CheckoutPage = () => {
               {/* Checkout Steps */}
               <div className="flex items-center justify-between mb-8 flex-wrap gap-2">
                 <button
-                  onClick={() => setActiveStep("items")}
-                  className={`flex cursor-pointer items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                    activeStep === "items"
-                      ? "text-button-secondary"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  <ShoppingCart size={20} />
-                  <span className="font-medium">Cart Items</span>
-                </button>
-                <ArrowRight className="hidden sm:block" />
-                <button
                   onClick={() => setActiveStep("info")}
                   className={`flex cursor-pointer items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
                     activeStep === "info"
@@ -192,51 +180,7 @@ const CheckoutPage = () => {
 
               {/* Active Step Content */}
               <div className="mt-8">
-                {activeStep === "items" && (
-                  <div>
-                    <h2 className="text-2xl font-bold  mb-6">
-                      Check Your Items
-                    </h2>
-                    <p className="text-muted-foreground mb-6">
-                      For a better experience, check your item and choose your
-                      shipping before ordering.
-                    </p>
-                    <div className="space-y-4">
-                      {CartData.map((item) => (
-                        <div
-                          key={item.id}
-                          className="flex items-center justify-between p-4 border rounded-xl"
-                        >
-                          <div className="flex items-center space-x-4">
-                            <div className="w-16 h-16 rounded-lg flex items-center justify-center">
-                              <Image
-                                src={item.image}
-                                alt={item.name}
-                                width={64}
-                                height={64}
-                              />
-                            </div>
-
-                            <div>
-                              <h4 className="font-medium cart-text-primary">
-                                {item.name}
-                              </h4>
-                              {item.description && (
-                                <p className="text-sm cart-text-base mt-1">
-                                  {item.description}
-                                </p>
-                              )}
-                              <h1>
-                                <span className="font-semibold">Price:</span>{" "}
-                                {item.finalPrice}
-                              </h1>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+               
 
                 {activeStep === "info" && (
                   <div>

@@ -2,13 +2,9 @@
 
 import {
   Trash2,
-  ChevronDown,
-  ChevronUp,
   Truck,
   Tag,
   Check,
-  ShoppingBag,
-  Gift,
 } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
@@ -46,12 +42,7 @@ interface Voucher {
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>(CartData);
-
   const [selectAll, setSelectAll] = useState(true);
-  const [expandedStores, setExpandedStores] = useState<string[]>([
-    "SneakerHub Store",
-    "Adidas Official Store",
-  ]);
   const [selectedVouchers, setSelectedVouchers] = useState<string[]>([]);
 
   const vouchers: Voucher[] = [
