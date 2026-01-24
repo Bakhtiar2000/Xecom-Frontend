@@ -125,7 +125,7 @@ export default function CartContent({
             checked={selectAll}
             onChange={toggleSelectAll}
           />
-          <span className="font-medium">All cart items</span>
+          <span className="font-medium text-lg lg:text-xl">All cart items</span>
         </label>
       </div>
 
@@ -134,7 +134,7 @@ export default function CartContent({
         <div key={store} className="bg-card-primary rounded-xl">
           <Accordion type="single" collapsible defaultValue={store}>
             <AccordionItem value={store}>
-              <AccordionTrigger className="px-4">
+              <AccordionTrigger className="px-4 text-lg lg:text-xl">
                 {store} ({items.length})
               </AccordionTrigger>
 
@@ -156,22 +156,33 @@ export default function CartContent({
 
                     <div className="flex-1">
                       <div className="flex justify-between">
-                        <h4 className="font-medium">{item.name}</h4>
-                        <button onClick={() => removeItem(item.id)}>
+                        <h4 className="font-medium text-sm lg:text-lg">
+                          {item.name}
+                        </h4>
+                        <button
+                          className="hover:text-danger cursor-pointer"
+                          onClick={() => removeItem(item.id)}
+                        >
                           <Trash2 size={18} />
                         </button>
                       </div>
 
                       <div className="flex justify-between mt-2">
-                        <span>Tk {item.finalPrice}</span>
-                        <div className="flex gap-2">
+                        <span className="text-sm lg:text-lg">
+                          Tk {item.finalPrice}
+                        </span>
+                        <div className="flex gap-4 items-center bg-muted px-2 rounded-2xl">
                           <button
+                            className="cursor-pointer text-lg"
                             onClick={() => updateQuantity(item.id, false)}
                           >
                             -
                           </button>
                           <span>{item.quantity}</span>
-                          <button onClick={() => updateQuantity(item.id, true)}>
+                          <button
+                            className="cursor-pointer text-lg"
+                            onClick={() => updateQuantity(item.id, true)}
+                          >
                             +
                           </button>
                         </div>
@@ -192,7 +203,7 @@ export default function CartContent({
           <span>Tk {totals.grand}</span>
         </div>
 
-        <Link href="/cart" onClick={handleCheckout}>
+        <Link href="/checkOut" onClick={handleCheckout}>
           <button className="w-full mt-4 bg-primary cursor-pointer text-white py-3 rounded-lg">
             Checkout ({cartItems.filter((i) => i.selected).length})
           </button>

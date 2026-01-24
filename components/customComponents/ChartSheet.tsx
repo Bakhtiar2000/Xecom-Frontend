@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Sheet,
@@ -20,7 +20,7 @@ export default function CartSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="p-3 overflow-y-auto">
         <SheetHeader>
-          <SheetTitle className="flex  gap-2"><ShoppingCart /> Your Cart</SheetTitle>
+          <SheetTitle className="flex text-xl   gap-2"><ShoppingCart /> Your Cart</SheetTitle>
         </SheetHeader>
 
         <CartContent isSheet onClose={() => onOpenChange(false)} />

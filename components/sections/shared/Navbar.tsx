@@ -49,6 +49,33 @@ const Navbar = () => {
   const pathname = usePathname();
   const { user, logOut } = useAuth();
   const [cartItems, setCartItems] = useState(CartData);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > 20) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    let timeoutId: NodeJS.Timeout;
+    const throttledScroll = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleScroll, 10);
+    };
+
+    window.addEventListener("scroll", throttledScroll);
+    return () => {
+      window.removeEventListener("scroll", throttledScroll);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [lastScrollY]);
 
   console.log("user is :", user?.email);
   useEffect(() => {
@@ -68,12 +95,12 @@ const Navbar = () => {
       {/* Top Bar */}
       <div
         className={`hidden lg:flex w-11/12 mx-auto bg-primary text-white text-sm
-  transition-all duration-300 ease-in-out overflow-hidden
-  ${
-    isSticky
-      ? "max-h-0 opacity-0 -translate-y-4"
-      : "max-h-20 opacity-100 translate-y-0"
-  }`}
+    transition-all duration-300 ease-in-out
+    ${
+      isSticky
+        ? "h-0 opacity-0 py-0 overflow-hidden"
+        : "h-auto opacity-100 py-1 overflow-visible"
+    }`}
       >
         <div className="w-1/2 flex items-center justify-between px-8 py-1">
           <p className="flex items-center gap-2">
@@ -170,7 +197,10 @@ const Navbar = () => {
             <div className="relative flex items-center flex-1"></div>
 
             <div className="flex gap-6">
-              <button className="flex items-center gap-1" onClick={() => setCartOpen(true)}>
+              <button
+                className="flex items-center gap-1"
+                onClick={() => setCartOpen(true)}
+              >
                 <ShoppingCart /> Cart ({cartItems.length})
               </button>
               <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
