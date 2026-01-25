@@ -138,7 +138,7 @@ export default function MegaWinterSell() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
-                className="flex lg:flex-wrap items-center justify-center  gap-4"
+                className="flex lg:flex-wrap items-center lg:justify-start justify-center  gap-4"
               >
                 <motion.button
                   whileHover={{ scale: 1.05 }}

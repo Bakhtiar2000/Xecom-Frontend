@@ -18,7 +18,7 @@ export default function CartSheet({
 }) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="p-3 overflow-y-auto">
+      <SheetContent side="right" className="p-3 z-100 overflow-y-auto">
         <SheetHeader>
           <SheetTitle className="flex text-xl   gap-2"><ShoppingCart /> Your Cart</SheetTitle>
         </SheetHeader>

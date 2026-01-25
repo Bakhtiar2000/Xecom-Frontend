@@ -92,13 +92,13 @@ const Footer: React.FC = () => {
         }
       `}</style>
 
-      <div className="border-t-2 footer-border   bg-gray-900 poppins-font">
-        <div className="container">
+      <div className="border-t-2 px-4 md:px-0 bg-gray-900 poppins-font">
+        <div className="container ">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Brand Section */}
-            <div className="lg:col-span-1">
-              <div className="flex items-center gap-3 mb-6">
-                <div>
+            <div className="lg:col-span-1 ">
+              <div className="flex   items-center gap-3 mb-6">
+                <div className="">
                   <h1 className="text-2xl font-bold">
                     <span className="text-gray-100 merriweather-font">
                       STEPS
@@ -135,7 +135,7 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Quick Links */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1  text-center lg:text-start">
               <h3 className="text-lg font-semibold text-gray-200 mb-6">
                 Quick Links
               </h3>
@@ -235,7 +235,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <h1 className="text-[60px] xs:text-[80px] hidden lg:block sm:text-[120px] md:text-[160px] lg:text-[200px] xl:text-[250px] w-full text-center font-bold leading-[0.8]">
+          <h1 className="text-[60px] xs:text-[80px] hidden lg:block sm:text-[120px] md:text-[160px] lg:text-[160px] xl:text-[210px] w-full text-center font-bold leading-[0.8]">
             <span
               style={shineStyle}
               className="inline-block w-full py-2 px-4 merriweather-font"

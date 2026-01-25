@@ -204,7 +204,7 @@ export default function CartContent({
         </div>
 
         <Link href="/checkOut" onClick={handleCheckout}>
-          <button className="w-full mt-4 bg-primary cursor-pointer text-white py-3 rounded-lg">
+          <button className="w-full mt-4 bg-button-primary cursor-pointer text-white py-3 rounded-lg">
             Checkout ({cartItems.filter((i) => i.selected).length})
           </button>
         </Link>

@@ -77,7 +77,6 @@ const Navbar = () => {
     };
   }, [lastScrollY]);
 
-  console.log("user is :", user?.email);
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 20);
@@ -198,7 +197,7 @@ const Navbar = () => {
 
             <div className="flex gap-6">
               <button
-                className="flex items-center gap-1"
+                className="flex cursor-pointer items-center gap-1"
                 onClick={() => setCartOpen(true)}
               >
                 <ShoppingCart /> Cart ({cartItems.length})
