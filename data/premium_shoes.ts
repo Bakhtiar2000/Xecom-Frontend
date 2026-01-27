@@ -69,7 +69,7 @@ export const trendingSneakers: Sneaker[] = [
   {
     id: 4,
     name: "New Balance 550 White Green",
-    brand: "New Balance",
+    brand: "Bata",
     price: "$120",
     originalPrice: "$140",
     discount: "14% off",

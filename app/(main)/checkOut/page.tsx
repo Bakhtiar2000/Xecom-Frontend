@@ -385,7 +385,8 @@ const CheckoutPage = () => {
                                     key={item.id}
                                     className="p-4 cursor-pointer"
                                   >
-                                    <div className="flex flex-col sm:flex-row gap-4">
+                                    <div className="flex flex-col
+                                     sm:flex-row gap-4">
                                       {/* Image */}
                                       <div className="w-full sm:w-24 h-24 rounded-lg overflow-hidden cart-img-bg-primary flex-shrink-0">
                                         <div className="w-full h-full flex items-center justify-center">
@@ -402,7 +403,7 @@ const CheckoutPage = () => {
                                       {/* Details */}
                                       <div className="flex-1 flex flex-col justify-between">
                                         {/* Name and Remove Button */}
-                                        <div className="flex flex-col sm:flex-row justify-between">
+                                        <div className="flex flex-row justify-between">
                                           <div>
                                             <h4 className="font-medium text-sm lg:text-lg">
                                               {item.name}{" "}
@@ -425,7 +426,7 @@ const CheckoutPage = () => {
                                         </div>
 
                                         {/* Pricing and Quantity */}
-                                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-2 sm:gap-0">
+                                        <div className="flex flex-row items-start sm:items-center justify-between mt-4 gap-2 sm:gap-0">
                                           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                                             {item.discountPercentage && (
                                               <div className="flex items-center gap-2">

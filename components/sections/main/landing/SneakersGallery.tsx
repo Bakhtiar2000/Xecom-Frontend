@@ -45,7 +45,7 @@ const SneakerMosaicGallery = () => {
           />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[300px] gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[300px] gap-2 md:gap-4">
           {sneakersGallery.map((item, index) => (
             <motion.div
               key={item.id}
@@ -63,7 +63,7 @@ const SneakerMosaicGallery = () => {
                   alt={item.alt}
                   width={600}
                   height={600}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full  object-cover"
                 />
 
                 <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -142,18 +142,18 @@ const SneakerMosaicGallery = () => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-5xl w-full max-h-[90vh] bg-secondary shadow-lg  rounded-2xl overflow-hidden"
+              className="relative max-w-5xl w-full mt-20 max-h-[90vh] bg-secondary shadow-lg  rounded-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={closeImage}
-                className="absolute top-4 right-4 w-10 h-10 bg-card-primary rounded-full  backdrop-blur-sm flex items-center justify-center  transition-colors z-10"
+                className="absolute top-4 right-4 w-10 md:w-10 md:h-10 h-10  bg-muted rounded-full  backdrop-blur-sm flex items-center justify-center  transition-colors z-10"
               >
                 <X className="w-6 h-6" />
               </button>
 
               <div className="flex flex-col md:flex-row h-full">
-                <div className="flex-1 relative min-h-[330px] md:min-h-[80vh] ">
+                <div className="flex-1 relative min-h-[230px]  md:min-h-[80vh] ">
                   <Image
                     src={selectedImage.src}
                     alt={selectedImage.alt}
@@ -163,10 +163,10 @@ const SneakerMosaicGallery = () => {
 
                   <button
                     onClick={(e) => toggleLike(selectedImage.id, e)}
-                    className="absolute top-4 left-4 p-3 bg-card-primary rounded-full backdrop-blur-sm hover:scale-110 transition-transform"
+                    className="absolute top-4  left-4 p-1  bg-muted rounded-full backdrop-blur-sm hover:scale-110 transition-transform"
                   >
                     <Heart
-                      className={`w-6  h-6 ${
+                      className={`w-8  h-8 ${
                         likedImages.includes(selectedImage.id)
                           ? "fill-red-500 text-red-500"
                           : " text-foreground"
@@ -175,7 +175,7 @@ const SneakerMosaicGallery = () => {
                   </button>
                 </div>
 
-                <div className="md:w-96 p-8 overflow-y-auto">
+                <div className="md:w-96 md:p-8 p-4 overflow-y-auto">
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-sm font-medium 0">
@@ -188,11 +188,11 @@ const SneakerMosaicGallery = () => {
                       )}
                     </div>
 
-                    <h2 className="text-2xl font-bold  mb-2">
+                    <h2 className="md:text-2xl text-xl font-bold mb-1  md:mb-2">
                       {selectedImage.alt}
                     </h2>
 
-                    <div className="flex text-muted-foreground items-center gap-4 text-sm ">
+                    <div className="flex text-muted-foreground  items-center  gap-4 text-sm ">
                       <span>{selectedImage.category}</span>
                       <span>•</span>
                       <span>Color: {selectedImage.colorway}</span>
@@ -205,22 +205,22 @@ const SneakerMosaicGallery = () => {
                     </div>
                   </div>
 
-                  <div className="mb-8">
+                  <div className="md:mb-8 hidden md:block mb-2">
                     <p className="">{selectedImage.description}</p>
                   </div>
 
                   <div className="space-y-3">
-                    <button className="w-full py-3 rounded-xl  font-medium hover:opacity-90 transition-opacity">
+                    <button className="w-full md:py-3 rounded-xl  font-medium hover:opacity-90 transition-opacity">
                       View Product Details
                     </button>
-                    <button className="w-full py-3 rounded-xl border-2  font-medium  transition-colors flex items-center justify-center gap-2">
+                    <button className="w-full py-3 bg-button-primary text-white rounded-xl border-2  font-medium  transition-colors flex items-center justify-center gap-2">
                       <Share2 className="w-4 h-4" />
                       Share
                     </button>
                   </div>
 
                   {/* Gallery Navigation */}
-                  <div className="mt-8 pt-8 ">
+                  <div className="md:mt-8 mt-2 md:pt-8 pt-2 ">
                     <h4 className="text-sm font-semibold  mb-4">
                       Gallery Navigation
                     </h4>
@@ -236,7 +236,7 @@ const SneakerMosaicGallery = () => {
                           }}
                           className={`aspect-square  overflow-hidden border-2 ${
                             selectedImage.id === img.id
-                              ? "border-blue-500"
+                              ? "border-success-foreground"
                               : "border-transparent"
                           }`}
                         >

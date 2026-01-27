@@ -50,7 +50,7 @@ const PremiumShoes = (): React.JSX.Element => {
         </div>
 
         {/* Tabs */}
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-4 md:mb-12">
           <div className="flex flex-row">
             {[
               {
@@ -75,13 +75,13 @@ const PremiumShoes = (): React.JSX.Element => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
-                className={`lg:px-6 px-2 cursor-pointer lg:py-4 py-2 text-sm  font-semibold flex items-center space-x-2 ${
+                className={`lg:px-6 px-2 cursor-pointer lg:py-4 py-2 text-sm  font-semibold flex items-center space-x-1 md:space-x-2 ${
                   activeTab === tab.id ? "border-b-2 border-primary" : ""
                 }`}
               >
                 {tab.icon}
-                <span className="text-sm ">{tab.label}</span>
-                <span className="px-2 py-1 rounded-full text-xs lg:text-lg ">
+                <span className="md:text-sm text-[8px] ">{tab.label}</span>
+                <span className="px-2 py-1 rounded-full  text-xs lg:text-lg ">
                   {tab.count}
                 </span>
               </button>
@@ -90,7 +90,7 @@ const PremiumShoes = (): React.JSX.Element => {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-8">
           {productsMap[activeTab].map((product, index) => (
             <ProductCard
               key={product.id}

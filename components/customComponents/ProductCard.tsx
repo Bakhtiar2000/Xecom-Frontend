@@ -27,9 +27,9 @@ const ProductCard = ({
       }}
     >
       {/* Badge */}
-      <div className="absolute top-4 left-4 z-10">
+      <div className="absolute to-2 md:top-4 left-2 md:left-4 z-10">
         <span
-          className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-lg ${
+          className={`md:px-3 px-2 py-1 md:py-1.5 rounded-full text-[8px] md:text-xs font-bold shadow-lg ${
             product.badge === "BEST SELLER"
               ? "bg-red-200 text-primary"
               : product.badge === "TRENDING"
@@ -46,7 +46,7 @@ const ProductCard = ({
       </div>
 
       {/* Image */}
-      <div className="relative h-64 img-primary-bg overflow-hidden">
+      <div className="relative h-30 md:h-64 img-primary-bg overflow-hidden">
         <Image
           src={product.image}
           alt={product.name}
@@ -57,10 +57,10 @@ const ProductCard = ({
       </div>
 
       {/* Content */}
-      <div className="p-6 ">
+      <div className="md:p-6  p-2 ">
         {/* Brand + Rating */}
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold treanding-base-text uppercase">
+        <div className="flex items-center justify-between mb-1 md:mb-2">
+          <span className="text-[15px] md:text-lg font-semibold  uppercase">
             {product.brand}
           </span>
 
@@ -68,7 +68,7 @@ const ProductCard = ({
             {[...Array(5)].map((_, i) => (
               <svg
                 key={i}
-                className={`w-4 h-4 text-rating ${
+                className={`md:w-4 md:h-4 lg:h-4 lg:w-4 w-3 h-3 text-rating ${
                   i < Math.floor(product.rating) ? "fill-current" : ""
                 }`}
                 viewBox="0 0 20 20"
@@ -76,32 +76,32 @@ const ProductCard = ({
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
             ))}
-            <span className="text-xs treanding-base-text ml-1">
+            <span className="text-[8px] md:text-xs  ml-1">
               ({product.reviews})
             </span>
           </div>
         </div>
 
         {/* Title */}
-        <h3 className="font-semibold tranding-secondry-text mb-2 line-clamp-2">
+        <h3 className="font-semibold text-[10px] md:text-sm text-muted-foreground mb-1 sm:sm:h-auto h-4  md:mb-2 line-clamp-2">
           {product.name}
         </h3>
 
         {/* Price */}
-        <div className="flex items-center space-x-2 mb-4">
-          <span className="text-xl font-bold tranding-secondry-text">
+        <div className="flex items-center space-x-2 mb-2 md:mb-4">
+          <span className="text-sm md:text-xl font-bold ">
             {product.price}
           </span>
-          <span className="text-sm treanding-base-text line-through">
+          <span className="text-sm md:text-lg line-through">
             {product.originalPrice}
           </span>
-          <span className="text-xs font-semibold px-2 py-1 rounded">
+          <span className="text-[8px] md:text-sm font-semibold px-2 py-1 rounded">
             {product.discount}
           </span>
         </div>
 
         {/* Colors + Sizes */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-2 md:mb-4">
           <div className="flex space-x-1">
             {product.colors.map((color, idx) => (
               <span
@@ -111,7 +111,7 @@ const ProductCard = ({
               />
             ))}
           </div>
-          <span className="text-xs treanding-base-text">
+          <span className="text-xs ">
             {product.sizes.length} sizes
           </span>
         </div>
@@ -119,7 +119,7 @@ const ProductCard = ({
         {/* CTA */}
         <Link
           href={`/Product/${product.id}`}
-          className="text-secondary bg-button-primary py-3 px-4 rounded-lg font-semibold flex justify-center"
+          className="text-secondary bg-button-primary py-2 px-2 md:py-3 md:px-4 text-[8px] rounded-lg font-semibold flex justify-center"
         >
           View Details
         </Link>
