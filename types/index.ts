@@ -29,3 +29,11 @@ export interface FilterState {
   categories: string[];
   sortBy: string;
 }
+
+export interface Order {
+  id: string
+  date: string
+  value: string
+  status: "On shipping" | "Delivered"
+  phone: string
+}
