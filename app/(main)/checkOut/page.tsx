@@ -17,6 +17,7 @@ import {
   FileText,
 } from "lucide-react";
 import Image from "next/image";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { z } from "zod";
 import { CartData } from "@/data/cart";
@@ -78,6 +79,9 @@ const CheckoutPage = () => {
     "items",
   );
 
+  const INSIDE_DHAKA_FEE = 100;
+  const OUTSIDE_DHAKA_FEE = 150;
+
   const [formValid, setFormValid] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>(CartData);
   const [selectedVouchers, setSelectedVouchers] = useState<string[]>([]);
@@ -113,7 +117,7 @@ const CheckoutPage = () => {
   const vouchers: Voucher[] = [
     {
       id: "v1",
-      name: "Free Shipping",
+      name: "Shipping Discount",
       description: "Minimum spend  Tk 1000",
       discount: 145,
       type: "freeShipping",
@@ -141,58 +145,43 @@ const CheckoutPage = () => {
 
   const calculateTotals = () => {
     const selectedItems = cartItems.filter((item) => item.selected);
+
     const totalPrice = selectedItems.reduce(
       (sum, item) => sum + item.finalPrice * item.quantity,
       0,
     );
 
-    let shippingFee = 0;
-    const totalShippingFee = selectedItems.reduce(
-      (sum, item) => sum + (item.sheppingFee || 0),
-      0,
-    );
+    const baseShippingFee =
+      formData.shippingLocation === "inside"
+        ? INSIDE_DHAKA_FEE
+        : OUTSIDE_DHAKA_FEE;
 
-    if (totalPrice < 1000) {
-      shippingFee = totalShippingFee;
-    } else {
-      if (selectedItems.length === 1) {
+    let shippingFee = baseShippingFee;
+    let savedShippingFee = 0;
+
+    if (totalPrice >= 1000) {
+      if (formData.shippingLocation === "inside") {
+        savedShippingFee = baseShippingFee;
+        shippingFee = 0;
       } else {
-        shippingFee = totalShippingFee - 145;
+        savedShippingFee = baseShippingFee * 0.5;
+        shippingFee = baseShippingFee * 0.5;
       }
     }
 
-    const voucherDiscount = selectedVouchers.reduce((sum, voucherId) => {
-      const voucher = vouchers.find((v) => v.id === voucherId);
-      return voucher && totalPrice >= voucher.minPurchase
-        ? sum + voucher.discount
-        : sum;
-    }, 0);
-
-    // If free shipping voucher is applied, shipping fee becomes 0
-    const finalShippingFee = selectedVouchers.length > 0 ? 0 : shippingFee;
-
-    // Calculate promo code discount (10% of total price)
+    // Promo discount (10%)
     const promoDiscount = appliedPromoCode ? totalPrice * 0.1 : 0;
 
-    // Calculate saved shipping amount
-    const savedShippingFee =
-      totalPrice >= 1000 && selectedVouchers.length === 0 ? 145 : 0;
-
-    const totalDiscount = (promoDiscount + savedShippingFee) | 0;
+    const totalDiscount = promoDiscount + savedShippingFee;
 
     return {
       totalPrice,
-      totalDiscount,
-      shippingFee: finalShippingFee,
-      originalShippingFee: shippingFee,
-      fullShippingFee: totalShippingFee,
+      shippingFee,
+      fullShippingFee: baseShippingFee,
       savedShippingFee,
-      voucherDiscount,
       promoDiscount,
-      grandTotal: Math.max(
-        0,
-        totalPrice + finalShippingFee - voucherDiscount - promoDiscount,
-      ),
+      totalDiscount,
+      grandTotal: Math.max(0, totalPrice + shippingFee - promoDiscount),
     };
   };
 
@@ -287,6 +276,33 @@ const CheckoutPage = () => {
 
   const totals = calculateTotals();
 
+  // shepping discound message
+
+  const getOfferMessage = () => {
+    const remaining = 1000 - totals.totalPrice;
+
+    if (totals.totalPrice < 1000) {
+      return {
+        status: "locked",
+        message: `Spend Tk ${remaining.toLocaleString("en-BD")} more to unlock shipping offer`,
+      };
+    }
+
+    if (formData.shippingLocation === "inside") {
+      return {
+        status: "active",
+        message: "🎉 Free shipping applied (Inside Dhaka)",
+      };
+    }
+
+    return {
+      status: "active",
+      message: "🎉 50% shipping discount applied (Outside Dhaka)",
+    };
+  };
+  const offerInfo = getOfferMessage();
+
+
   return (
     <div className="min-h-screen cart-bg py-8">
       <div className="mx-auto">
@@ -297,59 +313,52 @@ const CheckoutPage = () => {
           >
             <div className="mb-3">
               {/* Checkout Steps */}
-              <div
-                className={`flex bg-card-primary px-4 py-2 rounded-lg shadow-sm items-center   flex-wrap gap-2 ${activeStep === "payment" ? "justify-start" : "justify-between"}`}
+              <Tabs
+              
+                value={activeStep}
+                onValueChange={(value) => {
+                  if (value === "items") {
+                    setActiveStep("items");
+                  } else if (value === "info" && completedSteps.has("items")) {
+                    setActiveStep("info");
+                  } else if (value === "payment" && formValid) {
+                    setActiveStep("payment");
+                  }
+                }}
               >
-                <button
-                  onClick={() => setActiveStep("items")}
-                  className={`flex cursor-pointer items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                    activeStep === "items"
-                      ? "text-button-secondary"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  <ShoppingCart size={20} />
-                  <span className="font-medium">Items</span>
-                </button>
-                <ArrowRight className="" />
-                <button
-                  onClick={() => {
-                    if (completedSteps.has("items")) {
-                      setActiveStep("info");
-                    }
-                  }}
-                  disabled={!completedSteps.has("items")}
-                  className={`flex cursor-pointer items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                    !completedSteps.has("items")
-                      ? "text-muted-foreground cursor-not-allowed opacity-50"
-                      : activeStep === "info"
-                        ? "text-button-secondary"
-                        : "text-muted-foreground"
-                  }`}
-                >
-                  <Truck size={20} />
-                  <span className="font-medium">Shipping</span>
-                </button>
-                <ArrowRight className="" />
-                <button
-                  onClick={() => {
-                    if (formValid) {
-                      setActiveStep("payment");
-                    }
-                  }}
-                  disabled={!formValid}
-                  className={`flex cursor-pointer items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                    !formValid
-                      ? "text-muted-foreground cursor-not-allowed opacity-50"
-                      : activeStep === "payment"
-                        ? "text-button-secondary"
-                        : "text-muted-foreground"
-                  }`}
-                >
-                  <CreditCard size={20} />
-                  <span className="font-medium"> Successfully Payment</span>
-                </button>
-              </div>
+                <TabsList className="flex bg-card-primary px-4 py-2  rounded-lg shadow-sm items-center flex-wrap gap-2 w-full h-auto">
+                  <TabsTrigger
+                    value="items"
+                    className="flex items-center space-x-2 px-4 py-4 rounded-lg transition-all data-[state=active]:text-button-secondary"
+                  >
+                    <ShoppingCart size={20} />
+                    <span className="font-medium hidden md:inline">Items</span>
+                  </TabsTrigger>
+
+                  <ArrowRight className="mx-1" />
+
+                  <TabsTrigger
+                    value="info"
+                    disabled={!completedSteps.has("items")}
+                    className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-all data-[state=active]:text-button-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Truck size={20} />
+                    <span className="font-medium hidden md:inline">Shipping</span>
+                  </TabsTrigger>
+
+                  <ArrowRight className="mx-1" />
+
+                  <TabsTrigger
+                    value="payment"
+                    disabled={!formValid}
+                    className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-all data-[state=active]:text-button-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <CreditCard size={20} />
+                    <span className="font-medium hidden md:inline">Successfully Payment</span>
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+
 
               {/* Active Step Content */}
               <div className="mt-3">
@@ -385,8 +394,10 @@ const CheckoutPage = () => {
                                     key={item.id}
                                     className="p-4 cursor-pointer"
                                   >
-                                    <div className="flex flex-col
-                                     sm:flex-row gap-4">
+                                    <div
+                                      className="flex flex-col
+                                     sm:flex-row gap-4"
+                                    >
                                       {/* Image */}
                                       <div className="w-full sm:w-24 h-24 rounded-lg overflow-hidden cart-img-bg-primary flex-shrink-0">
                                         <div className="w-full h-full flex items-center justify-center">
@@ -568,7 +579,7 @@ const CheckoutPage = () => {
                           <div>
                             <p className="font-medium">Inside Dhaka</p>
                             <p className="text-sm text-muted-foreground">
-                              Delivery charge will be 70 BDT
+                              Minimum spend 1000 tk then Free Shipping{" "}
                             </p>
                           </div>
                         </label>
@@ -591,7 +602,7 @@ const CheckoutPage = () => {
                           <div>
                             <p className="font-medium">Outside Dhaka</p>
                             <p className="text-sm text-muted-foreground">
-                              Delivery charge will be 100 BDT
+                              Minimum spend 1000 tk then Shipping 50% off{" "}
                             </p>
                           </div>
                         </label>
@@ -737,7 +748,7 @@ const CheckoutPage = () => {
                                       <div>
                                         <p className="font-medium ">Bkash</p>
                                         <p className="text-xs text-muted-foreground">
-                                          1.5% transaction charge applicable
+                                          Mobile Payment
                                         </p>
                                       </div>
                                     </SelectItem>
@@ -840,19 +851,21 @@ const CheckoutPage = () => {
                         number.
                       </p>
 
-                      <div className="text-sm  text-center space-y-1 mb-6 ">
-                        <p>
-                          <strong>Order ID:</strong> #T9639048
-                        </p>
-                        <p>
-                          <strong>Order Date:</strong> 10 May, 2025
-                        </p>
-                        <p>
-                          <strong>Order Status:</strong> Order Submitted
-                        </p>
-                        <p>
-                          <strong>Order Value:</strong> Tk. 1,297
-                        </p>
+                      <div className="text-sm text-center mb-6">
+                        <div className="inline-block text-left space-y-3">
+                          <p>
+                            <strong>Order ID:</strong> #T9639048
+                          </p>
+                          <p>
+                            <strong>Order Date:</strong> 10 May, 2025
+                          </p>
+                          <p>
+                            <strong>Order Status:</strong> Order Submitted
+                          </p>
+                          <p>
+                            <strong>Order Value:</strong> Tk. 1,297
+                          </p>
+                        </div>
                       </div>
 
                       <div className="flex gap-4 justify-center mt-6">
@@ -905,7 +918,7 @@ const CheckoutPage = () => {
               <div className="bg-card-primary rounded-xl shadow-sm p-5 mb-3">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-sm lg:text-lg">
-                    Promo Code
+                    Discount Code
                   </h3>
                   <Tag className="w-5 h-5 text-button-secondary" />
                 </div>
@@ -962,15 +975,10 @@ const CheckoutPage = () => {
               <div className="bg-card-primary rounded-xl shadow-sm p-5 mb-3">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-sm lg:text-lg">
-                    Vouchers & Promotions
+                    Available Offers
                   </h3>
                   <Tag className="w-5 h-5 text-button-secondary" />
                 </div>
-
-                <p className="text-sm cart-dark-text mb-4">
-                  You can get a free shipping voucher with a minimum purchase of
-                  Tk 1000
-                </p>
 
                 <div className="space-y-3">
                   <p className="text-sm font-medium text-sm lg:text-lg">
@@ -984,50 +992,38 @@ const CheckoutPage = () => {
                       <div key={voucher.id}>
                         {canApply ? (
                           <div
-                            className={`border rounded-lg p-4 cursor-pointer transition-all bg-success`}
+                            className={`rounded-lg p-3 mb-4 text-sm flex items-center gap-2
+    ${
+      offerInfo.status === "active"
+        ? "bg-success text-success-foreground border border-success/30"
+        : "bg-muted text-muted-foreground border border-border"
+    }`}
                           >
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className={`font-medium`}>
-                                    {voucher.name}
-                                  </span>
-                                  <Check className="w-4 h-4 text-success-foreground" />
-                                </div>
-                                <p className="text-sm cart-dark-text mt-1">
-                                  {voucher.description}
-                                </p>
-                              </div>
-                              <div className="text-right">
-                                <div className="text-lg font-bold cart-light-text">
-                                  Tk {voucher.discount.toLocaleString("en-BD")}
-                                </div>
-                              </div>
-                            </div>
+                            {offerInfo.status === "active" ? (
+                              <Check size={16} />
+                            ) : (
+                              <Lock size={16} />
+                            )}
+                            <span>{offerInfo.message}</span>
                           </div>
                         ) : (
                           // Show AlertDialog if minimum purchase not met
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
-                              <div className="border rounded-lg p-4  transition-all opacity-50 cursor-not-allowed">
-                                <div className="flex justify-between items-start">
-                                  <div>
-                                    <div className="flex items-center gap-2">
-                                      <span className="font-medium text-sm lg:text-lg">
-                                        {voucher.name}
-                                      </span>
-                                    </div>
-                                    <p className="text-sm cart-dark-text mt-1">
-                                      {voucher.description}
-                                    </p>
-                                  </div>
-                                  <div className="text-right">
-                                    <div className="text-lg font-bold cart-light-text">
-                                      Tk{" "}
-                                      {voucher.discount.toLocaleString("en-BD")}
-                                    </div>
-                                  </div>
-                                </div>
+                              <div
+                                className={`rounded-lg p-3 mb-4 text-sm flex items-center gap-2
+    ${
+      offerInfo.status === "active"
+        ? "bg-success/10 text-success-foreground border border-success/30"
+        : "bg-muted text-muted-foreground border border-border"
+    }`}
+                              >
+                                {offerInfo.status === "active" ? (
+                                  <Check size={16} />
+                                ) : (
+                                  <Lock size={16} />
+                                )}
+                                <span>{offerInfo.message}</span>
                               </div>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
@@ -1212,8 +1208,29 @@ const CheckoutPage = () => {
                             };
                             console.log("orderData", orderData);
                             toast.success("Place Order Successful!");
+
+                            // Clear the form after successful order
+                            setFormData({
+                              name: "",
+                              mobileNumber: "",
+                              shippingLocation: "inside",
+                              address: "",
+                              paymentOption: "cod",
+                              additionalNote: "",
+                              selectedPaymentMethod: "bkash",
+                            });
+
+                            // Clear form validation states
+                            setFormErrors({});
+                            setFormValid(false);
+
+                            // Clear other states
+                            setAppliedPromoCode("");
+                            setPromoCode("");
+                            setPromoError("");
                           }
                         } else if (activeStep === "payment") {
+                          
                         }
                       }}
                       className="w-full bg-button-primary text-white font-semibold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] mt-6 cursor-pointer"
