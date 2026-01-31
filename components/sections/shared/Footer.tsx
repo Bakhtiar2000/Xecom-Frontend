@@ -56,6 +56,7 @@ const Footer: React.FC = () => {
   ];
 
   const quickLinks: QuickLink[] = [
+    { name: "FAQ", path: "/faqSection" },
     { name: "Home", path: "/" },
     { name: "Component", path: "/BrowseProperties" },
     { name: "More", path: "/become-host" },
