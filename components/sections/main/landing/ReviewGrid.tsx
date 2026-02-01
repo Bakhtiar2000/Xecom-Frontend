@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import ReviewCard from "@/components/ui/reviewcard";
 import { testimonials } from "@/data/review";
 import SectionTitle from "../../shared/SectionTitle";
+import Link from "next/link";
 
 // Define the type for a single review
 export interface Review {
@@ -89,11 +90,11 @@ const ReviewsGrid: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mt-12"
         >
-          <button className="group relative px-8 py-4 rounded-lg cursor-pointer tranding-secondry-text font-bold text-lg transition-all duration-300 hover:scale-105">
+          <Link href={'/review_section'} className="group relative px-8 py-4 rounded-lg cursor-pointer tranding-secondry-text font-bold text-lg transition-all duration-300 hover:scale-105">
             <span className="relative z-10 border-b-2 pb-2">
               {"< Read All Reviews >"}
             </span>
-          </button>
+          </Link>
         </motion.div>
       </div>
     </div>

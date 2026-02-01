@@ -164,7 +164,7 @@ const Navbar = () => {
                       <li className="row-span-3 ">
                         <NavigationMenuLink asChild>
                           <Link
-                            href="/manProducts"
+                            href="/man_products"
                             className="flex flex-col justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-4 md:p-6 no-underline outline-none transition-all duration-200 hover:shadow-md"
                           >
                             <h1 className="mb-2 text-lg font-medium sm:mt-4">
@@ -176,7 +176,7 @@ const Navbar = () => {
                       <li className="row-span-3 ">
                         <NavigationMenuLink asChild>
                           <Link
-                            href="/womanProducts"
+                            href="/woman_products"
                             className=" justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-4 md:p-6 no-underline outline-none transition-all duration-200 hover:shadow-md"
                           >
                             <h1 className="mb-2 text-lg font-medium sm:mt-4">
@@ -320,14 +320,14 @@ const Navbar = () => {
 
                 <div className="">
                   <Link
-                    href="/manProducts"
+                    href="/man_products"
                     className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
                   >
                     1. Man Products
                   </Link>
 
                   <Link
-                    href="/womanProducts"
+                    href="/woman_products"
                     className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
                   >
                     2. Woman Products

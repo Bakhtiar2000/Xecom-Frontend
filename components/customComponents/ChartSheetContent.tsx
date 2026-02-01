@@ -203,7 +203,7 @@ export default function CartContent({
           <span>Tk {totals.grand}</span>
         </div>
 
-        <Link href="/checkOut" onClick={handleCheckout}>
+        <Link href="/checkout" onClick={handleCheckout}>
           <button className="w-full mt-4 bg-button-primary cursor-pointer text-white py-3 rounded-lg">
             Checkout ({cartItems.filter((i) => i.selected).length})
           </button>

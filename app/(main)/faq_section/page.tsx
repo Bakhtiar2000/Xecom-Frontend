@@ -126,19 +126,19 @@ export default function FaqSection() {
               }}
               id={category}
             >
-              <h2 className="text-2xl font-semibold mb-6">{category}</h2>
+              <h2 className="text-2xl font-semibold mb-6 ">{category}</h2>
 
-              <Accordion type="single" collapsible className="space-y-2">
+              <Accordion type="single" collapsible className="space-y-2 ">
                 {faqData[category].map((item, index) => (
                   <AccordionItem
                     key={index}
                     value={`${category}-${index}`}
-                    className="border rounded-lg px-4"
+                    className="border rounded-lg px-4 py-1 "
                   >
-                    <AccordionTrigger className="text-left">
+                    <AccordionTrigger className="text-left md:text-[15px]">
                       {item.question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground">
+                    <AccordionContent className="text-muted-foreground text-[15px]">
                       {item.answer}
                     </AccordionContent>
                   </AccordionItem>

@@ -870,7 +870,7 @@ const CheckoutPage = () => {
 
                       <div className="flex gap-4 justify-center mt-6">
                         {/* Track Order Button */}
-                        <Link href="/trackOrder">
+                        <Link href="/track_order">
                           <button className="flex items-center gap-2 px-5 py-2 cursor-pointer bg-success rounded-lg text-success-foreground transition">
                             <Truck size={18} />
                             <span>Track Order</span>

@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 export const checkoutSchema = z.object({
   name: z
     .string()
@@ -13,13 +12,12 @@ export const checkoutSchema = z.object({
     .min(11, "Mobile number is required")
     .regex(
       /^(\+8801|01)[3-9]\d{8}$/,
-      "Please enter a valid Bangladesh phone number (e.g., +880173XXXXXXX)"
+      "Please enter a valid Bangladesh phone number (e.g., +880173XXXXXXX)",
     ),
 
-  shippingLocation: z
-    .enum(["inside", "outside"], {
-      errorMap: () => ({ message: "Please select a valid shipping location" }),
-    }),
+  shippingLocation: z.enum(["inside", "outside"], {
+    message: "Please select a valid shipping location",
+  }),
 
   address: z
     .string()
@@ -27,10 +25,10 @@ export const checkoutSchema = z.object({
     .max(200, "Address must not exceed 200 characters")
     .trim(),
 
-  paymentOption: z
-    .enum(["cod", "online"], {
-      errorMap: () => ({ message: "Please select a valid payment option" }),
-    }),
+  // ✅ Fixed - paymentOption
+  paymentOption: z.enum(["cod", "online"], {
+    message: "Please select a valid payment option",
+  }),
 
   additionalNote: z
     .string()
@@ -38,13 +36,13 @@ export const checkoutSchema = z.object({
     .optional()
     .default(""),
 
+ 
   selectedPaymentMethod: z
     .enum(["bkash", "nagad", "rocket", "upay", "bank", "card"], {
-      errorMap: () => ({ message: "Please select a valid payment method" }),
+      message: "Please select a valid payment method",
     })
     .optional()
     .default("bkash"),
 });
 
-// Type inference from schema
 export type CheckoutFormData = z.infer<typeof checkoutSchema>;

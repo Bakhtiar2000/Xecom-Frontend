@@ -1,150 +1,182 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail, Phone, MapPin, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card } from "@/components/ui/card";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function ContactPage() {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-    });
+  const [result, setResult] = useState<string>("");
+  console.log("res", result);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log("Contact form submitted:", formData);
-        // Handle form submission
-    };
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setResult("Sending...");
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    formData.append("access_key", "4cede823-c646-46b6-8b05-a9bad2a7bb69");
 
-    return (
-        <div className="container">
-            <div className="mb-4 text-center">
-                <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-                <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                    Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
-                </p>
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data: { success: boolean } = await response.json();
+
+      if (data.success) {
+        setResult("Form Submitted Successfully");
+        form.reset();
+        toast.success("Message sent successfully!");
+      } else {
+        setResult("Something went wrong");
+        toast.error("Failed to send message.");
+      }
+    } catch (error) {
+      setResult("Error submitting form: " + error);
+      toast.error("An error occurred while sending the message.");
+    }
+  };
+
+  return (
+    <section className="container">
+      {/* Header */}
+      <div className="text-center max-w-2xl mx-auto mb-20">
+        <SectionTitle
+          subtitle=" Contact Us"
+          title=" Get in touch with our sneaker team"
+          description=" Have a question about sizing, orders, or collaborations? Fill out the
+          form and our team will get back to you shortly."
+        ></SectionTitle>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        {/* LEFT: FORM */}
+        <div className="">
+          <form
+            onSubmit={onSubmit}
+            className="space-y-6 max-w-xl bg-card-primary p-8 rounded-lg shadow-lg"
+          >
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">
+                FULL NAME
+              </label>
+              <Input name="name" placeholder="Your name" required />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
-                {/* Contact Information */}
-                <div className="space-y-2">
-                    <Card>
-                        <CardHeader>
-                            <div className="text-4xl mb-2">📧</div>
-                            <CardTitle>Email</CardTitle>
-                            <CardDescription>support@xecom.com</CardDescription>
-                        </CardHeader>
-                    </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <div className="text-4xl mb-2">📞</div>
-                            <CardTitle>Phone</CardTitle>
-                            <CardDescription>+1 (555) 123-4567</CardDescription>
-                        </CardHeader>
-                    </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <div className="text-4xl mb-2">📍</div>
-                            <CardTitle>Address</CardTitle>
-                            <CardDescription>
-                                123 Business St.<br />
-                                Suite 100<br />
-                                San Francisco, CA 94102
-                            </CardDescription>
-                        </CardHeader>
-                    </Card>
-                </div>
-
-                {/* Contact Form */}
-                <Card className="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>Send us a message</CardTitle>
-                        <CardDescription>
-                            Fill out the form below and we'll get back to you shortly.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <form onSubmit={handleSubmit} className="space-y-2">
-                            <div className="space-y-2">
-                                <label htmlFor="name" className="text-sm font-medium">
-                                    Name
-                                </label>
-                                <Input
-                                    id="name"
-                                    name="name"
-                                    type="text"
-                                    placeholder="Your name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="email" className="text-sm font-medium">
-                                    Email
-                                </label>
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    placeholder="your.email@example.com"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="subject" className="text-sm font-medium">
-                                    Subject
-                                </label>
-                                <Input
-                                    id="subject"
-                                    name="subject"
-                                    type="text"
-                                    placeholder="What is this regarding?"
-                                    value={formData.subject}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="message" className="text-sm font-medium">
-                                    Message
-                                </label>
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    rows={6}
-                                    className="w-full px-3 py-2 border border-border rounded-md  2 500"
-                                    placeholder="Your message..."
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                            <Button type="submit" className="w-full">
-                                Send Message
-                            </Button>
-                        </form>
-                    </CardContent>
-                </Card>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">
+                EMAIL ADDRESS
+              </label>
+              <Input
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                required
+              />
             </div>
+
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">
+                MESSAGE
+              </label>
+              <textarea
+                name="message"
+                rows={4}
+                required
+                className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                placeholder="Write your message here..."
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Checkbox id="terms" required />
+              <label htmlFor="terms" className="text-sm text-muted-foreground">
+                I agree to the{" "}
+                <span className="underline cursor-pointer">
+                  Terms & Conditions
+                </span>
+              </label>
+            </div>
+
+            <Button type="submit" className="w-full h-11 rounded-md">
+              Send Message
+            </Button>
+          </form>
         </div>
-    );
+
+        {/* RIGHT: INFO */}
+        <div className="space-y-10 ">
+          {/* Brand Benefits */}
+          <div className="bg-card-primary p-4 lg:p-8 rounded-lg">
+            <h3 className="font-semibold mb-4">Why sneaker lovers choose us</h3>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              {[
+                "Premium quality sneakers made for everyday comfort",
+                "Perfect fit designed for Bangladeshi customers",
+                "Durable materials with modern streetwear style",
+                "Fast delivery and responsive local support",
+              ].map((item, i) => (
+                <li key={i} className="flex gap-2">
+                  <CheckCircle className="w-4 h-4 text-primary mt-0.5" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Locations */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <Card className="p-4">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-primary mt-1" />
+                <div>
+                  <p className="font-medium">Head Office</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Dhanmondi 27
+                    <br />
+                    Dhaka, Bangladesh
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-4">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-primary mt-1" />
+                <div>
+                  <p className="font-medium">Warehouse</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Uttara Sector 7
+                    <br />
+                    Dhaka, Bangladesh
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </div>
+          <div className="pt-6 space-y-4 bg-card-primary p-4 lg:p-8 rounded-lg">
+            <p className="text-sm font-medium">You can also reach us via</p>
+
+            <div className="flex flex-col sm:flex-row gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4" />
+                support@sneakerbd.com
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4" />
+                +880 17XX-XXXXXX
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
