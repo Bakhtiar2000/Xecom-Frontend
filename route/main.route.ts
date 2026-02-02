@@ -12,4 +12,8 @@ export const mainRoutes: RouteItem[] = [
     label: "Contact",
     href: "/contact",
   },
+   {
+    label: "Brand Shoes",
+    href: "/brand_shoes",
+  },
 ];

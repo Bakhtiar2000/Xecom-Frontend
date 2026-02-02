@@ -3,7 +3,7 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Sparkles, TrendingUp, Trophy } from "lucide-react";
-import { trendingSneakers, Sneaker } from "@/data/premium_shoes";
+import { shoesData, Sneaker } from "@/data/premium_shoes";
 import SectionTitle from "../../shared/SectionTitle";
 import ProductCard from "@/components/customComponents/ProductCard";
 
@@ -14,11 +14,11 @@ const PremiumShoes = (): React.JSX.Element => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  const bestSellers = trendingSneakers.filter(
+  const bestSellers = shoesData.filter(
     (item) => item.badge === "BEST SELLER" || item.rating >= 4.8
   );
 
-  const newArrivals = trendingSneakers.filter(
+  const newArrivals = shoesData.filter(
     (item) => item.badge === "NEW" || item.id >= 5
   );
 
@@ -33,7 +33,7 @@ const PremiumShoes = (): React.JSX.Element => {
   }, []);
 
   const productsMap: Record<TabType, Sneaker[]> = {
-    trending: trendingSneakers,
+    trending: shoesData,
     bestsellers: bestSellers,
     new: newArrivals,
   };
@@ -56,7 +56,7 @@ const PremiumShoes = (): React.JSX.Element => {
               {
                 id: "trending",
                 label: "Trending Now",
-                count: trendingSneakers.length,
+                count: shoesData.length,
                 icon: <TrendingUp className="lg:w-5 lg:h-5 w-2 h-2" />,
               },
               {

@@ -158,7 +158,7 @@ const Navbar = () => {
             <NavigationMenu>
               <NavigationMenuList className="hidden   -ml-18 lg:flex gap-6 font-bold">
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+                  <NavigationMenuTrigger> Category Shoes</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid gap-2 w-sm list-none lg:grid-cols-[.75fr_1fr]">
                       <li className="row-span-3 ">

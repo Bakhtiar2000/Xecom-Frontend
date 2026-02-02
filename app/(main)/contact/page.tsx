@@ -113,7 +113,7 @@ export default function ContactPage() {
         {/* RIGHT: INFO */}
         <div className="space-y-10 ">
           {/* Brand Benefits */}
-          <div className="bg-card-primary p-4 lg:p-8 rounded-lg">
+          <div className="bg-card-primary p-4 lg:p-8 shadow-sm rounded-lg">
             <h3 className="font-semibold mb-4">Why sneaker lovers choose us</h3>
             <ul className="space-y-3 text-sm text-muted-foreground">
               {[
@@ -160,7 +160,7 @@ export default function ContactPage() {
               </div>
             </Card>
           </div>
-          <div className="pt-6 space-y-4 bg-card-primary p-4 lg:p-8 rounded-lg">
+          <div className="pt-6 space-y-4 bg-card-primary p-4 lg:p-8 shadow-sm rounded-lg">
             <p className="text-sm font-medium">You can also reach us via</p>
 
             <div className="flex flex-col sm:flex-row gap-6 text-sm">
