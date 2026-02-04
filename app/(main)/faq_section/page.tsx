@@ -67,14 +67,12 @@ export default function FaqSection() {
     const targetSection = sectionRefs.current[category];
 
     if (container && targetSection) {
-      // Get the target section's position relative to the container
       const containerRect = container.getBoundingClientRect();
       const targetRect = targetSection.getBoundingClientRect();
 
-      // Calculate the offset from container top
+
       const offset = targetRect.top - containerRect.top;
 
-      // Scroll so the section appears at the top of the container
       container.scrollTo({
         top: container.scrollTop + offset,
         behavior: "smooth",
@@ -96,7 +94,7 @@ export default function FaqSection() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Sidebar */}
         <aside className="space-y-2 hidden md:block lg:sticky top-32 h-fit bg-card-primary p-4 rounded-lg">
-          {(Object.keys(faqData) as Category[]).map((category, index) => (
+          {(Object.keys(faqData) as Category[]).map((category) => (
             <button
               key={category}
               onClick={() => handleCategoryClick(category)}
@@ -104,7 +102,7 @@ export default function FaqSection() {
               className={`w-full text-left px-4 py-2 rounded-lg text-sx transition
     ${
       activeCategory === category
-        ? `font-bold  ${index !== 0 ? "ml-4" : ""}`
+        ? `font-bold ml-4`
         : "text-muted-foreground hover:bg-muted"
     }`}
             >

@@ -101,7 +101,7 @@ export default function SneakerShoesPage() {
         description="Discover the finest selection of authentic sneakers from top brands."
       />
       {/* Search & Filter Section */}
-      <div className="lg:mb-16 md:mb-10 mb-0 space-y-6">
+      <div className="md:mb-5 mb-0 space-y-6">
         {/* Enhanced Search Bar */}
         <div className="max-w-3xl mx-auto relative ">
           <div className="relative">
@@ -266,7 +266,7 @@ export default function SneakerShoesPage() {
                         {/* Price */}
                         <div className="flex items-center gap-2 pt-1 md:pt-2">
                           <span className="md:text-lg text-sm font-bold">
-                            ${shoe.price}
+                            {shoe.price}
                           </span>
                           {shoe.originalPrice &&
                             shoe.originalPrice > shoe.price && (
@@ -289,121 +289,6 @@ export default function SneakerShoesPage() {
                           <ShoppingBag className="w-4 h-4" />
                           Add to Cart
                         </Button>
-                        <Dialog open={open} onOpenChange={setOpen}>
-                          <DialogContent className="max-w-md rounded-2xl">
-                            {selectedShoe && (
-                              <>
-                                <DialogHeader>
-                                  <DialogTitle className="text-lg">
-                                    {selectedShoe.name}
-                                  </DialogTitle>
-                                </DialogHeader>
-
-                                {/* Size */}
-                                <div className="space-y-2">
-                                  <p className="text-sm font-medium">
-                                    Select Size
-                                  </p>
-                                  <div className="flex flex-wrap gap-2">
-                                    {selectedShoe.sizes?.map((size: number) => (
-                                      <button
-                                        key={size}
-                                        onClick={() => setSelectedSize(size)}
-                                        className={`px-3 py-1  cursor-pointer rounded-md border text-sm transition
-                  ${
-                    selectedSize === size
-                      ? "bg-white text-black  border-primary"
-                      : "border-border hover:border-primary"
-                  }`}
-                                      >
-                                        {size}
-                                      </button>
-                                    ))}
-                                  </div>
-                                </div>
-
-                                {/* Color */}
-                                <div className="space-y-2 mt-4">
-                                  <p className="text-sm font-medium">
-                                    Select Color
-                                  </p>
-                                  <div className="flex gap-3">
-                                    {selectedShoe.colors?.map(
-                                      (color: string) => (
-                                        <button
-                                          key={color}
-                                          onClick={() =>
-                                            setSelectedColor(color)
-                                          }
-                                          className={`w-9 h-9 cursor-pointer rounded-full border-2 transition
-                  ${
-                    selectedColor === color
-                      ? "border-primary scale-110"
-                      : "border-border"
-                  }`}
-                                          style={{ backgroundColor: color }}
-                                        />
-                                      ),
-                                    )}
-                                  </div>
-                                </div>
-
-                                {/* Quantity */}
-                                <div className="space-y-2 mt-4">
-                                  <p className="text-sm font-medium">
-                                    Quantity
-                                  </p>
-                                  <div className="flex items-center gap-4">
-                                    <Button
-                                      size="icon"
-                                      className={`cursor-pointer border-border ${quantity === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
-                                      variant="outline"
-                                      onClick={() => setQuantity((q) => q - 1)}
-                                    >
-                                      <Minus className="w-4 h-4" />
-                                    </Button>
-
-                                    <span className="text-lg font-semibold">
-                                      {quantity}
-                                    </span>
-
-                                    <Button
-                                      size="icon"
-                                      variant="outline"
-                                      className="cursor-pointer"
-                                      onClick={() => setQuantity((q) => q + 1)}
-                                    >
-                                      <Plus className="w-4 h-4" />
-                                    </Button>
-                                  </div>
-                                </div>
-
-                                {/* Confirm */}
-                                <Button
-                                  variant="outline"
-                                  className={`w-full mt-6 ${!selectedSize || !selectedColor
-                                    ? "opacity-50 cursor-not-allowed"
-                                    : ""
-                                  }`}
-                                
-                                  onClick={() => {
-                                    const cartItem = {
-                                      ...selectedShoe,
-                                      size: selectedSize,
-                                      color: selectedColor,
-                                      quantity,
-                                    };
-
-                                    console.log("Added to cart:", cartItem);
-                                    setOpen(false);
-                                  }}
-                                >
-                                  Add {quantity} to Cart
-                                </Button>
-                              </>
-                            )}
-                          </DialogContent>
-                        </Dialog>
                       </div>
                     </CardContent>
                   </Card>
@@ -413,6 +298,109 @@ export default function SneakerShoesPage() {
           ))}
         </div>
       )}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md rounded-2xl">
+          {selectedShoe && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-lg">
+                  {selectedShoe.name}
+                </DialogTitle>
+              </DialogHeader>
+
+              {/* Size */}
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Select Size</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedShoe.sizes?.map((size: number) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`px-3 py-1  cursor-pointer rounded-md border text-sm transition
+                  ${
+                    selectedSize === size
+                      ? "bg-white text-black  border-primary"
+                      : "border-border hover:border-primary"
+                  }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Color */}
+              <div className="space-y-2 mt-4">
+                <p className="text-sm font-medium">Select Color</p>
+                <div className="flex gap-3">
+                  {selectedShoe.colors?.map((color: string) => (
+                    <button
+                      key={color}
+                      onClick={() => setSelectedColor(color)}
+                      className={`w-9 h-9 cursor-pointer rounded-full border-2 transition
+                  ${
+                    selectedColor === color
+                      ? "border-primary scale-110"
+                      : "border-border"
+                  }`}
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Quantity */}
+              <div className="space-y-2 mt-4">
+                <p className="text-sm font-medium">Quantity</p>
+                <div className="flex items-center gap-4">
+                  <Button
+                    size="icon"
+                    className={`cursor-pointer border-border ${quantity === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+                    variant="outline"
+                    onClick={() => setQuantity((q) => q - 1)}
+                  >
+                    <Minus className="w-4 h-4" />
+                  </Button>
+
+                  <span className="text-lg font-semibold">{quantity}</span>
+
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="cursor-pointer"
+                    onClick={() => setQuantity((q) => q + 1)}
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Confirm */}
+              <Button
+                variant="outline"
+                className={`w-full mt-6 ${
+                  !selectedSize || !selectedColor
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+                onClick={() => {
+                  const cartItem = {
+                    ...selectedShoe,
+                    size: selectedSize,
+                    color: selectedColor,
+                    quantity,
+                  };
+
+                  console.log("Added to cart:", cartItem);
+                  setOpen(false);
+                }}
+              >
+                Add {quantity} to Cart
+              </Button>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

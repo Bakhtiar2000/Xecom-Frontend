@@ -69,3 +69,11 @@ export interface PaymentMethod {
   description: string;
 }
 
+export type Category = {
+  id: number;
+  title: string;
+  image: string;
+  bg: string; // gradient or color
+};
+
+

@@ -2,23 +2,21 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Star } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
+import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { reviews } from "@/data/review";
-
-type ReviewFormData = {
-  name: string;
-  email: string;
-  rating: number;
-  review: string;
-};
+import { reviewSchema } from "@/lib/review.Schema";
 
 
+// 🔹 TypeScript type inferred from Zod schema
+type ReviewFormData = z.infer<typeof reviewSchema>;
 
 export default function ReviewsSection() {
   const [hoverRating, setHoverRating] = useState(0);
@@ -31,6 +29,7 @@ export default function ReviewsSection() {
     reset,
     formState: { errors },
   } = useForm<ReviewFormData>({
+    resolver: zodResolver(reviewSchema),
     defaultValues: {
       rating: 0,
     },
@@ -69,9 +68,9 @@ export default function ReviewsSection() {
           </div>
 
           {/* Reviews List */}
-          <div className="space-y-8 ">
+          <div>
             {reviews.map((review, i) => (
-              <div key={i} className="flex gap-2 border-b p-4 rounded-2xl pb-6">
+              <div key={i} className="flex gap-2 border-b p-4 rounded-2xl ">
                 <Avatar className="w-15 h-15 rounded-full bg-card-primary p-2">
                   <AvatarImage src={review.avatar} />
                   <AvatarFallback>{review.name[0]}</AvatarFallback>
@@ -113,18 +112,18 @@ export default function ReviewsSection() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
               placeholder="Your name"
-              {...register("name", { required: true })}
+              {...register("name")}
             />
             {errors.name && (
-              <p className="text-sm text-danger">Name is required</p>
+              <p className="text-sm text-danger">{errors.name.message}</p>
             )}
 
             <Input
               placeholder="Your email"
-              {...register("email", { required: true })}
+              {...register("email")}
             />
             {errors.email && (
-              <p className="text-sm text-danger">Email is required</p>
+              <p className="text-sm text-danger">{errors.email.message}</p>
             )}
 
             {/* Star Rating */}
@@ -149,17 +148,17 @@ export default function ReviewsSection() {
                 })}
               </div>
               {errors.rating && (
-                <p className="text-sm text-danger">Rating is required</p>
+                <p className="text-sm text-danger">{errors.rating.message}</p>
               )}
             </div>
 
             <Textarea
               placeholder="This product is..."
               rows={4}
-              {...register("review", { required: true })}
+              {...register("review")}
             />
             {errors.review && (
-              <p className="text-sm text-danger">Review is required</p>
+              <p className="text-sm text-danger">{errors.review.message}</p>
             )}
 
             <Button type="submit" className="w-full rounded-full">
