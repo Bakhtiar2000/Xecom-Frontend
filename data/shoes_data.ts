@@ -149,7 +149,7 @@ export const sneakersGallery: SneakerGalleryItem [] = [
   },
   {
     id: 4,
-    src: "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=800&auto=format&fit=crop",
+    src: "/g1.webp",
     alt: "Nike Dunk Low Panda",
     category: "Skate",
     brand: "Nike",

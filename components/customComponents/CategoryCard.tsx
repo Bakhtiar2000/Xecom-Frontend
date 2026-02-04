@@ -13,30 +13,22 @@ export default function CategoryCard({ category, active }: Props) {
     <Card
       className={`
         relative flex flex-col items-center justify-center
-       max-w-75 lg:h-105 h-55 lg:my-10 my-5
+       max-w-65 lg:h-85 h-55 lg:my-10 my-5
         rounded-full border-0 shadow-md
-        bg-linear-to-br ${category.bg}
         transition-all duration-300
-        ${active ? "ring-4 ring-primary scale-105" : "hover:scale-105"}
+        ${active ? "ring-4 ring-primary " : ""}
       `}
     >
-      <div className="relative w-40 lg:w-70 h-70">
-        <Image
-          src={category.image}
-          alt={category.title}
-          fill
-          className={`object-contain ${active ? "hover:shadow-2xl cursor-pointer" : ""}`}
-        />
-      </div>
-
-      <p className="mb-4 lg:mt-4 font-semibold text-white tracking-wide">
-        {category.title}
-      </p>
+      <Image
+        src={category.image}
+        alt={category.title}
+        fill
+        className={`rounded-full object-cover h-full w-full ${active ? "hover:shadow-2xl cursor-pointer" : ""}`}
+      />
+      <p className="z-100 absolute bottom-5 lg:bottom-10 text-xl font-semibold text-white tracking-wide">{category.title}</p>
     </Card>
   );
-
 }
-
 
 // import Image from "next/image";
 // import { Card } from "@/components/ui/card";
@@ -86,4 +78,3 @@ export default function CategoryCard({ category, active }: Props) {
 //     </Card>
 //   );
 // }
-

@@ -54,14 +54,12 @@ export default function CategorySection() {
 
     setActiveSlide(relativeCenterIndex);
 
-
     const maxScroll = cardWidth * categories.length * 2;
     const minScroll = cardWidth * categories.length;
 
     if (currentScroll >= maxScroll - 10) {
       scrollRef.current.scrollLeft = minScroll;
-    }
-    else if (currentScroll <= cardWidth * (categories.length - 1) + 10) {
+    } else if (currentScroll <= cardWidth * (categories.length - 1) + 10) {
       scrollRef.current.scrollLeft =
         minScroll + (currentScroll - cardWidth * (categories.length - 1));
     }
@@ -128,11 +126,10 @@ export default function CategorySection() {
   };
 
   return (
-    <div className="container  mb-5  lg:mb-15">
+    <div className="container  mb-5  lg:mb-30">
       <SectionTitle
+        subtitle="All Category Shoes Available."
         title="OUR PRODUCT CATEGORY"
-        description="Discover our carefully curated sneaker collections designed for comfort, durability, and street-ready style.
-"
       />
 
       {isScrollable ? (

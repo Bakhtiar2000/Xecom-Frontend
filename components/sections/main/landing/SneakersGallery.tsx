@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ZoomIn, Heart, Share2 } from "lucide-react";
+import { X, Heart, Share2 } from "lucide-react";
 import Image from "next/image";
 import { sneakersGallery } from "@/data/shoes_data";
 import { SneakerGalleryItem } from "@/types/shoes.types";
 import SectionTitle from "../../shared/SectionTitle";
+import { Button } from "@/components/ui/button";
 
 const SneakerMosaicGallery = () => {
   const [selectedImage, setSelectedImage] = useState<SneakerGalleryItem | null>(
@@ -33,87 +34,46 @@ const SneakerMosaicGallery = () => {
   return (
     <>
       <section className="relative container">
-        <div className="absolute inset-0 -z-10 overflow-hidden ">
-          <div className="absolute top-0 left-0 w-96 h-96  rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-0 w-96 h-96  rounded-full blur-3xl" />
-        </div>
-
         <div className="text-center mb-12 lg:-mt-30">
-          <SectionTitle
-            subtitle="  Explore our collection"
-            title=" SneakerGallery"
-          />
+          <SectionTitle subtitle="Sneakers" title=" Featured Footwear" />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[300px] gap-2 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[300px]  gap-2 md:gap-4">
           {sneakersGallery.map((item, index) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.02 }}
-              className={`relative overflow-hidden rounded-lg text-black cursor-pointer group ${item.className}`}
+              className={`relative overflow-hidden rounded-xl  cursor-pointer ${item.className}`}
               onClick={() => openImage(item)}
             >
-              <div className="relative w-full h-full ">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  width={600}
-                  height={600}
-                  className="w-full h-full  object-cover"
-                />
+              {/* BACKGROUND IMAGE */}
+              <Image
+                src={item.src}
+                alt={item.alt}
+                fill
+                className="object-cover"
+                priority
+              />
+              {/* CONTENT */}
+              <div className="relative z-10 items-end flex h-full w-full  justify-between p-2 md:p-4 text-white">
+                {/* LEFT TEXT */}
+                <div className="max-w-[80%] lg:max-w-[70%] space-y-1 lg:space-y-3">
+                  <p className="text-xs text-shadow-rating uppercase tracking-[10px] opacity-90">
+                    {item.category}
+                  </p>
 
-                <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <h2 className="text-lg md:text-2xl font-bold leading-tight">
+                    {item.alt}
+                  </h2>
 
-                {item.featured && (
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full text-white  text-xs font-medium">
-                      Featured
-                    </span>
-                  </div>
-                )}
+                  <p className="text-xs md:text-sm opacity-90 line-clamp-3">
+                    {item.description}
+                  </p>
 
-                <button
-                  onClick={(e) => toggleLike(item.id, e)}
-                  className="absolute top-4 right-4 bg-card-primary p-2 rounded-full backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
-                >
-                  <Heart
-                    className={`w-5  h-5 ${
-                      likedImages.includes(item.id)
-                        ? "fill-red-500 text-red-500"
-                        : "dark:text-white"
-                    }`}
-                  />
-                </button>
-
-                <div className="absolute bottom-0 left-0 right-0  text-white bg-tertiary transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <div className=" backdrop-blur-sm  px-4 py-8">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-medium ">{item.brand}</span>
-                      <span className="text-xs ">
-                        {item.likes + (likedImages.includes(item.id) ? 1 : 0)}{" "}
-                        likes
-                      </span>
-                    </div>
-                    <h3 className="text-sm font-semibold  line-clamp-1">
-                      {item.alt}
-                    </h3>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className="text-xs px-2 py-1 rounded-full ">
-                        {item.category}
-                      </span>
-                      <span className="text-xs ">{item.colorway}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-12 h-12 rounded-full   backdrop-blur-sm flex items-center justify-center">
-                    <ZoomIn className="w-6 h-6 " />
-                  </div>
+                  <Button variant={"secondary"}>Shop Now</Button>
                 </div>
               </div>
             </motion.div>
