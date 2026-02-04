@@ -126,7 +126,7 @@ export default function CategorySection() {
   };
 
   return (
-    <div className="container  mb-5  lg:mb-30">
+    <div className="container">
       <SectionTitle
         subtitle="All Category Shoes Available."
         title="OUR PRODUCT CATEGORY"
@@ -152,12 +152,7 @@ export default function CategorySection() {
             {loopedCategories.map((cat, idx) => (
               <div
                 key={`${cat.id}-${idx}`}
-                className="shrink-0 pointer-events-none"
-                style={{
-                  width: isMobile
-                    ? "calc((100% - 1.5rem) / 2)"
-                    : "calc((100% - 4 * 1.5rem) / 5)",
-                }}
+                className="shrink-0 pointer-events-none w-[calc((100%-1.5rem)/2)] sm:w-[calc((100%-3rem)/3)] md:w-[calc((100%-4.5rem)/4)] lg:w-[calc((100%-6rem)/5)]"
               >
                 <CategoryCard
                   category={cat}
@@ -168,7 +163,7 @@ export default function CategorySection() {
           </div>
 
           {/* Dots Navigation */}
-          <div className="flex justify-center gap-2 ">
+          <div className="flex justify-center gap-2 mt-4">
             {Array.from({ length: totalSlides }).map((_, index) => (
               <button
                 key={index}
@@ -185,9 +180,11 @@ export default function CategorySection() {
         </div>
       ) : (
         // Normal grid for lg devices with 5 or fewer items
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 justify-items-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {categories.map((cat, idx) => (
-            <CategoryCard key={cat.id} category={cat} active={idx === 2} />
+            <div key={cat.id} className="w-full">
+              <CategoryCard category={cat} active={idx === 2} />
+            </div>
           ))}
         </div>
       )}

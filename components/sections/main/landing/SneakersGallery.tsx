@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, transform } from "framer-motion";
 import { X, Heart, Share2 } from "lucide-react";
 import Image from "next/image";
 import { sneakersGallery } from "@/data/shoes_data";
@@ -33,10 +33,8 @@ const SneakerMosaicGallery = () => {
 
   return (
     <>
-      <section className="relative container">
-        <div className="text-center mb-12 lg:-mt-30">
-          <SectionTitle subtitle="Sneakers" title=" Featured Footwear" />
-        </div>
+      <section className="container">
+        <SectionTitle subtitle="Sneakers" title=" Featured Footwear" />
 
         <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[300px]  gap-2 md:gap-4">
           {sneakersGallery.map((item, index) => (
@@ -46,7 +44,7 @@ const SneakerMosaicGallery = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
               viewport={{ once: true }}
-              className={`relative overflow-hidden rounded-xl  cursor-pointer ${item.className}`}
+              className={`relative overflow-hidden  rounded-xl  cursor-pointer ${item.className}`}
               onClick={() => openImage(item)}
             >
               {/* BACKGROUND IMAGE */}
@@ -54,11 +52,11 @@ const SneakerMosaicGallery = () => {
                 src={item.src}
                 alt={item.alt}
                 fill
-                className="object-cover"
+                className="object-cover hover:scale-103 transition-transform duration-300"
                 priority
               />
               {/* CONTENT */}
-              <div className="relative z-10 items-end flex h-full w-full  justify-between p-2 md:p-4 text-white">
+              <div className="relative z-10 items-end flex h-full w-full  justify-between p-2 md:p-4 lg:p-8 text-white">
                 {/* LEFT TEXT */}
                 <div className="max-w-[80%] lg:max-w-[70%] space-y-1 lg:space-y-3">
                   <p className="text-xs text-shadow-rating uppercase tracking-[10px] opacity-90">
@@ -113,7 +111,7 @@ const SneakerMosaicGallery = () => {
               </button>
 
               <div className="flex flex-col md:flex-row h-full">
-                <div className="flex-1 relative min-h-[230px]  md:min-h-[80vh] ">
+                <div className="flex-1 relative min-h-57.5  md:min-h-[80vh] ">
                   <Image
                     src={selectedImage.src}
                     alt={selectedImage.alt}
@@ -220,5 +218,6 @@ const SneakerMosaicGallery = () => {
     </>
   );
 };
+
 
 export default SneakerMosaicGallery;

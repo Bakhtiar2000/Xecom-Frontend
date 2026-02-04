@@ -33,6 +33,8 @@ export const categories: Category[] = [
     id: 6,
     title: "Formal",
     image: "/b2.webp",
+
   },
+  
   // add more → auto scroll mode
 ];

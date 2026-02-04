@@ -6,12 +6,14 @@ import ShoesVideo from "@/components/sections/main/landing/ShoesVideo";
 import HowToBooking from "@/components/sections/main/landing/HowToBooking";
 import ReviewGrid from "@/components/sections/main/landing/ReviewGrid";
 import CategoryShoes from "@/components/sections/main/landing/CategorySection";
+import BestCollection from "@/components/sections/main/landing/BestCollaction";
 
 export default function HomePage() {
   return (
     <div className="bg-background ">
       <HeroSection></HeroSection>
       <CategoryShoes></CategoryShoes>
+      <BestCollection></BestCollection>
       <SneakerMosaicGallery></SneakerMosaicGallery>
       <PremiumShoes></PremiumShoes>
       <MegaWinterSell></MegaWinterSell>
