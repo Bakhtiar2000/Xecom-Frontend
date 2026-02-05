@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppDispatch } from "@/redux/hooks";
-import { useLoginMutation, useForgotPasswordMutation } from "@/redux/features/auth/authApi";
+import { useLoginMutation, useForgotPasswordMutation } from "@/redux/features/auth/auth.api";
 import { setUser } from "@/redux/features/auth/authSlice";
 import { verifyToken } from "@/utils/verifyToken";
 import { TUser } from "@/redux/features/auth/authSlice";
@@ -228,7 +228,7 @@ const Login = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex space-x-4">
                     <Button
                       type="button"

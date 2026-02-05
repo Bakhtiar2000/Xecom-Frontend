@@ -11,7 +11,7 @@ import { logout, setUser } from "@/redux/features/auth/authSlice";
 import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5002",
+  baseUrl: "http://localhost:3000",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -42,7 +42,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     //* Send Refresh
     console.log("Sending refresh token");
 
-    const res = await fetch("http://localhost:5002/auth/refresh-token", {
+    const res = await fetch("http://localhost:3000/auth/refresh-token", {
       method: "POST",
       credentials: "include",
     });
@@ -57,7 +57,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
         setUser({
           user,
           token: data?.data?.accessToken,
-        })
+        }),
       );
 
       result = await baseQuery(args, api, extraOptions);
@@ -72,6 +72,28 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["user", "semester", "courses", "offeredCourse"],
+  tagTypes: [
+    "user",
+    "admin",
+    "staff",
+    "customer",
+    "address",
+    "country",
+    "division",
+    "district",
+    "thana",
+    "category",
+    "brand",
+    "product",
+    "attribute",
+    "attributeValue",
+    "productVariant",
+    "order",
+    "coupon",
+    "notification",
+    "setting",
+    "tenant",
+    "subscription",
+  ],
   endpoints: () => ({}),
 });

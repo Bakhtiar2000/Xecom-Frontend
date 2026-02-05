@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useRegisterMutation } from "@/redux/features/auth/authApi";
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { TResponse } from "@/types/global.type";
 
 const Register = () => {
