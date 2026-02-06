@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { ChevronLeft, Truck } from "lucide-react";
+import {  Truck } from "lucide-react";
 interface Review {
   rating: number;
   count: number;

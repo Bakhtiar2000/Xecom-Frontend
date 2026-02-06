@@ -129,7 +129,7 @@ export default function CategorySection() {
     <div className="container">
       <SectionTitle
         subtitle="All Category Shoes Available."
-        title="OUR PRODUCT CATEGORY"
+        title="Our Product Category"
       />
 
       {isScrollable ? (

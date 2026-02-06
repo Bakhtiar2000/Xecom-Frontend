@@ -270,7 +270,7 @@ export default function SneakerShoesPage() {
                           </span>
                           {shoe.originalPrice &&
                             shoe.originalPrice > shoe.price && (
-                              <span className="text-sm text-gray-400 line-through">
+                              <span className="text-sm text-gray-muted line-through">
                                 ${shoe.originalPrice}
                               </span>
                             )}

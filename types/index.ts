@@ -37,3 +37,15 @@ export interface Order {
   status: "On shipping" | "Delivered"
   phone: string
 }
+
+export type Review = {
+  id: string;
+  userName: string;
+  userEmail: string;
+  userImage?: string;
+  rating: number;
+  comment: string;
+  date: string;
+  images?: string[];
+};
+

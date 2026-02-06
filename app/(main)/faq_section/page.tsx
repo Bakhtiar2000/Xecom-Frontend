@@ -71,8 +71,7 @@ export default function FaqSection() {
       const targetRect = targetSection.getBoundingClientRect();
 
 
-      const offset = targetRect.top - containerRect.top;
-
+    const offset = targetRect.top - containerRect.top - 20;
       container.scrollTo({
         top: container.scrollTop + offset,
         behavior: "smooth",
@@ -93,13 +92,13 @@ export default function FaqSection() {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Sidebar */}
-        <aside className="space-y-2 hidden md:block lg:sticky top-32 h-fit bg-card-primary p-4 rounded-lg">
+        <aside className="space-y-1 hidden md:block lg:sticky top-32 h-fit bg-card-primary p-4 rounded-lg">
           {(Object.keys(faqData) as Category[]).map((category) => (
             <button
               key={category}
               onClick={() => handleCategoryClick(category)}
               onMouseDown={(e) => e.preventDefault()}
-              className={`w-full text-left px-4 py-2 rounded-lg text-sx transition
+              className={`w-full text-left px-4 py-2 rounded-lg text-sm transition
     ${
       activeCategory === category
         ? `font-bold ml-4`
@@ -126,12 +125,12 @@ export default function FaqSection() {
             >
               <h2 className="text-2xl font-semibold mb-6 ">{category}</h2>
 
-              <Accordion type="single" collapsible className="space-y-2 ">
+              <Accordion type="single" collapsible className="space-y-2  ">
                 {faqData[category].map((item, index) => (
                   <AccordionItem
                     key={index}
                     value={`${category}-${index}`}
-                    className="border rounded-lg px-4 py-1 "
+                    className="border rounded-lg px-4 py-1 border-b!  "
                   >
                     <AccordionTrigger className="text-left md:text-[15px]">
                       {item.question}

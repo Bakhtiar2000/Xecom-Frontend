@@ -118,7 +118,7 @@ const ProductCard = ({
 
         {/* CTA */}
         <Link
-          href={`/Product/${product.id}`}
+          href={`/productDetails/${product.id}`}
           className="text-white bg-button-primary py-2 px-2 md:py-3 md:px-4 text-[8px] md:text-[13px] rounded-lg  font-semibold flex justify-center"
         >
           View Details

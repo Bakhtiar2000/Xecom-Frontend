@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence, transform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { X, Heart, Share2 } from "lucide-react";
 import Image from "next/image";
 import { sneakersGallery } from "@/data/shoes_data";
@@ -44,7 +44,7 @@ const SneakerMosaicGallery = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
               viewport={{ once: true }}
-              className={`relative overflow-hidden  rounded-xl  cursor-pointer ${item.className}`}
+              className={`group relative overflow-hidden  rounded-xl  cursor-pointer ${item.className}`}
               onClick={() => openImage(item)}
             >
               {/* BACKGROUND IMAGE */}
@@ -52,7 +52,8 @@ const SneakerMosaicGallery = () => {
                 src={item.src}
                 alt={item.alt}
                 fill
-                className="object-cover hover:scale-103 transition-transform duration-300"
+                className="object-cover transition-transform duration-500 ease-out
+        group-hover:scale-105"
                 priority
               />
               {/* CONTENT */}
@@ -218,6 +219,5 @@ const SneakerMosaicGallery = () => {
     </>
   );
 };
-
 
 export default SneakerMosaicGallery;
