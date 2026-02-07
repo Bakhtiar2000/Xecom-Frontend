@@ -172,5 +172,6 @@ export const shoesData: Sneaker[] = [
     colors: ["#000000", "#FF0000"],
     sizes: [8, 9, 10, 11],
   },
+  
 ];
 
