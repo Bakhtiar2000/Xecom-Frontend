@@ -17,4 +17,8 @@ export const mainRoutes: RouteItem[] = [
     label: "Contact",
     href: "/contact",
   },
+  {
+    label: "About Us",
+    href: "/about",
+  },
 ];
