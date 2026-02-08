@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, ShoppingCart, User, Navigation } from "lucide-react";
+import { Menu, ShoppingCart, Navigation } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { mainRoutes } from "@/route/main.route";
 import { usePathname } from "next/navigation";
@@ -20,20 +20,19 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { useAuth } from "@/context/AuthContext";
-import Image from "next/image";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import Image from "next/image";
+// import {
+//   AlertDialog,
+//   AlertDialogAction,
+//   AlertDialogCancel,
+//   AlertDialogContent,
+//   AlertDialogDescription,
+//   AlertDialogFooter,
+//   AlertDialogHeader,
+//   AlertDialogTitle,
+//   AlertDialogTrigger,
+// } from "@/components/ui/alert-dialog";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sheet,
   SheetContent,
@@ -47,7 +46,6 @@ import CartSheet from "@/components/customComponents/ChartSheet";
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const pathname = usePathname();
-  const { user, logOut } = useAuth();
   const [cartItems, setCartItems] = useState(CartData);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -145,7 +143,7 @@ const Navbar = () => {
                     className={`relative font-thin text-sm transition-colors
           ${
             isActive
-              ? "text-primary dark:text-gray-300 font-semibold after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:bg-primary"
+              ? "text-primary dark:text-white font-semibold after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full dark:after:bg-white after:bg-primary"
               : "text-foreground hover:text-foreground"
           }
         `}
@@ -164,7 +162,7 @@ const Navbar = () => {
                       <li className="row-span-3 ">
                         <NavigationMenuLink asChild>
                           <Link
-                            href="/man_products"
+                            href="/man-products"
                             className="flex flex-col justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-4 md:p-6 no-underline outline-none transition-all duration-200 hover:shadow-md"
                           >
                             <h1 className="mb-2 text-lg font-medium sm:mt-4">
@@ -176,7 +174,7 @@ const Navbar = () => {
                       <li className="row-span-3 ">
                         <NavigationMenuLink asChild>
                           <Link
-                            href="/woman_products"
+                            href="/woman-products"
                             className=" justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-4 md:p-6 no-underline outline-none transition-all duration-200 hover:shadow-md"
                           >
                             <h1 className="mb-2 text-lg font-medium sm:mt-4">
@@ -217,7 +215,7 @@ const Navbar = () => {
                 </SelectContent>
               </Select>
               <ThemeToggle />
-              {user ? (
+              {/* {user ? (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <button className="flex items-center">
@@ -268,7 +266,7 @@ const Navbar = () => {
                 >
                   <User size={22} /> Sign In
                 </Link>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -320,14 +318,14 @@ const Navbar = () => {
 
                 <div className="">
                   <Link
-                    href="/man_products"
+                    href="/man-products"
                     className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
                   >
                     1. Man Products
                   </Link>
 
                   <Link
-                    href="/woman_products"
+                    href="/woman-products"
                     className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
                   >
                     2. Woman Products
@@ -360,10 +358,10 @@ const Navbar = () => {
 
                 <ThemeToggle />
 
-                {user ? (
+                {/* {user ? (
                   <button
                     onClick={logOut}
-                    className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-red-500 hover:bg-red-500/10"
+                    className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm "
                   >
                     <User size={18} />
                     Logout
@@ -376,7 +374,7 @@ const Navbar = () => {
                     <User size={18} />
                     Sign In
                   </Link>
-                )}
+                )} */}
               </div>
             </SheetContent>
           </Sheet>

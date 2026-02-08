@@ -38,14 +38,14 @@ export default function ProductDetailsClient({ id }: { id: string }) {
 
   const product: Product = {
     id,
-    name: "White Viscose Straight Salwar Kameez",
+    name: "White Viscose Straight Boot Kli",
     price: "3,691",
     originalPrice: "5,999",
     discount: "-38%",
     sku: "SKD77586",
     vat: "VAT included",
     description:
-      "Elegant white viscose straight salwar kameez with intricate embroidery work. Perfect for festive occasions and weddings.",
+      "Elegant white viscose straight Boot Kli with intricate embroidery work. Perfect for festive occasions and weddings.",
     features: [
       "100% Pure Viscose",
       "Hand Embroidered",
@@ -98,7 +98,7 @@ export default function ProductDetailsClient({ id }: { id: string }) {
               ))}
             </div>
             {/* Main Image */}
-            <div className="relative h-[300px] lg:h-[500px] bg-card-primary  rounded-lg overflow-hidden mb-4 flex-1">
+            <div className="relative h-75 lg:h-125 bg-card-primary  rounded-lg overflow-hidden mb-4 flex-1">
               <Image
                 src={productImages[selectedImage].src}
                 alt={productImages[selectedImage].alt}

@@ -8,10 +8,9 @@ export const mainRoutes: RouteItem[] = [
     label: "Home",
     href: "/",
   },
-
   {
     label: "Brands",
-    href: "/brand_shoes",
+    href: "/brand-shoes",
   },
   {
     label: "Contact",

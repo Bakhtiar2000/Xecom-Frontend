@@ -21,7 +21,6 @@ interface StepData {
   description: string;
   features: string[];
   linear: string;
-  illustration: React.ReactNode;
 }
 
 interface StepCardProps {
@@ -34,16 +33,16 @@ interface StepCardProps {
 /* ---------------- Style Variants ---------------- */
 const styleVariants: Record<VariantType, StyleVariant> = {
   minimal: {
-    card: "bg-white dark:bg-gray-900/20 backdrop-blur-sm border border-gray-200 dark:border-gray-800",
+    card: "bg-white dark:bg-black/20 backdrop-blur-sm border border-border",
   },
   modern: {
-    card: "bg-linear-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 shadow-xl",
+    card: "bg-card-primary shadow-xl",
   },
   card: {
-    card: "bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl border-0",
+    card: "bg-white dark:bg-card-primary shadow-lg hover:shadow-2xl border-0",
   },
   interactive: {
-    card: "bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-100 dark:border-gray-700 hover:border-transparent",
+    card: "bg-white/90 dark:bg-black/90 backdrop-blur-sm border border-border hover:border-transparent",
   },
 };
 
@@ -67,7 +66,7 @@ const StepCard: React.FC<StepCardProps> = ({
     >
       {/* Horizontal Connector */}
       {index < totalSteps - 1 && (
-        <div className="hidden lg:block absolute top-20 left-1/2 w-full h-0.5 bg-linear-to-r from-gray-200 to-gray-200">
+        <div className="hidden lg:block absolute top-20 left-1/2 w-full h-0.5 bg-linear-to-r from-muted to-muted/90">
           <MotionDiv
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
@@ -131,14 +130,12 @@ const StepCard: React.FC<StepCardProps> = ({
               }}
               className="flex items-center gap-2 text-xs "
             >
-              <CheckCircle className="w-3 h-3 text-emerald-500 flex-shrink-0" />
+              <CheckCircle className="w-3 h-3 text-success-foreground shrink-0" />
               <span>{feature}</span>
             </motion.li>
           ))}
         </ul>
-
-        {/* Illustration */}
-        <div className="mt-4">{step.illustration}</div>
+       
 
         {/* Bottom Progress Bar */}
         <MotionDiv
@@ -155,7 +152,7 @@ const StepCard: React.FC<StepCardProps> = ({
           <MotionDiv
             animate={{ y: [0, 5, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-8 h-8 rounded-full bg-linear-to-br from-gray-100 to-white flex items-center justify-center shadow-sm"
+            className="w-8 h-8 rounded-full bg-linear-to-br from-muted to-white flex items-center justify-center shadow-sm"
           >
             <ArrowRight className="w-4 h-4 " />
           </MotionDiv>

@@ -96,7 +96,7 @@ export default function SneakerShoesPage() {
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
                       <Button size="sm" className="bg-white text-black">
                         <Link
-                          href={`/productDetails/${shoe.id}`}
+                          href={`/product-details/${shoe.id}`}
                           className="flex gap-2 items-center"
                         >
                           <Eye className="w-4 h-4" />

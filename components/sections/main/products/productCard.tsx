@@ -47,7 +47,7 @@ export default function ProductCard({
         {/* Out of Stock */}
         {!product.inStock && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg">
+            <span className="px-4 py-2 bg-danger text-white font-semibold rounded-lg">
               Out of Stock
             </span>
           </div>
@@ -116,7 +116,7 @@ export default function ProductCard({
 
         {/* CTA */}
         <Link
-          href={`/productDetails/${product.id}`}
+          href={`/product-details/${product.id}`}
           className={`text-white  bg-button-primary py-3 px-4 rounded-lg font-semibold flex justify-center
     ${viewMode === "grid" ? "w-full" : "w-40"}
 

@@ -43,8 +43,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
                       key={i}
                       className={`w-4 h-4 ${
                         i < review.rating
-                          ? "fill-amber-400 text-amber-400"
-                          : "text-gray-300 dark:text-gray-600"
+                          ? "fill-rating text-rating"
+                          : "text-muted-foreground"
                       }`}
                     />
                   ))}
@@ -64,7 +64,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
             </div>
 
             {review.verified && (
-              <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-sm">
+              <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-success text-success-foreground text-sm">
                 <CheckCircle className="w-4 h-4" />
                 Verified
               </div>
@@ -77,7 +77,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
           </p>
 
           {/* Purchase Info */}
-          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
             <span className="font-medium">Purchased:</span>
             <span className="">
               {review.purchase}
@@ -92,11 +92,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
 
             <button
               onClick={() => setLiked((prev) => !prev)}
-              className="flex items-center gap-1 cursor-pointer text-gray-500 hover:text-red-500 transition-colors"
+              className="flex items-center gap-1 cursor-pointer text-muted-foreground hover:text-danger transition-colors"
             >
               <Heart
                 className={`w-5 h-5 ${
-                  liked ? "fill-red-500 text-red-500" : ""
+                  liked ? "fill-danger text-danger" : ""
                 }`}
               />
               <span>{review.likes + (liked ? 1 : 0)}</span>

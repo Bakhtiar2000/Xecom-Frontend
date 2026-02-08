@@ -14,7 +14,7 @@ export default function BestCollection() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  lg:gap-30 lg:mt-30 ">
         {products.map((item) => (
           <Link
-            href={`/productDetails/${item.id}`}
+            href={`/product-details/${item.id}`}
             key={item.id}
             className={`group relative bg-card-primary rounded-xl p-2 lg:h-50 max-w-90 border-2 ${item.border}  text-center  hover:shadow-xl ${item.shadowColor} cursor-pointer`}
           >

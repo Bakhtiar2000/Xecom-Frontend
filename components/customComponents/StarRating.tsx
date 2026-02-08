@@ -17,7 +17,7 @@ export function StarRating({ rating, editable, onChange }: Props) {
           type="button"
           onClick={() => editable && onChange?.(star)}
           className={`transition ${
-            star <= rating ? "text-amber-500" : "text-muted-foreground"
+            star <= rating ? "text-rating" : "text-muted-foreground"
           } ${editable && "hover:scale-110"}`}
         >
           <Star className="w-4 h-4 fill-current" />

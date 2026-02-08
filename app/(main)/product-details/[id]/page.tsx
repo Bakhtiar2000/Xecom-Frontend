@@ -33,7 +33,7 @@ interface ProductImage {
   alt: string;
 }
 
-export default function ProductDetailsClient({ id }: { id: string }) {
+export default function ProductDetails({ id }: { id: string }) {
   const [selectedSize, setSelectedSize] = useState("38");
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);

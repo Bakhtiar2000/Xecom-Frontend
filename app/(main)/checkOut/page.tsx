@@ -84,7 +84,6 @@ const CheckoutPage = () => {
 
   const [formValid, setFormValid] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>(CartData);
-  const [selectedVouchers, setSelectedVouchers] = useState<string[]>([]);
   const [promoCode, setPromoCode] = useState<string>("");
   const [appliedPromoCode, setAppliedPromoCode] = useState<string>("");
   const [promoError, setPromoError] = useState<string>("");
@@ -399,7 +398,7 @@ const CheckoutPage = () => {
                                      sm:flex-row gap-4"
                                     >
                                       {/* Image */}
-                                      <div className="w-full sm:w-24 h-24 rounded-lg overflow-hidden cart-img-bg-primary flex-shrink-0">
+                                      <div className="w-full sm:w-24 h-24 rounded-lg overflow-hidden cart-img-bg-primary shrink-0">
                                         <div className="w-full h-full flex items-center justify-center">
                                           <Image
                                             src={item.image}
@@ -452,7 +451,7 @@ const CheckoutPage = () => {
                                                 </span>
                                               </div>
                                             )}
-                                            <div className="text-xl font-bold text-sm lg:text-lg">
+                                            <div className=" font-bold text-sm lg:text-lg">
                                               Tk{" "}
                                               {item.finalPrice.toLocaleString(
                                                 "en-BD",
@@ -840,7 +839,7 @@ const CheckoutPage = () => {
                         🎉 Thank You
                       </p>
 
-                      <h1 className="text-2xl font-semibold text-gray-800 mb-2">
+                      <h1 className="text-2xl font-semibold mb-2">
                         Your order has been received
                       </h1>
 
@@ -870,7 +869,7 @@ const CheckoutPage = () => {
 
                       <div className="flex gap-4 justify-center mt-6">
                         {/* Track Order Button */}
-                        <Link href="/track_order">
+                        <Link href="/track-order">
                           <button className="flex items-center gap-2 px-5 py-2 cursor-pointer bg-success rounded-lg text-success-foreground transition">
                             <Truck size={18} />
                             <span>Track Order</span>
@@ -981,7 +980,7 @@ const CheckoutPage = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <p className="text-sm font-medium text-sm lg:text-lg">
+                  <p className="text-sm font-medium  lg:text-lg">
                     There are {vouchers.length} Vouchers for you
                   </p>
 
@@ -1132,7 +1131,7 @@ const CheckoutPage = () => {
 
                   <div className="border-t cart-border-primary pt-3 mt-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-lg font-bold text-sm lg:text-lg">
+                      <span className=" font-bold text-sm lg:text-lg">
                         Total
                       </span>
                       <div className="text-right">

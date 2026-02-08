@@ -108,7 +108,7 @@ export default function CategoryTopBar({
           {/* Mobile Filter Button */}
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="lg:hidden flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg"
+            className="lg:hidden flex items-center gap-2 px-4 py-2 bg-button-primary text-white rounded-lg"
           >
             <SlidersHorizontal className="w-5 h-5" />
             Filters

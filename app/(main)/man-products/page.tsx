@@ -173,15 +173,15 @@ export default function MensCategoryPage() {
   const getBadgeColor = (badge?: string) => {
     switch (badge) {
       case "BEST SELLER":
-        return "bg-red-500 text-white";
+        return "bg-danger text-danger-foreground";
       case "NEW":
-        return "bg-green-500 text-white";
+        return "bg-success text-success-foreground";
       case "TRENDING":
-        return "bg-purple-500 text-white";
+        return "bg-rating text-rating-foreground ";
       case "LIMITED":
-        return "bg-yellow-500 text-white";
+        return "bg-warning text-warning-foreground";
       default:
-        return "bg-blue-500 text-white";
+        return "bg-success text-success-foreground";
     }
   };
 

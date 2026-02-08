@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,11 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useForgotPasswordMutation } from "@/redux/features/auth/authApi";
 
 import AnimatedSneakerImage2 from "@/components/customComponents/AnnimationSneakersImage2";
-import { useAuth } from "@/context/AuthContext";
-import { FirebaseError } from "firebase/app";
 
 // Define form types
 interface LoginFormData {
@@ -31,10 +26,7 @@ interface ForgotPasswordFormData {
 }
 
 const Login = () => {
-  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [forgotPassword] = useForgotPasswordMutation();
-  const { logIn, signInWithGoogle } = useAuth();
   const {
     register,
     handleSubmit,
@@ -54,19 +46,7 @@ const Login = () => {
   } = useForm<ForgotPasswordFormData>();
 
   const handleForgotSubmit = async (data: ForgotPasswordFormData) => {
-    const toastId = toast.loading("Sending request ...");
-
-    try {
-      const res = await forgotPassword(data).unwrap();
-      toast.success(res.message || "Please check your mail", { id: toastId });
-      setIsModalOpen(false);
-      resetForgot();
-    } catch (err) {
-      const error = err as { data?: { message?: string } };
-      toast.error(error?.data?.message || "Something went wrong", {
-        id: toastId,
-      });
-    }
+   console.log('forget password data'  , data);
   };
 
   const showModal = () => {
@@ -79,87 +59,12 @@ const Login = () => {
   };
 
   const onSubmit = async (data: LoginFormData) => {
-    const toastId = toast.loading("Logging in...");
-
-    try {
-      await logIn(data.email, data.password);
-
-      toast.success("Logged in successfully!", {
-        id: toastId,
-        duration: 2000,
-      });
-
-      router.push("/");
-    } catch (error) {
-      let errorMessage = "Invalid email or password";
-
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case "auth/user-not-found":
-            errorMessage = "No user found with this email";
-            break;
-          case "auth/wrong-password":
-            errorMessage = "Incorrect password";
-            break;
-          case "auth/invalid-email":
-            errorMessage = "Invalid email format";
-            break;
-          case "auth/user-disabled":
-            errorMessage = "This account has been disabled";
-            break;
-          case "auth/too-many-requests":
-            errorMessage = "Too many failed attempts. Please try again later";
-            break;
-          case "auth/invalid-credential":
-            errorMessage =
-              "Invalid credentials. Please check your email and password";
-            break;
-        }
-      }
-
-      toast.error(errorMessage, { id: toastId });
-    }
+  console.log('login data'  , data);
   };
 
   // Google Sign
   const handleGoogleSignIn = async () => {
-    const toastId = toast.loading("Signing in with Google...");
-
-    try {
-      await signInWithGoogle();
-
-      toast.success("Welcome! Signed in with Google successfully", {
-        id: toastId,
-        duration: 2000,
-      });
-
-      router.push("/");
-    } catch (error: unknown) {
-      let errorMessage = "Failed to sign in with Google";
-
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case "auth/popup-closed-by-user":
-            errorMessage = "Sign-in popup was closed";
-            break;
-
-          case "auth/popup-blocked":
-            errorMessage = "Popup was blocked by the browser";
-            break;
-
-          case "auth/cancelled-popup-request":
-            errorMessage = "Sign-in was cancelled";
-            break;
-
-          case "auth/account-exists-with-different-credential":
-            errorMessage =
-              "An account already exists with a different sign-in method";
-            break;
-        }
-      }
-
-      toast.error(errorMessage, { id: toastId });
-    }
+ console.log('google login');
   };
 
   return (
@@ -263,7 +168,6 @@ const Login = () => {
               </form>
               <div className="mt-6 relative">
                 <div className="absolute inset-0 flex items-center">
-                  {/* <div className="w-full border-t border-gray-300 dark:border-gray-600"></div> */}
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-transparent text-muted-foreground">

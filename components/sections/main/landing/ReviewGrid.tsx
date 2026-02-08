@@ -90,7 +90,7 @@ const ReviewsGrid: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mt-12"
         >
-          <Link href={'/all_review'} className="group relative px-8 py-4 rounded-lg cursor-pointer tranding-secondry-text font-bold text-lg transition-all duration-300 hover:scale-105">
+          <Link href={'/all-review'} className="group relative px-8 py-4 rounded-lg cursor-pointer tranding-secondry-text font-bold text-lg transition-all duration-300 hover:scale-105">
             <span className="relative z-10 border-b-2 pb-2">
               {"< Read All Reviews >"}
             </span>

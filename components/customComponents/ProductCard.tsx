@@ -31,14 +31,14 @@ const ProductCard = ({
         <span
           className={`md:px-3 px-2 py-1 md:py-1.5 rounded-full text-[8px] md:text-xs font-bold shadow-lg ${
             product.badge === "BEST SELLER"
-              ? "bg-red-200 text-primary"
+              ? "bg-success text-success-foreground"
               : product.badge === "TRENDING"
-              ? "bg-yellow-500 text-primary"
+              ? "bg-rating text-rating-foreground"
               : product.badge === "HOT"
-              ? "bg-green-200 text-primary"
+              ? "bg-danger text-danger-foreground"
               : product.badge === "NEW"
-              ? "text-primary"
-              : "bg-blue-300 text-primary"
+              ? "bg-success text-success-foreground"
+              : "bg-success text-success-foreground"
           }`}
         >
           {product.badge}
@@ -118,7 +118,7 @@ const ProductCard = ({
 
         {/* CTA */}
         <Link
-          href={`/productDetails/${product.id}`}
+          href={`/product-details/${product.id}`}
           className="text-white bg-button-primary py-2 px-2 md:py-3 md:px-4 text-[8px] md:text-[13px] rounded-lg  font-semibold flex justify-center"
         >
           View Details

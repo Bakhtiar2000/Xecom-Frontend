@@ -259,7 +259,7 @@ export default function AboutCompanyPage() {
           {loopedShoes.map((member, index) => (
             <Card
               key={`${member.id}-${index}`}
-              className="text-center flex-shrink-0 w-[280px] sm:w-[300px] lg:w-[calc(25%-18px)]"
+              className="text-center shrink-0 w-70 sm:w-75 lg:w-[calc(25%-18px)]"
             >
               <CardContent className="p-6 space-y-4">
                 <div className="relative w-28 h-28 mx-auto rounded-full overflow-hidden">

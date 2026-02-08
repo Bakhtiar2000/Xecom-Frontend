@@ -6,9 +6,6 @@ import {
   Search,
   ShoppingCart,
   Truck,
-  CreditCard,
-  ShieldCheck,
-  RefreshCw,
   Ruler,
 } from "lucide-react";
 import StepCard from "@/components/customComponents/StepCard";
@@ -29,7 +26,6 @@ interface SneakerStep {
   description: string;
   features: string[];
   linear: string;
-  illustration: React.ReactNode;
 }
 
 interface HowtoBookingProps {
@@ -50,14 +46,7 @@ const sneakerSteps: SneakerStep[] = [
       "Check real-time availability",
       "Read authentic reviews",
     ],
-    linear: "from-blue-500 to-cyan-500",
-    illustration: (
-      <div className="flex items-center justify-center space-x-2 mt-4">
-        <div className="w-8 h-8 rounded-lg bg-linear-to-br from-blue-400 to-cyan-300" />
-        <div className="w-8 h-8 rounded-lg bg-linear-to-br from-blue-500 to-cyan-400" />
-        <div className="w-8 h-8 rounded-lg bg-linear-to-br from-blue-600 to-cyan-500" />
-      </div>
-    ),
+    linear: "from-success to-success-foreground",
   },
   {
     number: "02",
@@ -71,17 +60,7 @@ const sneakerSteps: SneakerStep[] = [
       "Width & arch support info",
       "Return if doesn't fit",
     ],
-    linear: "from-emerald-500 to-green-500",
-    illustration: (
-      <div className="flex items-center justify-center mt-4">
-        <div className="relative w-16 h-8">
-          <div className="absolute inset-0 bg-linear-to-r from-emerald-400 to-green-400 rounded-full" />
-          <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-secondary rounded-full -translate-y-1/2" />
-          <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-secondary rounded-full -translate-y-1/2" />
-          <div className="absolute top-1/2 left-3/4 w-2 h-2 bg-secondary rounded-full -translate-y-1/2" />
-        </div>
-      </div>
-    ),
+    linear: "from-success to-success-foreground",
   },
   {
     number: "03",
@@ -95,14 +74,7 @@ const sneakerSteps: SneakerStep[] = [
       "Price match guarantee",
       "Order confirmation",
     ],
-    linear: "from-amber-500 to-orange-500",
-    illustration: (
-      <div className="flex items-center justify-center space-x-2 mt-4">
-        <CreditCard className="w-6 h-6 ilustaration-text-primary" />
-        <ShieldCheck className="w-6 h-6 ilustaration-text-primary" />
-        <RefreshCw className="w-6 h-6 ilustaration-text-primary" />
-      </div>
-    ),
+    linear: "from-success to-success-foreground",
   },
   {
     number: "04",
@@ -116,15 +88,7 @@ const sneakerSteps: SneakerStep[] = [
       "Real-time order tracking",
       "Sneaker-safe packaging",
     ],
-    linear: "from-purple-500 to-pink-500",
-    illustration: (
-      <div className="flex items-center justify-center mt-4">
-        <div className="relative w-20 h-8">
-          <div className="absolute top-1/2 left-0 right-0 h-1 bg-linear-to-r from-purple-400 to-pink-400" />
-          <div className="absolute top-1/2 left-1/4 w-3 h-3 bg-linear-to-br from-purple-500 to-pink-500 rounded-full -translate-y-1/2 animate-pulse" />
-        </div>
-      </div>
-    ),
+    linear: "from-success to-success-foreground",
   },
 ];
 

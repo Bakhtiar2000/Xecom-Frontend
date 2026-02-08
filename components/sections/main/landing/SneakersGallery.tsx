@@ -127,7 +127,7 @@ const SneakerMosaicGallery = () => {
                     <Heart
                       className={`w-8  h-8 ${
                         likedImages.includes(selectedImage.id)
-                          ? "fill-red-500 text-red-500"
+                          ? "fill-danger text-danger-foreground"
                           : " text-foreground"
                       }`}
                     />

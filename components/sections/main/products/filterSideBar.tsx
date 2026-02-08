@@ -38,7 +38,7 @@ export default function FilterSidebar({
           </h2>
           <button
             onClick={clearAllFilters}
-            className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+            className="text-sm text-button-secondary cursor-pointer"
           >
             Clear All
           </button>
@@ -97,8 +97,8 @@ export default function FilterSidebar({
                 onClick={() => toggleFilter("sizes", size)}
                 className={`py-2 rounded ${
                   filters.sizes.includes(size)
-                    ? "bg-blue-600 text-white "
-                    : "bg-gray-100 text-secondary-foreground"
+                    ? "bg-button-primary text-white "
+                    : "bg-muted text-black dark:text-white"
                 }`}
               >
                 {size}
@@ -117,8 +117,8 @@ export default function FilterSidebar({
                 onClick={() => toggleFilter("colors", color.value)}
                 className={`relative w-8 h-8 rounded-full border-2 ${
                   filters.colors.includes(color.value)
-                    ? "border-blue-500"
-                    : "border-gray-300"
+                    ? "border-button-secondary"
+                    : "border-muted"
                 }`}
               >
                 <div

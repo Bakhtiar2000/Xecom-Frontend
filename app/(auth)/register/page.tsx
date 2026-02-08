@@ -1,12 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FirebaseError } from "firebase/app";
 
 import {
   Card,
@@ -16,8 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AnnimatedSneakerImage from "@/components/customComponents/AnnimationSneakersImage";
-import { updateProfile } from "firebase/auth";
-import { useAuth } from "@/context/AuthContext";
+
 
 // Define form data interface
 interface RegisterFormData {
@@ -29,14 +25,12 @@ interface RegisterFormData {
 }
 
 const Register = () => {
-  const router = useRouter();
 
   const {
     register: registerForm,
     handleSubmit,
     formState: { errors },
     watch,
-    reset,
   } = useForm<RegisterFormData>({
     defaultValues: {
       name: "",
@@ -48,94 +42,14 @@ const Register = () => {
   });
 
   const password = watch("password");
-  const { signUp, signInWithGoogle } = useAuth();
 
   const onSubmit = async (data: RegisterFormData) => {
-    const toastId = toast.loading("Creating account...");
-
-    try {
-      // Use signUp from AuthContext
-      await signUp(data.email, data.password);
-
-      // Update user profile with display name
-      // Note: We need to import auth to get current user
-      const { auth } = await import("@/lib/firebase");
-      if (auth.currentUser) {
-        await updateProfile(auth.currentUser, {
-          displayName: data.name,
-        });
-      }
-
-      toast.success("Account created successfully!", {
-        id: toastId,
-        duration: 3000,
-      });
-
-      reset();
-
-      // Redirect to dashboard or home page
-      router.push("/");
-    } catch (error: unknown) {
-      let errorMessage = "Something went wrong";
-
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case "auth/email-already-in-use":
-            errorMessage = "Email already in use. Please try another email.";
-            break;
-          case "auth/invalid-email":
-            errorMessage = "Invalid email address";
-            break;
-          case "auth/weak-password":
-            errorMessage =
-              "Password is too weak. Please use a stronger password.";
-            break;
-          case "auth/operation-not-allowed":
-            errorMessage = "Email/password accounts are not enabled";
-            break;
-        }
-      }
-
-      toast.error(errorMessage, { id: toastId });
-    }
+    console.log(data);
   };
 
   // Google Sign Up using AuthContext
   const handleGoogleSignUp = async () => {
-    const toastId = toast.loading("Signing up with Google...");
-
-    try {
-      await signInWithGoogle();
-
-      toast.success("Account created successfully with Google!", {
-        id: toastId,
-        duration: 2000,
-      });
-
-      router.push("/");
-    } catch (error: unknown) {
-      let errorMessage = "Failed to sign up with Google";
-
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case "auth/popup-closed-by-user":
-            errorMessage = "Sign-up popup was closed";
-            break;
-          case "auth/popup-blocked":
-            errorMessage = "Popup was blocked by browser";
-            break;
-          case "auth/cancelled-popup-request":
-            errorMessage = "Sign-up was cancelled";
-            break;
-          case "auth/account-exists-with-different-credential":
-            errorMessage =
-              "Account already exists with different sign-in method";
-            break;
-        }
-      }
-
-      toast.error(errorMessage, { id: toastId });
-    }
+   console.log('google login');
   };
 
   return (
@@ -331,7 +245,6 @@ const Register = () => {
               </form>
               <div className="mt-6 relative">
                 <div className="absolute inset-0 flex items-center">
-                  {/* <div className="w-full border-t border-gray-300 dark:border-gray-600"></div> */}
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-transparent text-muted-foreground ">

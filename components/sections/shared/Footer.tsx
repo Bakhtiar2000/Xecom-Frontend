@@ -56,7 +56,7 @@ const Footer: React.FC = () => {
   ];
 
   const quickLinks: QuickLink[] = [
-    { name: "FAQ", path: "/faq_section" },
+    { name: "FAQ", path: "/faq-section" },
     { name: "Home", path: "/" },
     { name: "Component", path: "/BrowseProperties" },
     { name: "More", path: "/become-host" },
@@ -163,7 +163,7 @@ const Footer: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Address */}
                 <div className="flex items-start cursor-pointer gap-4 p-4 dark:border-gray-700 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
-                  <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center shrink-0">
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
@@ -180,7 +180,7 @@ const Footer: React.FC = () => {
 
                 {/* Phone */}
                 <div className="flex items-start cursor-pointer gap-4 p-4 dark:border-gray-700 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
-                  <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center shrink-0">
                     <Phone className="w-6 h-6" />
                   </div>
                   <div>
@@ -198,7 +198,7 @@ const Footer: React.FC = () => {
 
                 {/* Email */}
                 <div className="flex items-start cursor-pointer gap-4 p-4 dark:bg-gray-900 rounded-2xl border border-gray-700 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-800 transition-all duration-300">
-                  <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center shrink-0">
                     <Mail className="w-6 h-6" />
                   </div>
                   <div>
@@ -216,7 +216,7 @@ const Footer: React.FC = () => {
 
                 {/* Business Hours */}
                 <div className="flex items-start cursor-pointer dark:border-gray-700 gap-4 p-4 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
                     <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
                       <div className="w-3 h-3 bg-amber-500 rounded-full" />
                     </div>
@@ -261,7 +261,7 @@ const Footer: React.FC = () => {
                   href="#"
                   className="text-emerald-600 font-medium hover:underline transition-colors duration-300"
                 >
-                  Md . Shakib Khan
+                  Md. Shakib Khan
                 </a>
               </div>
             </div>

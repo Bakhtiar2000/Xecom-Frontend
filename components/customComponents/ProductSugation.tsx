@@ -21,7 +21,7 @@ export default function ProductSugation() {
     if (!scrollRef.current) return;
     const cardWidth = scrollRef.current.scrollWidth / loopedShoes.length;
     scrollRef.current.scrollLeft = cardWidth * shoesData.length;
-  }, []);
+  },);
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
@@ -120,7 +120,7 @@ export default function ProductSugation() {
                     <Button className="bg-white dark:bg-black dark:text-white text-black hover:bg-muted/90 gap-2">
                       <Link
                         className="flex justify-center gap-2"
-                        href={`/productDetails/${shoe.id}`}
+                        href={`/product-details/${shoe.id}`}
                       >
                         {" "}
                         <Eye className="w-4 h-4" />

@@ -140,17 +140,17 @@ export default function ProductReviews() {
                       key={stars}
                       className="flex items-center gap-2 text-sm mb-1"
                     >
-                      <span className="w-8 text-gray-600 dark:text-gray-400">
+                      <span className="w-8 te4xt-muted-foreground">
                         {stars}
                       </span>
-                      <FastForward className="w-3 h-3 text-amber-500" />
-                      <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                      <FastForward className="w-3 h-3 text-rating" />
+                      <div className="flex-1 bg-card-primary rounded-full h-2">
                         <div
-                          className="bg-linear-to-r from-amber-500 to-orange-500 h-2 rounded-full"
+                          className="bg-linear-to-r from-rating to-rating/90 h-2 rounded-full"
                           style={{ width: `${percentage}%` }}
                         ></div>
                       </div>
-                      <span className="w-8 text-gray-600 dark:text-gray-400 text-right">
+                      <span className="w-8 text-muted-foreground text-right">
                         {count}
                       </span>
                     </div>
