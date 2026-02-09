@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { BadgeCheck, Globe, Users, Star, Target } from "lucide-react";
-import AnimatedCursorImage from "@/components/customComponents/AnnimatedCursorImage";
+import AnimatedCursorImage from "@/components/custom/AnnimatedCursorImage";
 import { useEffect, useRef, useState } from "react";
 
 export default function AboutCompanyPage() {

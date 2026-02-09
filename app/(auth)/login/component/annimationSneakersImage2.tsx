@@ -6,12 +6,9 @@ import {  ChevronLeft} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-type HoverEffect = "rotate" | "float" | "pulse";
 
 const ModernSneakerShowcase: FC = () => {
-  const [hoverEffect, setHoverEffect] = useState<HoverEffect>("rotate");
   const [isHovered, setIsHovered] = useState<boolean>(true);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
  
 
  

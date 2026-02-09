@@ -16,7 +16,6 @@ import {
 import { Plus, ChevronDown, FastForward } from "lucide-react";
 import { Review } from "@/types";
 import { productReviews } from "@/data/product_reivew";
-import { StarRating } from "./StarRating";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical, Edit, Trash2 } from "lucide-react";
+import { StarRating } from "@/components/custom/StarRating";
 
 const CURRENT_USER_EMAIL = "john@gmail.com";
 

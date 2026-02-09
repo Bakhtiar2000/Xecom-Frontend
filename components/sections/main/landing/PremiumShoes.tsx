@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { Sparkles, TrendingUp, Trophy } from "lucide-react";
 import { shoesData, Sneaker } from "@/data/premium_shoes";
 import SectionTitle from "../../shared/SectionTitle";
-import ProductCard from "@/components/customComponents/ProductCard";
+import ProductCard from "@/components/custom/ProductCard";
 
 type TabType = "trending" | "bestsellers" | "new";
 
@@ -76,7 +76,7 @@ const PremiumShoes = (): React.JSX.Element => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
                 className={`lg:px-6 px-2 cursor-pointer lg:py-4 py-2 text-sm  font-semibold flex items-center space-x-1 md:space-x-2 ${
-                  activeTab === tab.id ? "border-b-2 border-primary" : ""
+                  activeTab === tab.id ? "border-b-2 border-black dark:border-white" : ""
                 }`}
               >
                 {tab.icon}

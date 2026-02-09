@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import {  Truck } from "lucide-react";
-import ProductReviews from "@/components/customComponents/Product_Review";
-import ProductSugation from "@/components/customComponents/ProductSugation";
+import ProductSugation from "./component/ProductSugation";
+import ProductReviews from "./component/ProductReview";
 interface Review {
   rating: number;
   count: number;

@@ -2,11 +2,11 @@
 
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-import { Card, CardContent } from "../ui/card";
 import { shoesData, Sneaker } from "@/data/premium_shoes";
-import { Button } from "../ui/button";
 import Link from "next/link";
 import { Eye } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function ProductSugation() {
   const scrollRef = useRef<HTMLDivElement>(null);

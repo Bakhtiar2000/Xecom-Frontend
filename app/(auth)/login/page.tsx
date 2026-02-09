@@ -12,8 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-import AnimatedSneakerImage2 from "@/components/customComponents/AnnimationSneakersImage2";
+import ModernSneakerShowcase from "./component/annimationSneakersImage2";
 
 // Define form types
 interface LoginFormData {
@@ -70,7 +69,7 @@ const Login = () => {
   return (
     <div className=" container  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  poppins-font">
       <div className="lg:flex justify-center hidden">
-        <AnimatedSneakerImage2 />
+        <ModernSneakerShowcase/>
       </div>
 
       <div className="flex justify-center  ">

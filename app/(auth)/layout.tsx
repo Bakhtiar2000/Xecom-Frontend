@@ -1,6 +1,3 @@
-import { AuthProvider } from "@/context/AuthContext";
-import Link from "next/link";
-
 export default function AuthLayout({
   children,
 }: {
@@ -9,7 +6,7 @@ export default function AuthLayout({
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1 flex items-center justify-center p-4">
-        <AuthProvider>{children}</AuthProvider>
+        {children}
       </main>
     </div>
   );

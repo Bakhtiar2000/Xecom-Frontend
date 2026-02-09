@@ -6,8 +6,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import CartContent from "./ChartSheetContent";
 import { ShoppingCart } from "lucide-react";
+import CartContent from "./CartSheetContent";
 
 export default function CartSheet({
   open,

@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import AnnimatedSneakerImage from "@/components/customComponents/AnnimationSneakersImage";
+import ModernSneakerShowcase from "./component/ModernSneakerShowcase";
 
 
 // Define form data interface
@@ -55,7 +55,7 @@ const Register = () => {
   return (
     <div className="min-h-screen container bg-background  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  poppins-font">
       <div className="lg:flex justify-center hidden">
-        <AnnimatedSneakerImage />
+        <ModernSneakerShowcase/>
       </div>
 
       <div className="flex justify-center ">

@@ -14,7 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Eye, ShoppingBag, Plus, Minus } from "lucide-react";
-import { NoSneakersCard } from "@/components/customComponents/NoSneakersCard";
+import { NoSneakersCard } from "@/components/custom/NoSneakersCard";
 
 export default function SneakerShoesPage() {
   const [activeBrand, setActiveBrand] = useState<string | null>(null);

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, ShoppingCart, Navigation } from "lucide-react";
+import { Menu, ShoppingCart, Navigation, User } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { mainRoutes } from "@/route/main.route";
 import { usePathname } from "next/navigation";
@@ -41,7 +41,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { CartData } from "@/data/cart";
-import CartSheet from "@/components/customComponents/ChartSheet";
+import CartSheet from "./component/CartSheet";
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
@@ -267,6 +267,12 @@ const Navbar = () => {
                   <User size={22} /> Sign In
                 </Link>
               )} */}
+              <Link
+                href="/login"
+                className="flex hover-button items-center gap-1 transition"
+              >
+                <User size={22} /> Sign In
+              </Link>
             </div>
           </div>
 

@@ -14,7 +14,6 @@ type HoverEffect = "rotate" | "float" | "pulse";
 const ModernSneakerShowcase: FC = () => {
   const [hoverEffect, setHoverEffect] = useState<HoverEffect>("float");
   const [isHovered, setIsHovered] = useState<boolean>(true);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
   const [rotation, setRotation] = useState<number>(0);
 
   return (

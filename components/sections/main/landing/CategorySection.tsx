@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import CategoryCard from "@/components/customComponents/CategoryCard";
 import { categories } from "@/data/category_shoes";
 import SectionTitle from "../../shared/SectionTitle";
+import CategoryCard from "./component/CategoryCard";
 
 export default function CategorySection() {
   const [isMobile, setIsMobile] = useState(false);

@@ -8,8 +8,8 @@ import {
   Truck,
   Ruler,
 } from "lucide-react";
-import StepCard from "@/components/customComponents/StepCard";
 import SectionTitle from "../../shared/SectionTitle";
+import StepCard from "./component/StepCard";
 
 
 
