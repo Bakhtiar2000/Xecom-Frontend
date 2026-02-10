@@ -69,7 +69,7 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
       {...props}
     />
   )
-}
+} 
 
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
