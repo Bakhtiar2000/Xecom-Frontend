@@ -9,7 +9,7 @@ import {
   Ruler,
 } from "lucide-react";
 import SectionTitle from "../../shared/SectionTitle";
-import StepCard from "./component/StepCard";
+import StepCard from "@/utils/StepCard";
 
 
 

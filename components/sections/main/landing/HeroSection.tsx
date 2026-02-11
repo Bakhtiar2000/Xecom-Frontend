@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Plus, Eye, Shuffle, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { shoes } from "@/data/shoes_data";
+import { shoes } from "@/data/shoes-data";
 
 export default function Hero_Section() {
   const letters = ["T", "r", "e", "n", "d", "m", "a", "r", "k"];

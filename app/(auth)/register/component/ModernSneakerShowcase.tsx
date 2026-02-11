@@ -91,7 +91,7 @@ const ModernSneakerShowcase: FC = () => {
               {/* Sneaker Image */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <Image
-                  src="/man3.png"
+                  src="/shoes7.png"
                   alt="s1.png"
                   fill
                   className="object-contain"

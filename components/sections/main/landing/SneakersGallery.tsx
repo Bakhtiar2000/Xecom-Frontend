@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Heart, Share2 } from "lucide-react";
 import Image from "next/image";
-import { sneakersGallery } from "@/data/shoes_data";
+import { sneakersGallery } from "@/data/shoes-data";
 import { SneakerGalleryItem } from "@/types/shoes.types";
 import SectionTitle from "../../shared/SectionTitle";
 import { Button } from "@/components/ui/button";

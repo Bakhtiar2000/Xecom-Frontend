@@ -96,7 +96,7 @@ export const stats = [
 export const reviews = [
   {
     name: "Harvetz",
-    avatar: "/man.png",
+    avatar: "/shoes9.png",
     rating: 5,
     time: "5 weeks ago",
     comment:
@@ -104,7 +104,7 @@ export const reviews = [
   },
   {
     name: "Yansim",
-    avatar: "/man2.png",
+    avatar: "/shoes8.png",
     rating: 4,
     time: "1 weeks ago",
     comment:
@@ -112,7 +112,7 @@ export const reviews = [
   },
   {
     name: "Rafyzju",
-    avatar: "/man3.png",
+    avatar: "/shoes7.png",
     rating: 5,
     time: "3 weeks ago",
     comment: "Absolutely loved these sneakers! Stylish and comfortable.",

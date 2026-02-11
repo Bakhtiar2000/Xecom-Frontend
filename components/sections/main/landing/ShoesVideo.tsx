@@ -32,7 +32,7 @@ const ShoesVideo: React.FC = () => {
               {/* Video Container */}
               <div className="relative rounded-3xl overflow-hidden border-8  shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
                 <video
-                  src="/Video/sneakers.mp4"
+                  src="/video/sneakers.mp4"
                   autoPlay
                   loop
                   muted

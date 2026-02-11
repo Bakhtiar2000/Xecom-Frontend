@@ -1,4 +1,5 @@
 import { Review } from "@/types";
+import shoes8 from "../assets/shoes/shoes8.png";
 
 export const productReviews: Review[] = [
   {
@@ -9,6 +10,6 @@ export const productReviews: Review[] = [
     rating: 4.5,
     comment: "Great product, really loved it!",
     date: "2025-01-20",
-    images: ["/man2.png", "/man2.png", "/man2.png", "/man2.png"],
+    images: [shoes8, shoes8, shoes8, shoes8],
   },
 ];

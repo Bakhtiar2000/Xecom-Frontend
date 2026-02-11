@@ -1,3 +1,10 @@
+import { StaticImageData } from 'next/image';
+import shoes5 from "../assets/shoes/shoes5.png";
+import shoes6 from "../assets/shoes/shoes6.png";
+import shoes7 from "../assets/shoes/shoes7.png";
+import shoes8 from "../assets/shoes/shoes8.png";
+import shoes9 from "../assets/shoes/shoes9.png";
+
 export type Sneaker = {
   id: number;
   name: string;
@@ -5,7 +12,7 @@ export type Sneaker = {
   price: string;
   originalPrice: string;
   discount: string;
-  image: string;
+  image: string | StaticImageData;
   rating: number;
   reviews: number;
   badge:
@@ -30,7 +37,7 @@ export const shoesData: Sneaker[] = [
     price: "$120",
     originalPrice: "$150",
     discount: "20% off",
-    image: "/man.png",
+    image: shoes9,
     rating: 4.7,
     reviews: 245,
     badge: "POPULAR",
@@ -45,7 +52,7 @@ export const shoesData: Sneaker[] = [
     price: "$180",
     originalPrice: "$200",
     discount: "10% off",
-    image: "/man2.png",
+    image: shoes8,
     rating: 4.9,
     reviews: 312,
     badge: "BEST SELLER",
@@ -60,7 +67,7 @@ export const shoesData: Sneaker[] = [
     price: "$95",
     originalPrice: "$95",
     discount: "0% off",
-    image: "/man3.png",
+    image: shoes7,
     rating: 4.3,
     reviews: 189,
     badge: "NEW",
@@ -75,7 +82,7 @@ export const shoesData: Sneaker[] = [
     price: "$150",
     originalPrice: "$180",
     discount: "17% off",
-    image: "/man4.png",
+    image: shoes6,
     rating: 4.8,
     reviews: 421,
     badge: "TRENDING",
@@ -90,7 +97,7 @@ export const shoesData: Sneaker[] = [
     price: "$110",
     originalPrice: "$110",
     discount: "0% off",
-    image: "/man5.png",
+    image: shoes5,
     rating: 4.5,
     reviews: 167,
     badge: "POPULAR",
@@ -105,7 +112,7 @@ export const shoesData: Sneaker[] = [
     price: "$130",
     originalPrice: "$160",
     discount: "19% off",
-    image: "/man.png",
+    image: shoes9,
     rating: 4.6,
     reviews: 289,
     badge: "HOT",
@@ -120,7 +127,7 @@ export const shoesData: Sneaker[] = [
     price: "$105",
     originalPrice: "$130",
     discount: "19% off",
-    image: "/man2.png",
+    image: shoes8,
     rating: 4.4,
     reviews: 143,
     badge: "TRENDING",
@@ -135,7 +142,7 @@ export const shoesData: Sneaker[] = [
     price: "$90",
     originalPrice: "$90",
     discount: "0% off",
-    image: "/man3.png",
+    image: shoes7,
     rating: 4.2,
     reviews: 98,
     badge: "POPULAR",
@@ -150,7 +157,7 @@ export const shoesData: Sneaker[] = [
     price: "$95",
     originalPrice: "$120",
     discount: "21% off",
-    image: "/man4.png",
+    image: shoes6,
     rating: 4.3,
     reviews: 112,
     badge: "HOT",
@@ -165,7 +172,7 @@ export const shoesData: Sneaker[] = [
     price: "$125",
     originalPrice: "$125",
     discount: "0% off",
-    image: "/man5.png",
+    image: shoes5,
     rating: 4.7,
     reviews: 76,
     badge: "NEW",

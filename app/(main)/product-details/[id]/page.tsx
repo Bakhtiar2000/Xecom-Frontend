@@ -4,6 +4,11 @@ import Image from "next/image";
 import {  Truck } from "lucide-react";
 import ProductSugation from "./component/ProductSugation";
 import ProductReviews from "./component/ProductReview";
+import shoes5 from "@/assets/shoes/shoes5.png";
+import shoes6 from "@/assets/shoes/shoes6.png";
+import shoes7 from "@/assets/shoes/shoes7.png";
+import shoes8 from "@/assets/shoes/shoes8.png";
+
 interface Review {
   rating: number;
   count: number;
@@ -56,7 +61,7 @@ export default function ProductDetails({ id }: { id: string }) {
     ],
     sizes: ["34", "36", "38", "40", "42"],
     colors: ["#FFFFFF", "#F5F5F5", "#E8E8E8"],
-    images: ["/man2.png", "/man3.png", "/man4.png", "/man5.png"],
+    images: [shoes8, shoes7, shoes6, shoes5],
     deliveryInfo: "FREE DELIVERY on orders above TK. 8000",
     returnPolicy: "15 Days Return Policy",
     reviews: {
@@ -66,10 +71,10 @@ export default function ProductDetails({ id }: { id: string }) {
   };
 
   const productImages: ProductImage[] = [
-    { id: 1, src: "/man2.png", alt: "Front View" },
-    { id: 2, src: "/man3.png", alt: "Side View" },
-    { id: 3, src: "/man4.png", alt: "Back View" },
-    { id: 4, src: "/man5.png", alt: "Detail View" },
+    { id: 1, src: shoes8, alt: "Front View" },
+    { id: 2, src: shoes7, alt: "Side View" },
+    { id: 3, src: shoes6, alt: "Back View" },
+    { id: 4, src: shoes5, alt: "Detail View" },
   ];
 
   return (

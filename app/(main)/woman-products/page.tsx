@@ -1,12 +1,13 @@
 "use client"
 
-import CategoryLayout from "@/components/sections/main/products/categoryLayout";
-import CategoryTopBar from "@/components/sections/main/products/categoryTopBar";
-import FilterSidebar from "@/components/sections/main/products/filterSideBar";
-import ProductGrid from "@/components/sections/main/products/productGrid";
-import { ManProductData } from "@/data/category_Products";
+
+import CategoryTopBar from "@/utils/categoryTopBar";
+import FilterSidebar from "@/utils/filterSideBar";
+import ProductGrid from "@/utils/productGrid";
+import { ManProductData } from "@/data/category-products";
 import { FilterState, Product } from "@/types";
 import { useState, useEffect, useMemo } from "react";
+import CategoryLayout from "@/utils/categoryLayout";
 
 export default function MensCategoryPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");

@@ -93,7 +93,7 @@ const ModernSneakerShowcase: FC = () => {
                 className="relative w-full h-full"
               >
                 <Image
-                  src="/man4.png"
+                  src="/shoes6.png"
                   alt="Quantum Runner Pro Sneaker"
                   fill
                   className="object-contain p-8"

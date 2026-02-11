@@ -157,9 +157,7 @@ const Footer: React.FC = () => {
 
             {/* Contact Info */}
             <div className="lg:col-span-2">
-              <h3 className="text-lg font-semibold  text-center text-gray-200 mb-6">
-                Contact Info
-              </h3>
+             
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Address */}
                 <div className="flex items-start cursor-pointer gap-4 p-4 dark:border-gray-700 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
@@ -236,7 +234,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <h1 className="text-[60px] xs:text-[80px] hidden lg:block sm:text-[120px] md:text-[160px] lg:text-[160px] xl:text-[210px] w-full text-center font-bold leading-[0.8]">
+          <h1 className="text-[60px] lg:-mb-15 xs:text-[80px] hidden xl:block sm:text-[120px] md:text-[160px] lg:text-[200px] xl:text-[250px] w-full text-center font-bold leading-[0.8]">
             <span
               style={shineStyle}
               className="inline-block w-full py-2 px-4 merriweather-font"

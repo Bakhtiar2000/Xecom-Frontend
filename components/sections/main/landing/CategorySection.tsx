@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { categories } from "@/data/category_shoes";
 import SectionTitle from "../../shared/SectionTitle";
-import CategoryCard from "./component/CategoryCard";
+import CategoryCard from "@/utils/CategoryCard";
 
 export default function CategorySection() {
   const [isMobile, setIsMobile] = useState(false);

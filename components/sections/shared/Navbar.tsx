@@ -41,7 +41,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { CartData } from "@/data/cart";
-import CartSheet from "./component/CartSheet";
+import CartSheet from "@/utils/CartSheet";
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
@@ -123,7 +123,7 @@ const Navbar = () => {
         }`}
       >
         <div
-          className={`flex justify-between  items-center max-w-11/12 mx-auto px-4`}
+          className={`flex justify-between  items-center max-w-11/12 mx-auto md:px-4`}
         >
           <div className="flex justify-center items-center gap-20">
             <div className="text-3xl font-extrabold tracking-widest merriweather-font">
@@ -154,33 +154,193 @@ const Navbar = () => {
               })}
             </div>
             <NavigationMenu>
-              <NavigationMenuList className="hidden   -ml-18 lg:flex gap-6 font-bold">
+              <NavigationMenuList className="hidden -ml-18 lg:flex gap-6 font-bold">
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger> Shoes Category</NavigationMenuTrigger>
+                  <NavigationMenuTrigger>Shoes Category</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid gap-2 w-sm list-none lg:grid-cols-[.75fr_1fr]">
-                      <li className="row-span-3 ">
+                    <ul className="grid gap-3 p-6 w-200 grid-cols-3">
+                      {/* MEN CATEGORY */}
+                      <li className="row-span-1">
                         <NavigationMenuLink asChild>
-                          <Link
-                            href="/man-products"
-                            className="flex flex-col justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-4 md:p-6 no-underline outline-none transition-all duration-200 hover:shadow-md"
-                          >
-                            <h1 className="mb-2 text-lg font-medium sm:mt-4">
-                              Man
-                            </h1>
-                          </Link>
+                          <div className="space-y-3">
+                            <Link
+                              href="/men-products"
+                              className="block select-none rounded-lg bg-linear-to-b from-muted/50 to-muted p-4 no-underline outline-none transition-all duration-200 hover:shadow-md"
+                            >
+                              <h3 className="text-lg font-semibold">Men</h3>
+                              <p className="text-sm text-muted-foreground mt-1">
+                                Explore men&apos;s footwear
+                              </p>
+                            </Link>
+
+                            {/* Men Subcategories */}
+                            <ul className="space-y-2 pl-4">
+                              <li>
+                                <Link
+                                  href="/men-products?category=sneakers"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Sneakers
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/men-products?category=loafers"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Loafers
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/men-products?category=boots"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Boots
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/men-products?category=sandals"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Sandals
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/men-products?category=formal"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Formal Shoes
+                                </Link>
+                              </li>
+                            </ul>
+                          </div>
                         </NavigationMenuLink>
                       </li>
-                      <li className="row-span-3 ">
+
+                      {/* WOMEN CATEGORY */}
+                      <li className="row-span-1">
                         <NavigationMenuLink asChild>
-                          <Link
-                            href="/woman-products"
-                            className=" justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-4 md:p-6 no-underline outline-none transition-all duration-200 hover:shadow-md"
-                          >
-                            <h1 className="mb-2 text-lg font-medium sm:mt-4">
-                              Woman
-                            </h1>
-                          </Link>
+                          <div className="space-y-3">
+                            <Link
+                              href="/women-products"
+                              className="block select-none rounded-lg bg-linear-to-b from-muted/50 to-muted p-4 no-underline outline-none transition-all duration-200 hover:shadow-md"
+                            >
+                              <h3 className="text-lg font-semibold">Women</h3>
+                              <p className="text-sm text-muted-foreground mt-1">
+                                Discover women&apos;s collection
+                              </p>
+                            </Link>
+
+                            {/* Women Subcategories */}
+                            <ul className="space-y-2 pl-4">
+                              <li>
+                                <Link
+                                  href="/women-products?category=sneakers"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Sneakers
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/women-products?category=heels"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Heels
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/women-products?category=flats"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Flats
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/women-products?category=sandals"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Sandals
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/women-products?category=boots"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Boots
+                                </Link>
+                              </li>
+                            </ul>
+                          </div>
+                        </NavigationMenuLink>
+                      </li>
+
+                      {/* CHILDREN CATEGORY */}
+                      <li className="row-span-1">
+                        <NavigationMenuLink asChild>
+                          <div className="space-y-3">
+                            <Link
+                              href="/children-products"
+                              className="block select-none rounded-lg bg-linear-to-b from-muted/50 to-muted p-4 no-underline outline-none transition-all duration-200 hover:shadow-md"
+                            >
+                              <h3 className="text-lg font-semibold">
+                                Children
+                              </h3>
+                              <p className="text-sm text-muted-foreground mt-1">
+                                Shop kids footwear
+                              </p>
+                            </Link>
+
+                            {/* Children Subcategories */}
+                            <ul className="space-y-2 pl-4">
+                              <li>
+                                <Link
+                                  href="/children-products?category=sneakers"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Sneakers
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/children-products?category=school-shoes"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  School Shoes
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/children-products?category=sandals"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Sandals
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/children-products?category=sports"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Sports Shoes
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/children-products?category=casual"
+                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                >
+                                  Casual Wear
+                                </Link>
+                              </li>
+                            </ul>
+                          </div>
                         </NavigationMenuLink>
                       </li>
                     </ul>
@@ -278,7 +438,7 @@ const Navbar = () => {
 
           <Sheet>
             <SheetTrigger asChild>
-              <button className="lg:hidden hover-button p-4 rounded-md">
+              <button className="lg:hidden cursor-pointer hover-button p-4 rounded-md">
                 <Menu size={24} />
               </button>
             </SheetTrigger>
@@ -286,7 +446,7 @@ const Navbar = () => {
             <SheetContent side="left" className="z-100 w-75 sm:w-85 px-6 py-6">
               {/* Header / Brand */}
               <SheetHeader className="border-b pb-4">
-                <SheetTitle className="text-2xl font-extrabold tracking-widest">
+                <SheetTitle className="text-2xl  font-extrabold tracking-widest">
                   STEPS
                 </SheetTitle>
               </SheetHeader>
@@ -347,6 +507,12 @@ const Navbar = () => {
                 >
                   <ShoppingCart size={18} />
                   <span>Cart (0)</span>
+                </Link>
+                <Link
+                  href="/login"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted"
+                >
+                  <User size={22} /> Sign In
                 </Link>
 
                 <Select

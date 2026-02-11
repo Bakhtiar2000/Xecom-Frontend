@@ -1,38 +1,43 @@
 // data/categories.ts
 
 import { Category } from "@/types";
+import shoes5 from "../assets/shoes/shoes5.png";
+import shoes6 from "../assets/shoes/shoes6.png";
+import shoes7 from "../assets/shoes/shoes7.png";
+import shoes8 from "../assets/shoes/shoes8.png";
+import shoes9 from "../assets/shoes/shoes9.png";
 
 export const categories: Category[] = [
   {
     id: 1,
     title: "Sneakers",
-    image: "/man3.png",
+    image: shoes7,
 
   },
   {
     id: 2,
     title: "Formal",
-    image: "/man5.png",
+    image: shoes5,
   },
   {
     id: 3,
     title: "Boots",
-    image: "/man4.png",
+    image: shoes6,
   },
   {
     id: 4,
     title: "Loafer",
-    image: "/man3.png"
+    image: shoes7
   },
   {
     id: 5,
     title: "Sports",
-    image: "/man2.png",
+    image: shoes8,
   },
    {
     id: 6,
     title: "Formal",
-    image: "/man.png",
+    image: shoes9,
 
   },
 ];

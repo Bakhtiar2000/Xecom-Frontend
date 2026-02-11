@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import SectionTitle from "@/components/sections/shared/SectionTitle";
-import { shoesData, Sneaker } from "@/data/premium_shoes";
+import { shoesData, Sneaker } from "@/data/premium-shoes";
 import {
   Dialog,
   DialogContent,
@@ -41,7 +41,7 @@ export default function SneakerShoesPage() {
   return (
     <section className="container py-12 px-4">
       <SectionTitle
-        title="MOST POPULAR BRANDS"
+        title="Most Popular Brands"
         description="Choose a brand to explore available sneakers"
       />
 

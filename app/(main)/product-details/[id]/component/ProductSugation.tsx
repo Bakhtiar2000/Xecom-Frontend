@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-import { shoesData, Sneaker } from "@/data/premium_shoes";
+import { shoesData, Sneaker } from "@/data/premium-shoes";
 import Link from "next/link";
 import { Eye } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";

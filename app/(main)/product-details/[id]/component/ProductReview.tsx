@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus, ChevronDown, FastForward } from "lucide-react";
 import { Review } from "@/types";
-import { productReviews } from "@/data/product_reivew";
+import { productReviews } from "@/data/product-reivew";
 import {
   DropdownMenu,
   DropdownMenuContent,

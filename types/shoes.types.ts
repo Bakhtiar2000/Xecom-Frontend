@@ -1,6 +1,8 @@
+import { StaticImageData } from 'next/image';
+
 export interface ShoePart {
   title: string;
-  img: string;
+  img: string | StaticImageData;
   top?: string;
   bottom?: string;
   left?: string;
@@ -8,7 +10,7 @@ export interface ShoePart {
 
 export interface Shoe {
   id: number;
-  image: string;
+  image: string | StaticImageData;
   name: string;
   price: string;
   trademark: string;
