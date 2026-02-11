@@ -33,6 +33,14 @@ import {
 //   AlertDialogTrigger,
 // } from "@/components/ui/alert-dialog";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 import {
   Sheet,
   SheetContent,
@@ -109,9 +117,9 @@ const Navbar = () => {
         </div>
 
         <div className="w-1/2 flex items-center justify-end gap-4 py-1 pr-8">
-          <div className="text-sm">
-            Call Us: <span className="font-semibold">610-403-403</span>
-          </div>
+          <a  href="tel:+8801902042884" className="text-sm">
+            Call Us: <span className="font-semibold">88019020-42884</span>
+          </a>
         </div>
       </div>
 
@@ -154,194 +162,173 @@ const Navbar = () => {
               })}
             </div>
             <NavigationMenu>
-              <NavigationMenuList className="hidden -ml-18 lg:flex gap-6 font-bold">
+              <NavigationMenuList className="hidden lg:flex  -ml-13 font-bold">
+                {/* ================= MEN ================= */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>Shoes Category</NavigationMenuTrigger>
+                  <NavigationMenuTrigger>Men</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid gap-3 p-6 w-200 grid-cols-3">
-                      {/* MEN CATEGORY */}
-                      <li className="row-span-1">
-                        <NavigationMenuLink asChild>
-                          <div className="space-y-3">
-                            <Link
-                              href="/men-products"
-                              className="block select-none rounded-lg bg-linear-to-b from-muted/50 to-muted p-4 no-underline outline-none transition-all duration-200 hover:shadow-md"
-                            >
-                              <h3 className="text-lg font-semibold">Men</h3>
-                              <p className="text-sm text-muted-foreground mt-1">
-                                Explore men&apos;s footwear
-                              </p>
-                            </Link>
-
-                            {/* Men Subcategories */}
-                            <ul className="space-y-2 pl-4">
-                              <li>
-                                <Link
-                                  href="/men-products?category=sneakers"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Sneakers
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/men-products?category=loafers"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Loafers
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/men-products?category=boots"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Boots
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/men-products?category=sandals"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Sandals
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/men-products?category=formal"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Formal Shoes
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </NavigationMenuLink>
+                    <ul className="grid gap-2 p-6 w-60">
+                      <li>
+                        <Link
+                          href="/man-products"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          All Men&apos;s Shoes
+                        </Link>
                       </li>
-
-                      {/* WOMEN CATEGORY */}
-                      <li className="row-span-1">
-                        <NavigationMenuLink asChild>
-                          <div className="space-y-3">
-                            <Link
-                              href="/women-products"
-                              className="block select-none rounded-lg bg-linear-to-b from-muted/50 to-muted p-4 no-underline outline-none transition-all duration-200 hover:shadow-md"
-                            >
-                              <h3 className="text-lg font-semibold">Women</h3>
-                              <p className="text-sm text-muted-foreground mt-1">
-                                Discover women&apos;s collection
-                              </p>
-                            </Link>
-
-                            {/* Women Subcategories */}
-                            <ul className="space-y-2 pl-4">
-                              <li>
-                                <Link
-                                  href="/women-products?category=sneakers"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Sneakers
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/women-products?category=heels"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Heels
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/women-products?category=flats"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Flats
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/women-products?category=sandals"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Sandals
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/women-products?category=boots"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Boots
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </NavigationMenuLink>
+                      <li>
+                        <Link
+                          href="/men?category=sneakers"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sneakers
+                        </Link>
                       </li>
+                      <li>
+                        <Link
+                          href="/men?category=loafers"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Loafers
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/men?category=boots"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Boots
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/men?category=sandals"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sandals
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/men?category=formal"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Formal Shoes
+                        </Link>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
 
-                      {/* CHILDREN CATEGORY */}
-                      <li className="row-span-1">
-                        <NavigationMenuLink asChild>
-                          <div className="space-y-3">
-                            <Link
-                              href="/children-products"
-                              className="block select-none rounded-lg bg-linear-to-b from-muted/50 to-muted p-4 no-underline outline-none transition-all duration-200 hover:shadow-md"
-                            >
-                              <h3 className="text-lg font-semibold">
-                                Children
-                              </h3>
-                              <p className="text-sm text-muted-foreground mt-1">
-                                Shop kids footwear
-                              </p>
-                            </Link>
+                {/* ================= WOMEN ================= */}
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Women</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-2 p-6 w-60">
+                      <li>
+                        <Link
+                          href="/woman-products"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          All Women&apos;s Shoes
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/women?category=sneakers"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sneakers
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/women?category=heels"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Heels
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/women?category=flats"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Flats
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/women?category=sandals"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sandals
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/women?category=boots"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Boots
+                        </Link>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
 
-                            {/* Children Subcategories */}
-                            <ul className="space-y-2 pl-4">
-                              <li>
-                                <Link
-                                  href="/children-products?category=sneakers"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Sneakers
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/children-products?category=school-shoes"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  School Shoes
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/children-products?category=sandals"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Sandals
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/children-products?category=sports"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Sports Shoes
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/children-products?category=casual"
-                                  className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
-                                >
-                                  Casual Wear
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </NavigationMenuLink>
+                {/* ================= CHILDREN ================= */}
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Children</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-2 p-6 w-60">
+                      <li>
+                        <Link
+                          href="/children"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          All Children&apos;s Shoes
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/children?category=sneakers"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sneakers
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/children?category=school-shoes"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          School Shoes
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/children?category=sandals"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sandals
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/children?category=sports"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sports Shoes
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/children?category=casual"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Casual Wear
+                        </Link>
                       </li>
                     </ul>
                   </NavigationMenuContent>
@@ -476,28 +463,148 @@ const Navbar = () => {
                 })}
               </nav>
 
-              {/* Products Section */}
-              <div className="mt-8">
-                <p className="mb-3 text-xs font-bold uppercase tracking-wide ">
-                  Products
-                </p>
+         
+                {/* Products Section */}
+                <div className="mt-8 ml-3">
+                  <p className="mb-3 text-xs font-bold uppercase tracking-wide">
+                    Products
+                  </p>
 
-                <div className="">
-                  <Link
-                    href="/man-products"
-                    className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
-                  >
-                    1. Man Products
-                  </Link>
+                  <Accordion type="single" collapsible className="w-full">
+                    {/* ============ MEN ============ */}
+                    <AccordionItem value="men">
+                      <AccordionTrigger className="text-sm">
+                        Men
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="flex flex-col gap-1 pl-2">
+                          <Link href="/man-products" className="mobile-link">
+                            All Men&apos;s Shoes
+                          </Link>
+                          <Link
+                            href="/men?category=sneakers"
+                            className="mobile-link"
+                          >
+                            Sneakers
+                          </Link>
+                          <Link
+                            href="/men?category=loafers"
+                            className="mobile-link"
+                          >
+                            Loafers
+                          </Link>
+                          <Link
+                            href="/men?category=boots"
+                            className="mobile-link"
+                          >
+                            Boots
+                          </Link>
+                          <Link
+                            href="/men?category=sandals"
+                            className="mobile-link"
+                          >
+                            Sandals
+                          </Link>
+                          <Link
+                            href="/men?category=formal"
+                            className="mobile-link"
+                          >
+                            Formal Shoes
+                          </Link>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
-                  <Link
-                    href="/woman-products"
-                    className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
-                  >
-                    2. Woman Products
-                  </Link>
+                    {/* ============ WOMEN ============ */}
+                    <AccordionItem value="women">
+                      <AccordionTrigger className="text-sm">
+                        Women
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="flex flex-col gap-1 pl-2">
+                          <Link href="/woman-products" className="mobile-link">
+                            All Women&apos;s Shoes
+                          </Link>
+                          <Link
+                            href="/women?category=sneakers"
+                            className="mobile-link"
+                          >
+                            Sneakers
+                          </Link>
+                          <Link
+                            href="/women?category=heels"
+                            className="mobile-link"
+                          >
+                            Heels
+                          </Link>
+                          <Link
+                            href="/women?category=flats"
+                            className="mobile-link"
+                          >
+                            Flats
+                          </Link>
+                          <Link
+                            href="/women?category=sandals"
+                            className="mobile-link"
+                          >
+                            Sandals
+                          </Link>
+                          <Link
+                            href="/women?category=boots"
+                            className="mobile-link"
+                          >
+                            Boots
+                          </Link>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* ============ CHILDREN ============ */}
+                    <AccordionItem value="children">
+                      <AccordionTrigger className="text-sm">
+                        Children
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="flex flex-col gap-1 pl-2">
+                          <Link href="/children" className="mobile-link">
+                            All Children&apos;s Shoes
+                          </Link>
+                          <Link
+                            href="/children?category=sneakers"
+                            className="mobile-link"
+                          >
+                            Sneakers
+                          </Link>
+                          <Link
+                            href="/children?category=school-shoes"
+                            className="mobile-link"
+                          >
+                            School Shoes
+                          </Link>
+                          <Link
+                            href="/children?category=sandals"
+                            className="mobile-link"
+                          >
+                            Sandals
+                          </Link>
+                          <Link
+                            href="/children?category=sports"
+                            className="mobile-link"
+                          >
+                            Sports Shoes
+                          </Link>
+                          <Link
+                            href="/children?category=casual"
+                            className="mobile-link"
+                          >
+                            Casual Wear
+                          </Link>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </div>
-              </div>
+      
 
               {/* Actions */}
               <div className="mt-8 border-t pt-6 space-y-1">

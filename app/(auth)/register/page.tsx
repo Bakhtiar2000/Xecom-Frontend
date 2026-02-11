@@ -69,13 +69,13 @@ const Register = () => {
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="font-semibold">
+              <Link href="/login" className="font-semibold text-lg">
                 Sign in here
               </Link>
             </p>
           </div>
 
-          <Card>
+          <Card className="py-6">
             <CardHeader>
               <CardTitle>Join Xecom</CardTitle>
               <CardDescription>
@@ -238,7 +238,7 @@ const Register = () => {
                 </div>
 
                 <div>
-                  <Button type="submit" className="w-full" size="lg">
+                  <Button type="submit" className="w-full " size="lg">
                     Create Account
                   </Button>
                 </div>

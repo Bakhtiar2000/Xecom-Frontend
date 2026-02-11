@@ -86,6 +86,7 @@ export default function ProductSugation() {
 
   return (
     <div className="relative">
+      <h1 className="text-xl lg:text-2xl ">Similar Products</h1>
       <div
         ref={scrollRef}
         onScroll={handleScroll}
