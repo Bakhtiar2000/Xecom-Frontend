@@ -21,7 +21,7 @@ export interface Shoe {
 
 export interface SneakerGalleryItem {
   id: number;
-  src: string;
+  src: any;
   alt: string;
   category: string;
   brand: string;
