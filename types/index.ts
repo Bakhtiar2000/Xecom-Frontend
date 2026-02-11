@@ -1,3 +1,5 @@
+import type { StaticImageData } from "next/image";
+
 export * from "./user.type";
 export * from "./global.type";
 
@@ -46,6 +48,6 @@ export type Review = {
   rating: number;
   comment: string;
   date: string;
-  images?: string[];
+  images?: (string | StaticImageData)[];
 };
 

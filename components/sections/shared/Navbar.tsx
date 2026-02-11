@@ -33,6 +33,14 @@ import {
 //   AlertDialogTrigger,
 // } from "@/components/ui/alert-dialog";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 import {
   Sheet,
   SheetContent,
@@ -41,7 +49,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { CartData } from "@/data/cart";
-import CartSheet from "./component/CartSheet";
+import CartSheet from "@/utils/CartSheet";
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
@@ -109,9 +117,9 @@ const Navbar = () => {
         </div>
 
         <div className="w-1/2 flex items-center justify-end gap-4 py-1 pr-8">
-          <div className="text-sm">
-            Call Us: <span className="font-semibold">610-403-403</span>
-          </div>
+          <a  href="tel:+8801902042884" className="text-sm">
+            Call Us: <span className="font-semibold">88019020-42884</span>
+          </a>
         </div>
       </div>
 
@@ -123,7 +131,7 @@ const Navbar = () => {
         }`}
       >
         <div
-          className={`flex justify-between  items-center max-w-11/12 mx-auto px-4`}
+          className={`flex justify-between  items-center max-w-11/12 mx-auto md:px-4`}
         >
           <div className="flex justify-center items-center gap-20">
             <div className="text-3xl font-extrabold tracking-widest merriweather-font">
@@ -154,34 +162,173 @@ const Navbar = () => {
               })}
             </div>
             <NavigationMenu>
-              <NavigationMenuList className="hidden   -ml-18 lg:flex gap-6 font-bold">
+              <NavigationMenuList className="hidden lg:flex  -ml-13 font-bold">
+                {/* ================= MEN ================= */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger> Shoes Category</NavigationMenuTrigger>
+                  <NavigationMenuTrigger>Men</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid gap-2 w-sm list-none lg:grid-cols-[.75fr_1fr]">
-                      <li className="row-span-3 ">
-                        <NavigationMenuLink asChild>
-                          <Link
-                            href="/man-products"
-                            className="flex flex-col justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-4 md:p-6 no-underline outline-none transition-all duration-200 hover:shadow-md"
-                          >
-                            <h1 className="mb-2 text-lg font-medium sm:mt-4">
-                              Man
-                            </h1>
-                          </Link>
-                        </NavigationMenuLink>
+                    <ul className="grid gap-2 p-6 w-60">
+                      <li>
+                        <Link
+                          href="/man-products"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          All Men&apos;s Shoes
+                        </Link>
                       </li>
-                      <li className="row-span-3 ">
-                        <NavigationMenuLink asChild>
-                          <Link
-                            href="/woman-products"
-                            className=" justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-4 md:p-6 no-underline outline-none transition-all duration-200 hover:shadow-md"
-                          >
-                            <h1 className="mb-2 text-lg font-medium sm:mt-4">
-                              Woman
-                            </h1>
-                          </Link>
-                        </NavigationMenuLink>
+                      <li>
+                        <Link
+                          href="/men?category=sneakers"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sneakers
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/men?category=loafers"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Loafers
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/men?category=boots"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Boots
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/men?category=sandals"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sandals
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/men?category=formal"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Formal Shoes
+                        </Link>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                {/* ================= WOMEN ================= */}
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Women</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-2 p-6 w-60">
+                      <li>
+                        <Link
+                          href="/woman-products"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          All Women&apos;s Shoes
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/women?category=sneakers"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sneakers
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/women?category=heels"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Heels
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/women?category=flats"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Flats
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/women?category=sandals"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sandals
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/women?category=boots"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Boots
+                        </Link>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                {/* ================= CHILDREN ================= */}
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Children</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-2 p-6 w-60">
+                      <li>
+                        <Link
+                          href="/children"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          All Children&apos;s Shoes
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/children?category=sneakers"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sneakers
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/children?category=school-shoes"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          School Shoes
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/children?category=sandals"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sandals
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/children?category=sports"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Sports Shoes
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/children?category=casual"
+                          className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Casual Wear
+                        </Link>
                       </li>
                     </ul>
                   </NavigationMenuContent>
@@ -278,7 +425,7 @@ const Navbar = () => {
 
           <Sheet>
             <SheetTrigger asChild>
-              <button className="lg:hidden hover-button p-4 rounded-md">
+              <button className="lg:hidden cursor-pointer hover-button p-4 rounded-md">
                 <Menu size={24} />
               </button>
             </SheetTrigger>
@@ -286,7 +433,7 @@ const Navbar = () => {
             <SheetContent side="left" className="z-100 w-75 sm:w-85 px-6 py-6">
               {/* Header / Brand */}
               <SheetHeader className="border-b pb-4">
-                <SheetTitle className="text-2xl font-extrabold tracking-widest">
+                <SheetTitle className="text-2xl  font-extrabold tracking-widest">
                   STEPS
                 </SheetTitle>
               </SheetHeader>
@@ -316,28 +463,148 @@ const Navbar = () => {
                 })}
               </nav>
 
-              {/* Products Section */}
-              <div className="mt-8">
-                <p className="mb-3 text-xs font-bold uppercase tracking-wide ">
-                  Products
-                </p>
+         
+                {/* Products Section */}
+                <div className="mt-8 ml-3">
+                  <p className="mb-3 text-xs font-bold uppercase tracking-wide">
+                    Products
+                  </p>
 
-                <div className="">
-                  <Link
-                    href="/man-products"
-                    className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
-                  >
-                    1. Man Products
-                  </Link>
+                  <Accordion type="single" collapsible className="w-full">
+                    {/* ============ MEN ============ */}
+                    <AccordionItem value="men">
+                      <AccordionTrigger className="text-sm">
+                        Men
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="flex flex-col gap-1 pl-2">
+                          <Link href="/man-products" className="mobile-link">
+                            All Men&apos;s Shoes
+                          </Link>
+                          <Link
+                            href="/men?category=sneakers"
+                            className="mobile-link"
+                          >
+                            Sneakers
+                          </Link>
+                          <Link
+                            href="/men?category=loafers"
+                            className="mobile-link"
+                          >
+                            Loafers
+                          </Link>
+                          <Link
+                            href="/men?category=boots"
+                            className="mobile-link"
+                          >
+                            Boots
+                          </Link>
+                          <Link
+                            href="/men?category=sandals"
+                            className="mobile-link"
+                          >
+                            Sandals
+                          </Link>
+                          <Link
+                            href="/men?category=formal"
+                            className="mobile-link"
+                          >
+                            Formal Shoes
+                          </Link>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
-                  <Link
-                    href="/woman-products"
-                    className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-muted hover:text-primary"
-                  >
-                    2. Woman Products
-                  </Link>
+                    {/* ============ WOMEN ============ */}
+                    <AccordionItem value="women">
+                      <AccordionTrigger className="text-sm">
+                        Women
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="flex flex-col gap-1 pl-2">
+                          <Link href="/woman-products" className="mobile-link">
+                            All Women&apos;s Shoes
+                          </Link>
+                          <Link
+                            href="/women?category=sneakers"
+                            className="mobile-link"
+                          >
+                            Sneakers
+                          </Link>
+                          <Link
+                            href="/women?category=heels"
+                            className="mobile-link"
+                          >
+                            Heels
+                          </Link>
+                          <Link
+                            href="/women?category=flats"
+                            className="mobile-link"
+                          >
+                            Flats
+                          </Link>
+                          <Link
+                            href="/women?category=sandals"
+                            className="mobile-link"
+                          >
+                            Sandals
+                          </Link>
+                          <Link
+                            href="/women?category=boots"
+                            className="mobile-link"
+                          >
+                            Boots
+                          </Link>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* ============ CHILDREN ============ */}
+                    <AccordionItem value="children">
+                      <AccordionTrigger className="text-sm">
+                        Children
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="flex flex-col gap-1 pl-2">
+                          <Link href="/children" className="mobile-link">
+                            All Children&apos;s Shoes
+                          </Link>
+                          <Link
+                            href="/children?category=sneakers"
+                            className="mobile-link"
+                          >
+                            Sneakers
+                          </Link>
+                          <Link
+                            href="/children?category=school-shoes"
+                            className="mobile-link"
+                          >
+                            School Shoes
+                          </Link>
+                          <Link
+                            href="/children?category=sandals"
+                            className="mobile-link"
+                          >
+                            Sandals
+                          </Link>
+                          <Link
+                            href="/children?category=sports"
+                            className="mobile-link"
+                          >
+                            Sports Shoes
+                          </Link>
+                          <Link
+                            href="/children?category=casual"
+                            className="mobile-link"
+                          >
+                            Casual Wear
+                          </Link>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </div>
-              </div>
+      
 
               {/* Actions */}
               <div className="mt-8 border-t pt-6 space-y-1">
@@ -347,6 +614,12 @@ const Navbar = () => {
                 >
                   <ShoppingCart size={18} />
                   <span>Cart (0)</span>
+                </Link>
+                <Link
+                  href="/login"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted"
+                >
+                  <User size={22} /> Sign In
                 </Link>
 
                 <Select

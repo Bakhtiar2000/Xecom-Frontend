@@ -1,6 +1,7 @@
 
 import { CartItem } from '@/types';
 import Image from 'next/image';
+import shoes8 from '@/assets/shoes/shoes8.png';
 
 interface CartItemsProps {
   items: CartItem[];
@@ -13,7 +14,7 @@ const CartItems = ({ items }: CartItemsProps) => {
         <div key={item.id} className="flex  items-center justify-between p-4 border rounded-xl">
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 rounded-lg flex items-center justify-center">
-            <Image src={'/man2.png'} alt={item.name} width={64} height={64} />
+            <Image src={shoes8} alt={item.name} width={64} height={64} />
             </div>
             <div>
               <h4 className="font-semibold cart-dark-text">{item.name}</h4>

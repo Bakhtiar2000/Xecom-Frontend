@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import SectionTitle from "@/components/sections/shared/SectionTitle";
-import { shoesData, Sneaker } from "@/data/premium_shoes";
+import { shoesData, Sneaker } from "@/data/premium-shoes";
 import {
   Dialog,
   DialogContent,
@@ -41,7 +41,7 @@ export default function SneakerShoesPage() {
   return (
     <section className="container py-12 px-4">
       <SectionTitle
-        title="MOST POPULAR BRANDS"
+        title="Most Popular Brands"
         description="Choose a brand to explore available sneakers"
       />
 
@@ -51,16 +51,17 @@ export default function SneakerShoesPage() {
           <button
             key={brand.name}
             onClick={() => setActiveBrand(brand.name)}
-            className={`border rounded-2xl flex bg-card-primary items-center lg:h-50 cursor-pointer justify-center hover:shadow-md transition
-              ${activeBrand === brand.name ? "ring-2 ring-primary" : ""}
-            `}
+            className={`relative w-full h-40 lg:h-70 border rounded-2xl overflow-hidden bg-card-primary 
+      flex items-center justify-center hover:shadow-md transition
+      ${activeBrand === brand.name ? "ring-2 ring-primary" : ""}
+    `}
           >
             <Image
               src={brand.logo}
               alt={brand.name}
-              width={120}
-              height={120}
-              className="object-contain"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 300px"
             />
           </button>
         ))}

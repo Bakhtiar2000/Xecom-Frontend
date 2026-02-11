@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { faqData } from "@/data/faq_data";
+import { faqData } from "@/data/faq-data";
 import SectionTitle from "@/components/sections/shared/SectionTitle";
 
 type Category = keyof typeof faqData;

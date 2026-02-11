@@ -72,7 +72,7 @@ const Login = () => {
         <ModernSneakerShowcase/>
       </div>
 
-      <div className="flex justify-center  ">
+      <div className="flex justify-center ">
         <div className="max-w-md w-full  space-y-2">
           <div className="text-center">
             <Link href="/" className="text-3xl font-bold ">
@@ -83,13 +83,13 @@ const Login = () => {
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Or{" "}
-              <Link href="/register" className="font-semibold">
+              <Link href="/register" className="font-semibold text-lg">
                 create a new account
               </Link>
             </p>
           </div>
 
-          <Card>
+          <Card className="py-6">
             <CardHeader>
               <CardTitle>Welcome Back</CardTitle>
               <CardDescription>
@@ -169,7 +169,7 @@ const Login = () => {
                 <div className="absolute inset-0 flex items-center">
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-transparent text-muted-foreground">
+                  <span className="px-2 bg-transparent  text-muted-foreground">
                     Or continue with
                   </span>
                 </div>

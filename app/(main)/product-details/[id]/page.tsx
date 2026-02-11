@@ -1,9 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
-import {  Truck } from "lucide-react";
+import { Truck, X, ZoomIn } from "lucide-react";
 import ProductSugation from "./component/ProductSugation";
 import ProductReviews from "./component/ProductReview";
+import shoes5 from "@/assets/shoes/shoes5.png";
+import shoes6 from "@/assets/shoes/shoes6.png";
+import shoes7 from "@/assets/shoes/shoes7.png";
+import shoes8 from "@/assets/shoes/shoes8.png";
+
 interface Review {
   rating: number;
   count: number;
@@ -21,7 +26,7 @@ interface Product {
   features: string[];
   sizes: string[];
   colors: string[];
-  images: string[];
+  images: any;
   deliveryInfo: string;
   returnPolicy: string;
   reviews: Review;
@@ -29,7 +34,7 @@ interface Product {
 
 interface ProductImage {
   id: number;
-  src: string;
+  src: any;
   alt: string;
 }
 
@@ -37,6 +42,25 @@ export default function ProductDetails({ id }: { id: string }) {
   const [selectedSize, setSelectedSize] = useState("38");
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
+
+  const imageRef = useRef<HTMLDivElement>(null);
+  const zoomBoxRef = useRef<HTMLDivElement>(null);
+
+  // Handle mouse move for zoom preview
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!imageRef.current) return;
+
+    const rect = imageRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    setZoomPosition({
+      x: Math.min(100, Math.max(0, x)),
+      y: Math.min(100, Math.max(0, y)),
+    });
+  };
 
   const product: Product = {
     id,
@@ -56,7 +80,7 @@ export default function ProductDetails({ id }: { id: string }) {
     ],
     sizes: ["34", "36", "38", "40", "42"],
     colors: ["#FFFFFF", "#F5F5F5", "#E8E8E8"],
-    images: ["/man2.png", "/man3.png", "/man4.png", "/man5.png"],
+    images: [shoes8, shoes7, shoes6, shoes5],
     deliveryInfo: "FREE DELIVERY on orders above TK. 8000",
     returnPolicy: "15 Days Return Policy",
     reviews: {
@@ -66,61 +90,129 @@ export default function ProductDetails({ id }: { id: string }) {
   };
 
   const productImages: ProductImage[] = [
-    { id: 1, src: "/man2.png", alt: "Front View" },
-    { id: 2, src: "/man3.png", alt: "Side View" },
-    { id: 3, src: "/man4.png", alt: "Back View" },
-    { id: 4, src: "/man5.png", alt: "Detail View" },
+    { id: 1, src: shoes8, alt: "Front View" },
+    { id: 2, src: shoes7, alt: "Side View" },
+    { id: 3, src: shoes6, alt: "Back View" },
+    { id: 4, src: shoes5, alt: "Detail View" },
   ];
 
   return (
     <div className="container ">
-
-
       {/* Main Product Section */}
       <div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div className="md:flex md:gap-4 ">
-            <div className="flex md:flex-col py-5 md:-mt-5 flex-row gap-3">
-              {productImages.map((image, index) => (
-                <button
-                  key={image.id}
-                  onClick={() => setSelectedImage(index)}
-                  className={`relative w-20 h-20 rounded-md  cursor-pointer bg-card-primary   overflow-hidden border-2 ${
-                    selectedImage === index ? "border-black" : "border-border"
-                  }`}
-                >
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    className=""
-                    sizes="80px"
-                  />
-                </button>
-              ))}
-            </div>
-            {/* Main Image */}
-            <div className="relative h-75 lg:h-125 bg-card-primary  rounded-lg overflow-hidden mb-4 flex-1">
-              <Image
-                src={productImages[selectedImage].src}
-                alt={productImages[selectedImage].alt}
-                fill
-                className="object-contain p-8"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-
-              <div className="absolute top-4 right-4">
-                <span className="bg-danger text-white px-3 py-1 rounded-full text-xs font-bold">
-                  -38%
-                </span>
+          <div className="relative md:flex flex-row gap-6">
+      
+      
+              {/* Thumbnail Images */}
+              <div className="flex md:flex-col py-5 md:-mt-5 flex-row gap-3">
+                {productImages.map((image, index) => (
+                  <button
+                    key={image.id}
+                    onClick={() => setSelectedImage(index)}
+                    className={`relative w-20 h-20 rounded-md cursor-pointer bg-card-primary overflow-hidden border-2 ${
+                      selectedImage === index ? "border-black" : "border-border"
+                    }`}
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      className="object-cover"
+                      sizes="80px"
+                    />
+                  </button>
+                ))}
               </div>
-            </div>
+
+              {/* Main Image with Hover Zoom Preview */}
+              <div
+                ref={imageRef}
+               className="relative group cursor-crosshair w-full lg:w-[full h-120 bg-card-primary rounded-lg overflow-hidden"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+                onMouseMove={handleMouseMove}
+              >
+                {/* Main Product Image */}
+                <Image
+                  src={productImages[selectedImage].src}
+                  alt={productImages[selectedImage].alt}
+                  fill
+                  className="object-contain p-8 transition-transform duration-300 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw"
+                />
+
+                {/* Hover Zoom Lens Effect */}
+                {isHovering && (
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: `radial-gradient(circle at ${zoomPosition.x}% ${zoomPosition.y}%, transparent 30%, rgba(0,0,0,0.1) 100%)`,
+                    }}
+                  />
+                )}
+
+                {/* Zoom Indicator Overlay */}
+                <div className="absolute inset-0  transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <div className="bg-white/90 dark:bg-muted/90 backdrop-blur-sm text-gray-900 dark:text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-lg transform scale-90 group-hover:scale-100 transition-all">
+                    <ZoomIn className="w-4 h-4" />
+                    <span className="text-sm font-medium">
+                      Hover to preview
+                    </span>
+                  </div>
+                </div>
+
+                {/* Discount Badge */}
+                <div className="absolute top-4 right-4">
+                  <span className="bg-danger text-danger-foreground px-3 py-1 rounded-full text-xs font-bold">
+                    -38%
+                  </span>
+                </div>
+              </div>
+
+              {/* Hover Zoom Preview Box - Shows on the right side */}
+              {isHovering && (
+                <div
+                  ref={zoomBoxRef}
+                  className="absolute left-[calc(80%+2rem)] top-70 -translate-y-1/2 w-120 h-100 bg-white dark:bg-muted rounded-lg shadow-2xl overflow-hidden border-2 border-white dark:border-gray-700 z-30 hidden lg:block"
+                  style={{
+                    marginLeft: "1rem",
+                  }}
+                >
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={productImages[selectedImage].src}
+                      alt={productImages[selectedImage].alt}
+                      fill
+                      className="object-cover"
+                      sizes="320px"
+                      style={{
+                        transform: `scale(2.5) translate(${50 - zoomPosition.x}%, ${50 - zoomPosition.y}%)`,
+                        transition: "transform 0.05s ease-out",
+                      }}
+                    />
+
+                    {/* Zoom Level Indicator */}
+                    <div className="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
+                      2.5x Zoom
+                    </div>
+
+                    {/* Crosshair Center Indicator */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 border-2 border-white rounded-full opacity-50" />
+                  </div>
+                </div>
+              )}
+          
+
+            {/* Rest of your product details component... */}
           </div>
 
           {/* Product Details */}
           <div>
             <div className="mb-6">
-              <h1 className="lg:text-3xl text-xl font-bold  mb-2">{product.name}</h1>
+              <h1 className="lg:text-3xl text-xl font-bold  mb-2">
+                {product.name}
+              </h1>
               <div className="flex items-center justify-between">
                 <span className="detailsPage-text-primary text-sm">
                   SKU: {product.sku}
@@ -147,7 +239,9 @@ export default function ProductDetails({ id }: { id: string }) {
             {/* Price Section */}
             <div className="mb-6">
               <div className="flex items-baseline gap-3 mb-2">
-                <span className="lg:text-4xl text-2xl font-bold ">TK. {product.price}</span>
+                <span className="lg:text-4xl text-2xl font-bold ">
+                  TK. {product.price}
+                </span>
                 <span className="text-lg text-muted-foreground line-through">
                   TK. {product.originalPrice}
                 </span>
@@ -156,9 +250,7 @@ export default function ProductDetails({ id }: { id: string }) {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <span className=" text-sm font-medium">
-                  {product.vat}
-                </span>
+                <span className=" text-sm font-medium">{product.vat}</span>
                 <span className="text-muted-foreground text-sm">•</span>
                 <span className="detailsPage-text-primary text-sm">
                   Inclusive of all taxes
@@ -210,9 +302,7 @@ export default function ProductDetails({ id }: { id: string }) {
                     key={image.id}
                     onClick={() => setSelectedImage(index)}
                     className={`relative w-15 h-15 cursor-pointer bg-card-primary rounded-full overflow-hidden border-2 ${
-                      selectedImage === index
-                        ? "border-black"
-                        : "border-border"
+                      selectedImage === index ? "border-black" : "border-border"
                     }`}
                   >
                     <Image

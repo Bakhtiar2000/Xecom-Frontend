@@ -7,7 +7,7 @@ export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-
+    setMounted(true);
     // Check for saved theme preference or default to light mode
     const savedTheme = localStorage.getItem("theme");
     const prefersDark = window.matchMedia(
@@ -15,6 +15,7 @@ export default function ThemeToggle() {
     ).matches;
 
     if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+      setIsDark(true);
       document.documentElement.classList.add("dark");
     }
   }, []);
@@ -41,7 +42,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="relative w-14 h-7 cursor-pointer rounded-full transition-colors duration-300 focus:outline-none focus:ring-primary focus:ring-offset-2 bg-muted border border-border hover:border-foreground/50"
+      className="relative w-14 h-7  cursor-pointer rounded-full transition-colors duration-300 focus:outline-none focus:ring-primary focus:ring-offset-2 bg-muted border border-border hover:border-foreground/50"
       aria-label="Toggle theme"
     >
       {/* Track */}
@@ -57,7 +58,7 @@ export default function ThemeToggle() {
 
       {/* Slider */}
       <div
-        className={`absolute top-0.5 left-0.5 w-6 h-6 bg-background rounded-full shadow-md transform transition-all duration-300 ease-in-out border border-border ${
+        className={`absolute top-0.5  left-0.5 w-6 h-6 bg-background rounded-full shadow-md transform transition-all duration-300 ease-in-out border border-border ${
           isDark ? "translate-x-7" : "translate-x-0"
         }`}
       >

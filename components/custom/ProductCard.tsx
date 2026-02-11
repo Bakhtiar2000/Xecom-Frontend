@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Sneaker } from "@/data/premium_shoes";
+import { Sneaker } from "@/data/premium-shoes";
 
 export type ProductCardProps = {
   product: Sneaker;

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import shoes7 from "../../../../assets/shoes/shoes7.png"
 
 type HoverEffect = "rotate" | "float" | "pulse";
 
@@ -91,7 +92,7 @@ const ModernSneakerShowcase: FC = () => {
               {/* Sneaker Image */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <Image
-                  src="/man3.png"
+                  src={shoes7}
                   alt="s1.png"
                   fill
                   className="object-contain"

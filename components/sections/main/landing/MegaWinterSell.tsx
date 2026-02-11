@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Clock, ArrowRight, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import shoes7 from "@/assets/shoes/shoes7.png";
 
 type TimeLeft = {
   days: number;
@@ -31,7 +32,7 @@ export default function MegaWinterSell() {
 
   const featuredShoes: FeaturedShoe[] = [
     {
-      image: "/man3.png",
+      image: shoes7,
       name: "Nike Air Max",
       price: "$129.99",
       originalPrice: "$199.99",

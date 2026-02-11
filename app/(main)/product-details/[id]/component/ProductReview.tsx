@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus, ChevronDown, FastForward } from "lucide-react";
 import { Review } from "@/types";
-import { productReviews } from "@/data/product_reivew";
+import { productReviews } from "@/data/product-reivew";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +31,24 @@ export default function ProductReviews() {
   const [reviews, setReviews] = useState<Review[]>(productReviews);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Review | null>(null);
+  // image modal
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [activeImages, setActiveImages] = useState<string[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const openImageModal = (images: string[] = [], index: number) => {
+    setActiveImages(images);
+    setActiveIndex(index);
+    setImageModalOpen(true);
+  };
+
+  const nextImage = () => {
+    setActiveIndex((prev) => (prev === activeImages.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevImage = () => {
+    setActiveIndex((prev) => (prev === 0 ? activeImages.length - 1 : prev - 1));
+  };
 
   const [form, setForm] = useState<{
     userName: string;
@@ -244,37 +262,140 @@ export default function ProductReviews() {
           {reviews.map((r) => (
             <div className="border-b" key={r.id}>
               <CardContent className="py-6 space-y-4">
-                <StarRating rating={r.rating} />
-                <div className="flex justify-between">
-                  <div className="flex gap-3">
-                    {r.userImage ? (
-                      <Avatar>
-                        <Image
-                          src={r.userImage}
-                          alt={r.userName}
-                          width={40}
-                          height={40}
-                          className="w-10 h-10 rounded-full"
-                        />
-                      </Avatar>
-                    ) : (
-                      <Avatar>
-                        <AvatarFallback>
-                          {r.userName
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
+                <div className="md:flex space-y-4 gap-5">
+                  <div className="flex space-x-2 space-y-4">
+                    <div className="flex justify-between">
+                      <div className="flex gap-3">
+                        {r.userImage ? (
+                          <Avatar>
+                            <Image
+                              src={r.userImage}
+                              alt={r.userName}
+                              width={40}
+                              height={40}
+                              className="w-10 h-10 rounded-full"
+                            />
+                          </Avatar>
+                        ) : (
+                          <Avatar>
+                            <AvatarFallback>
+                              {r.userName
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")}
+                            </AvatarFallback>
+                          </Avatar>
+                        )}
+
+                        <div>
+                          <h4 className="font-semibold flex gap-6">
+                            {r.userName}{" "}
+                            <span>
+                              {" "}
+                              <StarRating rating={r.rating} />
+                            </span>
+                          </h4>
+                          <p className="text-xs text-muted-foreground">
+                            {r.date}
+                          </p>
+
+                          <p>{r.comment}</p>
+                        </div>
+                      </div>
+                    </div>
+                     <div className=" md:hidden items-start gap-2">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="p-1 rounded hover:bg-muted">
+                          <MoreVertical className="w-4 h-4" />
+                        </button>
+                      </DropdownMenuTrigger>
+
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleEdit(r)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          onClick={() => handleDelete(r.id)}
+                          className="text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  </div>
+                 
+                  <div>
+                    {r.images && r.images.length > 0 && (
+                      <div className="flex gap-2">
+                        {r.images.map((img, i) => (
+                          <Image
+                            key={i}
+                            src={img}
+                            alt={`Review image ${i}`}
+                            width={80}
+                            height={80}
+                            onClick={() => openImageModal(r.images!, i)}
+                            className="w-20 h-20 bg-muted object-cover rounded-lg cursor-pointer hover:opacity-90 transition"
+                          />
+                        ))}
+                      </div>
                     )}
 
-                    <div>
-                      <h4 className="font-semibold">{r.userName}</h4>
-                      <p className="text-xs text-muted-foreground">{r.date}</p>
-                    </div>
-                  </div>
+                    {/* image modal  */}
+                    <Dialog
+                      open={imageModalOpen}
+                      onOpenChange={setImageModalOpen}
+                    >
+                      <DialogHeader>
+                        <DialogTitle></DialogTitle>
+                      </DialogHeader>
 
-                  <div className="flex items-start gap-2">
+                      <DialogContent className="max-w-7xl bg-card-primary border-none p-0">
+                        <div className="relative flex items-center justify-center h-[80vh]">
+                          {/* Image */}
+                          <Image
+                            src={activeImages[activeIndex]}
+                            alt="Review preview"
+                            fill
+                            className="object-contain"
+                          />
+
+                          {/* Left Arrow */}
+                          {activeImages.length > 1 && (
+                            <button
+                              onClick={prevImage}
+                              className="absolute left-4 cursor-pointer text-xl  text-white bg-black/50 hover:bg-black/70 p-2 rounded-full"
+                            >
+                              ‹
+                            </button>
+                          )}
+
+                          {/* Right Arrow */}
+                          {activeImages.length > 1 && (
+                            <button
+                              onClick={nextImage}
+                              className="absolute right-4 cursor-pointer text-xl text-white bg-black/50 hover:bg-black/70 p-2 rounded-full"
+                            >
+                              ›
+                            </button>
+                          )}
+
+                          {/* Counter */}
+                          {activeImages.length > 1 && (
+                            <div className="absolute bottom-4 text-white text-sm bg-black/50 px-3 py-1 rounded-full">
+                              {activeIndex + 1} / {activeImages.length}
+                            </div>
+                          )}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                  <div className="md:flex hidden items-start gap-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <button className="p-1 rounded hover:bg-muted">
@@ -299,30 +420,14 @@ export default function ProductReviews() {
                     </DropdownMenu>
                   </div>
                 </div>
-
-                <p>{r.comment}</p>
-
-                {r.images && (
-                  <div className="flex gap-2">
-                    {r.images.map((img, i) => (
-                      <Image
-                        key={i}
-                        src={img}
-                        alt={`Review image ${i}`}
-                        width={80}
-                        height={80}
-                        className="w-20 h-20 bg-muted object-cover rounded-lg"
-                      />
-                    ))}
-                  </div>
-                )}
+                
               </CardContent>
             </div>
           ))}
         </div>
       </div>
 
-      <button className="flex items-center gap-1 text-primary">
+      <button className="flex cursor-pointer items-center gap-1 text-primary">
         Read all reviews
         <ChevronDown className="w-4 h-4" />
       </button>

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import {  ChevronLeft} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import shoes6 from "../../../../assets/shoes/shoes6.png"
 
 
 const ModernSneakerShowcase: FC = () => {
@@ -93,7 +94,7 @@ const ModernSneakerShowcase: FC = () => {
                 className="relative w-full h-full"
               >
                 <Image
-                  src="/man4.png"
+                  src={shoes6}
                   alt="Quantum Runner Pro Sneaker"
                   fill
                   className="object-contain p-8"

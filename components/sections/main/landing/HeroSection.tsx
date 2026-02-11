@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Plus, Eye, Shuffle, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { shoes } from "@/data/shoes_data";
+import { shoes } from "@/data/shoes-data";
 
 export default function Hero_Section() {
   const letters = ["T", "r", "e", "n", "d", "m", "a", "r", "k"];
@@ -25,7 +25,7 @@ export default function Hero_Section() {
       <section className="relative lg:min-h-screen max-w-11/12  py-5 mx-auto overflow-hidden ">
         <div className="text-center lg:mt-5">
           <motion.h1
-            className="text-[40px] merriweather-font  mt-5 sm:text-[60px] md:text-[80px] lg:text-[120px] font-bold leading-none tracking-tight cursor-pointer"
+            className="text-[40px] merriweather-font  mt-5 sm:text-[60px] md:text-[80px] lg:text-[120px] font-bold leading-none tracking-tight"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
@@ -126,13 +126,7 @@ export default function Hero_Section() {
 
                     {/* Text Layer */}
                     <button
-                      className="
-        relative z-10
-        w-full h-full
-        flex items-center justify-center
-        text-xs sm:text-sm font-semibold uppercase
-        text-white
-        tracking-wide
+                      className=" relative z-10 w-full h-full flex items-center justify-center text-xs sm:text-sm font-semibold uppercase cursor-pointer  text-white  tracking-wide
       "
                     >
                       Shop Now

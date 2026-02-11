@@ -1,4 +1,5 @@
 import { Heart, Shield, Star, Zap } from "lucide-react";
+;
 
 export const testimonials = [
   {
@@ -93,10 +94,10 @@ export const stats = [
   { label: "Fast Shipping", value: "24h", icon: Zap, color: "text-blue-500" },
 ];
 
-export const reviews = [
+export const reviews  = [
   {
     name: "Harvetz",
-    avatar: "/man.png",
+    avatar: "/shoes3.png",
     rating: 5,
     time: "5 weeks ago",
     comment:
@@ -104,7 +105,7 @@ export const reviews = [
   },
   {
     name: "Yansim",
-    avatar: "/man2.png",
+    avatar: "/shoes4.png",
     rating: 4,
     time: "1 weeks ago",
     comment:
@@ -112,7 +113,7 @@ export const reviews = [
   },
   {
     name: "Rafyzju",
-    avatar: "/man3.png",
+    avatar: "/shoes7.png",
     rating: 5,
     time: "3 weeks ago",
     comment: "Absolutely loved these sneakers! Stylish and comfortable.",
