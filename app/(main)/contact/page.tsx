@@ -250,7 +250,7 @@ export default function ContactPage() {
         {/* RIGHT: INFO */}
         <div className="xl:col-span-2">
           <iframe
-            className="w-full h-100 lg:h-100"
+            className="w-full h-100 lg:h-full"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4612.679301264357!2d90.39503632611562!3d23.877575333880674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c43ec75cadf5%3A0xb809cd999981f652!2sSector%209%2C%20Dhaka%201230!5e1!3m2!1sen!2sbd!4v1770734989377!5m2!1sen!2sbd"
             loading="lazy"
           ></iframe>

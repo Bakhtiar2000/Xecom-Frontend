@@ -11,6 +11,7 @@ import BestCollection from "@/components/sections/main/landing/BestCollaction";
 export default function HomePage() {
   return (
     <div className="bg-background ">
+      {/* <HeroSection/> */}
       <HeroSection></HeroSection>
       <CategoryShoes></CategoryShoes>
       <BestCollection></BestCollection>
