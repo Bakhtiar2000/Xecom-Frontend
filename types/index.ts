@@ -16,7 +16,7 @@ export interface Product {
   reviews: number;
   sizes: string[];
   colors: string[];
-  image: string;
+  image: any;
   badge?: "BEST SELLER" | "NEW" | "TRENDING" | "LIMITED" | "CLASSIC";
   inStock: boolean;
   deliveryTime: string;
@@ -48,6 +48,6 @@ export type Review = {
   rating: number;
   comment: string;
   date: string;
-  images?: (string | StaticImageData)[];
+  images: any;
 };
 

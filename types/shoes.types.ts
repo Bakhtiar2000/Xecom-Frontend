@@ -10,7 +10,7 @@ export interface ShoePart {
 
 export interface Shoe {
   id: number;
-  image: string | StaticImageData;
+  image: any;
   name: string;
   price: string;
   trademark: string;

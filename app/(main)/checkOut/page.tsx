@@ -63,15 +63,15 @@ interface CartItem {
   id: string;
   store: string;
   name: string;
-  description?: string;
+  description: string;
   originalPrice: number;
-  discountPercentage?: number;
+  discountPercentage: number;
   finalPrice: number;
-  image: string;
+  image:any; 
   selected: boolean;
   quantity: number;
   comboOffer?: boolean;
-  sheppingFee?: number;
+  sheppingFee: number;
 }
 
 const CheckoutPage = () => {

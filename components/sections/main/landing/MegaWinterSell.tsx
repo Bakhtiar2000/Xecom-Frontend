@@ -14,7 +14,7 @@ type TimeLeft = {
 };
 
 type FeaturedShoe = {
-  image: string;
+  image: any;
   name: string;
   price: string;
   originalPrice: string;

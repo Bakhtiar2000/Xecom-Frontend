@@ -31,7 +31,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { AuthProvider } from "@/context/AuthContext";
 
 export default function CustomerLayout({
   children,
@@ -130,7 +129,6 @@ export default function CustomerLayout({
   const breadcrumbs = generateBreadcrumbs();
 
   return (
-    <AuthProvider>
       <SidebarProvider>
         <div className="flex h-screen w-full overflow-hidden">
           <Sidebar collapsible="icon">
@@ -282,6 +280,5 @@ export default function CustomerLayout({
           </div>
         </div>
       </SidebarProvider>
-    </AuthProvider>
   );
 }
