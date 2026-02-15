@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Xecom - Your Trusted E-commerce Platform",
-  description: "Discover amazing products at unbeatable prices. Shop from thousands of items with fast delivery.",
+  description:
+    "Discover amazing products at unbeatable prices. Shop from thousands of items with fast delivery.",
 };
 
 export default function RootLayout({
@@ -30,8 +31,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          {children}
           <Toaster />
+          {children}
         </Providers>
       </body>
     </html>

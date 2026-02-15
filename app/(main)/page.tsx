@@ -1,15 +1,25 @@
 import HeroSection from "@/components/sections/main/landing/HeroSection";
-import FeaturesSection from "@/components/sections/main/landing/FeaturesSection";
-import PopularCategories from "@/components/sections/main/landing/PopularCategories";
-import CallToAction from "@/components/sections/main/landing/CallToAction";
+import SneakerMosaicGallery from "@/components/sections/main/landing/SneakersGallery";
+import MegaWinterSell from "@/components/sections/main/landing/MegaWinterSell";
+import PremiumShoes from "@/components/sections/main/landing/PremiumShoes";
+import ShoesVideo from "@/components/sections/main/landing/ShoesVideo";
+import HowToBooking from "@/components/sections/main/landing/HowToBooking";
+import ReviewGrid from "@/components/sections/main/landing/ReviewGrid";
+import CategoryShoes from "@/components/sections/main/landing/CategorySection";
+import BestCollection from "@/components/sections/main/landing/BestCollection";
 
 export default function HomePage() {
   return (
-    <div>
-      <HeroSection />
-      <FeaturesSection />
-      <PopularCategories />
-      <CallToAction />
+    <div className="bg-background">
+      <HeroSection></HeroSection>
+      <CategoryShoes></CategoryShoes>
+      <BestCollection></BestCollection>
+      <SneakerMosaicGallery></SneakerMosaicGallery>
+      <PremiumShoes></PremiumShoes>
+      <MegaWinterSell></MegaWinterSell>
+      <ShoesVideo></ShoesVideo>
+      <HowToBooking></HowToBooking>
+      <ReviewGrid></ReviewGrid>
     </div>
   );
 }

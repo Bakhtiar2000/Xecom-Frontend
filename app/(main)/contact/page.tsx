@@ -1,150 +1,261 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  CheckCircle,
+  MapPinHouse,
+  Map,
+  MapPinned,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent } from "@/components/ui/card";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function ContactPage() {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-    });
+  const [result, setResult] = useState<string>("");
+  console.log("res", result);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log("Contact form submitted:", formData);
-        // Handle form submission
-    };
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setResult("Sending...");
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    formData.append("access_key", "4cede823-c646-46b6-8b05-a9bad2a7bb69");
 
-    return (
-        <div className="container">
-            <div className="mb-4 text-center">
-                <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-                <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                    Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
-                </p>
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data: { success: boolean } = await response.json();
+
+      if (data.success) {
+        setResult("Form Submitted Successfully");
+        form.reset();
+        toast.success("Message sent successfully!");
+      } else {
+        setResult("Something went wrong");
+        toast.error("Failed to send message.");
+      }
+    } catch (error) {
+      setResult("Error submitting form: " + error);
+      toast.error("An error occurred while sending the message.");
+    }
+  };
+
+  return (
+    <section className="container">
+      {/* Header */}
+      <div className="text-center max-w-2xl mx-auto mb-20">
+        <SectionTitle
+          subtitle=" Contact Us"
+          title=" Get in touch with our sneaker team"
+          description=" Have a question about sizing, orders, or collaborations? Fill out the
+          form and our team will get back to you shortly."
+        ></SectionTitle>
+      </div>
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-2 xl:gap-10 mb-10">
+        <Card
+          className="
+          group rounded-3xl
+          border border-border
+          bg-background
+          transition-all duration-300
+          hover:-translate-y-2
+          hover:shadow-xl
+        "
+        >
+          <CardContent className="py-5 px-3 space-y-5 text-center">
+            <div
+              className="
+              mx-auto w-14 h-14 rounded-2xl
+              border border-border
+              flex items-center justify-center
+              transition-transform duration-300
+              group-hover:scale-105
+            "
+            >
+              <MapPinHouse className="w-7 h-7 text-foreground" />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
-                {/* Contact Information */}
-                <div className="space-y-2">
-                    <Card>
-                        <CardHeader>
-                            <div className="text-4xl mb-2">📧</div>
-                            <CardTitle>Email</CardTitle>
-                            <CardDescription>support@xecom.com</CardDescription>
-                        </CardHeader>
-                    </Card>
+            <h4 className="text-lg font-semibold tracking-tight">
+              Head Office
+            </h4>
 
-                    <Card>
-                        <CardHeader>
-                            <div className="text-4xl mb-2">📞</div>
-                            <CardTitle>Phone</CardTitle>
-                            <CardDescription>+1 (555) 123-4567</CardDescription>
-                        </CardHeader>
-                    </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <div className="text-4xl mb-2">📍</div>
-                            <CardTitle>Address</CardTitle>
-                            <CardDescription>
-                                123 Business St.<br />
-                                Suite 100<br />
-                                San Francisco, CA 94102
-                            </CardDescription>
-                        </CardHeader>
-                    </Card>
-                </div>
-
-                {/* Contact Form */}
-                <Card className="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>Send us a message</CardTitle>
-                        <CardDescription>
-                            Fill out the form below and we'll get back to you shortly.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <form onSubmit={handleSubmit} className="space-y-2">
-                            <div className="space-y-2">
-                                <label htmlFor="name" className="text-sm font-medium">
-                                    Name
-                                </label>
-                                <Input
-                                    id="name"
-                                    name="name"
-                                    type="text"
-                                    placeholder="Your name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="email" className="text-sm font-medium">
-                                    Email
-                                </label>
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    placeholder="your.email@example.com"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="subject" className="text-sm font-medium">
-                                    Subject
-                                </label>
-                                <Input
-                                    id="subject"
-                                    name="subject"
-                                    type="text"
-                                    placeholder="What is this regarding?"
-                                    value={formData.subject}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="message" className="text-sm font-medium">
-                                    Message
-                                </label>
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    rows={6}
-                                    className="w-full px-3 py-2 border border-border rounded-md  2 500"
-                                    placeholder="Your message..."
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                            <Button type="submit" className="w-full">
-                                Send Message
-                            </Button>
-                        </form>
-                    </CardContent>
-                </Card>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Dhanmondi 27
+              <br />
+              Dhaka, Bangladesh
+            </p>
+          </CardContent>
+        </Card>
+        <Card
+          className="
+          group rounded-3xl
+          border border-border
+          bg-background
+          transition-all duration-300
+          hover:-translate-y-2
+          hover:shadow-xl
+        "
+        >
+          <CardContent className="py-5 px-3 space-y-5 text-center">
+            <div
+              className="
+              mx-auto w-14 h-14 rounded-2xl
+              border border-border
+              flex items-center justify-center
+              transition-transform duration-300
+              group-hover:scale-105
+            "
+            >
+              <MapPinned className="w-7 h-7 text-foreground" />
             </div>
+
+            <h4 className="text-lg font-semibold tracking-tight">Warehouse</h4>
+
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Uttara Sector 7
+              <br />
+              Dhaka, Bangladesh
+            </p>
+          </CardContent>
+        </Card>
+        <Card
+          className="
+          group rounded-3xl
+          border border-border
+          bg-background
+          transition-all duration-300
+          hover:-translate-y-2
+          hover:shadow-xl
+        "
+        >
+          <CardContent className="py-5 px-3 space-y-5 text-center">
+            <div
+              className="
+              mx-auto w-14 h-14 rounded-2xl
+              border border-border
+              flex items-center justify-center
+              transition-transform duration-300
+              group-hover:scale-105
+            "
+            >
+              <Mail className="w-7 h-7 text-foreground" />
+            </div>
+
+            <h4 className="text-lg font-semibold tracking-tight">
+              Email
+            </h4>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              support@sneakerbd.com
+            </p>
+          </CardContent>
+        </Card>
+        <Card
+          className="
+          group rounded-3xl
+          border border-border
+          bg-background
+          transition-all duration-300
+          hover:-translate-y-2
+          hover:shadow-xl
+        "
+        >
+          <CardContent className="py-5 px-3 space-y-5 text-center">
+            <div
+              className="
+              mx-auto w-14 h-14 rounded-2xl
+              border border-border
+              flex items-center justify-center
+              transition-transform duration-300
+              group-hover:scale-105
+            "
+            >
+              <Phone className="w-7 h-7 text-foreground" />
+            </div>
+
+            <h4 className="text-lg font-semibold tracking-tight">
+              Phone
+            </h4>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              +880 17XX-XXXXXX
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-10 lg:gap-5 xl:gap-10 ">
+        {/* LEFT: FORM */}
+        <div className=" xl:col-span-1">
+          <form
+            onSubmit={onSubmit}
+            className="space-y-6  bg-card-primary p-4 md:p-8 rounded-lg shadow-lg"
+          >
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">
+                FULL NAME
+              </label>
+              <Input name="name" placeholder="Your name" required />
+            </div>
+
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">
+                EMAIL ADDRESS
+              </label>
+              <Input
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">
+                MESSAGE
+              </label>
+              <textarea
+                name="message"
+                rows={4}
+                required
+                className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                placeholder="Write your message here..."
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Checkbox id="terms" required />
+              <label htmlFor="terms" className="text-sm text-muted-foreground">
+                I agree to the{" "}
+                <span className="underline cursor-pointer">
+                  Terms & Conditions
+                </span>
+              </label>
+            </div>
+
+            <Button type="submit" className="w-full h-11 rounded-md">
+              Send Message
+            </Button>
+          </form>
         </div>
-    );
+
+        {/* RIGHT: INFO */}
+        <div className="xl:col-span-2">
+          <iframe
+            className="w-full h-100 lg:h-full"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4612.679301264357!2d90.39503632611562!3d23.877575333880674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c43ec75cadf5%3A0xb809cd999981f652!2sSector%209%2C%20Dhaka%201230!5e1!3m2!1sen!2sbd!4v1770734989377!5m2!1sen!2sbd"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+  );
 }

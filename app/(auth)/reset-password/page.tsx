@@ -1,28 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 export default function ResetPasswordPage() {
-    const router = useRouter();
+ 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (password !== confirmPassword) {
-            alert("Passwords do not match!");
-            return;
-        }
-
-        // Handle password reset logic
-        console.log("Password reset successful");
-        router.push("/login");
+       console.log("new password:", password, "confirm password:", confirmPassword);
     };
 
     return (

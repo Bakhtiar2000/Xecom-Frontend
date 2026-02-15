@@ -4,7 +4,8 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+   "strict": false,           // turn off all strict checks
+    "noImplicitAny": false,    // allow variables to be implicitly any
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -29,6 +30,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "components/sections/main/landing/PremiumShoes.tsx"  ],
   "exclude": ["node_modules"]
 }

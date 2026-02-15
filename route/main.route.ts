@@ -9,19 +9,15 @@ export const mainRoutes: RouteItem[] = [
     href: "/",
   },
   {
-    label: "Products",
-    href: "/products",
-  },
-  {
-    label: "Categories",
-    href: "/categories",
-  },
-  {
-    label: "Deals",
-    href: "/deals",
+    label: "Brands",
+    href: "/brand-shoes",
   },
   {
     label: "Contact",
     href: "/contact",
+  },
+  {
+    label: "About Us",
+    href: "/about",
   },
 ];
