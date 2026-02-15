@@ -1,0 +1,132 @@
+import React from "react";
+import {
+    Grid,
+    List,
+    SlidersHorizontal,
+    ChevronUp,
+    ChevronDown,
+} from "lucide-react";
+import { FilterState } from "@/types";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+
+type SortOption = {
+    value: string;
+    label: string;
+};
+
+type FilterOptions = {
+    sortOptions: SortOption[];
+};
+
+type Props = {
+    filters: FilterState;
+    productsLength: number;
+    filteredLength: number;
+    viewMode: "grid" | "list";
+    setViewMode: (v: "grid" | "list") => void;
+    showFilters: boolean;
+    setShowFilters: (v: boolean) => void;
+    filterOptions: FilterOptions;
+    toggleFilter: (type: keyof FilterState, value: string) => void;
+    setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
+};
+
+export default function ProductTopBar({
+    filters,
+    productsLength,
+    filteredLength,
+    viewMode,
+    setViewMode,
+    showFilters,
+    setShowFilters,
+    filterOptions,
+    toggleFilter,
+    setFilters,
+}: Props) {
+    return (
+        <div className="bg-card-primary rounded-lg shadow-sm p-6 mb-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+
+                {/* Left Info */}
+                <div>
+                    <p className="font-semibold">
+                        Showing{" "}
+                        <span className="font-semibold text-muted-foreground">
+                            {filteredLength}
+                        </span>{" "}
+                        of{" "}
+                        <span className="font-semibold text-muted-foreground">
+                            {productsLength}
+                        </span>{" "}
+                        products
+                    </p>
+                </div>
+
+                {/* Right Controls */}
+                <div className="flex items-center gap-4">
+
+                    {/* View Toggle */}
+                    <div className="hidden md:flex items-center bg-background rounded-lg p-1">
+                        <button
+                            onClick={() => setViewMode("grid")}
+                            className={`p-2 rounded ${viewMode === "grid" ? "bg-card-primary shadow" : ""
+                                }`}
+                        >
+                            <Grid className="w-5 h-5" />
+                        </button>
+                        <button
+                            onClick={() => setViewMode("list")}
+                            className={`p-2 rounded ${viewMode === "list" ? "bg-card-primary shadow" : ""
+                                }`}
+                        >
+                            <List className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    {/* Sort */}
+                    <Select
+                        value={filters.sortBy}
+                        onValueChange={(value) =>
+                            setFilters((prev) => ({
+                                ...prev,
+                                sortBy: value,
+                            }))
+                        }
+                    >
+                        <SelectTrigger className="w-[200px] hidden lg:flex">
+                            <span className="text-sm font-medium">Sort options:</span>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {filterOptions.sortOptions.map((option) => (
+                                <SelectItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    {/* Mobile Filter Button */}
+                    <button
+                        onClick={() => setShowFilters(!showFilters)}
+                        className="lg:hidden flex items-center gap-2 px-4 py-2 bg-button-primary text-white rounded-lg"
+                    >
+                        <SlidersHorizontal className="w-5 h-5" />
+                        Filters
+                        {showFilters ? (
+                            <ChevronUp className="w-4 h-4" />
+                        ) : (
+                            <ChevronDown className="w-4 h-4" />
+                        )}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}

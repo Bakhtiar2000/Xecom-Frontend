@@ -29,6 +29,7 @@ export interface FilterState {
   sizes: string[];
   colors: string[];
   categories: string[];
+  targets: string[];
   sortBy: string;
 }
 

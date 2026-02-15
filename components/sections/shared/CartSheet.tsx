@@ -7,7 +7,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ShoppingCart } from "lucide-react";
-import CartContent from "./CartSheetContent";
+import CartContent from "./sections/CartSheetContent";
 
 export default function CartSheet({
   open,
@@ -18,11 +18,10 @@ export default function CartSheet({
 }) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="p-3 z-100 overflow-y-auto">
+      <SheetContent side="right" className="p-3 z-100 overflow-y-auto w-full">
         <SheetHeader>
-          <SheetTitle className="flex text-xl   gap-2"><ShoppingCart /> Your Cart</SheetTitle>
+          <SheetTitle className="flex items-center text-lg gap-2"><ShoppingCart /> Your Cart</SheetTitle>
         </SheetHeader>
-
         <CartContent isSheet onClose={() => onOpenChange(false)} />
       </SheetContent>
     </Sheet>

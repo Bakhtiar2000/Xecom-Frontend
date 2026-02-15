@@ -49,7 +49,7 @@ const PremiumShoes = (): React.JSX.Element => {
   return (
     <section
       ref={sectionRef}
-      className="container overflow-hidden   poppins-font"
+      className="container"
     >
       <div className="  relative z-10">
         {/* Header */}
@@ -69,33 +69,32 @@ const PremiumShoes = (): React.JSX.Element => {
                 id: "trending",
                 label: "Trending Now",
                 count: shoesData.length,
-                icon: <TrendingUp className="lg:w-5 lg:h-5 w-2 h-2" />,
+                icon: <TrendingUp className="lg:w-5 lg:h-5 w-3 h-3" />,
               },
               {
                 id: "bestsellers",
                 label: "Best Sellers",
                 count: bestSellers.length,
-                icon: <Trophy className="lg:w-5 lg:h-5 w-2 h-2" />,
+                icon: <Trophy className="lg:w-5 lg:h-5 w-3 h-3" />,
               },
               {
                 id: "new",
                 label: "New Arrivals",
                 count: newArrivals.length,
-                icon: <Sparkles className="lg:w-5 lg:h-5 w-2 h-2" />,
+                icon: <Sparkles className="lg:w-5 lg:h-5 w-3 h-3" />,
               },
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
-                className={`lg:px-6 px-2 cursor-pointer lg:py-4 py-2 text-sm  font-semibold flex items-center space-x-1 md:space-x-2 ${
-                  activeTab === tab.id
-                    ? "border-b-2 border-black dark:border-white"
-                    : ""
-                }`}
+                className={`lg:px-6 px-3 cursor-pointer lg:py-4 py-2 text-sm font-semibold flex items-center space-x-1 md:space-x-2 ${activeTab === tab.id
+                  ? "border-b-2 border-black dark:border-white"
+                  : ""
+                  }`}
               >
                 {tab.icon}
-                <span className="md:text-sm text-[8px] ">{tab.label}</span>
-                <span className="px-2 py-1 rounded-full  text-xs lg:text-lg ">
+                <span className="md:text-sm text-xs">{tab.label}</span>
+                <span className="px-2 py-1 rounded-full text-xs">
                   {tab.count}
                 </span>
               </button>
@@ -115,23 +114,21 @@ const PremiumShoes = (): React.JSX.Element => {
           ))}
         </div>
         {activeProducts.length > MAX_VISIBLE && (
-          <div className="flex justify-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-center mt-12"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mt-12"
+          >
+            <button
+              onClick={() => setShowAll((prev) => !prev)}
+              className="group relative px-8 py-2 rounded-lg cursor-pointer tranding-secondry-text font-bold text-lg transition-all duration-300 hover:scale-105"
             >
-              <button
-                onClick={() => setShowAll((prev) => !prev)}
-                className="group relative px-8 py-2 rounded-lg cursor-pointer tranding-secondry-text font-bold text-lg transition-all duration-300 hover:scale-105"
-              >
-                <span className="relative z-10  pb-2">
-                  {showAll ? "< View Less >" : "< View More >"}
-                </span>
-              </button>
-            </motion.div>
-          </div>
+              <span className="relative z-10 pb-2">
+                {showAll ? "< View Less >" : "< View More >"}
+              </span>
+            </button>
+          </motion.div>
         )}
       </div>
     </section>

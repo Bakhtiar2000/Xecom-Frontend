@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { categories } from "@/data/category_shoes";
 import SectionTitle from "../../shared/SectionTitle";
-import CategoryCard from "@/utils/CategoryCard";
+import CategoryCard from "@/components/sections/main/landing/sections/CategoryCard";
 
 export default function CategorySection() {
   const [isMobile, setIsMobile] = useState(false);
@@ -13,7 +13,6 @@ export default function CategorySection() {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  // Check if device is mobile
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);

@@ -70,8 +70,8 @@ export default function MegaWinterSell() {
   }, []);
 
   return (
-    <section className="container  ">
-      <div className="bg-linear-to-br from-slate-950 via-purple-950 to-slate-950 rounded-2xl lg:min-h-screen relative overflow-hidden  text-white  poppins-font">
+    <section className="container">
+      <div className="bg-linear-to-br from-slate-950 via-purple-950 to-slate-950 rounded-2xl lg:min-h-screen relative overflow-hidden  text-white  ">
         <div className="relative z-10 max-w-7xl mx-auto  lg:py-16 px-5 py-10 text-center lg:text-left">
           <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
             <motion.div
@@ -167,7 +167,7 @@ export default function MegaWinterSell() {
               transition={{ duration: 0.8 }}
               className="relative flex justify-center items-center"
             >
-              <div className="relative w-80 md:w-96 h-80 md:h-[600px]">
+              <div className="relative w-80 md:w-96 h-80 md:h-150">
                 {featuredShoes.map((shoe, index) => (
                   <motion.div
                     key={index}
