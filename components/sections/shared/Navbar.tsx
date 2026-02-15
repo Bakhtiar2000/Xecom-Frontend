@@ -170,7 +170,7 @@ const Navbar = () => {
                     <ul className="grid gap-2 p-6 w-60">
                       <li>
                         <Link
-                          href="/man-products"
+                          href="/products"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           All Men&apos;s Shoes
@@ -178,7 +178,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          href="/men?category=sneakers"
+                          href="/products?category=men&sneakers"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           Sneakers
@@ -186,7 +186,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          href="/men?category=loafers"
+                          href="/products?category=men&loafers"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           Loafers
@@ -194,7 +194,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          href="/men?category=boots"
+                          href="/products?category=men&boots"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           Boots
@@ -202,7 +202,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          href="/men?category=sandals"
+                          href="/products?category=men&sandals"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           Sandals
@@ -210,7 +210,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          href="/men?category=formal"
+                          href="/products?category=men&formal"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           Formal Shoes
@@ -227,7 +227,7 @@ const Navbar = () => {
                     <ul className="grid gap-2 p-6 w-60">
                       <li>
                         <Link
-                          href="/woman-products"
+                          href="/products?category=women"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           All Women&apos;s Shoes
@@ -235,7 +235,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          href="/women?category=sneakers"
+                          href="/products?category=women&sneakers"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           Sneakers
@@ -243,7 +243,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          href="/women?category=heels"
+                          href="/products?category=women&heels"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           Heels
@@ -251,7 +251,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          href="/women?category=flats"
+                          href="/products?category=women&flats"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           Flats
@@ -259,7 +259,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          href="/women?category=sandals"
+                          href="/products?category=women&sandals"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           Sandals
@@ -267,7 +267,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         <Link
-                          href="/women?category=boots"
+                          href="/products?category=women&boots"
                           className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
                         >
                           Boots
@@ -478,35 +478,35 @@ const Navbar = () => {
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="flex flex-col gap-1 pl-2">
-                          <Link href="/man-products" className="mobile-link">
+                          <Link href="/products" className="mobile-link">
                             All Men&apos;s Shoes
                           </Link>
                           <Link
-                            href="/men?category=sneakers"
+                            href="/products?category=sneakers"
                             className="mobile-link"
                           >
                             Sneakers
                           </Link>
                           <Link
-                            href="/men?category=loafers"
+                            href="/products?category=loafers"
                             className="mobile-link"
                           >
                             Loafers
                           </Link>
                           <Link
-                            href="/men?category=boots"
+                            href="/products?category=boots"
                             className="mobile-link"
                           >
                             Boots
                           </Link>
                           <Link
-                            href="/men?category=sandals"
+                            href="/products?category=sandals"
                             className="mobile-link"
                           >
                             Sandals
                           </Link>
                           <Link
-                            href="/men?category=formal"
+                            href="/products?category=formal"
                             className="mobile-link"
                           >
                             Formal Shoes
@@ -522,35 +522,35 @@ const Navbar = () => {
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="flex flex-col gap-1 pl-2">
-                          <Link href="/woman-products" className="mobile-link">
+                          <Link href="/products?category=women" className="mobile-link">
                             All Women&apos;s Shoes
                           </Link>
                           <Link
-                            href="/women?category=sneakers"
+                            href="/products?category=women&sneakers"
                             className="mobile-link"
                           >
                             Sneakers
                           </Link>
                           <Link
-                            href="/women?category=heels"
+                            href="/products?category=women&heels"
                             className="mobile-link"
                           >
                             Heels
                           </Link>
                           <Link
-                            href="/women?category=flats"
+                            href="/products?category=women&flats"
                             className="mobile-link"
                           >
                             Flats
                           </Link>
                           <Link
-                            href="/women?category=sandals"
+                            href="/products?category=women&sandals"
                             className="mobile-link"
                           >
                             Sandals
                           </Link>
                           <Link
-                            href="/women?category=boots"
+                            href="/products?category=women&boots"
                             className="mobile-link"
                           >
                             Boots
@@ -566,35 +566,35 @@ const Navbar = () => {
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="flex flex-col gap-1 pl-2">
-                          <Link href="/children" className="mobile-link">
+                          <Link href="/products?category=children" className="mobile-link">
                             All Children&apos;s Shoes
                           </Link>
                           <Link
-                            href="/children?category=sneakers"
+                            href="/products?category=children&sneakers"
                             className="mobile-link"
                           >
                             Sneakers
                           </Link>
                           <Link
-                            href="/children?category=school-shoes"
+                            href="/products?category=children&school-shoes"
                             className="mobile-link"
                           >
                             School Shoes
                           </Link>
                           <Link
-                            href="/children?category=sandals"
+                            href="/products?category=children&sandals"
                             className="mobile-link"
                           >
                             Sandals
                           </Link>
                           <Link
-                            href="/children?category=sports"
+                            href="/products?category=children&sports"
                             className="mobile-link"
                           >
                             Sports Shoes
                           </Link>
                           <Link
-                            href="/children?category=casual"
+                            href="/products?category=children&casual"
                             className="mobile-link"
                           >
                             Casual Wear
