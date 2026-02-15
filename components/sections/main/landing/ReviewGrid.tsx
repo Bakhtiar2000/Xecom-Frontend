@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import ReviewCard from "@/components/sections/main/landing/sections/Reviewcard";
+import ReviewCard from "@/components/sections/main/landing/sections/ReviewCard";
 import { testimonials } from "@/data/review";
 import SectionTitle from "../../shared/SectionTitle";
 import Link from "next/link";
