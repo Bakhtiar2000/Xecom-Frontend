@@ -38,7 +38,7 @@ export interface CartItem {
   originalPrice?: number;
   discountPercentage?: number;
   finalPrice: number;
-  image: string;
+  image: any;
   selected: boolean;
   quantity: number;
   comboOffer?: boolean;

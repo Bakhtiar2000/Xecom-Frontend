@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -54,7 +54,7 @@ export default function ProductReviews() {
     userName: string;
     rating: number;
     comment: string;
-    images: string[];
+    images:(string | StaticImageData)[];
   }>({
     userName: "",
     rating: 5,

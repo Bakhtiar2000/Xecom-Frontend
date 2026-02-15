@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Product } from "@/types";
-import ProductCard from "./Product-Card";
+import ProductCard from "./ProductCard";
 
 type Props = {
   products: Product[];

@@ -10,7 +10,7 @@ export interface ShoePart {
 
 export interface Shoe {
   id: number;
-  image: string | StaticImageData;
+  image: any;
   name: string;
   price: string;
   trademark: string;
@@ -21,7 +21,7 @@ export interface Shoe {
 
 export interface SneakerGalleryItem {
   id: number;
-  src: string;
+  src: any;
   alt: string;
   category: string;
   brand: string;
