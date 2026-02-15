@@ -32,9 +32,9 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
         transition={{ duration: 0.5, delay: index * 0.1 }}
         className="group relative"
       >
-        <div className="relative hover:shadow-lg bg-card-primary rounded-lg p-6 shadow-sm border ">
+        <div className="relative hover:shadow-lg bg-card-primary rounded-lg p-4 md:p-6 shadow-sm border ">
           {/* Header */}
-          <div className="flex items-start justify-between mb-4">
+          <div className="flex items-start justify-between mb-2 md:mb-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <div className="flex">
@@ -55,7 +55,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
                 </span>
               </div>
 
-              <h4 className="font-bold">
+              <h4 className="font-semibold md:font-bold">
                 {review.name}
               </h4>
               <p className="text-sm ">
@@ -64,15 +64,15 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
             </div>
 
             {review.verified && (
-              <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-success text-success-foreground text-sm">
+              <div className="flex items-center gap-1 px-2 md:px-3 py-1 rounded-full bg-success text-success-foreground text-sm">
                 <CheckCircle className="w-4 h-4" />
-                Verified
+                <span className="text-sm md:text-base">Verified</span>
               </div>
             )}
           </div>
 
           {/* Comment */}
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground text-sm md:text-base mb-2 md:mb-4">
             {review.comment}
           </p>
 
@@ -85,7 +85,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between pt-4 border-t ">
+          <div className="flex items-center justify-between pt-2 md:pt-4 border-t ">
             <span className="text-sm ">
               {review.date}
             </span>
@@ -95,11 +95,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, index }) => {
               className="flex items-center gap-1 cursor-pointer text-muted-foreground hover:text-danger transition-colors"
             >
               <Heart
-                className={`w-5 h-5 ${
+                className={`w-4 md:w-5 h-4 md:h-5 ${
                   liked ? "fill-danger text-danger" : ""
                 }`}
               />
-              <span>{review.likes + (liked ? 1 : 0)}</span>
+              <span className="text-sm md:text-base">{review.likes + (liked ? 1 : 0)}</span>
             </button>
           </div>
         </div>

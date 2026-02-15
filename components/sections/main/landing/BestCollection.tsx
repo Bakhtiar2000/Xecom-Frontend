@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function BestCollection() {
   return (
-    <section className="container lg:h-[89vh]">
+    <section className="container">
       <SectionTitle subtitle="Featured Products" title="Our Best Collection" />
 
       {/* GRID */}

@@ -1,6 +1,6 @@
 "use client"
 
-import CategoryTopBar from "@/utils/Category-TopBar";
+import CategoryTopBar from "@/utils/CategoryTopBar";
 import ProductGrid from "@/utils/ProductGrid";
 import { ManProductData } from "@/data/category-products";
 import { FilterState, Product } from "@/types";

@@ -12,13 +12,6 @@
   font-variation-settings: 100;
 }
 
-.poppins-font {
-  font-family: "Poppins", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-variation-settings: 100;
-}
-
 @theme {
   /* =====================================================
      LIGHT MODE - Premium Black & White Foundation
@@ -37,8 +30,8 @@
   --color-tertiary-foreground: #fdba74;
 
   /* Semantic Colors */
-  --color-success: #d4e8d4 ;
-  --color-success-foreground:#2a4a2a;
+  --color-success: #d4e8d4;
+  --color-success-foreground: #2a4a2a;
   --color-danger: #ef4444;
   --color-danger-foreground: #fee2e2;
   --color-warning: #3a2f1a;
@@ -115,8 +108,8 @@
   --color-tertiary: linear-gradient(to top, #000000cc, transparent);
   --color-tertiary-foreground: #fdba74;
 
-  --color-success:#1a3a1a;
-  --color-success-foreground:#d4e8d4 ;
+  --color-success: #1a3a1a;
+  --color-success-foreground: #d4e8d4;
   --color-danger: #f2d5d5;
   --color-danger-foreground: #4a2a2a;
   --color-warning: #f5efd5;
@@ -196,15 +189,15 @@
 }
 
 /* =====================================================
-   Central CSS Styles for Consistent Layouts
+   Central CSS Styles for Consistent LayoutsF
    ===================================================== */
 
 .container {
-  @apply mx-auto px-4 py-5 lg:py-15 md:max-w-182  lg:max-w-11/12;
+  @apply max-w-xl sm:max-w-160 md:max-w-3xl lg:max-w-5xl xl:max-w-7xl 2xl:max-w-384 px-4 py-6 md:px-6 md:py-10 xl:px-8 xl:py-15 mx-auto;
 }
 
 .title-text {
-  @apply text-2xl lg:text-4xl  font-bold;
+  @apply text-2xl lg:text-4xl font-bold;
 }
 
 .description-text {

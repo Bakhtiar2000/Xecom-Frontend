@@ -1,7 +1,7 @@
 "use client"
 
 
-import CategoryTopBar from "@/utils/Category-TopBar";
+import CategoryTopBar from "@/utils/CategoryTopBar";
 import ProductGrid from "@/utils/ProductGrid";
 import { ManProductData } from "@/data/category-products";
 import { FilterState, Product } from "@/types";
@@ -189,7 +189,7 @@ export default function MensCategoryPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500); 
+    const timer = setTimeout(() => setIsLoading(false), 1500);
     return () => clearTimeout(timer);
   }, []);
 
