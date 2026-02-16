@@ -49,13 +49,13 @@ const Register = () => {
 
   // Google Sign Up using AuthContext
   const handleGoogleSignUp = async () => {
-   console.log('google login');
+    console.log('google login');
   };
 
   return (
-    <div className="min-h-screen container bg-background  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  poppins-font">
+    <div className="min-h-screen container bg-background  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  ">
       <div className="lg:flex justify-center hidden">
-        <ModernSneakerShowcase/>
+        <ModernSneakerShowcase />
       </div>
 
       <div className="flex justify-center ">

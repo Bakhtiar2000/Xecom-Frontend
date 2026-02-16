@@ -1,25 +1,76 @@
 import { baseApi } from "@/redux/api/baseApi";
-import { TAdmin, TCustomer, TResponseRedux, TStaff } from "@/types";
+import { TQueryParam, TResponseRedux, TUser } from "@/types";
+import { TAddAddressDto, TChangeStatusDto } from "./dto/user.dto";
 
-const user = baseApi.injectEndpoints({
-    endpoints: (builder) => ({
+const userApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    //-----------------Get All Users-----------------
+    getAllUsers: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
 
-        //-----------------Get Me-----------------
-        getMe: builder.query({
-            query: () => {
-                return {
-                    url: "users/me/",
-                    method: "GET"
-                };
-            },
-            providesTags: ["user"],
-            transformResponse: (response: TResponseRedux<TAdmin | TCustomer | TStaff>) => {
-                return {
-                    data: response.data,
-                };
-            },
-        }),
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/user",
+          method: "GET",
+          params: params,
+        };
+      },
+      providesTags: ["user"],
+      transformResponse: (response: TResponseRedux<TUser[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
     }),
+
+    //-----------------Get Me-----------------
+    getMe: builder.query({
+      query: () => {
+        return {
+          url: "/user/me",
+          method: "GET",
+        };
+      },
+      providesTags: ["user"],
+      transformResponse: (response: TResponseRedux<TUser>) => {
+        return {
+          data: response.data,
+        };
+      },
+    }),
+
+    //-----------------Change Status-----------------
+    changeStatus: builder.mutation({
+      query: (args: { id: string; data: TChangeStatusDto }) => ({
+        url: `/user/change-status/${args.id}`,
+        method: "POST",
+        body: args.data,
+      }),
+      invalidatesTags: ["user"],
+    }),
+
+    //-----------------Add User Address-----------------
+    addUserAddress: builder.mutation({
+      query: (data: TAddAddressDto) => ({
+        url: "/user/address",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["user", "address"],
+    }),
+  }),
 });
 
-export const { useGetMeQuery } = user;
+export const {
+  useGetAllUsersQuery,
+  useGetMeQuery,
+  useChangeStatusMutation,
+  useAddUserAddressMutation,
+} = userApi;

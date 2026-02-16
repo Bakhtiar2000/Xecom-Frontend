@@ -45,7 +45,7 @@ const Login = () => {
   } = useForm<ForgotPasswordFormData>();
 
   const handleForgotSubmit = async (data: ForgotPasswordFormData) => {
-   console.log('forget password data'  , data);
+    console.log('forget password data', data);
   };
 
   const showModal = () => {
@@ -58,18 +58,18 @@ const Login = () => {
   };
 
   const onSubmit = async (data: LoginFormData) => {
-  console.log('login data'  , data);
+    console.log('login data', data);
   };
 
   // Google Sign
   const handleGoogleSignIn = async () => {
- console.log('google login');
+    console.log('google login');
   };
 
   return (
-    <div className=" container  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  poppins-font">
+    <div className=" container  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  ">
       <div className="lg:flex justify-center hidden">
-        <ModernSneakerShowcase/>
+        <ModernSneakerShowcase />
       </div>
 
       <div className="flex justify-center ">

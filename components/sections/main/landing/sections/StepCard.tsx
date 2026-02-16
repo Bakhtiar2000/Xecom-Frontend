@@ -77,7 +77,7 @@ const StepCard: React.FC<StepCardProps> = ({
       )}
 
       {/* Step Number */}
-      <div className="relative z-10 flex justify-center mb-6">
+      <div className="relative z-10 flex justify-center mb-4">
         <MotionDiv
           initial={{ scale: 0, rotate: -180 }}
           whileInView={{ scale: 1, rotate: 0 }}
@@ -86,11 +86,11 @@ const StepCard: React.FC<StepCardProps> = ({
             delay: index * 0.15,
             type: "spring",
           }}
-          className={`w-14 h-14 rounded-xl bg-secondary  shadow-lg flex items-center justify-center group-hover:shadow-xl transition-all duration-300 ${
+          className={`w-10 md:w-14 h-10 md:h-14 rounded-xl bg-secondary shadow-lg flex items-center justify-center group-hover:shadow-xl transition-all duration-300 ${
             variant === "interactive" ? "group-hover:scale-110" : ""
           }`}
         >
-          <span className="text-xl font-bold ">
+          <span className="text-base md:text-xl font-bold ">
             {step.number}
           </span>
         </MotionDiv>
@@ -98,7 +98,7 @@ const StepCard: React.FC<StepCardProps> = ({
 
       {/* Card */}
       <div
-        className={`relative rounded-2xl p-6 shadow-sm mt-8 transition-all duration-300 overflow-hidden ${
+        className={`relative rounded-xl p-4 md:p-6 shadow-sm mt-8 transition-all duration-300 overflow-hidden ${
           styles.card
         } ${variant === "interactive" ? "hover:shadow-2xl" : "hover:shadow-lg"}`}
       >
@@ -108,17 +108,17 @@ const StepCard: React.FC<StepCardProps> = ({
         />
 
         {/* Title */}
-        <h3 className="text-lg font-bold mb-3 ">
+        <h3 className="text-lg font-bold mb-1 md:mb-3">
           {step.title}
         </h3>
 
         {/* Description */}
-        <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+        <p className="text-muted-foreground mb-2 md:mb-4 text-sm md:leading-relaxed">
           {step.description}
         </p>
 
         {/* Features */}
-        <ul className="space-y-2 mb-4">
+        <ul className="space-y-2 mb-2 md:mb-4">
           {step.features.map((feature, featureIndex) => (
             <motion.li
               key={feature}
@@ -148,7 +148,7 @@ const StepCard: React.FC<StepCardProps> = ({
 
       {/* Mobile Arrow */}
       {index < totalSteps - 1 && (
-        <div className="lg:hidden flex justify-center my-6">
+        <div className="cursor-pointer lg:hidden flex justify-center my-4 md:my-6">
           <MotionDiv
             animate={{ y: [0, 5, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}

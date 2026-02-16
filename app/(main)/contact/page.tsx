@@ -1,10 +1,18 @@
 "use client";
 
-import { Mail, Phone, MapPin, CheckCircle } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  CheckCircle,
+  MapPinHouse,
+  Map,
+  MapPinned,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import SectionTitle from "@/components/sections/shared/SectionTitle";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -54,13 +62,142 @@ export default function ContactPage() {
           form and our team will get back to you shortly."
         ></SectionTitle>
       </div>
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-2 xl:gap-10 mb-10">
+        <Card
+          className="
+          group rounded-3xl
+          border border-border
+          bg-background
+          transition-all duration-300
+          hover:-translate-y-2
+          hover:shadow-xl
+        "
+        >
+          <CardContent className="py-5 px-3 space-y-5 text-center">
+            <div
+              className="
+              mx-auto w-14 h-14 rounded-2xl
+              border border-border
+              flex items-center justify-center
+              transition-transform duration-300
+              group-hover:scale-105
+            "
+            >
+              <MapPinHouse className="w-7 h-7 text-foreground" />
+            </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <h4 className="text-lg font-semibold tracking-tight">
+              Head Office
+            </h4>
+
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Dhanmondi 27
+              <br />
+              Dhaka, Bangladesh
+            </p>
+          </CardContent>
+        </Card>
+        <Card
+          className="
+          group rounded-3xl
+          border border-border
+          bg-background
+          transition-all duration-300
+          hover:-translate-y-2
+          hover:shadow-xl
+        "
+        >
+          <CardContent className="py-5 px-3 space-y-5 text-center">
+            <div
+              className="
+              mx-auto w-14 h-14 rounded-2xl
+              border border-border
+              flex items-center justify-center
+              transition-transform duration-300
+              group-hover:scale-105
+            "
+            >
+              <MapPinned className="w-7 h-7 text-foreground" />
+            </div>
+
+            <h4 className="text-lg font-semibold tracking-tight">Warehouse</h4>
+
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Uttara Sector 7
+              <br />
+              Dhaka, Bangladesh
+            </p>
+          </CardContent>
+        </Card>
+        <Card
+          className="
+          group rounded-3xl
+          border border-border
+          bg-background
+          transition-all duration-300
+          hover:-translate-y-2
+          hover:shadow-xl
+        "
+        >
+          <CardContent className="py-5 px-3 space-y-5 text-center">
+            <div
+              className="
+              mx-auto w-14 h-14 rounded-2xl
+              border border-border
+              flex items-center justify-center
+              transition-transform duration-300
+              group-hover:scale-105
+            "
+            >
+              <Mail className="w-7 h-7 text-foreground" />
+            </div>
+
+            <h4 className="text-lg font-semibold tracking-tight">
+              Email
+            </h4>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              support@sneakerbd.com
+            </p>
+          </CardContent>
+        </Card>
+        <Card
+          className="
+          group rounded-3xl
+          border border-border
+          bg-background
+          transition-all duration-300
+          hover:-translate-y-2
+          hover:shadow-xl
+        "
+        >
+          <CardContent className="py-5 px-3 space-y-5 text-center">
+            <div
+              className="
+              mx-auto w-14 h-14 rounded-2xl
+              border border-border
+              flex items-center justify-center
+              transition-transform duration-300
+              group-hover:scale-105
+            "
+            >
+              <Phone className="w-7 h-7 text-foreground" />
+            </div>
+
+            <h4 className="text-lg font-semibold tracking-tight">
+              Phone
+            </h4>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              +880 17XX-XXXXXX
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-10 lg:gap-5 xl:gap-10 ">
         {/* LEFT: FORM */}
-        <div className="">
+        <div className=" xl:col-span-1">
           <form
             onSubmit={onSubmit}
-            className="space-y-6 max-w-xl bg-card-primary p-8 rounded-lg shadow-lg"
+            className="space-y-6  bg-card-primary p-4 md:p-8 rounded-lg shadow-lg"
           >
             <div>
               <label className="text-xs font-medium text-muted-foreground">
@@ -111,70 +248,12 @@ export default function ContactPage() {
         </div>
 
         {/* RIGHT: INFO */}
-        <div className="space-y-10 ">
-          {/* Brand Benefits */}
-          <div className="bg-card-primary p-4 lg:p-8 shadow-sm rounded-lg">
-            <h3 className="font-semibold mb-4">Why sneaker lovers choose us</h3>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              {[
-                "Premium quality sneakers made for everyday comfort",
-                "Perfect fit designed for Bangladeshi customers",
-                "Durable materials with modern streetwear style",
-                "Fast delivery and responsive local support",
-              ].map((item, i) => (
-                <li key={i} className="flex gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary mt-0.5" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Locations */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            <Card className="p-4">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-primary mt-1" />
-                <div>
-                  <p className="font-medium">Head Office</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Dhanmondi 27
-                    <br />
-                    Dhaka, Bangladesh
-                  </p>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="p-4">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-primary mt-1" />
-                <div>
-                  <p className="font-medium">Warehouse</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Uttara Sector 7
-                    <br />
-                    Dhaka, Bangladesh
-                  </p>
-                </div>
-              </div>
-            </Card>
-          </div>
-          <div className="pt-6 space-y-4 bg-card-primary p-4 lg:p-8 shadow-sm rounded-lg">
-            <p className="text-sm font-medium">You can also reach us via</p>
-
-            <div className="flex flex-col sm:flex-row gap-6 text-sm">
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                support@sneakerbd.com
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                +880 17XX-XXXXXX
-              </div>
-            </div>
-          </div>
+        <div className="xl:col-span-2">
+          <iframe
+            className="w-full h-100 lg:h-full"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4612.679301264357!2d90.39503632611562!3d23.877575333880674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c43ec75cadf5%3A0xb809cd999981f652!2sSector%209%2C%20Dhaka%201230!5e1!3m2!1sen!2sbd!4v1770734989377!5m2!1sen!2sbd"
+            loading="lazy"
+          ></iframe>
         </div>
       </div>
     </section>

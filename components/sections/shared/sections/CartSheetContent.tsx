@@ -11,6 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface CartItem {
   id: string;
@@ -20,7 +21,7 @@ interface CartItem {
   originalPrice: number;
   discountPercentage?: number;
   finalPrice: number;
-  image:any;
+  image: any;
   selected: boolean;
   quantity: number;
 }
@@ -78,9 +79,9 @@ export default function CartContent({
       cartItems.map((i) =>
         i.id === id
           ? {
-              ...i,
-              quantity: Math.max(1, inc ? i.quantity + 1 : i.quantity - 1),
-            }
+            ...i,
+            quantity: Math.max(1, inc ? i.quantity + 1 : i.quantity - 1),
+          }
           : i,
       ),
     );
@@ -118,14 +119,13 @@ export default function CartContent({
   return (
     <div className={isSheet ? "space-y-4" : "cart-bg py-8"}>
       {/* Select All */}
-      <div className="bg-card-primary rounded-xl p-4">
+      <div className="bg-card-primary rounded-xl px-4 py-2">
         <label className="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
+          <Checkbox
             checked={selectAll}
-            onChange={toggleSelectAll}
+            onCheckedChange={toggleSelectAll}
           />
-          <span className="font-medium text-lg lg:text-xl">All cart items</span>
+          <span className="font-medium">All cart items</span>
         </label>
       </div>
 
@@ -134,17 +134,16 @@ export default function CartContent({
         <div key={store} className="bg-card-primary rounded-xl">
           <Accordion type="single" collapsible defaultValue={store}>
             <AccordionItem value={store}>
-              <AccordionTrigger className="px-4 text-lg lg:text-xl">
+              <AccordionTrigger className="px-4">
                 {store} ({items.length})
               </AccordionTrigger>
 
               <AccordionContent>
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-4 p-4 border-t">
-                    <input
-                      type="checkbox"
+                    <Checkbox
                       checked={item.selected}
-                      onChange={() => toggleItemSelect(item.id)}
+                      onCheckedChange={() => toggleItemSelect(item.id)}
                     />
 
                     <Image
@@ -156,19 +155,19 @@ export default function CartContent({
 
                     <div className="flex-1">
                       <div className="flex justify-between">
-                        <h4 className="font-medium text-sm lg:text-lg">
+                        <h4 className="font-medium text-sm lg:text-base">
                           {item.name}
                         </h4>
                         <button
                           className="hover:text-danger cursor-pointer"
                           onClick={() => removeItem(item.id)}
                         >
-                          <Trash2 size={18} />
+                          <Trash2 size={16} />
                         </button>
                       </div>
 
                       <div className="flex justify-between mt-2">
-                        <span className="text-sm lg:text-lg">
+                        <span className="text-sm">
                           Tk {item.finalPrice}
                         </span>
                         <div className="flex gap-4 items-center bg-muted px-2 rounded-2xl">

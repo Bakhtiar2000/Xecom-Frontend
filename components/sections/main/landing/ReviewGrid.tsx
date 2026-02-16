@@ -2,10 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import ReviewCard from "@/components/ui/reviewcard";
 import { testimonials } from "@/data/review";
 import SectionTitle from "../../shared/SectionTitle";
 import Link from "next/link";
+import ReviewCard from "./sections/Reviewcard";
 
 // Define the type for a single review
 export interface Review {
@@ -32,7 +32,7 @@ const ReviewsGrid: React.FC = () => {
   };
 
   return (
-    <div className=" container    poppins-font">
+    <div className="container">
       <style jsx>{`
         @keyframes scroll {
           0% {
@@ -57,7 +57,7 @@ const ReviewsGrid: React.FC = () => {
       <div className="relative  overflow-hidden">
         <div className="text-center mb-12">
           <SectionTitle title="Real Reviews" description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers." className="mb-2" />
-          
+
         </div>
 
         {/* Reviews Grid */}
@@ -88,7 +88,7 @@ const ReviewsGrid: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mt-12"
+          className="text-center mt-4 md:mt-12"
         >
           <Link href={'/all-review'} className="group relative px-8 py-4 rounded-lg cursor-pointer tranding-secondry-text font-bold text-lg transition-all duration-300 hover:scale-105">
             <span className="relative z-10 border-b-2 pb-2">

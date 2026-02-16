@@ -93,8 +93,8 @@ const Footer: React.FC = () => {
         }
       `}</style>
 
-      <div className="border-t-2 px-4 md:px-0 bg-gray-900 poppins-font">
-        <div className="container ">
+      <div className="border-t-2 px-4 md:px-0 bg-gray-900 ">
+        <div className="container pb-0!">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Brand Section */}
             <div className="lg:col-span-1 ">
@@ -136,11 +136,11 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Quick Links */}
-            <div className="lg:col-span-1  text-center lg:text-start">
-              <h3 className="text-lg font-semibold text-gray-200 mb-6">
+            <div className="lg:col-span-1">
+              <h3 className="text-lg font-semibold text-gray-200 mb-4">
                 Quick Links
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-2">
                 {quickLinks.map((link) => (
                   <li key={link.name}>
                     <Link
@@ -157,7 +157,7 @@ const Footer: React.FC = () => {
 
             {/* Contact Info */}
             <div className="lg:col-span-2">
-             
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Address */}
                 <div className="flex items-start cursor-pointer gap-4 p-4 dark:border-gray-700 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
@@ -234,10 +234,10 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <h1 className="text-[60px] lg:-mb-15 xs:text-[80px] hidden xl:block sm:text-[120px] md:text-[160px] lg:text-[200px] xl:text-[250px] w-full text-center font-bold leading-[0.8]">
+          <h1 className="text-[clamp(40px,10vw,250px)] w-full text-center font-bold">
             <span
               style={shineStyle}
-              className="inline-block w-full py-2 px-4 merriweather-font"
+              className="inline-block w-full px-2 md:px-4 merriweather-font"
             >
               STEPS SHOES
             </span>
@@ -246,8 +246,8 @@ const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-700">
-          <div className="max-w-7xl mx-auto px-6 py-2">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+          <div className="container py-2! md:py-3!">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-2 text-sm">
               <div className="text-gray-300">
                 © {new Date().getFullYear()} STEPS. All rights reserved.
               </div>

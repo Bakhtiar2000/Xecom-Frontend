@@ -9,7 +9,7 @@ import {
   Ruler,
 } from "lucide-react";
 import SectionTitle from "../../shared/SectionTitle";
-import StepCard from "@/utils/StepCard";
+import StepCard from "@/components/sections/main/landing/sections/StepCard";
 
 
 
@@ -67,7 +67,7 @@ const sneakerSteps: SneakerStep[] = [
     icon: <ShoppingCart className="w-6 h-6" />,
     title: "Secure Checkout",
     description:
-      "Complete your purchase with multiple payment options and buyer protection.Order confirmation",
+      "Complete your purchase with multiple payment options and buyer protection.",
     features: [
       "Multiple payment methods",
       "SSL encrypted checkout",
@@ -101,7 +101,7 @@ const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8 }}
-      className="relative container poppins-font"
+      className="relative container"
     >
       <div className="relative text-center mb-16">
         <MotionDiv
@@ -110,17 +110,16 @@ const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <SectionTitle description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers." title="How to Get Your Sneakers"  className="mb-2"/>
-         
-         
+          <SectionTitle description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers." title="How to Get Your Sneakers" className="mb-2" />
+
+
         </MotionDiv>
       </div>
 
       <div className="relative">
         <div
-          className={`grid grid-cols-1 ${
-            sneakerSteps.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"
-          } gap-8 lg:gap-8`}
+          className={`grid grid-cols-1 ${sneakerSteps.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"
+            } gap-4 lg:gap-8`}
         >
           {sneakerSteps.map((step, index) => (
             <StepCard
