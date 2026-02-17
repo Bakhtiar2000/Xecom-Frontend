@@ -2,8 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "@/components/sections/shared/ThemeToggle";
+import ProtectedRoute from "@/route/ProtectedRoute";
+import { UserRole } from "@/redux/features/auth/dto/auth.dto";
+import { useAppDispatch } from "@/redux/hooks";
+import { logout } from "@/redux/features/auth/authSlice";
+import { toast } from "sonner";
 import {
   customerRoutes,
   customerMainRoutes,
@@ -38,6 +43,14 @@ export default function CustomerLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success("Logged out successfully");
+    router.push("/login");
+  };
 
   // Generate breadcrumb items from pathname
   const generateBreadcrumbs = () => {
@@ -129,6 +142,7 @@ export default function CustomerLayout({
   const breadcrumbs = generateBreadcrumbs();
 
   return (
+    <ProtectedRoute allowedRoles={[UserRole.CUSTOMER]}>
       <SidebarProvider>
         <div className="flex h-screen w-full overflow-hidden">
           <Sidebar collapsible="icon">
@@ -220,7 +234,7 @@ export default function CustomerLayout({
                   );
                 })}
                 <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="Logout">
+                  <SidebarMenuButton tooltip="Logout" onClick={handleLogout}>
                     <LogOut />
                     <span>Logout</span>
                   </SidebarMenuButton>
@@ -280,5 +294,6 @@ export default function CustomerLayout({
           </div>
         </div>
       </SidebarProvider>
+    </ProtectedRoute>
   );
 }

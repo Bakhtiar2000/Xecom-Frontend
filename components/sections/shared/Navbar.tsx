@@ -1,10 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, ShoppingCart, Navigation, User, LogIn } from "lucide-react";
+import { Menu, ShoppingCart, Navigation, User, LogIn, LogOut, LayoutDashboard } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { mainRoutes } from "@/route/main.route";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { selectCurrentUser, logout } from "@/redux/features/auth/authSlice";
+import { useGetMeQuery } from "@/redux/features/user/user.api";
+import { UserRole } from "@/redux/features/auth/dto/auth.dto";
+import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -32,8 +38,46 @@ import { navbarConfig } from "@/constants/navbar.config";
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const [cartItems, setCartItems] = useState(CartData);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  // Auth state
+  const user = useAppSelector(selectCurrentUser);
+  const { data: userData, isLoading: isLoadingUser } = useGetMeQuery(undefined, {
+    skip: !user, // Only fetch when user is logged in
+  });
+
+  // Get user initials from name
+  const getUserInitials = (name: string): string => {
+    if (!name) return "U";
+    const words = name.trim().split(/\s+/);
+    if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
+    return (words[0][0] + (words[1]?.[0] || "")).toUpperCase();
+  };
+
+  // Get dashboard route based on user role
+  const getDashboardRoute = (): string => {
+    if (!user) return "/";
+    if (user.role === UserRole.CUSTOMER) return "/customer";
+    if (
+      user.role === UserRole.SUPER_ADMIN ||
+      user.role === UserRole.ADMIN ||
+      user.role === UserRole.STAFF
+    ) {
+      return "/admin";
+    }
+    return "/";
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success("Logged out successfully");
+    router.push("/login");
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,8 +110,6 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const [cartOpen, setCartOpen] = useState(false);
 
   return (
     <div className="w-full bg-secondary">
@@ -158,7 +200,7 @@ const Navbar = () => {
             <div className="relative flex items-center flex-1"></div>
 
             <TooltipProvider>
-              <div className="flex gap-6">
+              <div className="flex gap-6 items-center">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
@@ -174,6 +216,47 @@ const Navbar = () => {
                 </Tooltip>
                 <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
 
+                {user && userData?.data && (
+                  <>
+                    {/* Profile Picture/Avatar */}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div>
+                          <Avatar className="h-8 w-8 cursor-default">
+                            {userData.data.user.profilePicture && (
+                              <AvatarImage
+                                src={userData.data.user.profilePicture}
+                                alt={userData.data.user.name}
+                              />
+                            )}
+                            <AvatarFallback className="text-xs">
+                              {getUserInitials(userData.data.user.name)}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{userData.data.user.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    {/* Dashboard Icon */}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link
+                          href={getDashboardRoute()}
+                          className="flex hover-button items-center gap-1 transition"
+                        >
+                          <LayoutDashboard size={22} />
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Dashboard</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </>
+                )}
+
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div>
@@ -185,19 +268,35 @@ const Navbar = () => {
                   </TooltipContent>
                 </Tooltip>
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href="/login"
-                      className="flex hover-button items-center gap-1 transition"
-                    >
-                      <LogIn size={22} />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Sign In</p>
-                  </TooltipContent>
-                </Tooltip>
+                {user ? (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={handleLogout}
+                        className="cursor-pointer text-danger flex hover-button items-center gap-1 transition"
+                      >
+                        <LogOut size={22} />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Logout</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ) : (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        href="/login"
+                        className="cursor-pointer text-success flex hover-button items-center gap-1 transition"
+                      >
+                        <LogIn size={22} />
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Sign In</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
               </div>
             </TooltipProvider>
           </div>
@@ -220,6 +319,47 @@ const Navbar = () => {
               </Tooltip>
               <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
 
+              {user && userData?.data && (
+                <>
+                  {/* Profile Picture/Avatar */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <Avatar className="h-7 w-7 cursor-default">
+                          {userData.data.user.profilePicture && (
+                            <AvatarImage
+                              src={userData.data.user.profilePicture}
+                              alt={userData.data.user.name}
+                            />
+                          )}
+                          <AvatarFallback className="text-xs">
+                            {getUserInitials(userData.data.user.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{userData.data.user.name}</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* Dashboard Icon */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        href={getDashboardRoute()}
+                        className="flex hover-button items-center gap-1 transition"
+                      >
+                        <LayoutDashboard size={20} />
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Dashboard</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </>
+              )}
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div>
@@ -231,19 +371,35 @@ const Navbar = () => {
                 </TooltipContent>
               </Tooltip>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href="/login"
-                    className="flex hover-button items-center gap-1 transition"
-                  >
-                    <LogIn size={20} />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Sign In</p>
-                </TooltipContent>
-              </Tooltip>
+              {user ? (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={handleLogout}
+                      className="cursor-pointer flex hover-button items-center text-danger gap-1 transition"
+                    >
+                      <LogOut size={20} />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Logout</p>
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href="/login"
+                      className="cursor-pointer text-success hover-button items-center gap-1 transition"
+                    >
+                      <LogIn size={20} />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Sign In</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
 
               <Sheet>
                 <SheetTrigger asChild>

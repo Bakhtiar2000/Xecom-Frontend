@@ -1,24 +1,49 @@
-// "use client";
+"use client";
 
-// import { useEffect } from "react";
-// import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { UserRole } from "@/redux/features/auth/dto/auth.dto";
 
-// export default function ProtectedRoute({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) {
-//   const router = useRouter();
+interface ProtectedRouteProps {
+    children: React.ReactNode;
+    allowedRoles?: UserRole[];
+}
 
-//   useEffect(() => {
-//     if (!loading && !user) {
-//       router.push("/login");
-//     }
-//   }, [user, loading, router]);
+export default function ProtectedRoute({
+    children,
+    allowedRoles,
+}: ProtectedRouteProps) {
+    const router = useRouter();
+    const user = useAppSelector(selectCurrentUser);
 
-//   if (loading) {
-//     return <div>Loading...</div>;
-//   }
+    useEffect(() => {
+        // If no user is logged in, redirect to login
+        if (!user) {
+            router.push("/login");
+            return;
+        }
 
-//   return user ? <>{children}</> : null;
-// }
+        // If allowed roles are specified and user's role is not in the list, redirect to home
+        if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
+            router.push("/");
+        }
+    }, [user, allowedRoles, router]);
+
+    // Don't render anything while checking authentication
+    if (!user) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-lg">Loading...</div>
+            </div>
+        );
+    }
+
+    // Don't render if user doesn't have the required role
+    if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
+        return null;
+    }
+
+    return <>{children}</>;
+}

@@ -9,6 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableEmpty,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -55,16 +56,11 @@ export default function AllUsersPage() {
               <TableHead>Role</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Email Verified</TableHead>
-              <TableHead>Created At</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center">
-                  No users found
-                </TableCell>
-              </TableRow>
+              <TableEmpty colSpan={6}>No users found</TableEmpty>
             ) : (
               users.map((user: TUser) => (
                 <TableRow key={user.id}>
@@ -85,15 +81,12 @@ export default function AllUsersPage() {
                   </TableCell>
                   <TableCell>
                     {user.emailVerified ? (
-                      <Badge variant="default" className="bg-green-500">
+                      <Badge variant="default" className="bg-success">
                         Verified
                       </Badge>
                     ) : (
                       <Badge variant="secondary">Not Verified</Badge>
                     )}
-                  </TableCell>
-                  <TableCell>
-                    {new Date(user.createdAt).toLocaleDateString()}
                   </TableCell>
                 </TableRow>
               ))

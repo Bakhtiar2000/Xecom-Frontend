@@ -1,9 +1,11 @@
 import { RootState } from "@/redux/store";
 import { createSlice } from "@reduxjs/toolkit";
+import { UserRole } from "./dto/auth.dto";
 
 export type TUser = {
-  userId: string;
-  role: string;
+  email: string;
+  role: UserRole;
+  id: string;
   iat: number;
   exp: number;
 };

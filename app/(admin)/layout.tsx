@@ -2,8 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "@/components/sections/shared/ThemeToggle";
+import ProtectedRoute from "@/route/ProtectedRoute";
+import { UserRole } from "@/redux/features/auth/dto/auth.dto";
+import { useAppDispatch } from "@/redux/hooks";
+import { logout } from "@/redux/features/auth/authSlice";
+import { toast } from "sonner";
 import {
   adminRoutes,
   adminMainRoutes,
@@ -46,6 +51,14 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success("Logged out successfully");
+    router.push("/login");
+  };
 
   // Generate breadcrumb items from pathname
   const generateBreadcrumbs = () => {
@@ -116,7 +129,7 @@ export default function AdminLayout({
   const breadcrumbs = generateBreadcrumbs();
 
   return (
-
+    <ProtectedRoute allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.STAFF]}>
       <SidebarProvider>
         <div className="flex h-screen w-full overflow-hidden">
           <Sidebar collapsible="icon">
@@ -227,7 +240,7 @@ export default function AdminLayout({
                   );
                 })}
                 <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="Logout">
+                  <SidebarMenuButton tooltip="Logout" onClick={handleLogout}>
                     <LogOut />
                     <span>Logout</span>
                   </SidebarMenuButton>
@@ -285,5 +298,6 @@ export default function AdminLayout({
           </div>
         </div>
       </SidebarProvider>
+    </ProtectedRoute>
   );
 }

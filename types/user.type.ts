@@ -22,6 +22,7 @@ export type TUser = {
 export type TAdmin = {
     id: string;
     userId: string;
+    user?: TUser;
     permissions: any;
     canManageUsers: boolean;
     canManageProducts: boolean;
@@ -40,6 +41,7 @@ export type TAdmin = {
 export type TStaff = {
     id: string;
     userId: string;
+    user?: TUser;
     permissions: any;
     canManageOrders: boolean;
     canManageInventory: boolean;
@@ -58,6 +60,7 @@ export type TStaff = {
 export type TCustomer = {
     id: string;
     userId: string;
+    user?: TUser;
     dateOfBirth?: string | null;
     gender?: string | null;
     customerType: CustomerType;
