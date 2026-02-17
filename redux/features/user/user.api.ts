@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/api/baseApi";
-import { TQueryParam, TResponseRedux, TUser } from "@/types";
+import { TAdmin, TCustomer, TQueryParam, TResponseRedux, TStaff, TUser } from "@/types";
 import { TAddAddressDto, TChangeStatusDto } from "./dto/user.dto";
 
 const userApi = baseApi.injectEndpoints({
@@ -39,7 +39,7 @@ const userApi = baseApi.injectEndpoints({
         };
       },
       providesTags: ["user"],
-      transformResponse: (response: TResponseRedux<TUser>) => {
+      transformResponse: (response: TResponseRedux<TAdmin | TCustomer | TStaff>) => {
         return {
           data: response.data,
         };

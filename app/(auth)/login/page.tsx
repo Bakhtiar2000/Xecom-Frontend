@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +14,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ModernSneakerShowcase from "./component/annimationSneakersImage2";
+import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import { useAppDispatch } from "@/redux/hooks";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "sonner";
+import { TUser } from "@/redux/features/auth/authSlice";
+import { UserRole } from "@/redux/features/auth/dto/auth.dto";
 
 // Define form types
 interface LoginFormData {
@@ -26,6 +34,10 @@ interface ForgotPasswordFormData {
 
 const Login = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [login, { isLoading }] = useLoginMutation();
+
   const {
     register,
     handleSubmit,
@@ -58,7 +70,38 @@ const Login = () => {
   };
 
   const onSubmit = async (data: LoginFormData) => {
-    console.log('login data', data);
+    try {
+      const response = await login(data).unwrap();
+
+      if (response.success && response.data.accessToken) {
+        const accessToken = response.data.accessToken;
+
+        // Decode the JWT token
+        const decodedUser = jwtDecode<TUser>(accessToken);
+
+        // Dispatch user and token to Redux store
+        dispatch(setUser({ user: decodedUser, token: accessToken }));
+
+        // Show success message
+        toast.success(response.message || "Logged in successfully");
+
+        // Redirect based on role
+        if (decodedUser.role === UserRole.CUSTOMER) {
+          router.push("/customer");
+        } else if (
+          decodedUser.role === UserRole.SUPER_ADMIN ||
+          decodedUser.role === UserRole.ADMIN ||
+          decodedUser.role === UserRole.STAFF
+        ) {
+          router.push("/admin");
+        } else {
+          router.push("/");
+        }
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Login failed. Please try again.");
+      console.error("Login error:", error);
+    }
   };
 
   // Google Sign
@@ -160,8 +203,8 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <Button type="submit" className="w-full" size="lg">
-                    Sign in
+                  <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
+                    {isLoading ? "Signing in..." : "Sign in"}
                   </Button>
                 </div>
               </form>
