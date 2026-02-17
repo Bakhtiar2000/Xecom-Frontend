@@ -1,6 +1,6 @@
 import { baseApi } from "@/redux/api/baseApi";
 import { TAdmin, TCustomer, TQueryParam, TResponseRedux, TStaff, TUser } from "@/types";
-import { TAddAddressDto, TChangeStatusDto } from "./dto/user.dto";
+import { TAddAddressDto, TChangeStatusDto, TUserMetadata } from "./dto/user.dto";
 
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -46,6 +46,22 @@ const userApi = baseApi.injectEndpoints({
       },
     }),
 
+    //-----------------Get Me-----------------
+    getUserMetadata: builder.query({
+      query: () => {
+        return {
+          url: "/user/metadata",
+          method: "GET",
+        };
+      },
+      providesTags: ["user"],
+      transformResponse: (response: TResponseRedux<TUserMetadata>) => {
+        return {
+          data: response.data,
+        };
+      },
+    }),
+
     //-----------------Change Status-----------------
     changeStatus: builder.mutation({
       query: (args: { id: string; data: TChangeStatusDto }) => ({
@@ -71,6 +87,7 @@ const userApi = baseApi.injectEndpoints({
 export const {
   useGetAllUsersQuery,
   useGetMeQuery,
+  useGetUserMetadataQuery,
   useChangeStatusMutation,
   useAddUserAddressMutation,
 } = userApi;

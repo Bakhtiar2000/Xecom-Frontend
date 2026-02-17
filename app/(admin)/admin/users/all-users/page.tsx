@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Title from "@/components/sections/shared/Title";
-import { useGetAllUsersQuery } from "@/redux/features/user/user.api";
+import { useGetAllUsersQuery, useGetUserMetadataQuery } from "@/redux/features/user/user.api";
 import {
   Table,
   TableBody,
@@ -27,8 +27,8 @@ import {
 import { TUser } from "@/types";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { SortableTableHead } from "@/components/custom/SortableTableHead";
-import { Gender, UserStatus, UserRole } from "@/constants/enum";
-import { Search, X } from "lucide-react";
+import { StatsCard } from "@/components/custom/StatsCard";
+import { Search, X, Users, UserCheck, UserX, ShieldCheck } from "lucide-react";
 import { useTableSort } from "@/hooks/useTableSort";
 import { useTablePagination } from "@/hooks/useTablePagination";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -46,8 +46,6 @@ export default function AllUsersPage() {
 
   const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
   const {
-    pageNumber,
-    pageSize,
     handlePageChange,
     handlePageSizeChange,
     getPaginationParams,
@@ -57,23 +55,20 @@ export default function AllUsersPage() {
   const buildQueryParams = () => {
     const params = [
       ...getPaginationParams(),
+      ...getSortParams()
     ];
 
     if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
     if (gender) params.push({ name: "gender", value: gender });
     if (status) params.push({ name: "status", value: status });
     if (role) params.push({ name: "role", value: role });
-
-    // Add sort params from the hook
-    params.push(...getSortParams());
-
     return params;
   };
 
   const { data, isLoading, isError } = useGetAllUsersQuery(buildQueryParams());
+  const { data: metadataData, isLoading: isMetadataLoading, isError: isMetadataError } = useGetUserMetadataQuery(undefined);
 
   const users = data?.data || [];
-
   const hasNoData = users.length === 0 && !isLoading;
 
   const handleSearchChange = (value: string) => {
@@ -100,20 +95,67 @@ export default function AllUsersPage() {
 
   const hasActiveFilters = debouncedSearchTerm || gender || status || role;
 
+  const metadata = metadataData?.data;
+
+  const statsCards = [
+    {
+      title: "Total Users",
+      value: metadata?.totalUsers ?? 0,
+      icon: Users,
+      colorVariant: "blue" as const,
+    },
+    {
+      title: "Active Users",
+      value: metadata?.totalActiveUsers ?? 0,
+      icon: UserCheck,
+      colorVariant: "green" as const,
+    },
+    {
+      title: "Inactive Users",
+      value: metadata?.totalInactiveUsers ?? 0,
+      icon: UserX,
+      colorVariant: "orange" as const,
+    },
+    {
+      title: "Verified Accounts",
+      value: metadata?.totalVerifiedAccounts ?? 0,
+      icon: ShieldCheck,
+      colorVariant: "purple" as const,
+    },
+  ];
+
   return (
-    <div className="space-y-4">
-      <Title mainTitle="All Users" />
+    <div>
+      <Title mainTitle="All Users" subTitle="Every Account on your business are listed here" />
+
+      {/* Metadata Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 mt-4 lg:mt-6">
+        {statsCards.map((card, index) => (
+          <StatsCard
+            key={index}
+            title={card.title}
+            value={card.value}
+            icon={card.icon}
+            colorVariant={card.colorVariant}
+            isLoading={isMetadataLoading}
+            isError={isMetadataError}
+          />
+        ))}
+      </div>
 
       {/* Filters Section */}
-      <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mt-4 lg:mt-6">
         {/* Search Input */}
-        <div className="relative">
+        <div className="relative max-w-80 w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 text-muted-foreground" />
           <Input
             placeholder="Search by name, email, or phone..."
             value={searchTerm}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-9"
+            className={`pl-9 ${searchTerm
+              ? "border-primary bg-primary/5"
+              : ""
+              }`}
           />
         </div>
 
@@ -126,7 +168,9 @@ export default function AllUsersPage() {
               handleFilterChange();
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger
+              className={gender ? "border-primary bg-primary/5" : ""}
+            >
               <SelectValue placeholder="Gender" />
             </SelectTrigger>
             <SelectContent>
@@ -144,7 +188,9 @@ export default function AllUsersPage() {
               handleFilterChange();
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger
+              className={status ? "border-primary bg-primary/5" : ""}
+            >
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -163,7 +209,9 @@ export default function AllUsersPage() {
               handleFilterChange();
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger
+              className={role ? "border-primary bg-primary/5" : ""}
+            >
               <SelectValue placeholder="Role" />
             </SelectTrigger>
             <SelectContent>
@@ -188,7 +236,7 @@ export default function AllUsersPage() {
         </div>
       </div>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border border-border mt-4 lg:mt-6">
         <Table>
           <TableHeader>
             <TableRow>

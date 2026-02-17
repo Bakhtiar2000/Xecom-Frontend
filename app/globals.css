@@ -34,6 +34,8 @@
   --color-success-foreground: #ffffff;
   --color-danger: #ef4444;
   --color-danger-foreground: #fee2e2;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
   --color-warning: #3a2f1a;
   --color-warning-foreground: #f5efd5;
   --color-info: #1a2533;
@@ -112,6 +114,8 @@
   --color-success-foreground: #052e16;
   --color-danger: #f2d5d5;
   --color-danger-foreground: #4a2a2a;
+  --color-destructive: #f87171;
+  --color-destructive-foreground: #1c1917;
   --color-warning: #f5efd5;
   --color-warning-foreground: #4a3f2a;
   --color-info: #d5dfe8;
@@ -202,6 +206,21 @@
 
 .description-text {
   @apply text-sm lg:text-lg font-thin text-muted-foreground;
+}
+
+.gold-color-text {
+  background: linear-gradient(
+    135deg,
+    #6d5226,
+    #c9a15a,
+    #f2ddb7,
+    #a57c4a,
+    #6d5226
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 1000;
 }
 
 .scrollbar-none {
