@@ -46,7 +46,7 @@ const userApi = baseApi.injectEndpoints({
       },
     }),
 
-    //-----------------Get Me-----------------
+    //-----------------Get User Metadata-----------------
     getUserMetadata: builder.query({
       query: () => {
         return {

@@ -8,3 +8,10 @@ export type TAddBrandDto = {
 };
 
 export type TUpdateBrandDto = Partial<TAddBrandDto>;
+
+
+export type TBrandMetadata = {
+  totalBrands: number;
+  totalActiveBrands: number;
+  totalInactiveBrands: number;
+}

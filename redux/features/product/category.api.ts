@@ -1,6 +1,7 @@
-import { TCategory, TQueryParam, TResponseRedux } from "@/types";
+import { TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "../../api/baseApi";
-import { TAddCategoryDto, TUpdateCategoryDto } from "./dto/category.dto";
+import { TCategory } from "@/types/product.type";
+import { TCategoryMetadata } from "./dto/category.dto";
 
 const categoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -44,6 +45,23 @@ const categoryApi = baseApi.injectEndpoints({
       },
     }),
 
+    
+    //-----------------Get Category Metadata-----------------
+    getCategoryMetadata: builder.query({
+      query: () => {
+        return {
+          url: "/category/metadata",
+          method: "GET",
+        };
+      },
+      providesTags: ["category"],
+      transformResponse: (response: TResponseRedux<TCategoryMetadata>) => {
+        return {
+          data: response.data,
+        };
+      },
+    }),
+
     //-----------------Add Category-----------------
     addCategory: builder.mutation({
       query: (data: FormData) => ({
@@ -81,4 +99,5 @@ export const {
   useAddCategoryMutation,
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
+  useGetCategoryMetadataQuery,
 } = categoryApi;

@@ -1,4 +1,4 @@
-import { TAttribute, TQueryParam, TResponseRedux } from "@/types";
+import { TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "../../api/baseApi";
 import {
   TAddAttributeDto,
@@ -6,6 +6,7 @@ import {
   TAddAttributeValueDto,
   TUpdateAttributeValueDto,
 } from "./dto/attribute.dto";
+import { TAttribute } from "@/types/product.type";
 
 const attributeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
