@@ -15,10 +15,54 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Xecom - Your Trusted E-commerce Platform",
+  title: {
+    default: "Xecom | Your Trusted E-commerce Platform",
+    template: "%s | Xecom",
+  },
+
   description:
-    "Discover amazing products at unbeatable prices. Shop from thousands of items with fast delivery.",
+    "Discover amazing products at unbeatable prices. Shop from thousands of items with fast delivery on Xecom.",
+
+  keywords: [
+    "Xecom",
+    "E-commerce Platform",
+    "Sneakers",
+    "Buy Products Online",
+    "Shoes",
+    "Online Shopping",
+  ],
+
+  icons: {
+    icon: "/favicon.ico",
+  },
+
+  metadataBase: new URL("https://xecom.com"),
+
+  openGraph: {
+    title: "Xecom",
+    description: "Your trusted destination for online shopping and great deals.",
+    url: "https://xecom.com",
+    siteName: "Xecom",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Xecom E-commerce Platform",
+      },
+    ],
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Xecom",
+    description: "Shop smarter with Xecom U+2013 quality products, best prices.",
+    creator: "@xecom",
+    images: ["/og-image.png"],
+  },
 };
+
 
 export default function RootLayout({
   children,
