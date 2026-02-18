@@ -1,6 +1,6 @@
-import { TProduct, TQueryParam, TResponseRedux } from "@/types";
+import { TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "../../api/baseApi";
-import { TAddProductDto, TUpdateProductDto } from "./dto/product.dto";
+import { TProduct } from "@/types/product.type";
 
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

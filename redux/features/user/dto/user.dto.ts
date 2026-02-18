@@ -10,3 +10,10 @@ export type TAddAddressDto = {
   postalCode?: string;
   street: string;
 };
+
+export type TUserMetadata = {
+  totalUsers: number;
+  totalActiveUsers: number;
+  totalInactiveUsers: number;
+  totalVerifiedAccounts: number;
+}

@@ -19,6 +19,9 @@ export type TCategory = {
   metadata: any;
   createdAt: string;
   updatedAt: string;
+  _count: {
+    products: number
+  }
 };
 
 export type TBrand = {
@@ -33,6 +36,9 @@ export type TBrand = {
   metadata: any;
   createdAt: string;
   updatedAt: string;
+  _count: {
+    products: number
+  }
 };
 
 export type TProduct = {

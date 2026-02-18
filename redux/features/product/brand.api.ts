@@ -1,6 +1,7 @@
-import { TBrand, TQueryParam, TResponseRedux } from "@/types";
+import { TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "../../api/baseApi";
-import { TAddBrandDto, TUpdateBrandDto } from "./dto/brand.dto";
+import { TBrandMetadata } from "./dto/brand.dto";
+import { TBrand } from "@/types/product.type";
 
 const brandApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -38,6 +39,22 @@ const brandApi = baseApi.injectEndpoints({
       }),
       providesTags: ["brand"],
       transformResponse: (response: TResponseRedux<TBrand>) => {
+        return {
+          data: response.data,
+        };
+      },
+    }),
+
+    //-----------------Get Brand Metadata-----------------
+    getBrandMetadata: builder.query({
+      query: () => {
+        return {
+          url: "/brand/metadata",
+          method: "GET",
+        };
+      },
+      providesTags: ["brand"],
+      transformResponse: (response: TResponseRedux<TBrandMetadata>) => {
         return {
           data: response.data,
         };

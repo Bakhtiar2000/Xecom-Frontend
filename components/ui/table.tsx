@@ -3,6 +3,7 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { Skeleton } from "@/components/ui/skeleton"
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
@@ -70,7 +71,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "bg-accent text-accent-foreground font-bold h-10 px-2 text-left align-middle whitespace-nowrap border border-border [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "bg-accent text-accent-foreground font-bold h-10 px-2 text-left align-middle whitespace-nowrap border border-border [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5",
         className
       )}
       {...props}
@@ -83,7 +84,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "p-2 align-middle whitespace-nowrap border border-border [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "p-2 align-middle whitespace-nowrap border border-border [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5",
         className
       )}
       {...props}
@@ -126,6 +127,47 @@ function TableEmpty({
   )
 }
 
+function TableLoading({
+  className,
+  colSpan,
+  rows = 5,
+  ...props
+}: React.ComponentProps<"td"> & { colSpan?: number; rows?: number }) {
+  return (
+    <>
+      {Array.from({ length: rows }).map((_, index) => (
+        <TableRow key={index}>
+          <TableCell colSpan={colSpan} className={cn("py-3", className)} {...props}>
+            <Skeleton className="h-5 w-full" />
+          </TableCell>
+        </TableRow>
+      ))}
+    </>
+  )
+}
+
+function TableError({
+  className,
+  colSpan,
+  children,
+  ...props
+}: React.ComponentProps<"td"> & { colSpan?: number }) {
+  return (
+    <TableRow>
+      <TableCell
+        colSpan={colSpan}
+        className={cn(
+          "py-5 text-center text-destructive",
+          className
+        )}
+        {...props}
+      >
+        {children || "Error loading data"}
+      </TableCell>
+    </TableRow>
+  )
+}
+
 export {
   Table,
   TableHeader,
@@ -136,4 +178,6 @@ export {
   TableCell,
   TableCaption,
   TableEmpty,
+  TableLoading,
+  TableError,
 }

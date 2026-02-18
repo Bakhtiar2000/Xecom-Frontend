@@ -11,3 +11,9 @@ export type TAddCategoryDto = {
 export type TUpdateCategoryDto = Partial<TAddCategoryDto> & {
   id: string;
 };
+
+export type TCategoryMetadata = {
+  totalCategories: number;
+  totalActiveCategories: number;
+  totalInactiveCategories: number;
+}

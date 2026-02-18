@@ -6,9 +6,9 @@ export interface TitleProps {
 
 export default function Title({ mainTitle, subTitle, className }: TitleProps) {
   return (
-    <header className={`text-xl md:text-2xl font-bold ${className || ""}`}>
-      <h1 className="mb-2">{mainTitle}</h1>
-      {subTitle && <h2>{subTitle}</h2>}
+    <header className={`text-xl lg:text-2xl ${className || ""}`}>
+      <h1 className="gold-color-text font-bold">{mainTitle}</h1>
+      {subTitle && <h2 className="text-sm md:text-base font-medium">{subTitle}</h2>}
     </header>
   );
 }
