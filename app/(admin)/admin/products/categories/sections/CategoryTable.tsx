@@ -178,7 +178,7 @@ export function CategoryTable({ onEdit }: CategoryTableProps) {
             </div>
 
             {/* Table */}
-            <div className="rounded-md border border-border">
+            <div className="rounded-md border border-border mt-4 lg:mt-6">
                 <Table>
                     <TableHeader>
                         <TableRow>

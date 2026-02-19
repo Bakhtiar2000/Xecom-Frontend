@@ -123,12 +123,28 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
     const onSubmit = async (data: TCategoryFormData) => {
         try {
             const formData = new FormData();
-            formData.append("name", data.name);
-            formData.append("slug", data.slug);
-            if (data.description) formData.append("description", data.description);
-            if (data.parentId) formData.append("parentId", data.parentId);
-            if (data.sortOrder !== undefined) formData.append("sortOrder", data.sortOrder.toString());
-            if (data.file) formData.append("file", data.file);
+
+            // Prepare JSON payload
+            const payload: any = {
+                name: data.name,
+                slug: data.slug,
+                description: data.description || undefined,
+                parentId: data.parentId || null,
+                sortOrder: data.sortOrder,
+            };
+
+            // Include id only for update requests
+            if (isEditMode && category) {
+                payload.id = category.id;
+            }
+
+            // Append JSON data as a single field
+            formData.append("text", JSON.stringify(payload));
+
+            // Append file if present
+            if (data.file) {
+                formData.append("file", data.file);
+            }
 
             let result;
             if (isEditMode && category) {
