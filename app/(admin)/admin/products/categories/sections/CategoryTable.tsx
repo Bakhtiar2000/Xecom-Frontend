@@ -40,7 +40,7 @@ import {
 import { TCategory } from "@/types/product.type";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { SortableTableHead } from "@/components/custom/SortableTableHead";
-import { Search, X, Folder, Pencil, Trash2 } from "lucide-react";
+import { Search, X, Folder, Pencil, Trash2, Loader2 } from "lucide-react";
 import { useTableSort } from "@/hooks/useTableSort";
 import { useTablePagination } from "@/hooks/useTablePagination";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -80,10 +80,11 @@ export function CategoryTable({ onEdit }: CategoryTableProps) {
         return params;
     };
 
-    const { data, isLoading, isError } = useGetAllCategoriesQuery(buildQueryParams());
+    const { data, isLoading, isFetching, isError } = useGetAllCategoriesQuery(buildQueryParams());
 
     const categories = data?.data || [];
     const hasNoData = categories.length === 0 && !isLoading;
+    const isRefetching = isFetching && !isLoading;
 
     const handleSearchChange = (value: string) => {
         setSearchTerm(value);
@@ -178,106 +179,115 @@ export function CategoryTable({ onEdit }: CategoryTableProps) {
             </div>
 
             {/* Table */}
-            <div className="rounded-md border border-border mt-4 lg:mt-6">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-20">Image</TableHead>
-                            <SortableTableHead
-                                field="name"
-                                label="Name"
-                                onSort={handleSortClick}
-                                getSortIcon={getSortIcon}
-                                disabled={hasNoData}
-                            />
-                            <TableHead>Description</TableHead>
-                            <TableHead className="w-24">Status</TableHead>
-                            <TableHead className="w-32">Total Products</TableHead>
-                            <TableHead className="w-24">Sort Order</TableHead>
-                            <TableHead className="w-24 text-right">Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {isLoading ? (
-                            <TableLoading colSpan={7} rows={5} />
-                        ) : isError ? (
-                            <TableError colSpan={7}>
-                                Error loading categories. Please try again.
-                            </TableError>
-                        ) : categories.length === 0 ? (
-                            <TableEmpty colSpan={7}>No categories found</TableEmpty>
-                        ) : (
-                            categories.map((category: TCategory) => (
-                                <TableRow key={category.id}>
-                                    <TableCell>
-                                        {category.imageUrl ? (
-                                            <div className="relative w-10 h-10 rounded-md overflow-hidden bg-muted">
-                                                <Image
-                                                    src={category.imageUrl}
-                                                    alt={category.name}
-                                                    fill
-                                                    className="object-cover"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center">
-                                                <Folder className="h-6 w-6 text-muted-foreground" />
-                                            </div>
-                                        )}
-                                    </TableCell>
-                                    <TableCell className="font-medium">{category.name}</TableCell>
-                                    <TableCell>
-                                        <span className="text-sm text-muted-foreground line-clamp-2">
-                                            {category.description || "No description"}
-                                        </span>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge
-                                            variant={category.isActive ? "default" : "secondary"}
-                                            className={category.isActive ? "bg-success" : ""}
-                                        >
-                                            {category.isActive ? "Active" : "Inactive"}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="text-center">
-                                        <span className="font-medium">
-                                            {category._count?.products ?? 0}
-                                        </span>
-                                    </TableCell>
-                                    <TableCell className="text-center">{category.sortOrder}</TableCell>
-                                    <TableCell>
-                                        <div className="flex justify-end gap-2">
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                onClick={() => onEdit(category)}
-                                                className="h-8 w-8 hover:bg-primary/10 hover:text-primary"
-                                            >
-                                                <Pencil className="h-4 w-4" />
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                onClick={() => handleDeleteClick(category)}
-                                                className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
-                {data?.meta && (
-                    <TablePagination
-                        meta={data.meta}
-                        onPageChange={handlePageChange}
-                        onPageSizeChange={handlePageSizeChange}
-                        disabled={hasNoData}
-                    />
+            <div className="relative rounded-md border border-border mt-4 lg:mt-6">
+                {/* Loading Spinner for Refetch */}
+                {isRefetching && (
+                    <div className="absolute top-3 right-3 z-10">
+                        <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                    </div>
                 )}
+
+                <div className={`transition-opacity duration-200 ${isRefetching ? 'opacity-60 pointer-events-none' : ''}`}>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-20">Image</TableHead>
+                                <SortableTableHead
+                                    field="name"
+                                    label="Name"
+                                    onSort={handleSortClick}
+                                    getSortIcon={getSortIcon}
+                                    disabled={hasNoData}
+                                />
+                                <TableHead>Description</TableHead>
+                                <TableHead className="w-24">Status</TableHead>
+                                <TableHead className="w-32">Total Products</TableHead>
+                                <TableHead className="w-24">Sort Order</TableHead>
+                                <TableHead className="w-24 text-right">Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {isLoading ? (
+                                <TableLoading colSpan={7} rows={5} />
+                            ) : isError ? (
+                                <TableError colSpan={7}>
+                                    Error loading categories. Please try again.
+                                </TableError>
+                            ) : categories.length === 0 ? (
+                                <TableEmpty colSpan={7}>No categories found</TableEmpty>
+                            ) : (
+                                categories.map((category: TCategory) => (
+                                    <TableRow key={category.id}>
+                                        <TableCell>
+                                            {category.imageUrl ? (
+                                                <div className="relative w-10 h-10 rounded-md overflow-hidden bg-muted">
+                                                    <Image
+                                                        src={category.imageUrl}
+                                                        alt={category.name}
+                                                        fill
+                                                        className="object-cover"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center">
+                                                    <Folder className="h-6 w-6 text-muted-foreground" />
+                                                </div>
+                                            )}
+                                        </TableCell>
+                                        <TableCell className="font-medium">{category.name}</TableCell>
+                                        <TableCell>
+                                            <span className="text-sm text-muted-foreground line-clamp-2">
+                                                {category.description || "No description"}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge
+                                                variant={category.isActive ? "default" : "secondary"}
+                                                className={category.isActive ? "bg-success" : ""}
+                                            >
+                                                {category.isActive ? "Active" : "Inactive"}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell className="text-center">
+                                            <span className="font-medium">
+                                                {category._count?.products ?? 0}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell className="text-center">{category.sortOrder}</TableCell>
+                                        <TableCell>
+                                            <div className="flex justify-end gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => onEdit(category)}
+                                                    className="h-8 w-8 hover:bg-primary/10 hover:text-primary"
+                                                >
+                                                    <Pencil className="h-4 w-4" />
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => handleDeleteClick(category)}
+                                                    className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                    {data?.meta && (
+                        <TablePagination
+                            meta={data.meta}
+                            onPageChange={handlePageChange}
+                            onPageSizeChange={handlePageSizeChange}
+                            disabled={hasNoData}
+                        />
+                    )}
+                </div>
             </div>
 
             {/* Delete Confirmation Dialog */}

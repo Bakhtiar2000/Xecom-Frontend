@@ -72,6 +72,12 @@ export type TProduct = {
   reviewCount: number;
   createdAt: string;
   updatedAt: string;
+  _count?: {
+    images: number;
+    variants: number;
+  };
+  brand?: TBrand;
+  category?: TCategory;
 };
 
 export type TBundleItem = {

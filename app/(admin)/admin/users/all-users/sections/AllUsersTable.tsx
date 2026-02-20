@@ -26,7 +26,7 @@ import {
 import { TUser } from "@/types";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { SortableTableHead } from "@/components/custom/SortableTableHead";
-import { Search, X } from "lucide-react";
+import { Search, X, Loader2 } from "lucide-react";
 import { useTableSort } from "@/hooks/useTableSort";
 import { useTablePagination } from "@/hooks/useTablePagination";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -61,10 +61,11 @@ export function AllUsersTable() {
         return params;
     };
 
-    const { data, isLoading, isError } = useGetAllUsersQuery(buildQueryParams());
+    const { data, isLoading, isFetching, isError } = useGetAllUsersQuery(buildQueryParams());
 
     const users = data?.data || [];
     const hasNoData = users.length === 0 && !isLoading;
+    const isRefetching = isFetching && !isLoading;
 
     const handleSearchChange = (value: string) => {
         setSearchTerm(value);
@@ -185,83 +186,92 @@ export function AllUsersTable() {
             </div>
 
             {/* Table */}
-            <div className="rounded-md border border-border mt-4">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <SortableTableHead
-                                field="name"
-                                label="Name"
-                                onSort={handleSortClick}
-                                getSortIcon={getSortIcon}
-                                disabled={hasNoData}
-                            />
-                            <SortableTableHead
-                                field="email"
-                                label="Email"
-                                onSort={handleSortClick}
-                                getSortIcon={getSortIcon}
-                                disabled={hasNoData}
-                            />
-                            <SortableTableHead
-                                field="phoneNumber"
-                                label="Phone"
-                                onSort={handleSortClick}
-                                getSortIcon={getSortIcon}
-                                disabled={hasNoData}
-                            />
-                            <TableHead>Role</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Email Verified</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {isLoading ? (
-                            <TableLoading colSpan={6} rows={5} />
-                        ) : isError ? (
-                            <TableError colSpan={6}>Error loading users. Please try again.</TableError>
-                        ) : users.length === 0 ? (
-                            <TableEmpty colSpan={6}>No users found</TableEmpty>
-                        ) : (
-                            users.map((user: TUser) => (
-                                <TableRow key={user.id}>
-                                    <TableCell className="font-medium">{user.name}</TableCell>
-                                    <TableCell>{user.email}</TableCell>
-                                    <TableCell>{user.phoneNumber || "N/A"}</TableCell>
-                                    <TableCell>
-                                        <Badge variant="outline">{user.role}</Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge
-                                            variant={
-                                                user.status === "ACTIVE" ? "default" : "destructive"
-                                            }
-                                        >
-                                            {user.status}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        {user.emailVerified ? (
-                                            <Badge variant="default" className="bg-success">
-                                                Verified
-                                            </Badge>
-                                        ) : (
-                                            <Badge variant="secondary">Not Verified</Badge>
-                                        )}
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
-                {data?.meta && (
-                    <TablePagination
-                        meta={data.meta}
-                        onPageChange={handlePageChange}
-                        onPageSizeChange={handlePageSizeChange}
-                        disabled={hasNoData}
-                    />
+            <div className="relative rounded-md border border-border mt-4">
+                {/* Loading Spinner for Refetch */}
+                {isRefetching && (
+                    <div className="absolute top-3 right-3 z-10">
+                        <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                    </div>
                 )}
+
+                <div className={`transition-opacity duration-200 ${isRefetching ? 'opacity-60 pointer-events-none' : ''}`}>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <SortableTableHead
+                                    field="name"
+                                    label="Name"
+                                    onSort={handleSortClick}
+                                    getSortIcon={getSortIcon}
+                                    disabled={hasNoData}
+                                />
+                                <SortableTableHead
+                                    field="email"
+                                    label="Email"
+                                    onSort={handleSortClick}
+                                    getSortIcon={getSortIcon}
+                                    disabled={hasNoData}
+                                />
+                                <SortableTableHead
+                                    field="phoneNumber"
+                                    label="Phone"
+                                    onSort={handleSortClick}
+                                    getSortIcon={getSortIcon}
+                                    disabled={hasNoData}
+                                />
+                                <TableHead>Role</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Email Verified</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {isLoading ? (
+                                <TableLoading colSpan={6} rows={5} />
+                            ) : isError ? (
+                                <TableError colSpan={6}>Error loading users. Please try again.</TableError>
+                            ) : users.length === 0 ? (
+                                <TableEmpty colSpan={6}>No users found</TableEmpty>
+                            ) : (
+                                users.map((user: TUser) => (
+                                    <TableRow key={user.id}>
+                                        <TableCell className="font-medium">{user.name}</TableCell>
+                                        <TableCell>{user.email}</TableCell>
+                                        <TableCell>{user.phoneNumber || "N/A"}</TableCell>
+                                        <TableCell>
+                                            <Badge variant="outline">{user.role}</Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge
+                                                variant={
+                                                    user.status === "ACTIVE" ? "default" : "destructive"
+                                                }
+                                            >
+                                                {user.status}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            {user.emailVerified ? (
+                                                <Badge variant="default" className="bg-success">
+                                                    Verified
+                                                </Badge>
+                                            ) : (
+                                                <Badge variant="secondary">Not Verified</Badge>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                    {data?.meta && (
+                        <TablePagination
+                            meta={data.meta}
+                            onPageChange={handlePageChange}
+                            onPageSizeChange={handlePageSizeChange}
+                            disabled={hasNoData}
+                        />
+                    )}
+                </div>
             </div>
         </>
     );
