@@ -38,6 +38,10 @@ export const adminRoutes: RouteGroup[] = [
         label: "Categories",
         href: "/admin/products/categories",
       },
+      {
+        label: "Brands",
+        href: "/admin/products/brands",
+      },
     ],
   },
   {

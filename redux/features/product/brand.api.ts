@@ -98,4 +98,5 @@ export const {
   useAddBrandMutation,
   useUpdateBrandMutation,
   useDeleteBrandMutation,
+  useGetBrandMetadataQuery,
 } = brandApi;
