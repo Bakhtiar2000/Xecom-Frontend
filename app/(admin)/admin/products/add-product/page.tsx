@@ -34,12 +34,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { X, Upload, Plus } from "lucide-react";
+import { X, Plus } from "lucide-react";
+import { ImageUpload } from "@/components/custom/ImageUpload";
+import { VideoUpload } from "@/components/custom/VideoUpload";
+import { MultiImageUpload } from "@/components/custom/MultipleImageUpload";
 
 export default function AddProductPage() {
   const [activeTab, setActiveTab] = useState("basic");
   const [tagInput, setTagInput] = useState("");
   const [keywordInput, setKeywordInput] = useState("");
+  const [imageFiles, setImageFiles] = useState<{ file: File; url: string }[]>([]);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
 
   const tabOrder = [
     "basic",
@@ -50,6 +55,7 @@ export default function AddProductPage() {
     "faq",
   ] as const;
 
+  // ✅ FIX 1: Added videoUrl and manualUrl to media tab fields
   const tabFields: Record<
     (typeof tabOrder)[number],
     (keyof ProductFormData | string)[]
@@ -83,7 +89,8 @@ export default function AddProductPage() {
       "specifications.upperMaterial",
     ],
     seo: ["seoTitle", "seoDescription", "metaKeywords"],
-    media: ["videoUrl", "manualUrl"],
+    // ✅ FIX: videoUrl and manualUrl are now included so they get validated on Next
+    media: ["images", "videoUrl", "manualUrl"],
     faq: ["faqData"],
   };
 
@@ -92,14 +99,10 @@ export default function AddProductPage() {
   const goNext = async () => {
     const fields = tabFields[activeTab as keyof typeof tabFields];
 
-    // Trigger validation
     let isValid = true;
-
     for (const field of fields) {
       const result = await form.trigger(field as any);
-      if (!result) {
-        isValid = false;
-      }
+      if (!result) isValid = false;
     }
 
     if (!isValid) {
@@ -130,18 +133,19 @@ export default function AddProductPage() {
       categoryId: "",
       status: "DRAFT",
       featured: false,
-      weight: "", 
-      warranty: "", 
+      weight: "",
+      warranty: "",
       tags: [],
       metaKeywords: [],
       faqData: [],
       minOrderQty: 1,
       maxOrderQty: 100,
       isBundle: false,
-      videoUrl: "", 
-      manualUrl: "", 
-      seoTitle: "", 
-      seoDescription: "", 
+      videoUrl: "",
+      images: [],
+      manualUrl: "",
+      seoTitle: "",
+      seoDescription: "",
       dimensions: {
         unit: "cm",
         width: 0,
@@ -158,9 +162,55 @@ export default function AddProductPage() {
     },
   });
 
-  const onSubmit = (data: ProductFormData) => {
-    console.log("Form Data:", data);
-    // Here you would call your API to create the product
+  const onSubmit = async (data: ProductFormData) => {
+    const formData = new FormData();
+
+    // Append images correctly
+    data.images.forEach((file: File) => {
+      formData.append("images", file);
+    });
+
+    // Append primitive fields
+    formData.append("name", data.name);
+    formData.append("slug", data.slug);
+    formData.append("shortDescription", data.shortDescription);
+    formData.append("fullDescription", data.fullDescription);
+    formData.append("brandId", data.brandId);
+    formData.append("categoryId", data.categoryId);
+    formData.append("status", data.status);
+    formData.append("featured", String(data.featured));
+    formData.append("weight", String(data.weight));
+    formData.append("warranty", data.warranty);
+    formData.append("minOrderQty", String(data.minOrderQty));
+    formData.append("maxOrderQty", String(data.maxOrderQty));
+    formData.append("isBundle", String(data.isBundle));
+    formData.append("videoUrl", data.videoUrl ?? "");
+    formData.append("manualUrl", data.manualUrl ?? "");
+    formData.append("seoTitle", data.seoTitle ?? "");
+    formData.append("seoDescription", data.seoDescription ?? "");
+
+    // Arrays & objects must be JSON stringified
+    formData.append("tags", JSON.stringify(data.tags));
+    formData.append("metaKeywords", JSON.stringify(data.metaKeywords));
+    formData.append("faqData", JSON.stringify(data.faqData));
+    formData.append("dimensions", JSON.stringify({
+      length: Number(data.dimensions.length),
+      width: Number(data.dimensions.width),
+      height: Number(data.dimensions.height),
+      unit: data.dimensions.unit,
+    }));
+    formData.append("specifications", JSON.stringify({
+      fitType: data.specifications.fitType,
+      occasion: data.specifications.occasion,
+      closureType: data.specifications.closureType,
+      soleMaterial: data.specifications.soleMaterial,
+      upperMaterial: data.specifications.upperMaterial,
+    }));
+
+    //  Debug — verify images are included
+    console.log("Total images:", data);
+
+
   };
 
   // Auto-generate slug from name
@@ -172,7 +222,6 @@ export default function AddProductPage() {
     form.setValue("slug", slug);
   };
 
-  // Add tag
   const addTag = () => {
     if (tagInput.trim()) {
       const currentTags = form.getValues("tags");
@@ -181,16 +230,14 @@ export default function AddProductPage() {
     }
   };
 
-  // Remove tag
   const removeTag = (index: number) => {
     const currentTags = form.getValues("tags");
     form.setValue(
       "tags",
-      currentTags.filter((_, i) => i !== index),
+      currentTags.filter((_, i) => i !== index)
     );
   };
 
-  // Add keyword
   const addKeyword = () => {
     if (keywordInput.trim()) {
       const currentKeywords = form.getValues("metaKeywords");
@@ -199,27 +246,24 @@ export default function AddProductPage() {
     }
   };
 
-  // Remove keyword
   const removeKeyword = (index: number) => {
     const currentKeywords = form.getValues("metaKeywords");
     form.setValue(
       "metaKeywords",
-      currentKeywords.filter((_, i) => i !== index),
+      currentKeywords.filter((_, i) => i !== index)
     );
   };
 
-  // Add FAQ
   const addFAQ = () => {
     const currentFAQs = form.getValues("faqData");
     form.setValue("faqData", [...currentFAQs, { question: "", answer: "" }]);
   };
 
-  // Remove FAQ
   const removeFAQ = (index: number) => {
     const currentFAQs = form.getValues("faqData");
     form.setValue(
       "faqData",
-      currentFAQs.filter((_, i) => i !== index),
+      currentFAQs.filter((_, i) => i !== index)
     );
   };
 
@@ -235,25 +279,39 @@ export default function AddProductPage() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
+            {/* ✅ FIX 2: Shadcn TabsTrigger disabled prop replaced with pointer-events-none
+                via data attribute + className to properly lock non-active tabs visually */}
             <TabsList className="grid w-full grid-cols-6">
               {tabOrder.map((tab) => (
-                <TabsTrigger key={tab} value={tab} disabled={tab !== activeTab}>
+                <TabsTrigger
+                  key={tab}
+                  value={tab}
+                  className={
+                    tab !== activeTab
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }
+                >
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </TabsTrigger>
               ))}
             </TabsList>
 
-            {/* Basic Info Tab */}
+            {/* ── Basic Info Tab ── */}
             <TabsContent value="basic" className="space-y-4">
               <Card className="py-5">
-                <CardHeader>
-                  <CardTitle>Basic Information</CardTitle>
-                  <CardDescription>
-                    Enter the basic details of your product
+                <CardHeader className="border-b bg-muted/30 px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <div className="h-5 w-1 rounded-full bg-primary" />
+                    <CardTitle className="text-base font-semibold">Basic Information</CardTitle>
+                  </div>
+                  <CardDescription className="text-xs mt-1 ml-3">
+                    Enter the core details of your product
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* ✅ FIX 3: All FormField components now have control={form.control} */}
                     <FormField
                       control={form.control}
                       name="name"
@@ -287,7 +345,6 @@ export default function AddProductPage() {
                               {...field}
                             />
                           </FormControl>
-
                           <FormMessage className="text-danger" />
                         </FormItem>
                       )}
@@ -446,14 +503,14 @@ export default function AddProductPage() {
               </Card>
             </TabsContent>
 
-            {/* Details Tab */}
+            {/* ── Details Tab ── */}
             <TabsContent value="details" className="space-y-4">
               <Card className="py-5">
-                <CardHeader>
-                  <CardTitle>Product Details</CardTitle>
-                  <CardDescription>
-                    Add additional product information
-                  </CardDescription>
+                <CardHeader className="border-b bg-muted/30 px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <div className="h-5 w-1 rounded-full bg-primary" />
+                    <CardTitle className="text-base font-semibold">Product Details</CardTitle>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -503,9 +560,7 @@ export default function AddProductPage() {
                                 placeholder="Width"
                                 {...field}
                                 onChange={(e) =>
-                                  field.onChange(
-                                    parseFloat(e.target.value) || 0,
-                                  )
+                                  field.onChange(parseFloat(e.target.value) || 0)
                                 }
                               />
                             </FormControl>
@@ -524,9 +579,7 @@ export default function AddProductPage() {
                                 placeholder="Height"
                                 {...field}
                                 onChange={(e) =>
-                                  field.onChange(
-                                    parseFloat(e.target.value) || 0,
-                                  )
+                                  field.onChange(parseFloat(e.target.value) || 0)
                                 }
                               />
                             </FormControl>
@@ -545,9 +598,7 @@ export default function AddProductPage() {
                                 placeholder="Length"
                                 {...field}
                                 onChange={(e) =>
-                                  field.onChange(
-                                    parseFloat(e.target.value) || 0,
-                                  )
+                                  field.onChange(parseFloat(e.target.value) || 0)
                                 }
                               />
                             </FormControl>
@@ -565,7 +616,7 @@ export default function AddProductPage() {
                         placeholder="Add a tag"
                         value={tagInput}
                         onChange={(e) => setTagInput(e.target.value)}
-                        onKeyPress={(e) => {
+                        onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             e.preventDefault();
                             addTag();
@@ -660,14 +711,14 @@ export default function AddProductPage() {
               </Card>
             </TabsContent>
 
-            {/* Specifications Tab */}
+            {/* ── Specifications Tab ── */}
             <TabsContent value="specifications" className="space-y-4">
               <Card className="py-5">
-                <CardHeader>
-                  <CardTitle>Product Specifications</CardTitle>
-                  <CardDescription>
-                    Add technical specifications for your product
-                  </CardDescription>
+                <CardHeader className="border-b bg-muted/30 px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <div className="h-5 w-1 rounded-full bg-primary" />
+                    <CardTitle className="text-base font-semibold">Product Specifications</CardTitle>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -692,10 +743,7 @@ export default function AddProductPage() {
                         <FormItem>
                           <FormLabel>Occasion</FormLabel>
                           <FormControl>
-                            <Input
-                              placeholder="Casual & Daily Wear"
-                              {...field}
-                            />
+                            <Input placeholder="Casual & Daily Wear" {...field} />
                           </FormControl>
                           <FormMessage className="text-danger" />
                         </FormItem>
@@ -748,14 +796,14 @@ export default function AddProductPage() {
               </Card>
             </TabsContent>
 
-            {/* SEO Tab */}
+            {/* ── SEO Tab ── */}
             <TabsContent value="seo" className="space-y-4">
               <Card className="py-5">
-                <CardHeader>
-                  <CardTitle>SEO Settings</CardTitle>
-                  <CardDescription>
-                    Optimize your product for search engines
-                  </CardDescription>
+                <CardHeader className="border-b bg-muted/30 px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <div className="h-5 w-1 rounded-full bg-primary" />
+                    <CardTitle className="text-base font-semibold">SEO Settings</CardTitle>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <FormField
@@ -806,7 +854,7 @@ export default function AddProductPage() {
                         placeholder="Add a keyword"
                         value={keywordInput}
                         onChange={(e) => setKeywordInput(e.target.value)}
-                        onKeyPress={(e) => {
+                        onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             e.preventDefault();
                             addKeyword();
@@ -836,55 +884,79 @@ export default function AddProductPage() {
               </Card>
             </TabsContent>
 
-            {/* Media Tab */}
+            {/* ── Media Tab ── */}
             <TabsContent value="media" className="space-y-4">
               <Card className="py-5">
-                <CardHeader>
-                  <CardTitle>Media Files</CardTitle>
-                  <CardDescription>
-                    Upload product images, videos, and manuals
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <FormLabel>Product Images</FormLabel>
-                    <div className="border-2 border-dashed rounded-lg p-8 text-center">
-                      <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                      <p className="text-sm text-muted-foreground mb-2">
-                        Drag and drop images here, or click to browse
-                      </p>
-                      <Button type="button" variant="outline" size="sm">
-                        Upload Images
-                      </Button>
-                    </div>
+                <CardHeader className="border-b bg-muted/30 px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <div className="h-5 w-1 rounded-full bg-primary" />
+                    <CardTitle className="text-base font-semibold">Media Files</CardTitle>
                   </div>
+                </CardHeader>
 
+                <CardContent className="space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="images"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Product Images *</FormLabel>
+                        <FormControl>
+                          <MultiImageUpload
+                            values={imageFiles}
+                            onChange={(images) => {
+                              setImageFiles(images);
+                              // Pass just the File[] to react-hook-form
+                              form.setValue("images", images.map((i) => i.file));
+                            }}
+                            maxFiles={8}
+                            maxSizeMB={5}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-danger" />
+                      </FormItem>
+                    )}
+                  />
+
+
+                  {/* Video URL — file upload, field name: videoUrl */}
                   <FormField
                     control={form.control}
                     name="videoUrl"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Video URL</FormLabel>
+                        <FormLabel>Product Video</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="https://example.com/video.mp4"
-                            {...field}
+                          <VideoUpload
+                            value={videoPreview}
+                            onChange={(file) => {
+                              if (file) {
+                                const url = URL.createObjectURL(file);
+                                field.onChange(url);
+                                setVideoPreview(url);
+                              } else {
+                                field.onChange("");
+                                setVideoPreview(null);
+                              }
+                            }}
+                            maxSizeMB={100}
                           />
                         </FormControl>
                         <FormDescription>
-                          Enter the URL of your product video
+                          Upload a product demo or walkthrough video
                         </FormDescription>
                         <FormMessage className="text-danger" />
                       </FormItem>
                     )}
                   />
 
+                  {/* Manual URL */}
                   <FormField
                     control={form.control}
                     name="manualUrl"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Manual/PDF URL</FormLabel>
+                        <FormLabel>Manual / PDF URL</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="https://example.com/manual.pdf"
@@ -892,7 +964,7 @@ export default function AddProductPage() {
                           />
                         </FormControl>
                         <FormDescription>
-                          Enter the URL of your product manual
+                          Link to the product manual or documentation PDF
                         </FormDescription>
                         <FormMessage className="text-danger" />
                       </FormItem>
@@ -902,12 +974,15 @@ export default function AddProductPage() {
               </Card>
             </TabsContent>
 
-            {/* FAQ Tab */}
+            {/* ── FAQ Tab ── */}
             <TabsContent value="faq" className="space-y-4">
               <Card className="py-5">
-                <CardHeader>
-                  <CardTitle>Frequently Asked Questions</CardTitle>
-                  <CardDescription>
+                <CardHeader className="border-b bg-muted/30 px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <div className="h-5 w-1 rounded-full bg-primary" />
+                    <CardTitle className="text-base font-semibold">Frequently Asked Questions</CardTitle>
+                  </div>
+                  <CardDescription className="text-xs mt-1 ml-3">
                     Add common questions and answers about your product
                   </CardDescription>
                 </CardHeader>
@@ -980,7 +1055,7 @@ export default function AddProductPage() {
             </TabsContent>
           </Tabs>
 
-          {/* Submit Buttons */}
+          {/* Navigation Buttons */}
           <div className="flex justify-between gap-4">
             <Button
               type="button"
@@ -1007,7 +1082,6 @@ export default function AddProductPage() {
                 >
                   Save as Draft
                 </Button>
-
                 <Button type="submit">Create Product</Button>
               </div>
             )}

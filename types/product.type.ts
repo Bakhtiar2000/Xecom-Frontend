@@ -45,7 +45,7 @@ export type TProduct = {
   id: string;
   tenantId?: string | null;
   name: string;
-  variants:string[];
+  variants: string[];
   slug: string;
   shortDescription?: string | null;
   fullDescription?: string | null;
@@ -107,8 +107,8 @@ export type TAttribute = {
   id: string;
   name: string;
   createdAt: string;
+  values: TAttributeValue[];
 };
-
 export type TAttributeValue = {
   id: string;
   attributeId: string;

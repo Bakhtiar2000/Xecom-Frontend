@@ -1,5 +1,9 @@
-// lib/validations/product.schema.ts
 import * as z from "zod";
+
+const fileValidator = z.custom<File>(
+  (val) => typeof window !== "undefined" && val instanceof File,
+  { message: "Must be a valid file" }
+);
 
 export const productSchema = z.object({
   // Basic Info
@@ -12,8 +16,17 @@ export const productSchema = z.object({
   status: z.enum(["ACTIVE", "INACTIVE", "DRAFT"]),
   featured: z.boolean().default(false),
 
+  // Media
+  images: z.array(fileValidator).min(1, "At least one image is required"),
+  video: z.array(fileValidator).optional(),
+  videoUrl: z.string().optional(),
+  manualUrl: z.string().optional(),
+
   // Product Details
-  weight: z.string().optional(),
+  weight: z.string().optional().refine(
+    (val) => !val || !isNaN(Number(val)),
+    "Weight must be a valid number"
+  ),
   dimensions: z.object({
     unit: z.string().default("cm"),
     width: z.number().min(0).default(0),
@@ -45,20 +58,17 @@ export const productSchema = z.object({
     })
   ).default([]),
 
-  // Media
-  videoUrl: z.string().optional().refine(
-    (val) => !val || val === "" || z.string().url().safeParse(val).success,
-    "Please enter a valid URL"
-  ),
-  manualUrl: z.string().optional().refine(
-    (val) => !val || val === "" || z.string().url().safeParse(val).success,
-    "Please enter a valid URL"
-  ),
-
   // Inventory
   minOrderQty: z.number().min(1, "Minimum order quantity must be at least 1").default(1),
-  maxOrderQty: z.number().min(1, "Maximum order quantity must be at least 1").default(100),
+  maxOrderQty: z.number().min(1, "Maximum order quantity must be at least 1").default(10),
   isBundle: z.boolean().default(false),
-});
+
+}).refine(
+  (data) => data.maxOrderQty >= data.minOrderQty,
+  {
+    message: "Max quantity must be ≥ min quantity",
+    path: ["maxOrderQty"],
+  }
+);
 
 export type ProductFormData = z.infer<typeof productSchema>;

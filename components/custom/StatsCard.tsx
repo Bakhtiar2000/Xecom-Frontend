@@ -63,7 +63,7 @@ export function StatsCard({
     }
 
     return (
-        <div className={`rounded-lg border shadow-md bg-card p-4 hover:shadow-md transition-shadow ${className}`}>
+        <div className={`rounded-lg border shadow-md bg-card-primary p-4 hover:shadow-md transition-shadow ${className}`}>
             <div className="flex items-center justify-between">
                 <div>
                     <p className="text-sm font-medium text-muted-foreground">{title}</p>
