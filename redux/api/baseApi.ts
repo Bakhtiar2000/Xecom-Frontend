@@ -23,11 +23,11 @@ const baseQuery = fetchBaseQuery({
 });
 
 // We use this extra layer over baseQuery to authenticate user with refresh token
-const baseQueryWithRefreshToken: BaseQueryFn<
-  FetchArgs,
-  BaseQueryApi,
-  DefinitionType
-> = async (args, api, extraOptions): Promise<any> => {
+const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs, BaseQueryApi, DefinitionType> = async (
+  args,
+  api,
+  extraOptions
+): Promise<any> => {
   let result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 404) {
@@ -57,7 +57,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
         setUser({
           user,
           token: data?.data?.accessToken,
-        }),
+        })
       );
 
       result = await baseQuery(args, api, extraOptions);

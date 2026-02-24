@@ -1,12 +1,6 @@
 import Title from "@/components/sections/shared/Title";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
 export default function CustomerOrders() {
@@ -47,7 +41,7 @@ export default function CustomerOrders() {
 
   return (
     <div className="space-y-2">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Title mainTitle="My Orders" />
         <Link href="/">
           <Button>Continue Shopping</Button>
@@ -58,10 +52,10 @@ export default function CustomerOrders() {
         {orders.map((order) => (
           <Card
             key={order.id}
-            className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300"
+            className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg"
           >
             <CardHeader>
-              <div className="flex justify-between items-start">
+              <div className="flex items-start justify-between">
                 <div>
                   <CardTitle className="text-lg">{order.id}</CardTitle>
                   <CardDescription>
@@ -71,14 +65,14 @@ export default function CustomerOrders() {
                 <div className="text-right">
                   <div className="text-lg font-semibold">{order.total}</div>
                   <span
-                    className={`text-xs px-2 py-1 rounded-full ${
+                    className={`rounded-full px-2 py-1 text-xs ${
                       order.status === "Delivered"
                         ? "bg-accent text-success"
                         : order.status === "In Transit"
-                        ? "bg-accent text-info"
-                        : order.status === "Processing"
-                        ? "bg-accent text-accent-foreground"
-                        : "bg-muted text-foreground"
+                          ? "bg-accent text-info"
+                          : order.status === "Processing"
+                            ? "bg-accent text-accent-foreground"
+                            : "bg-muted text-foreground"
                     }`}
                   >
                     {order.status}
@@ -87,9 +81,9 @@ export default function CustomerOrders() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Tracking Number: {order.trackingNumber}
                   </p>
                 </div>
@@ -115,7 +109,7 @@ export default function CustomerOrders() {
       </div>
 
       {/* Order Filters */}
-      <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
+      <Card className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg">
         <CardHeader>
           <CardTitle>Filter Orders</CardTitle>
         </CardHeader>

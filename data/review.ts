@@ -1,14 +1,11 @@
 import { Heart, Shield, Star, Zap } from "lucide-react";
-;
-
 export const testimonials = [
   {
     id: 1,
     name: "Marcus T.",
     role: "Sneaker Collector",
     rating: 5,
-    comment:
-      "The quality on these Jordans is insane! Perfect for my collection.",
+    comment: "The quality on these Jordans is insane! Perfect for my collection.",
     purchase: "Air Jordan 1 Retro",
     verified: true,
     date: "2 weeks ago",
@@ -19,8 +16,7 @@ export const testimonials = [
     name: "Sarah L.",
     role: "Fitness Enthusiast",
     rating: 5,
-    comment:
-      "Best running shoes I've ever owned. Lightweight and super comfortable!",
+    comment: "Best running shoes I've ever owned. Lightweight and super comfortable!",
     purchase: "Nike Vaporfly 3",
     verified: true,
     date: "1 month ago",
@@ -94,7 +90,7 @@ export const stats = [
   { label: "Fast Shipping", value: "24h", icon: Zap, color: "text-blue-500" },
 ];
 
-export const reviews  = [
+export const reviews = [
   {
     name: "Harvetz",
     avatar: "/shoes3.png",

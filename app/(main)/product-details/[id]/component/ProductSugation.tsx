@@ -21,7 +21,7 @@ export default function ProductSugation() {
     if (!scrollRef.current) return;
     const cardWidth = scrollRef.current.scrollWidth / loopedShoes.length;
     scrollRef.current.scrollLeft = cardWidth * shoesData.length;
-  },);
+  });
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
@@ -86,7 +86,7 @@ export default function ProductSugation() {
 
   return (
     <div className="relative">
-      <h1 className="text-xl lg:text-2xl ">Similar Products</h1>
+      <h1 className="text-xl lg:text-2xl">Similar Products</h1>
       <div
         ref={scrollRef}
         onScroll={handleScroll}
@@ -97,61 +97,53 @@ export default function ProductSugation() {
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={stopDrag}
-        className={`flex gap-6 overflow-x-scroll scrollbar-hide select-none ${
+        className={`scrollbar-hide flex gap-6 overflow-x-scroll select-none ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
       >
         {loopedShoes.map((shoe, idx) => (
           <div
             key={`${shoe.id}-${idx}`}
-            className="shrink-0 w-[70%] sm:w-[45%] md:w-[30%] lg:w-[22%] my-5 lg:my-10"
+            className="my-5 w-[70%] shrink-0 sm:w-[45%] md:w-[30%] lg:my-10 lg:w-[22%]"
           >
-            <Card
-              className={`group overflow-hidden border-0 transition-all duration-300`}
-            >
+            <Card className={`group overflow-hidden border-0 transition-all duration-300`}>
               <CardContent className="p-4">
-                <div className="relative aspect-square rounded-xl bg-muted overflow-hidden">
+                <div className="bg-muted relative aspect-square overflow-hidden rounded-xl">
                   <Image
                     src={shoe.image}
                     alt={shoe.name}
                     fill
                     className="object-contain p-4 transition-transform group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <Button className="bg-white dark:bg-black dark:text-white text-black hover:bg-muted/90 gap-2">
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <Button className="hover:bg-muted/90 gap-2 bg-white text-black dark:bg-black dark:text-white">
                       <Link
                         className="flex justify-center gap-2"
                         href={`/product-details/${shoe.id}`}
                       >
                         {" "}
-                        <Eye className="w-4 h-4" />
+                        <Eye className="h-4 w-4" />
                         Quick View
                       </Link>
                     </Button>
                   </div>
 
-                  <span className="absolute top-3 left-3 bg-black text-white text-xs px-2 py-1 rounded">
+                  <span className="absolute top-3 left-3 rounded bg-black px-2 py-1 text-xs text-white">
                     {shoe.badge}
                   </span>
                 </div>
 
                 <div className="mt-3 space-y-1">
-                  <p className="text-xs uppercase text-muted-foreground">
-                    {shoe.brand}
-                  </p>
+                  <p className="text-muted-foreground text-xs uppercase">{shoe.brand}</p>
 
-                  <h3 className="text-sm font-semibold line-clamp-1">
-                    {shoe.name}
-                  </h3>
+                  <h3 className="line-clamp-1 text-sm font-semibold">{shoe.name}</h3>
 
-                  <p className="text-xs text-muted-foreground">
-                    {shoe.category}
-                  </p>
+                  <p className="text-muted-foreground text-xs">{shoe.category}</p>
 
                   <div className="flex items-center gap-2 pt-1">
                     <span className="font-bold">{shoe.price}</span>
                     {shoe.originalPrice !== shoe.price && (
-                      <span className="text-xs text-muted-foreground line-through">
+                      <span className="text-muted-foreground text-xs line-through">
                         {shoe.originalPrice}
                       </span>
                     )}
@@ -163,13 +155,13 @@ export default function ProductSugation() {
         ))}
       </div>
 
-      <div className="flex justify-center gap-2 mt-4">
+      <div className="mt-4 flex justify-center gap-2">
         {shoesData.map((_, i) => (
           <button
             key={i}
             onClick={() => scrollToSlide(i)}
             className={`h-2 rounded-full transition-all ${
-              activeSlide === i ? "w-8 bg-primary" : "w-2 bg-gray-300"
+              activeSlide === i ? "bg-primary w-8" : "w-2 bg-gray-300"
             }`}
           />
         ))}

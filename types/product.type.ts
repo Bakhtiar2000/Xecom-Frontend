@@ -20,8 +20,8 @@ export type TCategory = {
   createdAt: string;
   updatedAt: string;
   _count: {
-    products: number
-  }
+    products: number;
+  };
 };
 
 export type TBrand = {
@@ -37,8 +37,8 @@ export type TBrand = {
   createdAt: string;
   updatedAt: string;
   _count: {
-    products: number
-  }
+    products: number;
+  };
 };
 
 export type TProduct = {

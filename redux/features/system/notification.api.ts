@@ -40,5 +40,4 @@ const notificationApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllNotificationsQuery, useMarkNotificationReadMutation } =
-  notificationApi;
+export const { useGetAllNotificationsQuery, useMarkNotificationReadMutation } = notificationApi;

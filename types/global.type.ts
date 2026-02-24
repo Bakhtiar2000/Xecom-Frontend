@@ -69,12 +69,10 @@ export interface PaymentMethod {
   description: string;
 }
 
-import { StaticImageData } from 'next/image';
+import { StaticImageData } from "next/image";
 
 export type Category = {
   id: number;
   title: string;
   image: string | StaticImageData;
 };
-
-

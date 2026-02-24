@@ -1,4 +1,4 @@
-import { StaticImageData } from 'next/image';
+import { StaticImageData } from "next/image";
 import shoes5 from "../assets/shoes/shoes5.png";
 import shoes6 from "../assets/shoes/shoes6.png";
 import shoes7 from "../assets/shoes/shoes7.png";
@@ -15,18 +15,11 @@ export type Sneaker = {
   image: string | StaticImageData;
   rating: number;
   reviews: number;
-  badge:
-    | "HOT"
-    | "TRENDING"
-    | "BEST SELLER"
-    | "POPULAR"
-    | "LIMITED"
-    | "NEW";
+  badge: "HOT" | "TRENDING" | "BEST SELLER" | "POPULAR" | "LIMITED" | "NEW";
   colors: string[];
   sizes: number[];
   category: string;
 };
-
 
 export const shoesData: Sneaker[] = [
   {
@@ -179,6 +172,4 @@ export const shoesData: Sneaker[] = [
     colors: ["#000000", "#FF0000"],
     sizes: [8, 9, 10, 11],
   },
-  
 ];
-

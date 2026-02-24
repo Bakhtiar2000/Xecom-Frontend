@@ -1,73 +1,63 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function CustomerDashboard() {
   return (
     <div className="space-y-2">
       {/* Dashboard Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardTitle className="text-muted-foreground text-sm font-medium">
               Total Orders
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">+2 from last month</p>
+            <p className="text-muted-foreground text-xs">+2 from last month</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
+        <Card className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Spent
-            </CardTitle>
+            <CardTitle className="text-muted-foreground text-sm font-medium">Total Spent</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">$1,234</div>
-            <p className="text-xs text-muted-foreground">
-              +$234 from last month
-            </p>
+            <p className="text-muted-foreground text-xs">+$234 from last month</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
+        <Card className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardTitle className="text-muted-foreground text-sm font-medium">
               Wishlist Items
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground">3 items on sale</p>
+            <p className="text-muted-foreground text-xs">3 items on sale</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
+        <Card className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardTitle className="text-muted-foreground text-sm font-medium">
               Reward Points
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">2,450</div>
-            <p className="text-xs text-muted-foreground">Expires in 6 months</p>
+            <p className="text-muted-foreground text-xs">Expires in 6 months</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Recent Orders */}
-      <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
+      <Card className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg">
         <CardHeader>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <CardTitle>Recent Orders</CardTitle>
             <Link href="/customer/orders">
               <Button variant="outline" size="sm">
@@ -100,21 +90,21 @@ export default function CustomerDashboard() {
             ].map((order) => (
               <div
                 key={order.id}
-                className="flex justify-between items-center p-4 border rounded-lg"
+                className="flex items-center justify-between rounded-lg border p-4"
               >
                 <div>
                   <p className="font-medium">{order.id}</p>
-                  <p className="text-sm text-muted-foreground">{order.date}</p>
+                  <p className="text-muted-foreground text-sm">{order.date}</p>
                 </div>
                 <div className="text-right">
                   <p className="font-medium">{order.amount}</p>
                   <span
-                    className={`text-xs px-2 py-1 rounded-full ${
+                    className={`rounded-full px-2 py-1 text-xs ${
                       order.status === "Delivered"
                         ? "bg-accent text-success"
                         : order.status === "In Transit"
-                        ? "bg-accent text-info"
-                        : "bg-accent text-accent-foreground"
+                          ? "bg-accent text-info"
+                          : "bg-accent text-accent-foreground"
                     }`}
                   >
                     {order.status}
@@ -127,12 +117,12 @@ export default function CustomerDashboard() {
       </Card>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="bg-background border-border transform cursor-pointer rounded-lg border shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
           <CardContent className="p-4 text-center">
-            <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="bg-accent mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full">
               <svg
-                className="w-6 h-6 text-primary"
+                className="text-primary h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -145,8 +135,8 @@ export default function CustomerDashboard() {
                 />
               </svg>
             </div>
-            <h3 className="font-semibold mb-2">Continue Shopping</h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            <h3 className="mb-2 font-semibold">Continue Shopping</h3>
+            <p className="text-muted-foreground mb-4 text-sm">
               Explore our latest products and deals
             </p>
             <Link href="/">
@@ -155,11 +145,11 @@ export default function CustomerDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+        <Card className="bg-background border-border transform cursor-pointer rounded-lg border shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
           <CardContent className="p-4 text-center">
-            <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="bg-accent mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full">
               <svg
-                className="w-6 h-6 text-primary"
+                className="text-primary h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -172,10 +162,8 @@ export default function CustomerDashboard() {
                 />
               </svg>
             </div>
-            <h3 className="font-semibold mb-2">My Wishlist</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              View and manage your saved items
-            </p>
+            <h3 className="mb-2 font-semibold">My Wishlist</h3>
+            <p className="text-muted-foreground mb-4 text-sm">View and manage your saved items</p>
             <Link href="/customer/wishlist">
               <Button className="w-full" variant="outline">
                 View Wishlist
@@ -184,11 +172,11 @@ export default function CustomerDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer">
+        <Card className="bg-background border-border transform cursor-pointer rounded-lg border shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
           <CardContent className="p-4 text-center">
-            <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="bg-accent mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full">
               <svg
-                className="w-6 h-6 text-primary"
+                className="text-primary h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -207,10 +195,8 @@ export default function CustomerDashboard() {
                 />
               </svg>
             </div>
-            <h3 className="font-semibold mb-2">Manage Addresses</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Update your delivery addresses
-            </p>
+            <h3 className="mb-2 font-semibold">Manage Addresses</h3>
+            <p className="text-muted-foreground mb-4 text-sm">Update your delivery addresses</p>
             <Link href="/customer/addresses">
               <Button className="w-full" variant="outline">
                 Manage Addresses

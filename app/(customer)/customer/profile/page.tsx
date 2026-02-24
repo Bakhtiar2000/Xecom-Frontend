@@ -1,26 +1,20 @@
 import Title from "@/components/sections/shared/Title";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 export default function CustomerProfile() {
   return (
     <div className="space-y-2">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Title mainTitle="Profile Settings" />
         <Button>Save Changes</Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Profile Information */}
         <div className="lg:col-span-2">
-          <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
+          <Card className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg">
             <CardHeader>
               <CardTitle>Personal Information</CardTitle>
               <CardDescription>
@@ -28,7 +22,7 @@ export default function CustomerProfile() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label className="text-sm font-medium">First Name</label>
                   <Input placeholder="John" className="mt-1" />
@@ -59,16 +53,16 @@ export default function CustomerProfile() {
 
         {/* Profile Picture */}
         <div>
-          <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
+          <Card className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg">
             <CardHeader>
               <CardTitle>Profile Picture</CardTitle>
               <CardDescription>
                 Upload a profile picture to personalize your account.
               </CardDescription>
             </CardHeader>
-            <CardContent className="text-center space-y-2">
-              <div className="w-32 h-32 bg-muted rounded-full mx-auto flex items-center justify-center">
-                <span className="text-4xl text-muted-foreground">👤</span>
+            <CardContent className="space-y-2 text-center">
+              <div className="bg-muted mx-auto flex h-32 w-32 items-center justify-center rounded-full">
+                <span className="text-muted-foreground text-4xl">👤</span>
               </div>
               <Button variant="outline" className="w-full">
                 Upload New Picture
@@ -79,39 +73,25 @@ export default function CustomerProfile() {
       </div>
 
       {/* Account Security */}
-      <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
+      <Card className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg">
         <CardHeader>
           <CardTitle>Security Settings</CardTitle>
-          <CardDescription>
-            Manage your account security and password settings.
-          </CardDescription>
+          <CardDescription>Manage your account security and password settings.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           <div>
             <label className="text-sm font-medium">Current Password</label>
-            <Input
-              type="password"
-              placeholder="Enter current password"
-              className="mt-1"
-            />
+            <Input type="password" placeholder="Enter current password" className="mt-1" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className="text-sm font-medium">New Password</label>
-              <Input
-                type="password"
-                placeholder="Enter new password"
-                className="mt-1"
-              />
+              <Input type="password" placeholder="Enter new password" className="mt-1" />
             </div>
             <div>
               <label className="text-sm font-medium">Confirm Password</label>
-              <Input
-                type="password"
-                placeholder="Confirm new password"
-                className="mt-1"
-              />
+              <Input type="password" placeholder="Confirm new password" className="mt-1" />
             </div>
           </div>
 

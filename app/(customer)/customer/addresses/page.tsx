@@ -26,34 +26,29 @@ export default function CustomerAddresses() {
 
   return (
     <div className="space-y-2">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Title mainTitle="My Addresses" />
         <Button>Add New Address</Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {addresses.map((address) => (
           <Card
             key={address.id}
-            className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300"
+            className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg"
           >
             <CardHeader>
-              <div className="flex justify-between items-start">
+              <div className="flex items-start justify-between">
                 <CardTitle className="flex items-center space-x-2">
                   <span>{address.type}</span>
                   {address.isDefault && (
-                    <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
+                    <span className="bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs">
                       Default
                     </span>
                   )}
                 </CardTitle>
                 <Button variant="ghost" size="sm">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -65,7 +60,7 @@ export default function CustomerAddresses() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 mb-4">
+              <div className="mb-4 space-y-2">
                 <p className="font-medium">{address.name}</p>
                 <p className="text-muted-foreground">{address.address}</p>
                 <p className="text-muted-foreground">{address.city}</p>
@@ -90,11 +85,11 @@ export default function CustomerAddresses() {
         ))}
       </div>
 
-      <Card className="bg-background rounded-lg shadow-md border border-border hover:shadow-lg transition-shadow duration-300">
-        <CardContent className="p-4 text-center border-2 border-dashed border-border">
-          <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+      <Card className="bg-background border-border rounded-lg border shadow-md transition-shadow duration-300 hover:shadow-lg">
+        <CardContent className="border-border border-2 border-dashed p-4 text-center">
+          <div className="bg-muted mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full">
             <svg
-              className="w-6 h-6 text-muted-foreground"
+              className="text-muted-foreground h-6 w-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -107,10 +102,8 @@ export default function CustomerAddresses() {
               />
             </svg>
           </div>
-          <h3 className="font-semibold mb-2">Add New Address</h3>
-          <p className="text-muted-foreground mb-4">
-            Add a new delivery address to your account
-          </p>
+          <h3 className="mb-2 font-semibold">Add New Address</h3>
+          <p className="text-muted-foreground mb-4">Add a new delivery address to your account</p>
           <Button>Add Address</Button>
         </CardContent>
       </Card>

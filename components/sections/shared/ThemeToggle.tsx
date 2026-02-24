@@ -10,9 +10,7 @@ export default function ThemeToggle() {
     setMounted(true);
     // Check for saved theme preference or default to light mode
     const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
     if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
       setIsDark(true);
@@ -34,40 +32,38 @@ export default function ThemeToggle() {
 
   // Prevent hydration mismatch
   if (!mounted) {
-    return (
-      <div className="w-14 h-7 rounded-full bg-muted border border-border" />
-    );
+    return <div className="bg-muted border-border h-7 w-14 rounded-full border" />;
   }
 
   return (
     <button
       onClick={toggleTheme}
-      className="relative w-14 h-7  cursor-pointer rounded-full transition-colors duration-300 focus:outline-none focus:ring-primary focus:ring-offset-2 bg-muted border border-border hover:border-foreground/50"
+      className="focus:ring-primary bg-muted border-border hover:border-foreground/50 relative h-7 w-14 cursor-pointer rounded-full border transition-colors duration-300 focus:ring-offset-2 focus:outline-none"
       aria-label="Toggle theme"
     >
       {/* Track */}
-      <div className="absolute inset-0 rounded-full overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden rounded-full">
         <div
           className={`absolute inset-0 transition-opacity duration-300 ${
             isDark ? "opacity-100" : "opacity-0"
           }`}
         >
-          <div className="w-full h-full bg-foreground" />
+          <div className="bg-foreground h-full w-full" />
         </div>
       </div>
 
       {/* Slider */}
       <div
-        className={`absolute top-0.5  left-0.5 w-6 h-6 bg-background rounded-full shadow-md transform transition-all duration-300 ease-in-out border border-border ${
+        className={`bg-background border-border absolute top-0.5 left-0.5 h-6 w-6 transform rounded-full border shadow-md transition-all duration-300 ease-in-out ${
           isDark ? "translate-x-7" : "translate-x-0"
         }`}
       >
         {/* Icon inside slider */}
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="flex h-full w-full items-center justify-center">
           {isDark ? (
             // Moon icon
             <svg
-              className="w-3.5 h-3.5 text-foreground animate-fade-in"
+              className="text-foreground animate-fade-in h-3.5 w-3.5"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -76,7 +72,7 @@ export default function ThemeToggle() {
           ) : (
             // Sun icon
             <svg
-              className="w-3.5 h-3.5 text-foreground animate-fade-in"
+              className="text-foreground animate-fade-in h-3.5 w-3.5"
               fill="currentColor"
               viewBox="0 0 20 20"
             >

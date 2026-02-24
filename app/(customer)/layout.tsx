@@ -9,11 +9,7 @@ import { UserRole } from "@/redux/features/auth/dto/auth.dto";
 import { useAppDispatch } from "@/redux/hooks";
 import { logout } from "@/redux/features/auth/authSlice";
 import { toast } from "sonner";
-import {
-  customerRoutes,
-  customerMainRoutes,
-  customerFooterRoutes,
-} from "@/route/customer.route";
+import { customerRoutes, customerMainRoutes, customerFooterRoutes } from "@/route/customer.route";
 import {
   Sidebar,
   SidebarContent,
@@ -37,11 +33,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-export default function CustomerLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function CustomerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -77,9 +69,7 @@ export default function CustomerLayout({
 
       // Find the current route in the defined routes
       const allRoutes = [...customerMainRoutes, ...customerRoutes];
-      const sectionRoute = allRoutes.find((r) =>
-        r.href.startsWith(`/customer/${section}`),
-      );
+      const sectionRoute = allRoutes.find((r) => r.href.startsWith(`/customer/${section}`));
 
       if (sectionRoute && paths.length === 2) {
         // Simple route with just two segments
@@ -151,14 +141,12 @@ export default function CustomerLayout({
                 <SidebarMenuItem>
                   <SidebarMenuButton size="lg" asChild>
                     <Link href="/">
-                      <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                      <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                         <User className="size-4" />
                       </div>
                       <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="truncate font-semibold">Xecom</span>
-                        <span className="truncate text-xs">
-                          Customer Portal
-                        </span>
+                        <span className="truncate text-xs">Customer Portal</span>
                       </div>
                     </Link>
                   </SidebarMenuButton>
@@ -244,10 +232,10 @@ export default function CustomerLayout({
           </Sidebar>
 
           {/* Main Content */}
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex flex-1 flex-col overflow-hidden">
             {/* Header */}
-            <header className="bg-background shadow-sm border-b px-4 py-4 shrink-0">
-              <div className="flex justify-between items-center">
+            <header className="bg-background shrink-0 border-b px-4 py-4 shadow-sm">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <SidebarTrigger />
                   <div className="flex flex-col gap-1">
@@ -263,14 +251,10 @@ export default function CustomerLayout({
                                   <Link href={crumb.href}>{crumb.label}</Link>
                                 </BreadcrumbLink>
                               ) : (
-                                <span className="text-muted-foreground">
-                                  {crumb.label}
-                                </span>
+                                <span className="text-muted-foreground">{crumb.label}</span>
                               )}
                             </BreadcrumbItem>
-                            {index < breadcrumbs.length - 1 && (
-                              <BreadcrumbSeparator />
-                            )}
+                            {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
                           </React.Fragment>
                         ))}
                       </BreadcrumbList>
@@ -279,10 +263,8 @@ export default function CustomerLayout({
                 </div>
                 <div className="flex items-center space-x-4">
                   <ThemeToggle />
-                  <span className="text-muted-foreground">
-                    Welcome back, Customer!
-                  </span>
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-medium">
+                  <span className="text-muted-foreground">Welcome back, Customer!</span>
+                  <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-full font-medium">
                     C
                   </div>
                 </div>

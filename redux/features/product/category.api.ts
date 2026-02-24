@@ -45,7 +45,6 @@ const categoryApi = baseApi.injectEndpoints({
       },
     }),
 
-    
     //-----------------Get Category Metadata-----------------
     getCategoryMetadata: builder.query({
       query: () => {

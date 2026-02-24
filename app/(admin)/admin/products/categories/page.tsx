@@ -25,12 +25,9 @@ export default function CategoriesPage() {
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-        <Title
-          mainTitle="Categories"
-          subTitle="Manage product categories and their organization"
-        />
-        <Button onClick={handleAddClick} className="gap-2 w-fit">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <Title mainTitle="Categories" subTitle="Manage product categories and their organization" />
+        <Button onClick={handleAddClick} className="w-fit gap-2">
           <Plus className="h-4 w-4" />
           Add Category
         </Button>
@@ -47,11 +44,7 @@ export default function CategoriesPage() {
       </div>
 
       {/* Category Modal */}
-      <CategoryModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        category={selectedCategory}
-      />
+      <CategoryModal open={isModalOpen} onOpenChange={setIsModalOpen} category={selectedCategory} />
     </div>
   );
 }

@@ -1,16 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  Facebook,
-  Heart,
-  Instagram,
-  Mail,
-  MapPin,
-  Phone,
-  X,
-  Youtube,
-} from "lucide-react";
+import { Facebook, Heart, Instagram, Mail, MapPin, Phone, X, Youtube } from "lucide-react";
 import Link from "next/link";
 
 // Type for social links
@@ -31,25 +22,25 @@ const Footer: React.FC = () => {
   const socialLinks: SocialLink[] = [
     {
       name: "Facebook",
-      icon: <Facebook className="w-5 h-5" />,
+      icon: <Facebook className="h-5 w-5" />,
       url: "https://facebook.com",
       color: "hover:text-blue-600",
     },
     {
       name: "X",
-      icon: <X className="w-5 h-5" />,
+      icon: <X className="h-5 w-5" />,
       url: "https://x.com",
       color: "hover:text-black dark:hover:text-gray-300",
     },
     {
       name: "Instagram",
-      icon: <Instagram className="w-5 h-5" />,
+      icon: <Instagram className="h-5 w-5" />,
       url: "https://instagram.com",
       color: "hover:text-pink-600",
     },
     {
       name: "YouTube",
-      icon: <Youtube className="w-5 h-5" />,
+      icon: <Youtube className="h-5 w-5" />,
       url: "https://youtube.com",
       color: "hover:text-red-600",
     },
@@ -93,28 +84,24 @@ const Footer: React.FC = () => {
         }
       `}</style>
 
-      <div className="border-t-2 px-4 md:px-0 bg-gray-900 ">
+      <div className="border-t-2 bg-gray-900 px-4 md:px-0">
         <div className="container pb-0!">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-4 lg:gap-12">
             {/* Brand Section */}
-            <div className="lg:col-span-1 ">
-              <div className="flex   items-center gap-3 mb-6">
+            <div className="lg:col-span-1">
+              <div className="mb-6 flex items-center gap-3">
                 <div className="">
                   <h1 className="text-2xl font-bold">
-                    <span className="text-gray-100 merriweather-font">
-                      STEPS
-                    </span>
+                    <span className="merriweather-font text-gray-100">STEPS</span>
                   </h1>
-                  <p className="text-sm text-gray-300">
-                    SOLE – Sneakers Simplified
-                  </p>
+                  <p className="text-sm text-gray-300">SOLE – Sneakers Simplified</p>
                 </div>
               </div>
 
               <div>
-                <p className="text-gray-300 leading-relaxed mb-6">
-                  Minimal design. Maximum comfort. Sneakers made for everyday
-                  life with timeless style.
+                <p className="mb-6 leading-relaxed text-gray-300">
+                  Minimal design. Maximum comfort. Sneakers made for everyday life with timeless
+                  style.
                 </p>
 
                 {/* Social Media Links */}
@@ -125,7 +112,7 @@ const Footer: React.FC = () => {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`w-10 h-10 bg-white/20 border-gray-700 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:border-emerald-300 hover:shadow-md ${social.color}`}
+                      className={`flex h-10 w-10 items-center justify-center rounded-xl border-gray-700 bg-white/20 text-white transition-all duration-300 hover:border-emerald-300 hover:shadow-md ${social.color}`}
                       aria-label={social.name}
                     >
                       {social.icon}
@@ -137,17 +124,15 @@ const Footer: React.FC = () => {
 
             {/* Quick Links */}
             <div className="lg:col-span-1">
-              <h3 className="text-lg font-semibold text-gray-200 mb-4">
-                Quick Links
-              </h3>
+              <h3 className="mb-4 text-lg font-semibold text-gray-200">Quick Links</h3>
               <ul className="space-y-2">
                 {quickLinks.map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.path}
-                      className="text-gray-300 hover:text-emerald-600 transition-colors duration-300 flex items-center gap-2 group"
+                      className="group flex items-center gap-2 text-gray-300 transition-colors duration-300 hover:text-emerald-600"
                     >
-                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                       {link.name}
                     </Link>
                   </li>
@@ -157,18 +142,15 @@ const Footer: React.FC = () => {
 
             {/* Contact Info */}
             <div className="lg:col-span-2">
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 {/* Address */}
-                <div className="flex items-start cursor-pointer gap-4 p-4 dark:border-gray-700 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
-                  <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center shrink-0">
-                    <MapPin className="w-6 h-6" />
+                <div className="flex cursor-pointer items-start gap-4 rounded-2xl border border-gray-700 p-4 transition-all duration-300 hover:border-emerald-200 dark:border-gray-700 dark:bg-gray-900">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white">
+                    <MapPin className="h-6 w-6" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-200 mb-1">
-                      Our Location
-                    </h4>
-                    <p className="text-gray-300 text-sm leading-relaxed">
+                    <h4 className="mb-1 font-semibold text-gray-200">Our Location</h4>
+                    <p className="text-sm leading-relaxed text-gray-300">
                       Sylhet, Bangladesh
                       <br />
                       Merrick Way, FL 12345
@@ -177,17 +159,15 @@ const Footer: React.FC = () => {
                 </div>
 
                 {/* Phone */}
-                <div className="flex items-start cursor-pointer gap-4 p-4 dark:border-gray-700 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
-                  <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center shrink-0">
-                    <Phone className="w-6 h-6" />
+                <div className="flex cursor-pointer items-start gap-4 rounded-2xl border border-gray-700 p-4 transition-all duration-300 hover:border-emerald-200 dark:border-gray-700 dark:bg-gray-900">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white">
+                    <Phone className="h-6 w-6" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-200 mb-1">
-                      Phone Number
-                    </h4>
+                    <h4 className="mb-1 font-semibold text-gray-200">Phone Number</h4>
                     <a
                       href="tel:+8801902042884"
-                      className="text-gray-300 text-sm hover:text-emerald-600 transition-colors duration-300"
+                      className="text-sm text-gray-300 transition-colors duration-300 hover:text-emerald-600"
                     >
                       +880 1902-042884
                     </a>
@@ -195,17 +175,15 @@ const Footer: React.FC = () => {
                 </div>
 
                 {/* Email */}
-                <div className="flex items-start cursor-pointer gap-4 p-4 dark:bg-gray-900 rounded-2xl border border-gray-700 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-800 transition-all duration-300">
-                  <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center shrink-0">
-                    <Mail className="w-6 h-6" />
+                <div className="flex cursor-pointer items-start gap-4 rounded-2xl border border-gray-700 p-4 transition-all duration-300 hover:border-emerald-200 dark:border-gray-700 dark:bg-gray-900 dark:hover:border-emerald-800">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white">
+                    <Mail className="h-6 w-6" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-200 mb-1">
-                      Email Address
-                    </h4>
+                    <h4 className="mb-1 font-semibold text-gray-200">Email Address</h4>
                     <a
                       href="mailto:endgameprogramm10@gmail.com"
-                      className="text-gray-300 text-sm hover:text-emerald-600 transition-colors duration-300"
+                      className="text-sm text-gray-300 transition-colors duration-300 hover:text-emerald-600"
                     >
                       support@ezrent.com
                     </a>
@@ -213,17 +191,15 @@ const Footer: React.FC = () => {
                 </div>
 
                 {/* Business Hours */}
-                <div className="flex items-start cursor-pointer dark:border-gray-700 gap-4 p-4 dark:bg-gray-900 rounded-2xl border border-gray-700 hover:border-emerald-200 transition-all duration-300">
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
-                    <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
-                      <div className="w-3 h-3 bg-amber-500 rounded-full" />
+                <div className="flex cursor-pointer items-start gap-4 rounded-2xl border border-gray-700 p-4 transition-all duration-300 hover:border-emerald-200 dark:border-gray-700 dark:bg-gray-900">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/20">
+                    <div className="bg-secondary flex h-6 w-6 items-center justify-center rounded-full">
+                      <div className="h-3 w-3 rounded-full bg-amber-500" />
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-200 mb-1">
-                      Business Hours
-                    </h4>
-                    <p className="text-gray-300 text-sm leading-relaxed">
+                    <h4 className="mb-1 font-semibold text-gray-200">Business Hours</h4>
+                    <p className="text-sm leading-relaxed text-gray-300">
                       Mon - Sun: 24/7
                       <br />
                       Support Available
@@ -234,11 +210,8 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <h1 className="text-[clamp(40px,10vw,250px)] w-full text-center font-bold">
-            <span
-              style={shineStyle}
-              className="inline-block w-full px-2 md:px-4 merriweather-font"
-            >
+          <h1 className="w-full text-center text-[clamp(40px,10vw,250px)] font-bold">
+            <span style={shineStyle} className="merriweather-font inline-block w-full px-2 md:px-4">
               STEPS SHOES
             </span>
           </h1>
@@ -247,17 +220,17 @@ const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-700">
           <div className="container py-2! md:py-3!">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-2 text-sm">
+            <div className="flex flex-col items-center justify-between gap-2 text-sm md:flex-row">
               <div className="text-gray-300">
                 © {new Date().getFullYear()} STEPS. All rights reserved.
               </div>
               <div className="flex items-center gap-1 text-gray-300">
                 Made with
-                <Heart className="w-4 h-4 text-red-500 fill-current" />
+                <Heart className="h-4 w-4 fill-current text-red-500" />
                 by{" "}
                 <a
                   href="#"
-                  className="text-emerald-600 font-medium hover:underline transition-colors duration-300"
+                  className="font-medium text-emerald-600 transition-colors duration-300 hover:underline"
                 >
                   Md. Shakib Khan
                 </a>

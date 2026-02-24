@@ -9,11 +9,7 @@ import { UserRole } from "@/redux/features/auth/dto/auth.dto";
 import { useAppDispatch } from "@/redux/hooks";
 import { logout } from "@/redux/features/auth/authSlice";
 import { toast } from "sonner";
-import {
-  adminRoutes,
-  adminMainRoutes,
-  adminFooterRoutes,
-} from "@/route/admin.route";
+import { adminRoutes, adminMainRoutes, adminFooterRoutes } from "@/route/admin.route";
 import {
   Sidebar,
   SidebarContent,
@@ -30,11 +26,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, LogOut, ShoppingBag } from "lucide-react";
 import {
   Breadcrumb,
@@ -45,11 +37,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -81,7 +69,7 @@ export default function AdminLayout({
 
       // Find the matching group for this category
       const group = adminRoutes.find((g) =>
-        g.routes.some((r) => r.href.startsWith(`/admin/${category}`)),
+        g.routes.some((r) => r.href.startsWith(`/admin/${category}`))
       );
 
       if (group) {
@@ -138,7 +126,7 @@ export default function AdminLayout({
                 <SidebarMenuItem>
                   <SidebarMenuButton size="lg" asChild>
                     <Link href="/">
-                      <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                      <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                         <ShoppingBag className="size-4" />
                       </div>
                       <div className="grid flex-1 text-left text-sm leading-tight">
@@ -182,18 +170,12 @@ export default function AdminLayout({
                 <SidebarGroupContent>
                   <SidebarMenu>
                     {adminRoutes.map((group, groupIndex) => (
-                      <Collapsible
-                        key={groupIndex}
-                        defaultOpen
-                        className="group/collapsible"
-                      >
+                      <Collapsible key={groupIndex} defaultOpen className="group/collapsible">
                         <SidebarMenuItem>
                           <CollapsibleTrigger asChild>
                             <SidebarMenuButton
                               tooltip={group.title}
-                              isActive={group.routes.some(
-                                (route) => pathname === route.href,
-                              )}
+                              isActive={group.routes.some((route) => pathname === route.href)}
                             >
                               <group.icon />
                               <span>{group.title}</span>
@@ -204,10 +186,7 @@ export default function AdminLayout({
                             <SidebarMenuSub>
                               {group.routes.map((route) => (
                                 <SidebarMenuSubItem key={route.href}>
-                                  <SidebarMenuSubButton
-                                    asChild
-                                    isActive={pathname === route.href}
-                                  >
+                                  <SidebarMenuSubButton asChild isActive={pathname === route.href}>
                                     <Link href={route.href}>
                                       <span>{route.label}</span>
                                     </Link>
@@ -250,10 +229,10 @@ export default function AdminLayout({
           </Sidebar>
 
           {/* Main Content */}
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex flex-1 flex-col overflow-hidden">
             {/* Header */}
-            <header className="bg-background shadow-sm border-b px-4 py-4 shrink-0">
-              <div className="flex justify-between items-center">
+            <header className="bg-background shrink-0 border-b px-4 py-4 shadow-sm">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <SidebarTrigger />
                   <div className="flex flex-col gap-1">
@@ -269,14 +248,10 @@ export default function AdminLayout({
                                   <Link href={crumb.href}>{crumb.label}</Link>
                                 </BreadcrumbLink>
                               ) : (
-                                <span className="text-muted-foreground">
-                                  {crumb.label}
-                                </span>
+                                <span className="text-muted-foreground">{crumb.label}</span>
                               )}
                             </BreadcrumbItem>
-                            {index < breadcrumbs.length - 1 && (
-                              <BreadcrumbSeparator />
-                            )}
+                            {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
                           </React.Fragment>
                         ))}
                       </BreadcrumbList>
@@ -286,7 +261,7 @@ export default function AdminLayout({
                 <div className="flex items-center space-x-4">
                   <ThemeToggle />
                   <span className="text-muted-foreground">Welcome, Admin!</span>
-                  <div className="w-8 h-8 bg-danger rounded-full flex items-center justify-center text-primary-foreground font-medium">
+                  <div className="bg-danger text-primary-foreground flex h-8 w-8 items-center justify-center rounded-full font-medium">
                     A
                   </div>
                 </div>

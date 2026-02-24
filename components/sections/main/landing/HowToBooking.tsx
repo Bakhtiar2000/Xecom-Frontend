@@ -2,22 +2,14 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  Search,
-  ShoppingCart,
-  Truck,
-  Ruler,
-} from "lucide-react";
+import { Search, ShoppingCart, Truck, Ruler } from "lucide-react";
 import SectionTitle from "../../shared/SectionTitle";
 import StepCard from "@/components/sections/main/landing/sections/StepCard";
-
-
 
 const MotionDiv = motion.div;
 const MotionSection = motion.section;
 
 type VariantType = "modern";
-
 
 interface SneakerStep {
   number: string;
@@ -32,11 +24,10 @@ interface HowtoBookingProps {
   variant?: VariantType;
 }
 
-
 const sneakerSteps: SneakerStep[] = [
   {
     number: "01",
-    icon: <Search className="w-6 h-6" />,
+    icon: <Search className="h-6 w-6" />,
     title: "Find Your Style",
     description:
       "Browse our curated collection of premium sneakers from top brands and limited editions.",
@@ -50,7 +41,7 @@ const sneakerSteps: SneakerStep[] = [
   },
   {
     number: "02",
-    icon: <Ruler className="w-6 h-6" />,
+    icon: <Ruler className="h-6 w-6" />,
     title: "Perfect Fit",
     description:
       "Use our size guide and fit technology to ensure your sneakers feel just right Return if doesn't fit.",
@@ -64,10 +55,9 @@ const sneakerSteps: SneakerStep[] = [
   },
   {
     number: "03",
-    icon: <ShoppingCart className="w-6 h-6" />,
+    icon: <ShoppingCart className="h-6 w-6" />,
     title: "Secure Checkout",
-    description:
-      "Complete your purchase with multiple payment options and buyer protection.",
+    description: "Complete your purchase with multiple payment options and buyer protection.",
     features: [
       "Multiple payment methods",
       "SSL encrypted checkout",
@@ -78,7 +68,7 @@ const sneakerSteps: SneakerStep[] = [
   },
   {
     number: "04",
-    icon: <Truck className="w-6 h-6" />,
+    icon: <Truck className="h-6 w-6" />,
     title: "Fast Delivery",
     description:
       "Get your sneakers delivered quickly with real-time tracking and premium packaging.",
@@ -92,9 +82,7 @@ const sneakerSteps: SneakerStep[] = [
   },
 ];
 
-
 const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
-
   return (
     <MotionSection
       initial={{ opacity: 0 }}
@@ -103,23 +91,26 @@ const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
       transition={{ duration: 0.8 }}
       className="relative container"
     >
-      <div className="relative text-center mb-16">
+      <div className="relative mb-16 text-center">
         <MotionDiv
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <SectionTitle description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers." title="How to Get Your Sneakers" className="mb-2" />
-
-
+          <SectionTitle
+            description="From browsing to doorstep, getting your perfect pair has never been easier. Follow these simple steps to own your dream sneakers."
+            title="How to Get Your Sneakers"
+            className="mb-2"
+          />
         </MotionDiv>
       </div>
 
       <div className="relative">
         <div
-          className={`grid grid-cols-1 ${sneakerSteps.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"
-            } gap-4 lg:gap-8`}
+          className={`grid grid-cols-1 ${
+            sneakerSteps.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"
+          } gap-4 lg:gap-8`}
         >
           {sneakerSteps.map((step, index) => (
             <StepCard

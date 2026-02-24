@@ -7,12 +7,7 @@ import { CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Plus, ChevronDown, FastForward } from "lucide-react";
 import { Review } from "@/types";
 import { productReviews } from "@/data/product-reivew";
@@ -54,7 +49,7 @@ export default function ProductReviews() {
     userName: string;
     rating: number;
     comment: string;
-    images:(string | StaticImageData)[];
+    images: (string | StaticImageData)[];
   }>({
     userName: "",
     rating: 5,
@@ -64,9 +59,7 @@ export default function ProductReviews() {
 
   const averageRating =
     reviews.length > 0
-      ? (
-          reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-        ).toFixed(1)
+      ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
       : "0.0";
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,9 +78,7 @@ export default function ProductReviews() {
     if (!form.comment.trim()) return;
 
     if (editing) {
-      setReviews((prev) =>
-        prev.map((r) => (r.id === editing.id ? { ...r, ...form } : r)),
-      );
+      setReviews((prev) => prev.map((r) => (r.id === editing.id ? { ...r, ...form } : r)));
     } else {
       setReviews((prev) => [
         {
@@ -138,39 +129,30 @@ export default function ProductReviews() {
 
   return (
     <section>
-      <div className="mt-10 mb-2 bg-card-primary rounded-2xl">
+      <div className="bg-card-primary mt-10 mb-2 rounded-2xl">
         {/* Header */}
-        <div className="py-10 border-b">
-          <CardHeader className="flex flex-col md:flex-row md:justify-between gap-4">
+        <div className="border-b py-10">
+          <CardHeader className="flex flex-col gap-4 md:flex-row md:justify-between">
             <div>
-              <h2 className="text-2xl font-bold mb-5">Guest Reviews</h2>
+              <h2 className="mb-5 text-2xl font-bold">Guest Reviews</h2>
               <div className="flex justify-start gap-5">
-                <div className=" space-y-2 gap-3 mt-2">
+                <div className="mt-2 gap-3 space-y-2">
                   <span className="text-3xl font-bold">{averageRating}</span>
                   <StarRating rating={Number(averageRating)} />
-                  <span className="text-sm text-muted-foreground">
-                    ({reviews.length} reviews)
-                  </span>
+                  <span className="text-muted-foreground text-sm">({reviews.length} reviews)</span>
                 </div>
-                <div className="flex-1 min-w-50 w-full sm:w-auto">
+                <div className="w-full min-w-50 flex-1 sm:w-auto">
                   {ratingDistribution.map(({ stars, count, percentage }) => (
-                    <div
-                      key={stars}
-                      className="flex items-center gap-2 text-sm mb-1"
-                    >
-                      <span className="w-8 te4xt-muted-foreground">
-                        {stars}
-                      </span>
-                      <FastForward className="w-3 h-3 text-rating" />
-                      <div className="flex-1 bg-card-primary rounded-full h-2">
+                    <div key={stars} className="mb-1 flex items-center gap-2 text-sm">
+                      <span className="te4xt-muted-foreground w-8">{stars}</span>
+                      <FastForward className="text-rating h-3 w-3" />
+                      <div className="bg-card-primary h-2 flex-1 rounded-full">
                         <div
-                          className="bg-linear-to-r from-rating to-rating/90 h-2 rounded-full"
+                          className="from-rating to-rating/90 h-2 rounded-full bg-linear-to-r"
                           style={{ width: `${percentage}%` }}
                         ></div>
                       </div>
-                      <span className="w-8 text-muted-foreground text-right">
-                        {count}
-                      </span>
+                      <span className="text-muted-foreground w-8 text-right">{count}</span>
                     </div>
                   ))}
                 </div>
@@ -181,7 +163,7 @@ export default function ProductReviews() {
               className="bg-button-primary hover:bg-button-primary/85 cursor-pointer"
               onClick={() => setOpen(true)}
             >
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="mr-2 h-4 w-4" />
               Add Review
             </Button>
           </CardHeader>
@@ -191,9 +173,7 @@ export default function ProductReviews() {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
-              <DialogTitle>
-                {editing ? "Update Review" : "Add Review"}
-              </DialogTitle>
+              <DialogTitle>{editing ? "Update Review" : "Add Review"}</DialogTitle>
             </DialogHeader>
 
             <div className="space-y-4">
@@ -215,30 +195,25 @@ export default function ProductReviews() {
                 onChange={(e) => setForm({ ...form, comment: e.target.value })}
               />
 
-              <Input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
+              <Input type="file" multiple accept="image/*" onChange={handleImageUpload} />
 
               {/* Image Preview + Delete */}
               {form.images.length > 0 && (
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex flex-wrap gap-2">
                   {form.images.map((img, i) => (
-                    <div key={i} className="relative group">
+                    <div key={i} className="group relative">
                       <Image
                         src={img}
                         alt={`Upload preview ${i}`}
                         width={80}
                         height={80}
-                        className="w-20 h-20 object-cover rounded-lg border"
+                        className="h-20 w-20 rounded-lg border object-cover"
                       />
 
                       <button
                         type="button"
                         onClick={() => removeImage(i)}
-                        className="absolute top-0 right-0 bg-destructive text-whit  font-bold rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+                        className="bg-destructive text-whit absolute top-0 right-0 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold opacity-0 transition group-hover:opacity-100"
                       >
                         ✕
                       </button>
@@ -248,7 +223,7 @@ export default function ProductReviews() {
               )}
 
               <Button
-                className="w-full bg-button-primary hover:bg-button-primary/80 cursor-pointer"
+                className="bg-button-primary hover:bg-button-primary/80 w-full cursor-pointer"
                 onClick={handleSubmit}
               >
                 {editing ? "Update Review" : "Submit Review"}
@@ -261,9 +236,9 @@ export default function ProductReviews() {
         <div>
           {reviews.map((r) => (
             <div className="border-b" key={r.id}>
-              <CardContent className="py-6 space-y-4">
-                <div className="md:flex space-y-4 gap-5">
-                  <div className="flex space-x-2 space-y-4">
+              <CardContent className="space-y-4 py-6">
+                <div className="gap-5 space-y-4 md:flex">
+                  <div className="flex space-y-4 space-x-2">
                     <div className="flex justify-between">
                       <div className="flex gap-3">
                         {r.userImage ? (
@@ -273,7 +248,7 @@ export default function ProductReviews() {
                               alt={r.userName}
                               width={40}
                               height={40}
-                              className="w-10 h-10 rounded-full"
+                              className="h-10 w-10 rounded-full"
                             />
                           </Avatar>
                         ) : (
@@ -288,47 +263,45 @@ export default function ProductReviews() {
                         )}
 
                         <div>
-                          <h4 className="font-semibold flex gap-6">
+                          <h4 className="flex gap-6 font-semibold">
                             {r.userName}{" "}
                             <span>
                               {" "}
                               <StarRating rating={r.rating} />
                             </span>
                           </h4>
-                          <p className="text-xs text-muted-foreground">
-                            {r.date}
-                          </p>
+                          <p className="text-muted-foreground text-xs">{r.date}</p>
 
                           <p>{r.comment}</p>
                         </div>
                       </div>
                     </div>
-                     <div className=" md:hidden items-start gap-2">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button className="p-1 rounded hover:bg-muted">
-                          <MoreVertical className="w-4 h-4" />
-                        </button>
-                      </DropdownMenuTrigger>
+                    <div className="items-start gap-2 md:hidden">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button className="hover:bg-muted rounded p-1">
+                            <MoreVertical className="h-4 w-4" />
+                          </button>
+                        </DropdownMenuTrigger>
 
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleEdit(r)}>
-                          <Edit className="w-4 h-4 mr-2" />
-                          Edit
-                        </DropdownMenuItem>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleEdit(r)}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
 
-                        <DropdownMenuItem
-                          onClick={() => handleDelete(r.id)}
-                          className="text-destructive"
-                        >
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(r.id)}
+                            className="text-destructive"
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
-                  </div>
-                 
+
                   <div>
                     {r.images && r.images.length > 0 && (
                       <div className="flex gap-2">
@@ -340,23 +313,20 @@ export default function ProductReviews() {
                             width={80}
                             height={80}
                             onClick={() => openImageModal(r.images!, i)}
-                            className="w-20 h-20 bg-muted object-cover rounded-lg cursor-pointer hover:opacity-90 transition"
+                            className="bg-muted h-20 w-20 cursor-pointer rounded-lg object-cover transition hover:opacity-90"
                           />
                         ))}
                       </div>
                     )}
 
                     {/* image modal  */}
-                    <Dialog
-                      open={imageModalOpen}
-                      onOpenChange={setImageModalOpen}
-                    >
+                    <Dialog open={imageModalOpen} onOpenChange={setImageModalOpen}>
                       <DialogHeader>
                         <DialogTitle></DialogTitle>
                       </DialogHeader>
 
-                      <DialogContent className="max-w-7xl bg-card-primary border-none p-0">
-                        <div className="relative flex items-center justify-center h-[80vh]">
+                      <DialogContent className="bg-card-primary max-w-7xl border-none p-0">
+                        <div className="relative flex h-[80vh] items-center justify-center">
                           {/* Image */}
                           <Image
                             src={activeImages[activeIndex]}
@@ -369,7 +339,7 @@ export default function ProductReviews() {
                           {activeImages.length > 1 && (
                             <button
                               onClick={prevImage}
-                              className="absolute left-4 cursor-pointer text-xl  text-white bg-black/50 hover:bg-black/70 p-2 rounded-full"
+                              className="absolute left-4 cursor-pointer rounded-full bg-black/50 p-2 text-xl text-white hover:bg-black/70"
                             >
                               ‹
                             </button>
@@ -379,7 +349,7 @@ export default function ProductReviews() {
                           {activeImages.length > 1 && (
                             <button
                               onClick={nextImage}
-                              className="absolute right-4 cursor-pointer text-xl text-white bg-black/50 hover:bg-black/70 p-2 rounded-full"
+                              className="absolute right-4 cursor-pointer rounded-full bg-black/50 p-2 text-xl text-white hover:bg-black/70"
                             >
                               ›
                             </button>
@@ -387,7 +357,7 @@ export default function ProductReviews() {
 
                           {/* Counter */}
                           {activeImages.length > 1 && (
-                            <div className="absolute bottom-4 text-white text-sm bg-black/50 px-3 py-1 rounded-full">
+                            <div className="absolute bottom-4 rounded-full bg-black/50 px-3 py-1 text-sm text-white">
                               {activeIndex + 1} / {activeImages.length}
                             </div>
                           )}
@@ -395,17 +365,17 @@ export default function ProductReviews() {
                       </DialogContent>
                     </Dialog>
                   </div>
-                  <div className="md:flex hidden items-start gap-2">
+                  <div className="hidden items-start gap-2 md:flex">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <button className="p-1 rounded hover:bg-muted">
-                          <MoreVertical className="w-4 h-4" />
+                        <button className="hover:bg-muted rounded p-1">
+                          <MoreVertical className="h-4 w-4" />
                         </button>
                       </DropdownMenuTrigger>
 
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => handleEdit(r)}>
-                          <Edit className="w-4 h-4 mr-2" />
+                          <Edit className="mr-2 h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
 
@@ -413,23 +383,22 @@ export default function ProductReviews() {
                           onClick={() => handleDelete(r.id)}
                           className="text-destructive"
                         >
-                          <Trash2 className="w-4 h-4 mr-2" />
+                          <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
                 </div>
-                
               </CardContent>
             </div>
           ))}
         </div>
       </div>
 
-      <button className="flex cursor-pointer items-center gap-1 text-primary">
+      <button className="text-primary flex cursor-pointer items-center gap-1">
         Read all reviews
-        <ChevronDown className="w-4 h-4" />
+        <ChevronDown className="h-4 w-4" />
       </button>
     </section>
   );

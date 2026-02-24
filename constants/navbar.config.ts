@@ -49,9 +49,15 @@ export const navbarConfig: NavbarConfig = {
       items: [
         { label: "All", href: "/products?target=kids" },
         { label: "Sneakers", href: "/products?target=kids&category=sneakers" },
-        { label: "School Shoes", href: "/products?target=kids&category=school-shoes" },
+        {
+          label: "School Shoes",
+          href: "/products?target=kids&category=school-shoes",
+        },
         { label: "Sandals", href: "/products?target=kids&category=sandals" },
-        { label: "Sports Shoes", href: "/products?target=kids&category=sports" },
+        {
+          label: "Sports Shoes",
+          href: "/products?target=kids&category=sports",
+        },
         { label: "Casual Wear", href: "/products?target=kids&category=casual" },
       ],
     },

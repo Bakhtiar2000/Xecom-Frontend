@@ -18,19 +18,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { CartData } from "@/data/cart";
 import CartSheet from "@/components/sections/shared/CartSheet";
 import { navbarConfig } from "@/constants/navbar.config";
@@ -112,45 +101,41 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="w-full bg-secondary">
+    <div className="bg-secondary w-full">
       {/* Top Bar */}
       <div
-        className={`container py-2! hidden lg:flex mx-auto bg-primary text-white text-sm transition-all duration-300 ease-in-out ${isSticky
-          ? "h-0 opacity-0 overflow-hidden"
-          : "h-auto opacity-100 py-2! overflow-visible"
-          }`}
+        className={`bg-primary container mx-auto hidden py-2! text-sm text-white transition-all duration-300 ease-in-out lg:flex ${
+          isSticky ? "h-0 overflow-hidden opacity-0" : "h-auto overflow-visible py-2! opacity-100"
+        }`}
       >
-        <div className="w-1/2 flex items-center justify-between">
+        <div className="flex w-1/2 items-center justify-between">
           <p className="flex items-center gap-2">
-            <span className="font-semibold flex gap-1">
+            <span className="flex gap-1 font-semibold">
               <Navigation size={20} /> 7 Days A Week
             </span>
             <span>From 9:00 AM To 7:00 PM</span>
           </p>
         </div>
 
-        <div className="w-1/2 flex items-center justify-end gap-4">
+        <div className="flex w-1/2 items-center justify-end gap-4">
           <a href="tel:+8801902042884" className="text-sm">
-            Call Us: <span className="font-semibold pl-2">88019020-42884</span>
+            Call Us: <span className="pl-2 font-semibold">88019020-42884</span>
           </a>
         </div>
       </div>
 
       <nav
-        className={`w-full left-0 bg-secondary transition-all duration-300 ${isSticky
-          ? "fixed top-0 z-40 shadow-md py-3"
-          : "relative py-3 shadow-sm"
-          }`}
+        className={`bg-secondary left-0 w-full transition-all duration-300 ${
+          isSticky ? "fixed top-0 z-40 py-3 shadow-md" : "relative py-3 shadow-sm"
+        }`}
       >
         <div
-          className={`container py-0! flex justify-between items-center max-w-11/12 mx-auto md:px-4`}
+          className={`container mx-auto flex max-w-11/12 items-center justify-between py-0! md:px-4`}
         >
-          <div className="flex justify-center items-center gap-20">
-            <div className="text-3xl font-extrabold tracking-widest merriweather-font">
-              STEPS
-            </div>
+          <div className="flex items-center justify-center gap-20">
+            <div className="merriweather-font text-3xl font-extrabold tracking-widest">STEPS</div>
 
-            <div className="hidden items-start justify-start lg:flex gap-6">
+            <div className="hidden items-start justify-start gap-6 lg:flex">
               {mainRoutes.map((route) => {
                 const isActive =
                   pathname === route.href ||
@@ -160,10 +145,11 @@ const Navbar = () => {
                   <Link
                     key={route.href}
                     href={route.href}
-                    className={`relative font-thin text-sm transition-colors ${isActive
-                      ? "text-primary dark:text-white font-semibold after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full dark:after:bg-white after:bg-primary"
-                      : "text-foreground hover:text-foreground"
-                      }`}
+                    className={`relative text-sm font-thin transition-colors ${
+                      isActive
+                        ? "text-primary after:bg-primary font-semibold after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full dark:text-white dark:after:bg-white"
+                        : "text-foreground hover:text-foreground"
+                    }`}
                   >
                     {route.label}
                   </Link>
@@ -171,17 +157,19 @@ const Navbar = () => {
               })}
 
               <NavigationMenu>
-                <NavigationMenuList className="hidden lg:flex gap-6 -mt-0.5">
+                <NavigationMenuList className="-mt-0.5 hidden gap-6 lg:flex">
                   {navbarConfig.categories.map((category) => (
                     <NavigationMenuItem key={category.label}>
-                      <NavigationMenuTrigger className="font-thin">{category.trigger}</NavigationMenuTrigger>
+                      <NavigationMenuTrigger className="font-thin">
+                        {category.trigger}
+                      </NavigationMenuTrigger>
                       <NavigationMenuContent>
                         <ul className="grid w-48">
                           {category.items.map((item) => (
                             <li key={item.href}>
                               <Link
                                 href={item.href}
-                                className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
                               >
                                 {item.label}
                               </Link>
@@ -196,11 +184,11 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="hidden lg:flex nav-bg-base justify-between items-center gap-6 text-sm rounded-lg">
-            <div className="relative flex items-center flex-1"></div>
+          <div className="nav-bg-base hidden items-center justify-between gap-6 rounded-lg text-sm lg:flex">
+            <div className="relative flex flex-1 items-center"></div>
 
             <TooltipProvider>
-              <div className="flex gap-6 items-center">
+              <div className="flex items-center gap-6">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
@@ -245,7 +233,7 @@ const Navbar = () => {
                       <TooltipTrigger asChild>
                         <Link
                           href={getDashboardRoute()}
-                          className="flex hover-button items-center gap-1 transition"
+                          className="hover-button flex items-center gap-1 transition"
                         >
                           <LayoutDashboard size={22} />
                         </Link>
@@ -273,7 +261,7 @@ const Navbar = () => {
                     <TooltipTrigger asChild>
                       <button
                         onClick={handleLogout}
-                        className="cursor-pointer text-danger flex hover-button items-center gap-1 transition"
+                        className="text-danger hover-button flex cursor-pointer items-center gap-1 transition"
                       >
                         <LogOut size={22} />
                       </button>
@@ -287,7 +275,7 @@ const Navbar = () => {
                     <TooltipTrigger asChild>
                       <Link
                         href="/login"
-                        className="cursor-pointer text-success flex hover-button items-center gap-1 transition"
+                        className="text-success hover-button flex cursor-pointer items-center gap-1 transition"
                       >
                         <LogIn size={22} />
                       </Link>
@@ -303,7 +291,7 @@ const Navbar = () => {
 
           {/* Mobile Actions */}
           <TooltipProvider>
-            <div className="flex lg:hidden items-center gap-4">
+            <div className="flex items-center gap-4 lg:hidden">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
@@ -348,7 +336,7 @@ const Navbar = () => {
                     <TooltipTrigger asChild>
                       <Link
                         href={getDashboardRoute()}
-                        className="flex hover-button items-center gap-1 transition"
+                        className="hover-button flex items-center gap-1 transition"
                       >
                         <LayoutDashboard size={20} />
                       </Link>
@@ -376,7 +364,7 @@ const Navbar = () => {
                   <TooltipTrigger asChild>
                     <button
                       onClick={handleLogout}
-                      className="cursor-pointer flex hover-button items-center text-danger gap-1 transition"
+                      className="hover-button text-danger flex cursor-pointer items-center gap-1 transition"
                     >
                       <LogOut size={20} />
                     </button>
@@ -390,7 +378,7 @@ const Navbar = () => {
                   <TooltipTrigger asChild>
                     <Link
                       href="/login"
-                      className="cursor-pointer text-success hover-button items-center gap-1 transition"
+                      className="text-success hover-button cursor-pointer items-center gap-1 transition"
                     >
                       <LogIn size={20} />
                     </Link>
@@ -406,7 +394,7 @@ const Navbar = () => {
                   <Menu className="cursor-pointer" size={24} />
                 </SheetTrigger>
 
-                <SheetContent side="left" className="block lg:hidden z-100 w-75 sm:w-85 px-4">
+                <SheetContent side="left" className="z-100 block w-75 px-4 sm:w-85 lg:hidden">
                   {/* Header / Brand */}
                   <SheetHeader className="border-b">
                     <SheetTitle className="text-2xl font-extrabold tracking-widest">
@@ -425,10 +413,11 @@ const Navbar = () => {
                         <Link
                           key={route.href}
                           href={route.href}
-                          className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive
-                            ? "bg-primary/10 text-primary"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                            }`}
+                          className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                            isActive
+                              ? "bg-primary/10 text-primary"
+                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                          }`}
                         >
                           {route.label}
                         </Link>
@@ -436,12 +425,9 @@ const Navbar = () => {
                     })}
                   </nav>
 
-
                   {/* Products Section */}
                   <div className="mt-5 ml-3">
-                    <p className="mb-2 text-xs font-bold uppercase tracking-widest">
-                      Products
-                    </p>
+                    <p className="mb-2 text-xs font-bold tracking-widest uppercase">Products</p>
 
                     <NavigationMenu>
                       <NavigationMenuList className="flex gap-6">
@@ -456,7 +442,7 @@ const Navbar = () => {
                                   <li key={item.href}>
                                     <Link
                                       href={item.href}
-                                      className="block text-sm py-2 px-3 rounded-md hover:bg-muted transition-colors"
+                                      className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
                                     >
                                       {item.label}
                                     </Link>

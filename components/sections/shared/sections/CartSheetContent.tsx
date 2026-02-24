@@ -69,9 +69,7 @@ export default function CartContent({
   };
 
   const toggleItemSelect = (id: string) => {
-    setCartItems(
-      cartItems.map((i) => (i.id === id ? { ...i, selected: !i.selected } : i)),
-    );
+    setCartItems(cartItems.map((i) => (i.id === id ? { ...i, selected: !i.selected } : i)));
   };
 
   const updateQuantity = (id: string, inc: boolean) => {
@@ -79,11 +77,11 @@ export default function CartContent({
       cartItems.map((i) =>
         i.id === id
           ? {
-            ...i,
-            quantity: Math.max(1, inc ? i.quantity + 1 : i.quantity - 1),
-          }
-          : i,
-      ),
+              ...i,
+              quantity: Math.max(1, inc ? i.quantity + 1 : i.quantity - 1),
+            }
+          : i
+      )
     );
   };
 
@@ -107,7 +105,7 @@ export default function CartContent({
       g[i.store].push(i);
       return g;
     },
-    {} as Record<string, CartItem[]>,
+    {} as Record<string, CartItem[]>
   );
 
   const handleCheckout = () => {
@@ -120,11 +118,8 @@ export default function CartContent({
     <div className={isSheet ? "space-y-4" : "cart-bg py-8"}>
       {/* Select All */}
       <div className="bg-card-primary rounded-xl px-4 py-2">
-        <label className="flex items-center gap-3 cursor-pointer">
-          <Checkbox
-            checked={selectAll}
-            onCheckedChange={toggleSelectAll}
-          />
+        <label className="flex cursor-pointer items-center gap-3">
+          <Checkbox checked={selectAll} onCheckedChange={toggleSelectAll} />
           <span className="font-medium">All cart items</span>
         </label>
       </div>
@@ -140,24 +135,17 @@ export default function CartContent({
 
               <AccordionContent>
                 {items.map((item) => (
-                  <div key={item.id} className="flex gap-4 p-4 border-t">
+                  <div key={item.id} className="flex gap-4 border-t p-4">
                     <Checkbox
                       checked={item.selected}
                       onCheckedChange={() => toggleItemSelect(item.id)}
                     />
 
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      width={72}
-                      height={72}
-                    />
+                    <Image src={item.image} alt={item.name} width={72} height={72} />
 
                     <div className="flex-1">
                       <div className="flex justify-between">
-                        <h4 className="font-medium text-sm lg:text-base">
-                          {item.name}
-                        </h4>
+                        <h4 className="text-sm font-medium lg:text-base">{item.name}</h4>
                         <button
                           className="hover:text-danger cursor-pointer"
                           onClick={() => removeItem(item.id)}
@@ -166,11 +154,9 @@ export default function CartContent({
                         </button>
                       </div>
 
-                      <div className="flex justify-between mt-2">
-                        <span className="text-sm">
-                          Tk {item.finalPrice}
-                        </span>
-                        <div className="flex gap-4 items-center bg-muted px-2 rounded-2xl">
+                      <div className="mt-2 flex justify-between">
+                        <span className="text-sm">Tk {item.finalPrice}</span>
+                        <div className="bg-muted flex items-center gap-4 rounded-2xl px-2">
                           <button
                             className="cursor-pointer text-lg"
                             onClick={() => updateQuantity(item.id, false)}
@@ -203,7 +189,7 @@ export default function CartContent({
         </div>
 
         <Link href="/checkout" onClick={handleCheckout}>
-          <button className="w-full mt-4 bg-button-primary cursor-pointer text-white py-3 rounded-lg">
+          <button className="bg-button-primary mt-4 w-full cursor-pointer rounded-lg py-3 text-white">
             Checkout ({cartItems.filter((i) => i.selected).length})
           </button>
         </Link>

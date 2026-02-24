@@ -2,7 +2,6 @@ import { TCustomer, TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "../../api/baseApi";
 import { TRegisterCustomerDto } from "./dto/customer.dto";
 
-
 const customerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     //-----------------Get All Customers-----------------
@@ -43,5 +42,4 @@ const customerApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllCustomersQuery, useRegisterCustomerMutation } =
-  customerApi;
+export const { useGetAllCustomersQuery, useRegisterCustomerMutation } = customerApi;

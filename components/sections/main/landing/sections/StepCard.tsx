@@ -4,9 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, ArrowRight } from "lucide-react";
 
-
 const MotionDiv = motion.div;
-
 
 type VariantType = "minimal" | "modern" | "card" | "interactive";
 
@@ -46,13 +44,7 @@ const styleVariants: Record<VariantType, StyleVariant> = {
   },
 };
 
-
-const StepCard: React.FC<StepCardProps> = ({
-  step,
-  index,
-  totalSteps,
-  variant = "modern",
-}) => {
+const StepCard: React.FC<StepCardProps> = ({ step, index, totalSteps, variant = "modern" }) => {
   const styles = styleVariants[variant];
 
   return (
@@ -66,7 +58,7 @@ const StepCard: React.FC<StepCardProps> = ({
     >
       {/* Horizontal Connector */}
       {index < totalSteps - 1 && (
-        <div className="hidden lg:block absolute top-20 left-1/2 w-full h-0.5 bg-linear-to-r from-muted to-muted/90">
+        <div className="from-muted to-muted/90 absolute top-20 left-1/2 hidden h-0.5 w-full bg-linear-to-r lg:block">
           <MotionDiv
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
@@ -77,7 +69,7 @@ const StepCard: React.FC<StepCardProps> = ({
       )}
 
       {/* Step Number */}
-      <div className="relative z-10 flex justify-center mb-4">
+      <div className="relative z-10 mb-4 flex justify-center">
         <MotionDiv
           initial={{ scale: 0, rotate: -180 }}
           whileInView={{ scale: 1, rotate: 0 }}
@@ -86,39 +78,35 @@ const StepCard: React.FC<StepCardProps> = ({
             delay: index * 0.15,
             type: "spring",
           }}
-          className={`w-10 md:w-14 h-10 md:h-14 rounded-xl bg-secondary shadow-lg flex items-center justify-center group-hover:shadow-xl transition-all duration-300 ${
+          className={`bg-secondary flex h-10 w-10 items-center justify-center rounded-xl shadow-lg transition-all duration-300 group-hover:shadow-xl md:h-14 md:w-14 ${
             variant === "interactive" ? "group-hover:scale-110" : ""
           }`}
         >
-          <span className="text-base md:text-xl font-bold ">
-            {step.number}
-          </span>
+          <span className="text-base font-bold md:text-xl">{step.number}</span>
         </MotionDiv>
       </div>
 
       {/* Card */}
       <div
-        className={`relative rounded-xl p-4 md:p-6 shadow-sm mt-8 transition-all duration-300 overflow-hidden ${
+        className={`relative mt-8 overflow-hidden rounded-xl p-4 shadow-sm transition-all duration-300 md:p-6 ${
           styles.card
         } ${variant === "interactive" ? "hover:shadow-2xl" : "hover:shadow-lg"}`}
       >
         {/* Hover Overlay */}
         <div
-          className={`absolute inset-0 bg-linear-to-br ${step.linear} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+          className={`absolute inset-0 bg-linear-to-br ${step.linear} opacity-0 transition-opacity duration-300 group-hover:opacity-5`}
         />
 
         {/* Title */}
-        <h3 className="text-lg font-bold mb-1 md:mb-3">
-          {step.title}
-        </h3>
+        <h3 className="mb-1 text-lg font-bold md:mb-3">{step.title}</h3>
 
         {/* Description */}
-        <p className="text-muted-foreground mb-2 md:mb-4 text-sm md:leading-relaxed">
+        <p className="text-muted-foreground mb-2 text-sm md:mb-4 md:leading-relaxed">
           {step.description}
         </p>
 
         {/* Features */}
-        <ul className="space-y-2 mb-2 md:mb-4">
+        <ul className="mb-2 space-y-2 md:mb-4">
           {step.features.map((feature, featureIndex) => (
             <motion.li
               key={feature}
@@ -128,33 +116,32 @@ const StepCard: React.FC<StepCardProps> = ({
                 duration: 0.4,
                 delay: index * 0.15 + featureIndex * 0.1,
               }}
-              className="flex items-center gap-2 text-xs "
+              className="flex items-center gap-2 text-xs"
             >
-              <CheckCircle className="w-3 h-3 text-success-foreground shrink-0" />
+              <CheckCircle className="text-success-foreground h-3 w-3 shrink-0" />
               <span>{feature}</span>
             </motion.li>
           ))}
         </ul>
-       
 
         {/* Bottom Progress Bar */}
         <MotionDiv
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           transition={{ duration: 0.8, delay: index * 0.15 + 0.4 }}
-          className={`absolute bottom-0 left-0 w-full h-1 bg-linear-to-r ${step.linear} origin-left`}
+          className={`absolute bottom-0 left-0 h-1 w-full bg-linear-to-r ${step.linear} origin-left`}
         />
       </div>
 
       {/* Mobile Arrow */}
       {index < totalSteps - 1 && (
-        <div className="cursor-pointer lg:hidden flex justify-center my-4 md:my-6">
+        <div className="my-4 flex cursor-pointer justify-center md:my-6 lg:hidden">
           <MotionDiv
             animate={{ y: [0, 5, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-8 h-8 rounded-full bg-linear-to-br from-muted to-white flex items-center justify-center shadow-sm"
+            className="from-muted flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br to-white shadow-sm"
           >
-            <ArrowRight className="w-4 h-4 " />
+            <ArrowRight className="h-4 w-4" />
           </MotionDiv>
         </div>
       )}

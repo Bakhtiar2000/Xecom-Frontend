@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Mail,
-  Phone,
-  MapPin,
-  CheckCircle,
-  MapPinHouse,
-  Map,
-  MapPinned,
-} from "lucide-react";
+import { Mail, Phone, MapPin, CheckCircle, MapPinHouse, Map, MapPinned } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -54,7 +46,7 @@ export default function ContactPage() {
   return (
     <section className="container">
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto mb-20">
+      <div className="mx-auto mb-20 max-w-2xl text-center">
         <SectionTitle
           subtitle=" Contact Us"
           title=" Get in touch with our sneaker team"
@@ -62,186 +54,94 @@ export default function ContactPage() {
           form and our team will get back to you shortly."
         ></SectionTitle>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-2 xl:gap-10 mb-10">
-        <Card
-          className="
-          group rounded-3xl
-          border border-border
-          bg-background
-          transition-all duration-300
-          hover:-translate-y-2
-          hover:shadow-xl
-        "
-        >
-          <CardContent className="py-5 px-3 space-y-5 text-center">
-            <div
-              className="
-              mx-auto w-14 h-14 rounded-2xl
-              border border-border
-              flex items-center justify-center
-              transition-transform duration-300
-              group-hover:scale-105
-            "
-            >
-              <MapPinHouse className="w-7 h-7 text-foreground" />
+      <div className="mb-10 grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-2 xl:gap-10">
+        <Card className="group border-border bg-background rounded-3xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+          <CardContent className="space-y-5 px-3 py-5 text-center">
+            <div className="border-border mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border transition-transform duration-300 group-hover:scale-105">
+              <MapPinHouse className="text-foreground h-7 w-7" />
             </div>
 
-            <h4 className="text-lg font-semibold tracking-tight">
-              Head Office
-            </h4>
+            <h4 className="text-lg font-semibold tracking-tight">Head Office</h4>
 
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground text-sm leading-relaxed">
               Dhanmondi 27
               <br />
               Dhaka, Bangladesh
             </p>
           </CardContent>
         </Card>
-        <Card
-          className="
-          group rounded-3xl
-          border border-border
-          bg-background
-          transition-all duration-300
-          hover:-translate-y-2
-          hover:shadow-xl
-        "
-        >
-          <CardContent className="py-5 px-3 space-y-5 text-center">
-            <div
-              className="
-              mx-auto w-14 h-14 rounded-2xl
-              border border-border
-              flex items-center justify-center
-              transition-transform duration-300
-              group-hover:scale-105
-            "
-            >
-              <MapPinned className="w-7 h-7 text-foreground" />
+        <Card className="group border-border bg-background rounded-3xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+          <CardContent className="space-y-5 px-3 py-5 text-center">
+            <div className="border-border mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border transition-transform duration-300 group-hover:scale-105">
+              <MapPinned className="text-foreground h-7 w-7" />
             </div>
 
             <h4 className="text-lg font-semibold tracking-tight">Warehouse</h4>
 
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground text-sm leading-relaxed">
               Uttara Sector 7
               <br />
               Dhaka, Bangladesh
             </p>
           </CardContent>
         </Card>
-        <Card
-          className="
-          group rounded-3xl
-          border border-border
-          bg-background
-          transition-all duration-300
-          hover:-translate-y-2
-          hover:shadow-xl
-        "
-        >
-          <CardContent className="py-5 px-3 space-y-5 text-center">
-            <div
-              className="
-              mx-auto w-14 h-14 rounded-2xl
-              border border-border
-              flex items-center justify-center
-              transition-transform duration-300
-              group-hover:scale-105
-            "
-            >
-              <Mail className="w-7 h-7 text-foreground" />
+        <Card className="group border-border bg-background rounded-3xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+          <CardContent className="space-y-5 px-3 py-5 text-center">
+            <div className="border-border mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border transition-transform duration-300 group-hover:scale-105">
+              <Mail className="text-foreground h-7 w-7" />
             </div>
 
-            <h4 className="text-lg font-semibold tracking-tight">
-              Email
-            </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              support@sneakerbd.com
-            </p>
+            <h4 className="text-lg font-semibold tracking-tight">Email</h4>
+            <p className="text-muted-foreground text-sm leading-relaxed">support@sneakerbd.com</p>
           </CardContent>
         </Card>
-        <Card
-          className="
-          group rounded-3xl
-          border border-border
-          bg-background
-          transition-all duration-300
-          hover:-translate-y-2
-          hover:shadow-xl
-        "
-        >
-          <CardContent className="py-5 px-3 space-y-5 text-center">
-            <div
-              className="
-              mx-auto w-14 h-14 rounded-2xl
-              border border-border
-              flex items-center justify-center
-              transition-transform duration-300
-              group-hover:scale-105
-            "
-            >
-              <Phone className="w-7 h-7 text-foreground" />
+        <Card className="group border-border bg-background rounded-3xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+          <CardContent className="space-y-5 px-3 py-5 text-center">
+            <div className="border-border mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border transition-transform duration-300 group-hover:scale-105">
+              <Phone className="text-foreground h-7 w-7" />
             </div>
 
-            <h4 className="text-lg font-semibold tracking-tight">
-              Phone
-            </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              +880 17XX-XXXXXX
-            </p>
+            <h4 className="text-lg font-semibold tracking-tight">Phone</h4>
+            <p className="text-muted-foreground text-sm leading-relaxed">+880 17XX-XXXXXX</p>
           </CardContent>
         </Card>
       </div>
-      <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-10 lg:gap-5 xl:gap-10 ">
+      <div className="grid gap-10 lg:grid-cols-2 lg:gap-5 xl:grid-cols-3 xl:gap-10">
         {/* LEFT: FORM */}
-        <div className=" xl:col-span-1">
+        <div className="xl:col-span-1">
           <form
             onSubmit={onSubmit}
-            className="space-y-6  bg-card-primary p-4 md:p-8 rounded-lg shadow-lg"
+            className="bg-card-primary space-y-6 rounded-lg p-4 shadow-lg md:p-8"
           >
             <div>
-              <label className="text-xs font-medium text-muted-foreground">
-                FULL NAME
-              </label>
+              <label className="text-muted-foreground text-xs font-medium">FULL NAME</label>
               <Input name="name" placeholder="Your name" required />
             </div>
 
             <div>
-              <label className="text-xs font-medium text-muted-foreground">
-                EMAIL ADDRESS
-              </label>
-              <Input
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                required
-              />
+              <label className="text-muted-foreground text-xs font-medium">EMAIL ADDRESS</label>
+              <Input name="email" type="email" placeholder="Enter your email" required />
             </div>
 
             <div>
-              <label className="text-xs font-medium text-muted-foreground">
-                MESSAGE
-              </label>
+              <label className="text-muted-foreground text-xs font-medium">MESSAGE</label>
               <textarea
                 name="message"
                 rows={4}
                 required
-                className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="border-border bg-background focus-visible:ring-ring w-full rounded-md border px-4 py-3 text-sm focus-visible:ring-2 focus-visible:outline-none"
                 placeholder="Write your message here..."
               />
             </div>
 
             <div className="flex items-center gap-2">
               <Checkbox id="terms" required />
-              <label htmlFor="terms" className="text-sm text-muted-foreground">
-                I agree to the{" "}
-                <span className="underline cursor-pointer">
-                  Terms & Conditions
-                </span>
+              <label htmlFor="terms" className="text-muted-foreground text-sm">
+                I agree to the <span className="cursor-pointer underline">Terms & Conditions</span>
               </label>
             </div>
 
-            <Button type="submit" className="w-full h-11 rounded-md">
+            <Button type="submit" className="h-11 w-full rounded-md">
               Send Message
             </Button>
           </form>
@@ -250,7 +150,7 @@ export default function ContactPage() {
         {/* RIGHT: INFO */}
         <div className="xl:col-span-2">
           <iframe
-            className="w-full h-100 lg:h-full"
+            className="h-100 w-full lg:h-full"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4612.679301264357!2d90.39503632611562!3d23.877575333880674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c43ec75cadf5%3A0xb809cd999981f652!2sSector%209%2C%20Dhaka%201230!5e1!3m2!1sen!2sbd!4v1770734989377!5m2!1sen!2sbd"
             loading="lazy"
           ></iframe>

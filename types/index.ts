@@ -34,11 +34,11 @@ export interface FilterState {
 }
 
 export interface Order {
-  id: string
-  date: string
-  value: string
-  status: "On shipping" | "Delivered"
-  phone: string
+  id: string;
+  date: string;
+  value: string;
+  status: "On shipping" | "Delivered";
+  phone: string;
 }
 
 export type Review = {
@@ -51,4 +51,3 @@ export type Review = {
   date: string;
   images: any;
 };
-

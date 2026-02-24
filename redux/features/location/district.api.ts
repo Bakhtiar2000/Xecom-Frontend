@@ -30,5 +30,4 @@ const districtApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useAddDistrictMutation, useGetSingleDistrictQuery } =
-  districtApi;
+export const { useAddDistrictMutation, useGetSingleDistrictQuery } = districtApi;

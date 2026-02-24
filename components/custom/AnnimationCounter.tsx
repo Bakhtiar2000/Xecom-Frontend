@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from "react";
 
 interface AnimatedCounterProps {
   target: number;
@@ -9,11 +9,11 @@ interface AnimatedCounterProps {
   decimals?: number;
 }
 
-export default function AnimatedCounter({ 
-  target, 
-  suffix = '', 
+export default function AnimatedCounter({
+  target,
+  suffix = "",
   duration = 2000,
-  decimals = 0 
+  decimals = 0,
 }: AnimatedCounterProps) {
   const [count, setCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);

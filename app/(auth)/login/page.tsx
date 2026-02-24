@@ -6,13 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ModernSneakerShowcase from "./component/annimationSneakersImage2";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { useAppDispatch } from "@/redux/hooks";
@@ -57,7 +51,7 @@ const Login = () => {
   } = useForm<ForgotPasswordFormData>();
 
   const handleForgotSubmit = async (data: ForgotPasswordFormData) => {
-    console.log('forget password data', data);
+    console.log("forget password data", data);
   };
 
   const showModal = () => {
@@ -106,27 +100,25 @@ const Login = () => {
 
   // Google Sign
   const handleGoogleSignIn = async () => {
-    console.log('google login');
+    console.log("google login");
   };
 
   return (
-    <div className=" container  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  ">
-      <div className="lg:flex justify-center hidden">
+    <div className="container grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
+      <div className="hidden justify-center lg:flex">
         <ModernSneakerShowcase />
       </div>
 
-      <div className="flex justify-center ">
-        <div className="max-w-md w-full  space-y-2">
+      <div className="flex justify-center">
+        <div className="w-full max-w-md space-y-2">
           <div className="text-center">
-            <Link href="/" className="text-3xl font-bold ">
+            <Link href="/" className="text-3xl font-bold">
               Xecom
             </Link>
-            <h2 className="mt-4 text-3xl font-bold text-foreground">
-              Sign in to your account
-            </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <h2 className="text-foreground mt-4 text-3xl font-bold">Sign in to your account</h2>
+            <p className="text-muted-foreground mt-2 text-sm">
               Or{" "}
-              <Link href="/register" className="font-semibold text-lg">
+              <Link href="/register" className="text-lg font-semibold">
                 create a new account
               </Link>
             </p>
@@ -135,9 +127,7 @@ const Login = () => {
           <Card className="py-6">
             <CardHeader>
               <CardTitle>Welcome Back</CardTitle>
-              <CardDescription>
-                Enter your credentials to access your account
-              </CardDescription>
+              <CardDescription>Enter your credentials to access your account</CardDescription>
             </CardHeader>
             <CardContent>
               <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
@@ -155,18 +145,13 @@ const Login = () => {
                       className={errors.email ? "border-danger" : ""}
                     />
                     {errors.email && (
-                      <p className="mt-1 text-sm text-primary">
-                        {errors.email.message}
-                      </p>
+                      <p className="text-primary mt-1 text-sm">{errors.email.message}</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium "
-                  >
+                  <label htmlFor="password" className="block text-sm font-medium">
                     Password
                   </label>
                   <div className="mt-1">
@@ -183,20 +168,14 @@ const Login = () => {
                       className={errors.password ? "border-danger" : ""}
                     />
                     {errors.password && (
-                      <p className="mt-1 text-sm text-primary">
-                        {errors.password.message}
-                      </p>
+                      <p className="text-primary mt-1 text-sm">{errors.password.message}</p>
                     )}
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="text-sm">
-                    <button
-                      type="button"
-                      onClick={showModal}
-                      className="font-medium "
-                    >
+                    <button type="button" onClick={showModal} className="font-medium">
                       Forgot your password?
                     </button>
                   </div>
@@ -208,23 +187,22 @@ const Login = () => {
                   </Button>
                 </div>
               </form>
-              <div className="mt-6 relative">
-                <div className="absolute inset-0 flex items-center">
-                </div>
+              <div className="relative mt-6">
+                <div className="absolute inset-0 flex items-center"></div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-transparent  text-muted-foreground">
+                  <span className="text-muted-foreground bg-transparent px-2">
                     Or continue with
                   </span>
                 </div>
               </div>
 
-              <div className="flex justify-center mt-4">
+              <div className="mt-4 flex justify-center">
                 <button
                   onClick={() => handleGoogleSignIn()}
-                  className="flex items-center justify-center gap-3 w-full py-3 rounded-xl  font-medium shadow-sm bg-white  dark:bg-white/10 cursor-pointer transition-all"
+                  className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-white py-3 font-medium shadow-sm transition-all dark:bg-white/10"
                 >
                   <svg
-                    className="w-6 h-6"
+                    className="h-6 w-6"
                     viewBox="0 0 533.5 544.3"
                     xmlns="http://www.w3.org/2000/svg"
                   >
@@ -254,8 +232,8 @@ const Login = () => {
 
           {/* Forgot Password Modal */}
           {isModalOpen && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <Card className="w-full max-w-md mx-4">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              <Card className="mx-4 w-full max-w-md">
                 <CardHeader>
                   <CardTitle>Reset Password</CardTitle>
                   <CardDescription>
@@ -263,14 +241,11 @@ const Login = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form
-                    onSubmit={handleSubmitForgot(handleForgotSubmit)}
-                    className="space-y-2"
-                  >
+                  <form onSubmit={handleSubmitForgot(handleForgotSubmit)} className="space-y-2">
                     <div>
                       <label
                         htmlFor="forgot-email"
-                        className="block text-sm font-medium text-muted-foreground"
+                        className="text-muted-foreground block text-sm font-medium"
                       >
                         Email Address
                       </label>
@@ -288,9 +263,7 @@ const Login = () => {
                           className={forgotErrors.email ? "border-danger" : ""}
                         />
                         {forgotErrors.email && (
-                          <p className="mt-1 text-sm text-primary">
-                            {forgotErrors.email.message}
-                          </p>
+                          <p className="text-primary mt-1 text-sm">{forgotErrors.email.message}</p>
                         )}
                       </div>
                     </div>

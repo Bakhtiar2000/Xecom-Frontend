@@ -8,19 +8,19 @@ Follow this structure strictly to maintain consistency across the project.
 
 ### 📝 Quick Reference
 
-| Folder | Purpose | When to Use |
-|--------|---------|-------------|
-| `app/` | **Pages & Routes** (Frontend) | Creating new pages, layouts, API routes |
-| `components/` | **React Components** (Frontend) | Creating reusable UI, forms, page sections |
-| `components/ui/` | **Base UI Components** | Buttons, inputs, cards, dialogs (shadcn/ui) |
-| `components/common/` | **Shared Components** | Header, Footer, Navbar, Sidebar |
-| `lib/` | **Library Config** | Setting up axios, validators, API clients |
-| `utils/` | **Helper Functions** | Date formatting, JWT verify, calculations |
-| `constants/` | **Static Values** | API URLs, enums, routes, messages |
-| `types/` | **TypeScript Types** | Defining interfaces, types for data models |
-| `redux/` | **State Management** (Frontend) | Managing global state, API calls (RTK Query) |
-| `public/` | **Static Assets** | Images, icons, fonts, videos |
-| `hooks/` | **Custom React Hooks** (Frontend) | Reusable React logic (useAuth, useDebounce) |
+| Folder               | Purpose                           | When to Use                                  |
+| -------------------- | --------------------------------- | -------------------------------------------- |
+| `app/`               | **Pages & Routes** (Frontend)     | Creating new pages, layouts, API routes      |
+| `components/`        | **React Components** (Frontend)   | Creating reusable UI, forms, page sections   |
+| `components/ui/`     | **Base UI Components**            | Buttons, inputs, cards, dialogs (shadcn/ui)  |
+| `components/common/` | **Shared Components**             | Header, Footer, Navbar, Sidebar              |
+| `lib/`               | **Library Config**                | Setting up axios, validators, API clients    |
+| `utils/`             | **Helper Functions**              | Date formatting, JWT verify, calculations    |
+| `constants/`         | **Static Values**                 | API URLs, enums, routes, messages            |
+| `types/`             | **TypeScript Types**              | Defining interfaces, types for data models   |
+| `redux/`             | **State Management** (Frontend)   | Managing global state, API calls (RTK Query) |
+| `public/`            | **Static Assets**                 | Images, icons, fonts, videos                 |
+| `hooks/`             | **Custom React Hooks** (Frontend) | Reusable React logic (useAuth, useDebounce)  |
 
 ---
 
@@ -141,11 +141,11 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 
 #### 🎨 `components/`
 
-* **`ui/`** - Only reusable UI primitives (buttons, inputs, cards, dialogs) from shadcn/ui or custom design system
-* **`common/`** - Shared components used across multiple pages (Header, Footer, Sidebar, Navbar)
-* **`forms/`** - Form components with validation logic
-* **`admin/`** - Components exclusive to admin panel
-* **`customer/`** - Components exclusive to customer-facing pages
+- **`ui/`** - Only reusable UI primitives (buttons, inputs, cards, dialogs) from shadcn/ui or custom design system
+- **`common/`** - Shared components used across multiple pages (Header, Footer, Sidebar, Navbar)
+- **`forms/`** - Form components with validation logic
+- **`admin/`** - Components exclusive to admin panel
+- **`customer/`** - Components exclusive to customer-facing pages
 
 > [!NOTE]
 > **📌 Rule:** Components should be PascalCase (e.g., `ProductCard.tsx`)
@@ -154,13 +154,13 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 
 #### 📄 `app/`
 
-* Use **route groups** like `(admin)` and `(customer)` for organizing routes without affecting URL
-* Each folder represents a route segment
-* `page.tsx` - The actual page component
-* `layout.tsx` - Layout wrapper for that route group
-* `loading.tsx` - Loading UI (optional)
-* `error.tsx` - Error UI (optional)
-* `not-found.tsx` - 404 page
+- Use **route groups** like `(admin)` and `(customer)` for organizing routes without affecting URL
+- Each folder represents a route segment
+- `page.tsx` - The actual page component
+- `layout.tsx` - Layout wrapper for that route group
+- `loading.tsx` - Loading UI (optional)
+- `error.tsx` - Error UI (optional)
+- `not-found.tsx` - 404 page
 
 > [!NOTE]
 > **📌 Rule:** All pages go here, not in a separate `pages/` folder (Next.js 13+ App Router)
@@ -169,12 +169,12 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 
 #### 🔧 `lib/`
 
-* **Purpose:** Third-party library configurations and core utility functions
-* **Examples:**
-  * `utils.ts` - Utility functions like `cn()` for classnames, `formatCurrency()`, etc.
-  * `axios.ts` - Axios instance with interceptors
-  * `validators.ts` - Zod/Yup validation schemas
-  * `api-client.ts` - Reusable API client logic
+- **Purpose:** Third-party library configurations and core utility functions
+- **Examples:**
+  - `utils.ts` - Utility functions like `cn()` for classnames, `formatCurrency()`, etc.
+  - `axios.ts` - Axios instance with interceptors
+  - `validators.ts` - Zod/Yup validation schemas
+  - `api-client.ts` - Reusable API client logic
 
 > [!NOTE]
 > **📌 Rule:** Library-specific configurations go here
@@ -183,12 +183,12 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 
 #### 🛠️ `utils/`
 
-* **Purpose:** Pure helper/utility functions specific to your business logic
-* **Examples:**
-  * `verifyToken.ts` - JWT token verification
-  * `formatDate.ts` - Date formatting functions
-  * `generateSlug.ts` - URL slug generation
-  * `calculatePrice.ts` - Price/discount calculations
+- **Purpose:** Pure helper/utility functions specific to your business logic
+- **Examples:**
+  - `verifyToken.ts` - JWT token verification
+  - `formatDate.ts` - Date formatting functions
+  - `generateSlug.ts` - URL slug generation
+  - `calculatePrice.ts` - Price/discount calculations
 
 > [!NOTE]
 > **📌 Rule:** camelCase naming (e.g., `verifyToken.ts`)
@@ -197,12 +197,12 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 
 #### 📌 `constants/`
 
-* **Purpose:** Static, unchanging values used across the app
-* **Examples:**
-  * `enum.ts` - Enums (`UserRole`, `OrderStatus`, `PaymentMethod`)
-  * `global.ts` - Global constants (`API_URL`, `APP_NAME`, `MAX_FILE_SIZE`)
-  * `routes.ts` - Route path constants
-  * `messages.ts` - Error/success message templates
+- **Purpose:** Static, unchanging values used across the app
+- **Examples:**
+  - `enum.ts` - Enums (`UserRole`, `OrderStatus`, `PaymentMethod`)
+  - `global.ts` - Global constants (`API_URL`, `APP_NAME`, `MAX_FILE_SIZE`)
+  - `routes.ts` - Route path constants
+  - `messages.ts` - Error/success message templates
 
 > [!NOTE]
 > **📌 Rule:** UPPER_SNAKE_CASE for constants, PascalCase for enums
@@ -211,12 +211,12 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 
 #### 🔷 `types/`
 
-* **Purpose:** TypeScript type definitions and interfaces
-* **Examples:**
-  * `index.ts` - Re-export all types
-  * `user.type.ts` - User, Profile, UserResponse
-  * `product.type.ts` - Product, Category, ProductFilters
-  * `api.type.ts` - API request/response types
+- **Purpose:** TypeScript type definitions and interfaces
+- **Examples:**
+  - `index.ts` - Re-export all types
+  - `user.type.ts` - User, Profile, UserResponse
+  - `product.type.ts` - Product, Category, ProductFilters
+  - `api.type.ts` - API request/response types
 
 > [!NOTE]
 > **📌 Rule:** Use `.type.ts` extension, PascalCase for types
@@ -225,13 +225,13 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 
 #### 🔄 `redux/`
 
-* **`store.ts`** - Redux store setup
-* **`hooks.ts`** - Typed Redux hooks
-* **`api/`** - RTK Query base API configuration
-* **`features/`** - Feature-based slices and APIs
-  * Each feature has its own folder
-  * Use `.api.ts` for RTK Query endpoints
-  * Use `.slice.ts` for Redux slices
+- **`store.ts`** - Redux store setup
+- **`hooks.ts`** - Typed Redux hooks
+- **`api/`** - RTK Query base API configuration
+- **`features/`** - Feature-based slices and APIs
+  - Each feature has its own folder
+  - Use `.api.ts` for RTK Query endpoints
+  - Use `.slice.ts` for Redux slices
 
 > [!NOTE]
 > **📌 Rule:** Follow feature-based organization
@@ -240,8 +240,8 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 
 #### 🖼️ `public/`
 
-* **Purpose:** Static assets served directly
-* Organize by type: `images/`, `icons/`, `fonts/`, `videos/`
+- **Purpose:** Static assets served directly
+- Organize by type: `images/`, `icons/`, `fonts/`, `videos/`
 
 > [!NOTE]
 > **📌 Rule:** Use descriptive names, optimize images before adding
@@ -251,36 +251,37 @@ c:/Work Station/ReturnHex/Xecom-Frontend/
 ### ✅ Best Practices
 
 1. **Naming Conventions:**
-   * Components: `PascalCase.tsx`
-   * Utilities/Hooks: `camelCase.ts`
-   * Constants: `UPPER_SNAKE_CASE`
-   * Types: `PascalCase`
+   - Components: `PascalCase.tsx`
+   - Utilities/Hooks: `camelCase.ts`
+   - Constants: `UPPER_SNAKE_CASE`
+   - Types: `PascalCase`
 
 2. **File Organization:**
-   * Keep related files together
-   * Don't nest too deeply (max 3-4 levels)
-   * Use `index.ts` for clean exports
+   - Keep related files together
+   - Don't nest too deeply (max 3-4 levels)
+   - Use `index.ts` for clean exports
 
 3. **Component Structure:**
-   * One component per file
-   * Co-locate styles if using CSS modules
-   * Keep components small and focused
+   - One component per file
+   - Co-locate styles if using CSS modules
+   - Keep components small and focused
 
 4. **Import Order:**
+
    ```typescript
    // 1. External imports
-   import { useState } from 'react'
-   import { Button } from '@/components/ui/button'
-   
+   import { useState } from "react";
+   import { Button } from "@/components/ui/button";
+
    // 2. Internal imports
-   import { useAuth } from '@/hooks/useAuth'
-   import { API_URL } from '@/constants/global'
-   
+   import { useAuth } from "@/hooks/useAuth";
+   import { API_URL } from "@/constants/global";
+
    // 3. Types
-   import type { User } from '@/types/user.type'
-   
+   import type { User } from "@/types/user.type";
+
    // 4. Styles (if any)
-   import './styles.css'
+   import "./styles.css";
    ```
 
 ---
@@ -303,10 +304,10 @@ git checkout -b feat/fix/chore/docs/branch-name
 
 Use the correct prefix:
 
-* `feat/` – new feature
-* `fix/` – bug fix
-* `chore/` – maintenance or config
-* `docs/` – documentation
+- `feat/` – new feature
+- `fix/` – bug fix
+- `chore/` – maintenance or config
+- `docs/` – documentation
 
 ---
 
@@ -341,7 +342,7 @@ dev  ←  your-branch
 
 > [!CAUTION]
 > **Do NOT create PRs into `main`.**
-> 
+>
 > **Do NOT push directly to `main`.**
 
 ---
@@ -367,16 +368,18 @@ This is the only allowed merge target.
 
 > [!IMPORTANT]
 > **✅ DO:**
-> * Always create branches from `dev`
-> * Always create PRs into `dev`
-> * Keep commit messages clean and meaningful
-> * Update your branch before and after development to avoid conflicts
+>
+> - Always create branches from `dev`
+> - Always create PRs into `dev`
+> - Keep commit messages clean and meaningful
+> - Update your branch before and after development to avoid conflicts
 
 > [!CAUTION]
 > **❌ DON'T:**
-> * Never push directly to `main` (it is protected)
-> * Never create PRs into `main`
-> * Never work without pulling latest changes first
+>
+> - Never push directly to `main` (it is protected)
+> - Never create PRs into `main`
+> - Never work without pulling latest changes first
 
 ---
 

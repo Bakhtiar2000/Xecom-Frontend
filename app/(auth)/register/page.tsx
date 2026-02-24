@@ -5,15 +5,8 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ModernSneakerShowcase from "./component/ModernSneakerShowcase";
-
 
 // Define form data interface
 interface RegisterFormData {
@@ -25,7 +18,6 @@ interface RegisterFormData {
 }
 
 const Register = () => {
-
   const {
     register: registerForm,
     handleSubmit,
@@ -49,27 +41,25 @@ const Register = () => {
 
   // Google Sign Up using AuthContext
   const handleGoogleSignUp = async () => {
-    console.log('google login');
+    console.log("google login");
   };
 
   return (
-    <div className="min-h-screen container bg-background  grid grid-cols-1 lg:grid-cols-2 items-center  gap-10  ">
-      <div className="lg:flex justify-center hidden">
+    <div className="bg-background container grid min-h-screen grid-cols-1 items-center gap-10 lg:grid-cols-2">
+      <div className="hidden justify-center lg:flex">
         <ModernSneakerShowcase />
       </div>
 
-      <div className="flex justify-center ">
-        <div className="max-w-md w-full space-y-2">
+      <div className="flex justify-center">
+        <div className="w-full max-w-md space-y-2">
           <div className="text-center">
             <Link href="/" className="text-3xl font-bold">
               Xecom
             </Link>
-            <h2 className="mt-4 text-3xl font-bold text-foreground">
-              Create your account
-            </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <h2 className="text-foreground mt-4 text-3xl font-bold">Create your account</h2>
+            <p className="text-muted-foreground mt-2 text-sm">
               Already have an account?{" "}
-              <Link href="/login" className="font-semibold text-lg">
+              <Link href="/login" className="text-lg font-semibold">
                 Sign in here
               </Link>
             </p>
@@ -78,14 +68,12 @@ const Register = () => {
           <Card className="py-6">
             <CardHeader>
               <CardTitle>Join Xecom</CardTitle>
-              <CardDescription>
-                Fill in your information to create a new account
-              </CardDescription>
+              <CardDescription>Fill in your information to create a new account</CardDescription>
             </CardHeader>
             <CardContent>
               <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium ">
+                  <label htmlFor="name" className="block text-sm font-medium">
                     Full Name
                   </label>
                   <div className="mt-1">
@@ -102,15 +90,13 @@ const Register = () => {
                       className={errors.name ? "border-danger" : ""}
                     />
                     {errors.name && (
-                      <p className="mt-1 text-sm text-primary">
-                        {errors.name.message}
-                      </p>
+                      <p className="text-primary mt-1 text-sm">{errors.name.message}</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium ">
+                  <label htmlFor="email" className="block text-sm font-medium">
                     Email Address
                   </label>
                   <div className="mt-1">
@@ -127,18 +113,13 @@ const Register = () => {
                       className={errors.email ? "border-danger" : ""}
                     />
                     {errors.email && (
-                      <p className="mt-1 text-sm text-primary">
-                        {errors.email.message}
-                      </p>
+                      <p className="text-primary mt-1 text-sm">{errors.email.message}</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="phoneNumber"
-                    className="block text-sm font-medium "
-                  >
+                  <label htmlFor="phoneNumber" className="block text-sm font-medium">
                     Phone Number
                   </label>
                   <div className="mt-1">
@@ -155,18 +136,13 @@ const Register = () => {
                       className={errors.phoneNumber ? "border-danger" : ""}
                     />
                     {errors.phoneNumber && (
-                      <p className="mt-1 text-sm text-primary">
-                        {errors.phoneNumber.message}
-                      </p>
+                      <p className="text-primary mt-1 text-sm">{errors.phoneNumber.message}</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium "
-                  >
+                  <label htmlFor="password" className="block text-sm font-medium">
                     Password
                   </label>
                   <div className="mt-1">
@@ -188,78 +164,66 @@ const Register = () => {
                       className={errors.password ? "border-danger" : ""}
                     />
                     {errors.password && (
-                      <p className="mt-1 text-sm text-primary">
-                        {errors.password.message}
-                      </p>
+                      <p className="text-primary mt-1 text-sm">{errors.password.message}</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="confirmPassword"
-                    className="block text-sm font-medium "
-                  >
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium">
                     Confirm Password
                   </label>
                   <div className="mt-1">
                     <Input
                       {...registerForm("confirmPassword", {
                         required: "Please confirm your password",
-                        validate: (value) =>
-                          value === password || "Passwords do not match",
+                        validate: (value) => value === password || "Passwords do not match",
                       })}
                       type="password"
                       placeholder="Confirm your password"
                       className={errors.confirmPassword ? "border-danger" : ""}
                     />
                     {errors.confirmPassword && (
-                      <p className="mt-1 text-sm text-primary">
-                        {errors.confirmPassword.message}
-                      </p>
+                      <p className="text-primary mt-1 text-sm">{errors.confirmPassword.message}</p>
                     )}
                   </div>
                 </div>
 
-                <div className="text-sm text-muted-foreground">
+                <div className="text-muted-foreground text-sm">
                   <p>
                     By creating an account, you agree to our{" "}
-                    <Link href="/terms" className=" font-bold ">
+                    <Link href="/terms" className="font-bold">
                       Terms of Service
                     </Link>{" "}
                     and{" "}
-                    <Link
-                      href="/privacy"
-                      className="text-primary hover:text-primary/80"
-                    >
+                    <Link href="/privacy" className="text-primary hover:text-primary/80">
                       Privacy Policy
                     </Link>
                   </p>
                 </div>
 
                 <div>
-                  <Button type="submit" className="w-full " size="lg">
+                  <Button type="submit" className="w-full" size="lg">
                     Create Account
                   </Button>
                 </div>
               </form>
-              <div className="mt-6 relative">
-                <div className="absolute inset-0 flex items-center">
-                </div>
+              <div className="relative mt-6">
+                <div className="absolute inset-0 flex items-center"></div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-transparent text-muted-foreground ">
+                  <span className="text-muted-foreground bg-transparent px-2">
                     Or continue with
                   </span>
                 </div>
               </div>
 
-              <div className="flex justify-center mt-4">
+              <div className="mt-4 flex justify-center">
                 <button
                   onClick={() => handleGoogleSignUp()}
-                  className="flex items-center justify-center gap-3 w-full py-3 rounded-xl  font-medium shadow-sm bg-white  dark:bg-white/10 cursor-pointer transition-all"
+                  className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-white py-3 font-medium shadow-sm transition-all dark:bg-white/10"
                 >
                   <svg
-                    className="w-6 h-6"
+                    className="h-6 w-6"
                     viewBox="0 0 533.5 544.3"
                     xmlns="http://www.w3.org/2000/svg"
                   >

@@ -24,7 +24,7 @@ const persistAuthReducer = persistReducer(persistConfig, authReducer);
 // Middleware to invalidate the 'User' tag on logout
 const invalidateTagsMiddleware = (store: any) => (next: any) => (action: any) => {
   if (action.type === logout.type) {
-    store.dispatch(baseApi.util.invalidateTags(['user']));
+    store.dispatch(baseApi.util.invalidateTags(["user"]));
   }
   return next(action);
 };

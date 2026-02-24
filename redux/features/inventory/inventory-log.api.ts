@@ -40,5 +40,4 @@ const inventoryLogApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllInventoryLogsQuery, useAddInventoryLogMutation } =
-  inventoryLogApi;
+export const { useGetAllInventoryLogsQuery, useAddInventoryLogMutation } = inventoryLogApi;

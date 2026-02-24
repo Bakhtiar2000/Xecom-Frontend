@@ -2,84 +2,64 @@
 
 import React, { FC, useState } from "react";
 import { motion } from "framer-motion";
-import {  ChevronLeft} from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import shoes6 from "../../../../assets/shoes/shoes6.png"
-
+import shoes6 from "../../../../assets/shoes/shoes6.png";
 
 const ModernSneakerShowcase: FC = () => {
   const [isHovered, setIsHovered] = useState<boolean>(true);
- 
-
- 
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto p-8 rounded-r-full overflow-hidden bg-card-primary shadow-lg">
-      
+    <div className="bg-card-primary relative mx-auto w-full max-w-4xl overflow-hidden rounded-r-full p-8 shadow-lg">
       {/* Header */}
-      <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-20">
-        <Link 
-          href="/" 
-          className="flex items-center gap-3 group transition-all duration-300 hover:scale-105"
+      <div className="absolute top-6 right-6 left-6 z-20 flex items-center justify-between">
+        <Link
+          href="/"
+          className="group flex items-center gap-3 transition-all duration-300 hover:scale-105"
         >
           <motion.div
             whileHover={{ rotate: -10 }}
-            className="w-12 h-12 rounded-xl bg-button-ternary flex items-center justify-center shadow-lg"
+            className="bg-button-ternary flex h-12 w-12 items-center justify-center rounded-xl shadow-lg"
           >
-            <ChevronLeft className="w-6 h-6 text-white" />
+            <ChevronLeft className="h-6 w-6 text-white" />
           </motion.div>
-          
+
           <div className="flex flex-col">
-            <span className="font-bold text-xl  tracking-tight">
-             Xecom
-            </span>
-            <span className="text-sm text-muted-foreground">
-              Premium Sneakers Collection
-            </span>
+            <span className="text-xl font-bold tracking-tight">Xecom</span>
+            <span className="text-muted-foreground text-sm">Premium Sneakers Collection</span>
           </div>
         </Link>
       </div>
 
       {/* Main Content */}
-      <div className="py-50 px-4  md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          
+      <div className="px-4 py-50 md:px-12">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
           {/* Info Section */}
           <div className="space-y-6">
             <div className="space-y-4">
-
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+              <h1 className="text-4xl leading-tight font-bold md:text-5xl">
                 Quantum <span className="text-button-ternary">Runner Pro</span>
               </h1>
-              
+
               <p className="text-muted-foreground text-lg">
-                Experience next-level comfort with our revolutionary quantum foam technology. 
+                Experience next-level comfort with our revolutionary quantum foam technology.
                 Designed for peak performance and style.
               </p>
             </div>
           </div>
 
           {/* Sneaker Display */}
-          <div 
+          <div
             className="relative"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(true)}
           >
-           
-
-          
-
             {/* Main Image Container */}
-            <div className="relative aspect-square rounded-3xl overflow-hidden ">
-              
+            <div className="relative aspect-square overflow-hidden rounded-3xl">
               {/* Dynamic Background Pattern */}
               <motion.div
-                animate={
-                  isHovered 
-                    ? { backgroundPosition: ["0% 0%", "100% 100%"] } 
-                    : {}
-                }
+                animate={isHovered ? { backgroundPosition: ["0% 0%", "100% 100%"] } : {}}
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                 className="absolute inset-0 opacity-10"
                 style={{
@@ -90,9 +70,7 @@ const ModernSneakerShowcase: FC = () => {
               />
 
               {/* Sneaker Image */}
-              <motion.div
-                className="relative w-full h-full"
-              >
+              <motion.div className="relative h-full w-full">
                 <Image
                   src={shoes6}
                   alt="Quantum Runner Pro Sneaker"
@@ -104,8 +82,8 @@ const ModernSneakerShowcase: FC = () => {
             </div>
 
             {/* Interactive Ring */}
-            <div className="absolute inset-0 pointer-events-none">
-              <svg className="w-full h-full" viewBox="0 0 100 100">
+            <div className="pointer-events-none absolute inset-0">
+              <svg className="h-full w-full" viewBox="0 0 100 100">
                 <motion.circle
                   cx="50"
                   cy="50"
@@ -115,7 +93,11 @@ const ModernSneakerShowcase: FC = () => {
                   strokeWidth="1.5"
                   strokeDasharray="4,4"
                   animate={{ rotate: isHovered ? 360 : 0 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
                 />
                 <defs>
                   <linearGradient id="gradient-ring" x1="0%" y1="0%" x2="100%" y2="100%">

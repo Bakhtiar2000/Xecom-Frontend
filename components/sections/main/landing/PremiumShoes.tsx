@@ -18,17 +18,15 @@ const PremiumShoes = (): React.JSX.Element => {
   const [showAll, setShowAll] = useState(false);
 
   const bestSellers = shoesData.filter(
-    (item) => item.badge === "BEST SELLER" || item.rating >= 4.8,
+    (item) => item.badge === "BEST SELLER" || item.rating >= 4.8
   );
 
-  const newArrivals = shoesData.filter(
-    (item) => item.badge === "NEW" || item.id >= 5,
-  );
+  const newArrivals = shoesData.filter((item) => item.badge === "NEW" || item.id >= 5);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => entry.isIntersecting && setIsVisible(true),
-      { threshold: 0.2 },
+      { threshold: 0.2 }
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
@@ -42,75 +40,58 @@ const PremiumShoes = (): React.JSX.Element => {
   };
 
   const activeProducts = productsMap[activeTab];
-  const visibleProducts = showAll
-    ? activeProducts
-    : activeProducts.slice(0, MAX_VISIBLE);
+  const visibleProducts = showAll ? activeProducts : activeProducts.slice(0, MAX_VISIBLE);
 
   return (
-    <section
-      ref={sectionRef}
-      className="container"
-    >
-      <div className="  relative z-10">
+    <section ref={sectionRef} className="container">
+      <div className="relative z-10">
         {/* Header */}
         <div className="text-center">
-          <SectionTitle
-            subtitle="Sneaker"
-            title=" Premium Sneaker Collection"
-            className="mb-2"
-          />
+          <SectionTitle subtitle="Sneaker" title=" Premium Sneaker Collection" className="mb-2" />
         </div>
 
         {/* Tabs */}
-        <div className="flex justify-center mb-4 md:mb-12">
+        <div className="mb-4 flex justify-center md:mb-12">
           <div className="flex flex-row">
             {[
               {
                 id: "trending",
                 label: "Trending Now",
                 count: shoesData.length,
-                icon: <TrendingUp className="lg:w-5 lg:h-5 w-3 h-3" />,
+                icon: <TrendingUp className="h-3 w-3 lg:h-5 lg:w-5" />,
               },
               {
                 id: "bestsellers",
                 label: "Best Sellers",
                 count: bestSellers.length,
-                icon: <Trophy className="lg:w-5 lg:h-5 w-3 h-3" />,
+                icon: <Trophy className="h-3 w-3 lg:h-5 lg:w-5" />,
               },
               {
                 id: "new",
                 label: "New Arrivals",
                 count: newArrivals.length,
-                icon: <Sparkles className="lg:w-5 lg:h-5 w-3 h-3" />,
+                icon: <Sparkles className="h-3 w-3 lg:h-5 lg:w-5" />,
               },
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
-                className={`lg:px-6 px-3 cursor-pointer lg:py-4 py-2 text-sm font-semibold flex items-center space-x-1 md:space-x-2 ${activeTab === tab.id
-                  ? "border-b-2 border-black dark:border-white"
-                  : ""
-                  }`}
+                className={`flex cursor-pointer items-center space-x-1 px-3 py-2 text-sm font-semibold md:space-x-2 lg:px-6 lg:py-4 ${
+                  activeTab === tab.id ? "border-b-2 border-black dark:border-white" : ""
+                }`}
               >
                 {tab.icon}
-                <span className="md:text-sm text-xs">{tab.label}</span>
-                <span className="px-2 py-1 rounded-full text-xs">
-                  {tab.count}
-                </span>
+                <span className="text-xs md:text-sm">{tab.label}</span>
+                <span className="rounded-full px-2 py-1 text-xs">{tab.count}</span>
               </button>
             ))}
           </div>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-8">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
           {visibleProducts.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              index={index}
-              isVisible={isVisible}
-            />
+            <ProductCard key={product.id} product={product} index={index} isVisible={isVisible} />
           ))}
         </div>
         {activeProducts.length > MAX_VISIBLE && (
@@ -118,11 +99,11 @@ const PremiumShoes = (): React.JSX.Element => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mt-12"
+            className="mt-12 text-center"
           >
             <button
               onClick={() => setShowAll((prev) => !prev)}
-              className="group relative px-8 py-2 rounded-lg cursor-pointer tranding-secondry-text font-bold text-lg transition-all duration-300 hover:scale-105"
+              className="group tranding-secondry-text relative cursor-pointer rounded-lg px-8 py-2 text-lg font-bold transition-all duration-300 hover:scale-105"
             >
               <span className="relative z-10 pb-2">
                 {showAll ? "< View Less >" : "< View More >"}

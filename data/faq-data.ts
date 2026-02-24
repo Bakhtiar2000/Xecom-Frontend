@@ -129,8 +129,7 @@ export const faqData = {
     },
     {
       question: "How can I track my order?",
-      answer:
-        "Once your order ships, you'll receive a tracking link via email.",
+      answer: "Once your order ships, you'll receive a tracking link via email.",
     },
     {
       question: "Is shipping free?",
@@ -187,8 +186,7 @@ export const faqData = {
     },
     {
       question: "How do I start a return?",
-      answer:
-        "Visit your account orders page or contact support to initiate a return request.",
+      answer: "Visit your account orders page or contact support to initiate a return request.",
     },
     {
       question: "Are sale items returnable?",
@@ -197,8 +195,7 @@ export const faqData = {
     },
     {
       question: "When will I receive my refund?",
-      answer:
-        "Refunds are processed within 5–7 business days after we receive the returned item.",
+      answer: "Refunds are processed within 5–7 business days after we receive the returned item.",
     },
     {
       question: "Do I have to pay for return shipping?",
@@ -250,8 +247,7 @@ export const faqData = {
     },
     {
       question: "Is my payment information secure?",
-      answer:
-        "Yes, all transactions are encrypted and processed through secure payment gateways.",
+      answer: "Yes, all transactions are encrypted and processed through secure payment gateways.",
     },
     {
       question: "Can I pay in installments?",

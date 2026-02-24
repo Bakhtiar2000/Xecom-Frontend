@@ -7,43 +7,40 @@ import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { UserRole } from "@/redux/features/auth/dto/auth.dto";
 
 interface ProtectedRouteProps {
-    children: React.ReactNode;
-    allowedRoles?: UserRole[];
+  children: React.ReactNode;
+  allowedRoles?: UserRole[];
 }
 
-export default function ProtectedRoute({
-    children,
-    allowedRoles,
-}: ProtectedRouteProps) {
-    const router = useRouter();
-    const user = useAppSelector(selectCurrentUser);
+export default function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
+  const router = useRouter();
+  const user = useAppSelector(selectCurrentUser);
 
-    useEffect(() => {
-        // If no user is logged in, redirect to login
-        if (!user) {
-            router.push("/login");
-            return;
-        }
-
-        // If allowed roles are specified and user's role is not in the list, redirect to home
-        if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
-            router.push("/");
-        }
-    }, [user, allowedRoles, router]);
-
-    // Don't render anything while checking authentication
+  useEffect(() => {
+    // If no user is logged in, redirect to login
     if (!user) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="text-lg">Loading...</div>
-            </div>
-        );
+      router.push("/login");
+      return;
     }
 
-    // Don't render if user doesn't have the required role
+    // If allowed roles are specified and user's role is not in the list, redirect to home
     if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
-        return null;
+      router.push("/");
     }
+  }, [user, allowedRoles, router]);
 
-    return <>{children}</>;
+  // Don't render anything while checking authentication
+  if (!user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  // Don't render if user doesn't have the required role
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
+    return null;
+  }
+
+  return <>{children}</>;
 }

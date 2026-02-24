@@ -12,7 +12,6 @@ export const categories: Category[] = [
     id: 1,
     title: "Sneakers",
     image: shoes7,
-
   },
   {
     id: 2,
@@ -27,17 +26,16 @@ export const categories: Category[] = [
   {
     id: 4,
     title: "Loafer",
-    image: shoes7
+    image: shoes7,
   },
   {
     id: 5,
     title: "Sports",
     image: shoes8,
   },
-   {
+  {
     id: 6,
     title: "Formal",
     image: shoes9,
-
   },
 ];

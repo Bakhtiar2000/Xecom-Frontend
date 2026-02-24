@@ -12,7 +12,7 @@ export const checkoutSchema = z.object({
     .min(11, "Mobile number is required")
     .regex(
       /^(\+8801|01)[3-9]\d{8}$/,
-      "Please enter a valid Bangladesh phone number (e.g., +880173XXXXXXX)",
+      "Please enter a valid Bangladesh phone number (e.g., +880173XXXXXXX)"
     ),
 
   shippingLocation: z.enum(["inside", "outside"], {
@@ -36,7 +36,6 @@ export const checkoutSchema = z.object({
     .optional()
     .default(""),
 
- 
   selectedPaymentMethod: z
     .enum(["bkash", "nagad", "rocket", "upay", "bank", "card"], {
       message: "Please select a valid payment method",

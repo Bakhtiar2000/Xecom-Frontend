@@ -16,4 +16,4 @@ export type TCategoryMetadata = {
   totalCategories: number;
   totalActiveCategories: number;
   totalInactiveCategories: number;
-}
+};

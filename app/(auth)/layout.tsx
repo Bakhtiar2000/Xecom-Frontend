@@ -6,11 +6,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { UserRole } from "@/redux/features/auth/dto/auth.dto";
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const user = useAppSelector(selectCurrentUser);
 
@@ -37,10 +33,8 @@ export default function AuthLayout({
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <main className="flex-1 flex items-center justify-center p-4">
-        {children}
-      </main>
+    <div className="bg-background flex min-h-screen flex-col">
+      <main className="flex flex-1 items-center justify-center p-4">{children}</main>
     </div>
   );
 }

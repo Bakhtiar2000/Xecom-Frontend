@@ -67,7 +67,7 @@ interface CartItem {
   originalPrice: number;
   discountPercentage: number;
   finalPrice: number;
-  image:any; 
+  image: any;
   selected: boolean;
   quantity: number;
   comboOffer?: boolean;
@@ -75,9 +75,7 @@ interface CartItem {
 }
 
 const CheckoutPage = () => {
-  const [activeStep, setActiveStep] = useState<"items" | "info" | "payment">(
-    "items",
-  );
+  const [activeStep, setActiveStep] = useState<"items" | "info" | "payment">("items");
 
   const INSIDE_DHAKA_FEE = 100;
   const OUTSIDE_DHAKA_FEE = 150;
@@ -128,13 +126,11 @@ const CheckoutPage = () => {
     setCartItems(
       cartItems.map((item) => {
         if (item.id === id) {
-          const newQuantity = increment
-            ? item.quantity + 1
-            : Math.max(1, item.quantity - 1);
+          const newQuantity = increment ? item.quantity + 1 : Math.max(1, item.quantity - 1);
           return { ...item, quantity: newQuantity };
         }
         return item;
-      }),
+      })
     );
   };
 
@@ -147,13 +143,11 @@ const CheckoutPage = () => {
 
     const totalPrice = selectedItems.reduce(
       (sum, item) => sum + item.finalPrice * item.quantity,
-      0,
+      0
     );
 
     const baseShippingFee =
-      formData.shippingLocation === "inside"
-        ? INSIDE_DHAKA_FEE
-        : OUTSIDE_DHAKA_FEE;
+      formData.shippingLocation === "inside" ? INSIDE_DHAKA_FEE : OUTSIDE_DHAKA_FEE;
 
     let shippingFee = baseShippingFee;
     let savedShippingFee = 0;
@@ -192,7 +186,7 @@ const CheckoutPage = () => {
       groups[item.store].push(item);
       return groups;
     },
-    {} as Record<string, CartItem[]>,
+    {} as Record<string, CartItem[]>
   );
 
   const [formData, setFormData] = useState<CheckoutFormData>({
@@ -204,30 +198,20 @@ const CheckoutPage = () => {
     additionalNote: "",
     selectedPaymentMethod: "bkash",
   });
-  const [formErrors, setFormErrors] = useState<
-    Partial<Record<keyof CheckoutFormData, string>>
-  >({});
+  const [formErrors, setFormErrors] = useState<Partial<Record<keyof CheckoutFormData, string>>>({});
   console.log(formData);
 
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
   // Validate specific field only
-  const validateField = (
-    fieldName: string,
-    value: string,
-    allData: CheckoutFormData,
-  ) => {
+  const validateField = (fieldName: string, value: string, allData: CheckoutFormData) => {
     const fieldSchemas: Record<string, z.ZodTypeAny> = {
       name: checkoutSchema.pick({ name: true }).shape.name,
-      mobileNumber: checkoutSchema.pick({ mobileNumber: true }).shape
-        .mobileNumber,
-      shippingLocation: checkoutSchema.pick({ shippingLocation: true }).shape
-        .shippingLocation,
+      mobileNumber: checkoutSchema.pick({ mobileNumber: true }).shape.mobileNumber,
+      shippingLocation: checkoutSchema.pick({ shippingLocation: true }).shape.shippingLocation,
       address: checkoutSchema.pick({ address: true }).shape.address,
-      paymentOption: checkoutSchema.pick({ paymentOption: true }).shape
-        .paymentOption,
-      additionalNote: checkoutSchema.pick({ additionalNote: true }).shape
-        .additionalNote,
+      paymentOption: checkoutSchema.pick({ paymentOption: true }).shape.paymentOption,
+      additionalNote: checkoutSchema.pick({ additionalNote: true }).shape.additionalNote,
       selectedPaymentMethod: checkoutSchema.pick({
         selectedPaymentMethod: true,
       }).shape.selectedPaymentMethod,
@@ -254,9 +238,7 @@ const CheckoutPage = () => {
     });
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     setFormData((prev) => {
@@ -301,19 +283,15 @@ const CheckoutPage = () => {
   };
   const offerInfo = getOfferMessage();
 
-
   return (
-    <div className="min-h-screen cart-bg py-8">
+    <div className="cart-bg min-h-screen py-8">
       <div className="mx-auto">
-        <div className="lg:flex justify-center mx-auto w-11/12 px-4  gap-3">
+        <div className="mx-auto w-11/12 justify-center gap-3 px-4 lg:flex">
           {/* Left Column - Checkout Process */}
-          <div
-            className={`${activeStep === "payment" ? "lg:w-full" : "lg:w-8/12"}`}
-          >
+          <div className={`${activeStep === "payment" ? "lg:w-full" : "lg:w-8/12"}`}>
             <div className="mb-3">
               {/* Checkout Steps */}
               <Tabs
-              
                 value={activeStep}
                 onValueChange={(value) => {
                   if (value === "items") {
@@ -325,13 +303,13 @@ const CheckoutPage = () => {
                   }
                 }}
               >
-                <TabsList className="flex bg-card-primary px-4 py-2  rounded-lg shadow-sm items-center flex-wrap gap-2 w-full h-auto">
+                <TabsList className="bg-card-primary flex h-auto w-full flex-wrap items-center gap-2 rounded-lg px-4 py-2 shadow-sm">
                   <TabsTrigger
                     value="items"
-                    className="flex items-center space-x-2 px-4 py-4 rounded-lg transition-all data-[state=active]:text-button-secondary"
+                    className="data-[state=active]:text-button-secondary flex items-center space-x-2 rounded-lg px-4 py-4 transition-all"
                   >
                     <ShoppingCart size={20} />
-                    <span className="font-medium hidden md:inline">Items</span>
+                    <span className="hidden font-medium md:inline">Items</span>
                   </TabsTrigger>
 
                   <ArrowRight className="mx-1" />
@@ -339,10 +317,10 @@ const CheckoutPage = () => {
                   <TabsTrigger
                     value="info"
                     disabled={!completedSteps.has("items")}
-                    className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-all data-[state=active]:text-button-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="data-[state=active]:text-button-secondary flex items-center space-x-2 rounded-lg px-4 py-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <Truck size={20} />
-                    <span className="font-medium hidden md:inline">Shipping</span>
+                    <span className="hidden font-medium md:inline">Shipping</span>
                   </TabsTrigger>
 
                   <ArrowRight className="mx-1" />
@@ -350,14 +328,13 @@ const CheckoutPage = () => {
                   <TabsTrigger
                     value="payment"
                     disabled={!formValid}
-                    className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-all data-[state=active]:text-button-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="data-[state=active]:text-button-secondary flex items-center space-x-2 rounded-lg px-4 py-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <CreditCard size={20} />
-                    <span className="font-medium hidden md:inline">Successfully Payment</span>
+                    <span className="hidden font-medium md:inline">Successfully Payment</span>
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
-
 
               {/* Active Step Content */}
               <div className="mt-3">
@@ -367,39 +344,27 @@ const CheckoutPage = () => {
                     {Object.entries(groupedItems).map(([store, items]) => (
                       <div
                         key={store}
-                        className="bg-card-primary rounded-xl shadow-sm mb-3 px-2 overflow-hidden"
+                        className="bg-card-primary mb-3 overflow-hidden rounded-xl px-2 shadow-sm"
                       >
-                        <Accordion
-                          type="single"
-                          collapsible
-                          defaultValue={store}
-                        >
+                        <Accordion type="single" collapsible defaultValue={store}>
                           <AccordionItem value={store}>
                             <AccordionTrigger>
-                              <div className=" p-2">
-                                <div className="flex items-center cursor-pointer justify-between">
+                              <div className="p-2">
+                                <div className="flex cursor-pointer items-center justify-between">
                                   <div className="ml-3">
-                                    <h3 className="font-semibold text-lg lg:text-xl">
-                                      {store}
-                                    </h3>
+                                    <h3 className="text-lg font-semibold lg:text-xl">{store}</h3>
                                   </div>
                                 </div>
                               </div>
                             </AccordionTrigger>
                             <AccordionContent>
-                              <div className="divide-y border-t cart-border-primary border-border">
+                              <div className="cart-border-primary border-border divide-y border-t">
                                 {items.map((item) => (
-                                  <div
-                                    key={item.id}
-                                    className="p-4 cursor-pointer"
-                                  >
-                                    <div
-                                      className="flex flex-col
-                                     sm:flex-row gap-4"
-                                    >
+                                  <div key={item.id} className="cursor-pointer p-4">
+                                    <div className="flex flex-col gap-4 sm:flex-row">
                                       {/* Image */}
-                                      <div className="w-full sm:w-24 h-24 rounded-lg overflow-hidden cart-img-bg-primary shrink-0">
-                                        <div className="w-full h-full flex items-center justify-center">
+                                      <div className="cart-img-bg-primary h-24 w-full shrink-0 overflow-hidden rounded-lg sm:w-24">
+                                        <div className="flex h-full w-full items-center justify-center">
                                           <Image
                                             src={item.image}
                                             alt={item.name}
@@ -411,61 +376,51 @@ const CheckoutPage = () => {
                                       </div>
 
                                       {/* Details */}
-                                      <div className="flex-1 flex flex-col justify-between">
+                                      <div className="flex flex-1 flex-col justify-between">
                                         {/* Name and Remove Button */}
                                         <div className="flex flex-row justify-between">
                                           <div>
-                                            <h4 className="font-medium text-sm lg:text-lg">
+                                            <h4 className="text-sm font-medium lg:text-lg">
                                               {item.name}{" "}
-                                              <span className="ml-2">
-                                                x {item.quantity}
-                                              </span>
+                                              <span className="ml-2">x {item.quantity}</span>
                                             </h4>
                                             {item.description && (
-                                              <p className="text-sm cart-text-base mt-1">
+                                              <p className="cart-text-base mt-1 text-sm">
                                                 {item.description}
                                               </p>
                                             )}
                                           </div>
                                           <button
                                             onClick={() => removeItem(item.id)}
-                                            className="p-2 mt-2 sm:mt-0 self-start sm:self-auto rounded-lg"
+                                            className="mt-2 self-start rounded-lg p-2 sm:mt-0 sm:self-auto"
                                           >
-                                            <Trash2 className="w-5 h-5 text-muted-foreground hover:text-danger" />
+                                            <Trash2 className="text-muted-foreground hover:text-danger h-5 w-5" />
                                           </button>
                                         </div>
 
                                         {/* Pricing and Quantity */}
-                                        <div className="flex flex-row items-start sm:items-center justify-between mt-4 gap-2 sm:gap-0">
-                                          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                                        <div className="mt-4 flex flex-row items-start justify-between gap-2 sm:items-center sm:gap-0">
+                                          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                                             {item.discountPercentage && (
                                               <div className="flex items-center gap-2">
-                                                <span className="px-2 py-1 bg-danger-foreground text-danger text-sm font-medium rounded">
+                                                <span className="bg-danger-foreground text-danger rounded px-2 py-1 text-sm font-medium">
                                                   {item.discountPercentage}%
                                                 </span>
-                                                <span className="text-lg cart-text-base line-through">
-                                                  Tk{" "}
-                                                  {item.originalPrice.toLocaleString(
-                                                    "en-BD",
-                                                  )}
+                                                <span className="cart-text-base text-lg line-through">
+                                                  Tk {item.originalPrice.toLocaleString("en-BD")}
                                                 </span>
                                               </div>
                                             )}
-                                            <div className=" font-bold text-sm lg:text-lg">
-                                              Tk{" "}
-                                              {item.finalPrice.toLocaleString(
-                                                "en-BD",
-                                              )}
+                                            <div className="text-sm font-bold lg:text-lg">
+                                              Tk {item.finalPrice.toLocaleString("en-BD")}
                                             </div>
                                           </div>
 
                                           {/* Quantity Selector */}
-                                          <div className="flex items-center border cart-border-sec rounded-lg mt-2 sm:mt-0">
+                                          <div className="cart-border-sec mt-2 flex items-center rounded-lg border sm:mt-0">
                                             <button
-                                              onClick={() =>
-                                                updateQuantity(item.id, false)
-                                              }
-                                              className="px-3 py-1 cursor-pointer"
+                                              onClick={() => updateQuantity(item.id, false)}
+                                              className="cursor-pointer px-3 py-1"
                                             >
                                               -
                                             </button>
@@ -473,10 +428,8 @@ const CheckoutPage = () => {
                                               {item.quantity}
                                             </span>
                                             <button
-                                              onClick={() =>
-                                                updateQuantity(item.id, true)
-                                              }
-                                              className="px-3 py-1 cursor-pointer"
+                                              onClick={() => updateQuantity(item.id, true)}
+                                              className="cursor-pointer px-3 py-1"
                                             >
                                               +
                                             </button>
@@ -495,14 +448,12 @@ const CheckoutPage = () => {
                   </div>
                 )}
                 {activeStep === "info" && (
-                  <div className="bg-card-primary p-4 lg:p-8 rounded-lg shadow-sm">
-                    <h2 className="text-2xl font-bold  mb-6">
-                      Customer Information
-                    </h2>
-                    <div className="flex my-2 gap-2">
+                  <div className="bg-card-primary rounded-lg p-4 shadow-sm lg:p-8">
+                    <h2 className="mb-6 text-2xl font-bold">Customer Information</h2>
+                    <div className="my-2 flex gap-2">
                       {/* Name Field */}
-                      <div className="space-y-2 flex-1">
-                        <label className="text-sm font-medium  flex items-center">
+                      <div className="flex-1 space-y-2">
+                        <label className="flex items-center text-sm font-medium">
                           <User size={16} className="mr-2" />
                           Your name *
                         </label>
@@ -512,26 +463,21 @@ const CheckoutPage = () => {
                           value={formData.name}
                           onChange={handleChange}
                           placeholder="Rahim Abdel"
-                          className={`w-full px-4 py-3 border rounded-lg  transition-all bg-transparent ${
+                          className={`w-full rounded-lg border bg-transparent px-4 py-3 transition-all ${
                             formErrors.name
-                              ? "border-danger focus:ring-danger "
-                              : " focus:ring-success"
+                              ? "border-danger focus:ring-danger"
+                              : "focus:ring-success"
                           }`}
                         />
                         {formErrors.name && (
-                          <p className="text-sm text-danger font-medium">
-                            {formErrors.name}
-                          </p>
+                          <p className="text-danger text-sm font-medium">{formErrors.name}</p>
                         )}
                       </div>
                       {/* Mobile Number Field */}
-                      <div className="space-y-2 flex-1">
-                        <label className="text-sm font-medium  flex items-center">
+                      <div className="flex-1 space-y-2">
+                        <label className="flex items-center text-sm font-medium">
                           <Phone size={16} className="mr-2" />
-                          <span className="hidden lg:flex">
-                            Your Mobile
-                          </span>{" "}
-                          Number *
+                          <span className="hidden lg:flex">Your Mobile</span> Number *
                         </label>
                         <Input
                           type="tel"
@@ -539,14 +485,14 @@ const CheckoutPage = () => {
                           value={formData.mobileNumber}
                           onChange={handleChange}
                           placeholder="017XXXXXXXX"
-                          className={`w-full px-4 py-3 border rounded-lg focus:outline-none  transition-all bg-transparent ${
+                          className={`w-full rounded-lg border bg-transparent px-4 py-3 transition-all focus:outline-none ${
                             formErrors.mobileNumber
                               ? "border-danger focus:ring-danger"
-                              : "border-success  focus:ring-success"
+                              : "border-success focus:ring-success"
                           }`}
                         />
                         {formErrors.mobileNumber && (
-                          <p className="text-sm text-danger font-medium">
+                          <p className="text-danger text-sm font-medium">
                             {formErrors.mobileNumber}
                           </p>
                         )}
@@ -554,14 +500,14 @@ const CheckoutPage = () => {
                     </div>
 
                     {/* Shipping Location */}
-                    <div className="space-y-2 my-2">
-                      <label className="text-sm font-medium  flex items-center">
+                    <div className="my-2 space-y-2">
+                      <label className="flex items-center text-sm font-medium">
                         <MapPin size={16} className="mr-2" />
                         Shipping Location *
                       </label>
                       <div className="grid grid-cols-2 gap-4">
                         <label
-                          className={`flex items-center border rounded-lg p-4 cursor-pointer transition-all ${
+                          className={`flex cursor-pointer items-center rounded-lg border p-4 transition-all ${
                             formData.shippingLocation === "inside"
                               ? "border-border bg-success"
                               : "border-border hover:border-success-foreground"
@@ -573,18 +519,18 @@ const CheckoutPage = () => {
                             value="inside"
                             checked={formData.shippingLocation === "inside"}
                             onChange={handleChange}
-                            className="mr-3 w-4 h-4 "
+                            className="mr-3 h-4 w-4"
                           />
                           <div>
                             <p className="font-medium">Inside Dhaka</p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-muted-foreground text-sm">
                               Minimum spend 1000 tk then Free Shipping{" "}
                             </p>
                           </div>
                         </label>
 
                         <label
-                          className={`flex items-center border rounded-lg p-4 cursor-pointer transition-all ${
+                          className={`flex cursor-pointer items-center rounded-lg border p-4 transition-all ${
                             formData.shippingLocation === "outside"
                               ? "border-border bg-success"
                               : "border-border hover:border-success-foreground"
@@ -596,26 +542,26 @@ const CheckoutPage = () => {
                             value="outside"
                             checked={formData.shippingLocation === "outside"}
                             onChange={handleChange}
-                            className="mr-3 w-4 h-4 text-success-foreground"
+                            className="text-success-foreground mr-3 h-4 w-4"
                           />
                           <div>
                             <p className="font-medium">Outside Dhaka</p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-muted-foreground text-sm">
                               Minimum spend 1000 tk then Shipping 50% off{" "}
                             </p>
                           </div>
                         </label>
                       </div>
                       {formErrors.shippingLocation && (
-                        <p className="text-sm text-danger font-medium">
+                        <p className="text-danger text-sm font-medium">
                           {formErrors.shippingLocation}
                         </p>
                       )}
                     </div>
 
                     {/* Address Field */}
-                    <div className="space-y-2 my-2">
-                      <label className="text-sm font-medium  flex items-center">
+                    <div className="my-2 space-y-2">
+                      <label className="flex items-center text-sm font-medium">
                         <MapPin size={16} className="mr-2" />
                         Your Address *
                       </label>
@@ -625,22 +571,20 @@ const CheckoutPage = () => {
                         onChange={handleChange}
                         rows={3}
                         placeholder="Product delivery address here"
-                        className={`w-full px-4 py-3 border rounded-lg resize-none focus:outline-none focus:ring-2 transition-all ${
+                        className={`w-full resize-none rounded-lg border px-4 py-3 transition-all focus:ring-2 focus:outline-none ${
                           formErrors.address
                             ? "border-danger focus:ring-danger"
                             : "border-success focus:ring-success"
                         }`}
                       />
                       {formErrors.address && (
-                        <p className="text-sm text-danger font-medium">
-                          {formErrors.address}
-                        </p>
+                        <p className="text-danger text-sm font-medium">{formErrors.address}</p>
                       )}
                     </div>
 
                     {/* Payment Option */}
-                    <div className="space-y-2 my-2">
-                      <label className="text-sm font-medium  flex items-center">
+                    <div className="my-2 space-y-2">
+                      <label className="flex items-center text-sm font-medium">
                         Payment Option *
                       </label>
 
@@ -648,7 +592,7 @@ const CheckoutPage = () => {
                         {/* Cash on Delivery Card */}
                         <div className="flex-1">
                           <label
-                            className={`flex items-center border rounded-lg p-4 cursor-pointer transition-all ${
+                            className={`flex cursor-pointer items-center rounded-lg border p-4 transition-all ${
                               formData.paymentOption === "cod"
                                 ? "border-border bg-success"
                                 : "border-border hover:border-success-foreground"
@@ -660,11 +604,11 @@ const CheckoutPage = () => {
                               value="cod"
                               checked={formData.paymentOption === "cod"}
                               onChange={handleChange}
-                              className="mr-3 w-4 h-4 text-tag"
+                              className="text-tag mr-3 h-4 w-4"
                             />
                             <div>
-                              <p className="font-medium ">Cash On Delivery</p>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="font-medium">Cash On Delivery</p>
+                              <p className="text-muted-foreground text-sm">
                                 Additional fee may apply
                               </p>
                             </div>
@@ -673,33 +617,27 @@ const CheckoutPage = () => {
 
                         {/* Online Payment Dropdown Card */}
                         <div
-                          className={`border flex-1  rounded-lg p-4 cursor-pointer  mb-4 transition-all ${
+                          className={`mb-4 flex-1 cursor-pointer rounded-lg border p-4 transition-all ${
                             formData.paymentOption === "online"
                               ? "border-border bg-success"
                               : "border-border hover:border-success-foreground"
                           }`}
                         >
-                          <div className="flex items-center  justify-start">
+                          <div className="flex items-center justify-start">
                             <input
                               type="radio"
                               name="paymentOption"
                               value="online"
                               checked={formData.paymentOption === "online"}
                               onChange={handleChange}
-                              className="mr-3 w-4 h-4  mt-4 text-tag"
+                              className="text-tag mt-4 mr-3 h-4 w-4"
                             />
-                            <div className="h-1 mb-4">
-                              <div className="h-1 mb-4 flex-1">
+                            <div className="mb-4 h-1">
+                              <div className="mb-4 h-1 flex-1">
                                 <Select
                                   value={formData.selectedPaymentMethod}
                                   onValueChange={(
-                                    value:
-                                      | "bkash"
-                                      | "nagad"
-                                      | "rocket"
-                                      | "upay"
-                                      | "bank"
-                                      | "card",
+                                    value: "bkash" | "nagad" | "rocket" | "upay" | "bank" | "card"
                                   ) => {
                                     setFormData((prev) => {
                                       const updatedData: CheckoutFormData = {
@@ -709,8 +647,7 @@ const CheckoutPage = () => {
                                       };
 
                                       // Validate the entire form with updated data
-                                      const validation =
-                                        checkoutSchema.safeParse(updatedData);
+                                      const validation = checkoutSchema.safeParse(updatedData);
                                       if (validation.success) {
                                         setFormErrors({});
                                         setFormValid(true);
@@ -718,13 +655,10 @@ const CheckoutPage = () => {
                                         const errors: Partial<
                                           Record<keyof CheckoutFormData, string>
                                         > = {};
-                                        validation.error.issues.forEach(
-                                          (error) => {
-                                            const field = error
-                                              .path[0] as keyof CheckoutFormData;
-                                            errors[field] = error.message;
-                                          },
-                                        );
+                                        validation.error.issues.forEach((error) => {
+                                          const field = error.path[0] as keyof CheckoutFormData;
+                                          errors[field] = error.message;
+                                        });
                                         setFormErrors(errors);
                                         setFormValid(false);
                                       }
@@ -745,8 +679,8 @@ const CheckoutPage = () => {
                                   <SelectContent>
                                     <SelectItem value="bkash">
                                       <div>
-                                        <p className="font-medium ">Bkash</p>
-                                        <p className="text-xs text-muted-foreground">
+                                        <p className="font-medium">Bkash</p>
+                                        <p className="text-muted-foreground text-xs">
                                           Mobile Payment
                                         </p>
                                       </div>
@@ -754,7 +688,7 @@ const CheckoutPage = () => {
                                     <SelectItem value="nagad">
                                       <div>
                                         <p className="font-medium">Nagad</p>
-                                        <p className="text-xs text-muted-foreground">
+                                        <p className="text-muted-foreground text-xs">
                                           Mobile payment
                                         </p>
                                       </div>
@@ -762,7 +696,7 @@ const CheckoutPage = () => {
                                     <SelectItem value="rocket">
                                       <div>
                                         <p className="font-medium">Rocket</p>
-                                        <p className="text-xs text-muted-foreground">
+                                        <p className="text-muted-foreground text-xs">
                                           Mobile payment
                                         </p>
                                       </div>
@@ -770,27 +704,23 @@ const CheckoutPage = () => {
                                     <SelectItem value="upay">
                                       <div>
                                         <p className="font-medium">Upay</p>
-                                        <p className="text-xs text-muted-foreground">
+                                        <p className="text-muted-foreground text-xs">
                                           Digital wallet
                                         </p>
                                       </div>
                                     </SelectItem>
                                     <SelectItem value="bank">
                                       <div>
-                                        <p className="font-medium">
-                                          Bank Transfer
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">
+                                        <p className="font-medium">Bank Transfer</p>
+                                        <p className="text-muted-foreground text-xs">
                                           Direct transfer
                                         </p>
                                       </div>
                                     </SelectItem>
                                     <SelectItem value="card">
                                       <div>
-                                        <p className="font-medium">
-                                          Credit/Debit Card
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">
+                                        <p className="font-medium">Credit/Debit Card</p>
+                                        <p className="text-muted-foreground text-xs">
                                           Visa, Mastercard, Amex
                                         </p>
                                       </div>
@@ -798,7 +728,7 @@ const CheckoutPage = () => {
                                   </SelectContent>
                                 </Select>
                                 {formErrors.selectedPaymentMethod && (
-                                  <p className="text-sm text-danger font-medium mt-1">
+                                  <p className="text-danger mt-1 text-sm font-medium">
                                     {formErrors.selectedPaymentMethod}
                                   </p>
                                 )}
@@ -808,15 +738,15 @@ const CheckoutPage = () => {
                         </div>
                       </div>
                       {formErrors.paymentOption && (
-                        <p className="text-sm text-danger font-medium">
+                        <p className="text-danger text-sm font-medium">
                           {formErrors.paymentOption}
                         </p>
                       )}
                     </div>
 
                     {/* Additional Note */}
-                    <div className="space-y-2 my-2">
-                      <label className="text-sm font-medium  flex items-center">
+                    <div className="my-2 space-y-2">
+                      <label className="flex items-center text-sm font-medium">
                         <FileText size={16} className="mr-2" />
                         Additional Note
                       </label>
@@ -826,32 +756,27 @@ const CheckoutPage = () => {
                         onChange={handleChange}
                         rows={4}
                         placeholder="Write your instruction here"
-                        className="w-full px-4 py-3 border border-success rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-success transition-all"
+                        className="border-success focus:ring-success w-full resize-none rounded-lg border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
                       />
                     </div>
                   </div>
                 )}
 
                 {activeStep === "payment" && (
-                  <div className=" flex items-center justify-center bg-card-primary py-10 ">
-                    <div className="max-w-md w-full p-6 text-center">
-                      <p className="text-sm text-muted-foreground mb-2">
-                        🎉 Thank You
+                  <div className="bg-card-primary flex items-center justify-center py-10">
+                    <div className="w-full max-w-md p-6 text-center">
+                      <p className="text-muted-foreground mb-2 text-sm">🎉 Thank You</p>
+
+                      <h1 className="mb-2 text-2xl font-semibold">Your order has been received</h1>
+
+                      <p className="text-muted-foreground mb-6 text-sm">
+                        Thanks for your order at . Your order will be processed as soon as possible.
+                        Make sure you check your order ID. You will be receiving an email shortly
+                        with invoice number.
                       </p>
 
-                      <h1 className="text-2xl font-semibold mb-2">
-                        Your order has been received
-                      </h1>
-
-                      <p className="text-muted-foreground text-sm mb-6">
-                        Thanks for your order at . Your order will be processed
-                        as soon as possible. Make sure you check your order ID.
-                        You will be receiving an email shortly with invoice
-                        number.
-                      </p>
-
-                      <div className="text-sm text-center mb-6">
-                        <div className="inline-block text-left space-y-3">
+                      <div className="mb-6 text-center text-sm">
+                        <div className="inline-block space-y-3 text-left">
                           <p>
                             <strong>Order ID:</strong> #T9639048
                           </p>
@@ -867,10 +792,10 @@ const CheckoutPage = () => {
                         </div>
                       </div>
 
-                      <div className="flex gap-4 justify-center mt-6">
+                      <div className="mt-6 flex justify-center gap-4">
                         {/* Track Order Button */}
                         <Link href="/track-order">
-                          <button className="flex items-center gap-2 px-5 py-2 cursor-pointer bg-success rounded-lg text-success-foreground transition">
+                          <button className="bg-success text-success-foreground flex cursor-pointer items-center gap-2 rounded-lg px-5 py-2 transition">
                             <Truck size={18} />
                             <span>Track Order</span>
                           </button>
@@ -878,7 +803,7 @@ const CheckoutPage = () => {
 
                         {/* Continue Shopping Button */}
                         <Link href="/">
-                          <button className="flex items-center gap-2 px-5 py-2  border rounded-lg border-success cursor-pointer text-success-foreground transition">
+                          <button className="border-success text-success-foreground flex cursor-pointer items-center gap-2 rounded-lg border px-5 py-2 transition">
                             <ShoppingCart size={18} />
                             <span>Continue Shopping</span>
                           </button>
@@ -891,22 +816,19 @@ const CheckoutPage = () => {
             </div>
 
             {/* Security Badge */}
-            <div className="bg-card-primary rounded-xl shadow p-4 flex items-center justify-center space-x-4">
+            <div className="bg-card-primary flex items-center justify-center space-x-4 rounded-xl p-4 shadow">
               <Shield className="" size={24} />
-              <span className="text-muted-foreground font-medium text-sm sm:text-base text-center">
-                Secure Checkout • 256-bit SSL Encryption • Your information is
-                safe
+              <span className="text-muted-foreground text-center text-sm font-medium sm:text-base">
+                Secure Checkout • 256-bit SSL Encryption • Your information is safe
               </span>
             </div>
           </div>
           {/* Right Column - Order Summary */}
-          <div
-            className={`lg:w-4/12 mt-3 lg:mt-0 ${activeStep === "payment" ? "hidden" : ""}`}
-          >
+          <div className={`mt-3 lg:mt-0 lg:w-4/12 ${activeStep === "payment" ? "hidden" : ""}`}>
             <div>
-              <div className="bg-primary rounded-xl p-4 mb-3">
+              <div className="bg-primary mb-3 rounded-xl p-4">
                 <div className="flex items-center text-white">
-                  <Truck className="w-6 h-6 mr-3" />
+                  <Truck className="mr-3 h-6 w-6" />
                   <div>
                     <p className="font-semibold">Order Details</p>
                   </div>
@@ -914,12 +836,10 @@ const CheckoutPage = () => {
               </div>
 
               {/* Promo Code Section */}
-              <div className="bg-card-primary rounded-xl shadow-sm p-5 mb-3">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-sm lg:text-lg">
-                    Discount Code
-                  </h3>
-                  <Tag className="w-5 h-5 text-button-secondary" />
+              <div className="bg-card-primary mb-3 rounded-xl p-5 shadow-sm">
+                <div className="mb-4 flex items-center justify-between">
+                  <h3 className="text-sm font-semibold lg:text-lg">Discount Code</h3>
+                  <Tag className="text-button-secondary h-5 w-5" />
                 </div>
 
                 {!appliedPromoCode ? (
@@ -933,32 +853,26 @@ const CheckoutPage = () => {
                           setPromoError("");
                         }}
                         placeholder="Enter promo code"
-                        className="flex-1 px-3 py-2  border cart-border-sec rounded-lg focus:outline-none focus:ring-2 focus:ring-button-secondary text-sm lg:text-lg"
+                        className="cart-border-sec focus:ring-button-secondary flex-1 rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none lg:text-lg"
                       />
                       <button
                         onClick={applyPromoCode}
-                        className="px-4 py-2 bg-button-primary cursor-pointer text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
+                        className="bg-button-primary cursor-pointer rounded-lg px-4 py-2 font-medium text-white transition-opacity hover:opacity-90"
                       >
                         Apply
                       </button>
                     </div>
-                    {promoError && (
-                      <p className="text-sm text-danger mt-2">{promoError}</p>
-                    )}
-                    <p className="text-xs text-muted-foreground mt-2">
+                    {promoError && <p className="text-danger mt-2 text-sm">{promoError}</p>}
+                    <p className="text-muted-foreground mt-2 text-xs">
                       Valid codes: SAVE10, DISCOUNT10, PROMO10 (10% off)
                     </p>
                   </div>
                 ) : (
-                  <div className="bg-success border border-success rounded-lg p-3">
+                  <div className="bg-success border-success rounded-lg border p-3">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-success-foreground">
-                          {appliedPromoCode}
-                        </p>
-                        <p className="text-sm text-success-foreground">
-                          10% discount applied
-                        </p>
+                        <p className="text-success-foreground font-medium">{appliedPromoCode}</p>
+                        <p className="text-success-foreground text-sm">10% discount applied</p>
                       </div>
                       <button
                         onClick={removePromoCode}
@@ -971,16 +885,14 @@ const CheckoutPage = () => {
                 )}
               </div>
 
-              <div className="bg-card-primary rounded-xl shadow-sm p-5 mb-3">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-sm lg:text-lg">
-                    Available Offers
-                  </h3>
-                  <Tag className="w-5 h-5 text-button-secondary" />
+              <div className="bg-card-primary mb-3 rounded-xl p-5 shadow-sm">
+                <div className="mb-4 flex items-center justify-between">
+                  <h3 className="text-sm font-semibold lg:text-lg">Available Offers</h3>
+                  <Tag className="text-button-secondary h-5 w-5" />
                 </div>
 
                 <div className="space-y-3">
-                  <p className="text-sm font-medium  lg:text-lg">
+                  <p className="text-sm font-medium lg:text-lg">
                     There are {vouchers.length} Vouchers for you
                   </p>
 
@@ -991,12 +903,11 @@ const CheckoutPage = () => {
                       <div key={voucher.id}>
                         {canApply ? (
                           <div
-                            className={`rounded-lg p-3 mb-4 text-sm flex items-center gap-2
-    ${
-      offerInfo.status === "active"
-        ? "bg-success text-success-foreground border border-success/30"
-        : "bg-muted text-muted-foreground border border-border"
-    }`}
+                            className={`mb-4 flex items-center gap-2 rounded-lg p-3 text-sm ${
+                              offerInfo.status === "active"
+                                ? "bg-success text-success-foreground border-success/30 border"
+                                : "bg-muted text-muted-foreground border-border border"
+                            }`}
                           >
                             {offerInfo.status === "active" ? (
                               <Check size={16} />
@@ -1010,12 +921,11 @@ const CheckoutPage = () => {
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <div
-                                className={`rounded-lg p-3 mb-4 text-sm flex items-center gap-2
-    ${
-      offerInfo.status === "active"
-        ? "bg-success/10 text-success-foreground border border-success/30"
-        : "bg-muted text-muted-foreground border border-border"
-    }`}
+                                className={`mb-4 flex items-center gap-2 rounded-lg p-3 text-sm ${
+                                  offerInfo.status === "active"
+                                    ? "bg-success/10 text-success-foreground border-success/30 border"
+                                    : "bg-muted text-muted-foreground border-border border"
+                                }`}
                               >
                                 {offerInfo.status === "active" ? (
                                   <Check size={16} />
@@ -1027,20 +937,18 @@ const CheckoutPage = () => {
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  Minimum Purchase Required
-                                </AlertDialogTitle>
+                                <AlertDialogTitle>Minimum Purchase Required</AlertDialogTitle>
                                 <AlertDialogDescription>
                                   You need to spend at least Tk{" "}
-                                  {voucher.minPurchase.toLocaleString("en-BD")}{" "}
-                                  to use this voucher. Your current total is Tk{" "}
+                                  {voucher.minPurchase.toLocaleString("en-BD")} to use this voucher.
+                                  Your current total is Tk{" "}
                                   {totals.totalPrice.toLocaleString("en-BD")}.
                                   <br />
                                   <br />
                                   Please add Tk{" "}
-                                  {(
-                                    voucher.minPurchase - totals.totalPrice
-                                  ).toLocaleString("en-BD")}{" "}
+                                  {(voucher.minPurchase - totals.totalPrice).toLocaleString(
+                                    "en-BD"
+                                  )}{" "}
                                   more to your cart to unlock this voucher.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
@@ -1055,19 +963,15 @@ const CheckoutPage = () => {
                   })}
                 </div>
               </div>
-              <div className="bg-card-primary rounded-xl shadow-sm p-5">
-                <h3 className="font-semibold text-sm lg:text-lg mb-4">
-                  Order Summary
-                </h3>
+              <div className="bg-card-primary rounded-xl p-5 shadow-sm">
+                <h3 className="mb-4 text-sm font-semibold lg:text-lg">Order Summary</h3>
 
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">
-                      Total Price (
-                      {cartItems.filter((item) => item.selected).length}{" "}
-                      products)
+                      Total Price ({cartItems.filter((item) => item.selected).length} products)
                     </span>
-                    <span className="font-medium text-sm lg:text-lg">
+                    <span className="text-sm font-medium lg:text-lg">
                       Tk {totals.totalPrice.toLocaleString("en-BD")}
                     </span>
                   </div>
@@ -1075,34 +979,29 @@ const CheckoutPage = () => {
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Shipping Fee</span>
                     <div className="text-right">
-                      {totals.shippingFee === 0 &&
-                      totals.fullShippingFee > 0 ? (
+                      {totals.shippingFee === 0 && totals.fullShippingFee > 0 ? (
                         <div className="flex items-center gap-2">
-                          <span className="line-through text-sm text-muted-foreground">
+                          <span className="text-muted-foreground text-sm line-through">
                             Tk {totals.fullShippingFee.toLocaleString("en-BD")}
                           </span>
-                          <span className="font-medium text-success-foreground">
-                            Free
-                          </span>
+                          <span className="text-success-foreground font-medium">Free</span>
                         </div>
                       ) : totals.savedShippingFee > 0 ? (
                         <div className="flex flex-col items-end">
                           <div className="flex items-center gap-2">
-                            <span className="line-through text-sm text-muted-foreground">
-                              Tk{" "}
-                              {totals.fullShippingFee.toLocaleString("en-BD")}
+                            <span className="text-muted-foreground text-sm line-through">
+                              Tk {totals.fullShippingFee.toLocaleString("en-BD")}
                             </span>
-                            <span className="font-medium text-sm lg:text-lg">
+                            <span className="text-sm font-medium lg:text-lg">
                               Tk {totals.shippingFee.toLocaleString("en-BD")}
                             </span>
                           </div>
-                          <span className="text-xs text-success-foreground">
-                            Saved Tk{" "}
-                            {totals.savedShippingFee.toLocaleString("en-BD")}
+                          <span className="text-success-foreground text-xs">
+                            Saved Tk {totals.savedShippingFee.toLocaleString("en-BD")}
                           </span>
                         </div>
                       ) : (
-                        <span className="font-medium text-sm lg:text-lg">
+                        <span className="text-sm font-medium lg:text-lg">
                           Tk {totals.shippingFee.toLocaleString("en-BD")}
                         </span>
                       )}
@@ -1111,36 +1010,28 @@ const CheckoutPage = () => {
 
                   {appliedPromoCode && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">
-                        Promo Code Discount
-                      </span>
-                      <span className="font-medium text-danger">
+                      <span className="text-muted-foreground">Promo Code Discount</span>
+                      <span className="text-danger font-medium">
                         - Tk {totals.promoDiscount.toLocaleString("en-BD")}
                       </span>
                     </div>
                   )}
 
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      Total Discount
-                    </span>
-                    <span className="font-medium text-danger">
+                    <span className="text-muted-foreground">Total Discount</span>
+                    <span className="text-danger font-medium">
                       - Tk {totals.totalDiscount.toLocaleString("en-BD")}
                     </span>
                   </div>
 
-                  <div className="border-t cart-border-primary pt-3 mt-3">
-                    <div className="flex justify-between items-center">
-                      <span className=" font-bold text-sm lg:text-lg">
-                        Total
-                      </span>
+                  <div className="cart-border-primary mt-3 border-t pt-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold lg:text-lg">Total</span>
                       <div className="text-right">
-                        <div className="text-2xl font-bold cart-light-text">
+                        <div className="cart-light-text text-2xl font-bold">
                           Tk {totals.grandTotal.toLocaleString("en-BD")}
                         </div>
-                        <p className="text-sm cart-text-base mt-1">
-                          Total amount to be paid
-                        </p>
+                        <p className="cart-text-base mt-1 text-sm">Total amount to be paid</p>
                       </div>
                     </div>
                   </div>
@@ -1151,7 +1042,7 @@ const CheckoutPage = () => {
                       <AlertDialogTrigger asChild>
                         <button
                           type="button"
-                          className="w-full flex justify-center items-center font-semibold py-3 px-4 rounded-lg mt-6 bg-black/10 border border-border shadow-sm cursor-not-allowed opacity-50"
+                          className="border-border mt-6 flex w-full cursor-not-allowed items-center justify-center rounded-lg border bg-black/10 px-4 py-3 font-semibold opacity-50 shadow-sm"
                         >
                           <Lock className="mr-2" size={20} />
                           Proceed to Payment
@@ -1159,12 +1050,9 @@ const CheckoutPage = () => {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Make Sure Complete to Fill This Form
-                          </AlertDialogTitle>
+                          <AlertDialogTitle>Make Sure Complete to Fill This Form</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Please complete all required fields before
-                            proceeding to payment.
+                            Please complete all required fields before proceeding to payment.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
@@ -1178,15 +1066,11 @@ const CheckoutPage = () => {
                         e.preventDefault();
 
                         if (activeStep === "items") {
-                          setCompletedSteps((prev) =>
-                            new Set(prev).add("items"),
-                          );
+                          setCompletedSteps((prev) => new Set(prev).add("items"));
                           setActiveStep("info");
                         } else if (activeStep === "info") {
                           if (formValid) {
-                            setCompletedSteps((prev) =>
-                              new Set(prev).add("info"),
-                            );
+                            setCompletedSteps((prev) => new Set(prev).add("info"));
                             setActiveStep("payment");
                             const orderData = {
                               customer: {
@@ -1229,10 +1113,9 @@ const CheckoutPage = () => {
                             setPromoError("");
                           }
                         } else if (activeStep === "payment") {
-                          
                         }
                       }}
-                      className="w-full bg-button-primary text-white font-semibold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] mt-6 cursor-pointer"
+                      className="bg-button-primary mt-6 w-full transform cursor-pointer rounded-lg px-4 py-3 font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
                     >
                       {activeStep === "items" &&
                         `Proceed to Shipping (${cartItems.filter((item) => item.selected).length})`}

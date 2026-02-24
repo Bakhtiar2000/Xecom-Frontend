@@ -1,4 +1,4 @@
-import { StaticImageData } from 'next/image';
+import { StaticImageData } from "next/image";
 
 export interface ShoePart {
   title: string;
@@ -18,7 +18,6 @@ export interface Shoe {
   parts: ShoePart[];
 }
 
-
 export interface SneakerGalleryItem {
   id: number;
   src: any;
@@ -27,7 +26,7 @@ export interface SneakerGalleryItem {
   brand: string;
   colorway: string;
   featured: boolean;
-  className?: string; 
+  className?: string;
   likes: number;
   description: string;
 }

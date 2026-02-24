@@ -16,4 +16,4 @@ export type TUserMetadata = {
   totalActiveUsers: number;
   totalInactiveUsers: number;
   totalVerifiedAccounts: number;
-}
+};

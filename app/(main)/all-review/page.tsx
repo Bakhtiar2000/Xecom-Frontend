@@ -14,7 +14,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { reviews } from "@/data/review";
 import { reviewSchema } from "@/lib/review.Schema";
 
-
 // 🔹 TypeScript type inferred from Zod schema
 type ReviewFormData = z.infer<typeof reviewSchema>;
 
@@ -44,23 +43,21 @@ export default function ReviewsSection() {
 
   return (
     <section className="container">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
         {/* LEFT: Reviews */}
         <div className="lg:col-span-2">
           <div className="mb-8">
-            <h2 className="font-bold merriweather-font lg:text-4xl text-2xl mb-2">Reviews</h2>
-            <p className="mx-auto text-muted-foreground">
-              for Sneakers Collection
-            </p>
+            <h2 className="merriweather-font mb-2 text-2xl font-bold lg:text-4xl">Reviews</h2>
+            <p className="text-muted-foreground mx-auto">for Sneakers Collection</p>
 
-            <div className="flex items-center gap-4 mt-4">
+            <div className="mt-4 flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Star className="w-6 h-6 fill-rating text-rating" />
+                <Star className="fill-rating text-rating h-6 w-6" />
                 <span className="text-4xl font-semibold">4.8</span>
                 <span className="text-muted-foreground">/5.0</span>
               </div>
 
-              <div className=" text-sm px-4 py-2 rounded-lg">
+              <div className="rounded-lg px-4 py-2 text-sm">
                 <span className="font-medium">Recommended</span>
                 <div className="text-muted-foreground">(98%) buyers recommend this product</div>
               </div>
@@ -70,35 +67,29 @@ export default function ReviewsSection() {
           {/* Reviews List */}
           <div>
             {reviews.map((review, i) => (
-              <div key={i} className="flex gap-2 border-b p-4 rounded-2xl ">
-                <Avatar className="w-15 h-15 rounded-full bg-card-primary p-2">
+              <div key={i} className="flex gap-2 rounded-2xl border-b p-4">
+                <Avatar className="bg-card-primary h-15 w-15 rounded-full p-2">
                   <AvatarImage src={review.avatar} />
                   <AvatarFallback>{review.name[0]}</AvatarFallback>
                 </Avatar>
 
-                <div className="flex-1  bg-card-primary rounded-2xl p-4">
+                <div className="bg-card-primary flex-1 rounded-2xl p-4">
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium">{review.name}</h4>
-                    <span className="text-sm text-muted-foreground">
-                      {review.time}
-                    </span>
+                    <span className="text-muted-foreground text-sm">{review.time}</span>
                   </div>
 
-                  <div className="flex gap-1 my-1">
+                  <div className="my-1 flex gap-1">
                     {Array.from({ length: 5 }).map((_, idx) => (
                       <Star
                         key={idx}
-                        className={`w-4 h-4 ${
-                          idx < review.rating
-                            ? "fill-rating text-rating"
-                            : "text-muted"
+                        className={`h-4 w-4 ${
+                          idx < review.rating ? "fill-rating text-rating" : "text-muted"
                         }`}
                       />
                     ))}
                   </div>
-                  <p className="text-muted-foreground text-sm">
-                    {review.comment}
-                  </p>
+                  <p className="text-muted-foreground text-sm">{review.comment}</p>
                 </div>
               </div>
             ))}
@@ -106,29 +97,19 @@ export default function ReviewsSection() {
         </div>
 
         {/* RIGHT: Review Form */}
-        <Card className="p-6 h-fit lg:mt-[20vh] bg-card-primary">
-          <h3 className="text-xl font-semibold mb-6">Write your review</h3>
+        <Card className="bg-card-primary h-fit p-6 lg:mt-[20vh]">
+          <h3 className="mb-6 text-xl font-semibold">Write your review</h3>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <Input
-              placeholder="Your name"
-              {...register("name")}
-            />
-            {errors.name && (
-              <p className="text-sm text-danger">{errors.name.message}</p>
-            )}
+            <Input placeholder="Your name" {...register("name")} />
+            {errors.name && <p className="text-danger text-sm">{errors.name.message}</p>}
 
-            <Input
-              placeholder="Your email"
-              {...register("email")}
-            />
-            {errors.email && (
-              <p className="text-sm text-danger">{errors.email.message}</p>
-            )}
+            <Input placeholder="Your email" {...register("email")} />
+            {errors.email && <p className="text-danger text-sm">{errors.email.message}</p>}
 
             {/* Star Rating */}
             <div>
-              <p className="text-sm mb-2 text-muted-foreground">Choose star</p>
+              <p className="text-muted-foreground mb-2 text-sm">Choose star</p>
               <div className="flex gap-2">
                 {Array.from({ length: 5 }).map((_, i) => {
                   const starValue = i + 1;
@@ -138,7 +119,7 @@ export default function ReviewsSection() {
                       onClick={() => setValue("rating", starValue)}
                       onMouseEnter={() => setHoverRating(starValue)}
                       onMouseLeave={() => setHoverRating(0)}
-                      className={`w-6 h-6 cursor-pointer ${
+                      className={`h-6 w-6 cursor-pointer ${
                         starValue <= (hoverRating || selectedRating)
                           ? "fill-rating text-rating"
                           : "text-muted fill-muted"
@@ -147,19 +128,11 @@ export default function ReviewsSection() {
                   );
                 })}
               </div>
-              {errors.rating && (
-                <p className="text-sm text-danger">{errors.rating.message}</p>
-              )}
+              {errors.rating && <p className="text-danger text-sm">{errors.rating.message}</p>}
             </div>
 
-            <Textarea
-              placeholder="This product is..."
-              rows={4}
-              {...register("review")}
-            />
-            {errors.review && (
-              <p className="text-sm text-danger">{errors.review.message}</p>
-            )}
+            <Textarea placeholder="This product is..." rows={4} {...register("review")} />
+            {errors.review && <p className="text-danger text-sm">{errors.review.message}</p>}
 
             <Button type="submit" className="w-full rounded-full">
               Submit Review

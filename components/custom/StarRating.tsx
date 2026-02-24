@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { Star } from "lucide-react"
+import { Star } from "lucide-react";
 
 interface Props {
-  rating: number
-  editable?: boolean
-  onChange?: (value: number) => void
+  rating: number;
+  editable?: boolean;
+  onChange?: (value: number) => void;
 }
 
 export function StarRating({ rating, editable, onChange }: Props) {
@@ -20,9 +20,9 @@ export function StarRating({ rating, editable, onChange }: Props) {
             star <= rating ? "text-rating" : "text-muted-foreground"
           } ${editable && "hover:scale-110"}`}
         >
-          <Star className="w-4 h-4 fill-current" />
+          <Star className="h-4 w-4 fill-current" />
         </button>
       ))}
     </div>
-  )
+  );
 }

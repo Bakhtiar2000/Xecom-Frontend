@@ -114,9 +114,7 @@ export default function CategorySection() {
       const containerCenter = scrollRef.current.offsetWidth / 2;
       const cardCenter = cardWidth / 2;
       const targetScroll =
-        cardWidth * (categories.length + slideIndex) +
-        cardCenter -
-        containerCenter;
+        cardWidth * (categories.length + slideIndex) + cardCenter - containerCenter;
       scrollRef.current.scrollTo({
         left: targetScroll,
         behavior: "smooth",
@@ -126,10 +124,7 @@ export default function CategorySection() {
 
   return (
     <div className="container">
-      <SectionTitle
-        subtitle="All Category Shoes Available."
-        title="Our Product Category"
-      />
+      <SectionTitle subtitle="All Category Shoes Available." title="Our Product Category" />
 
       {isScrollable ? (
         <div className="relative">
@@ -144,33 +139,28 @@ export default function CategorySection() {
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            className={`flex gap-6 overflow-x-scroll scrollbar-hide pb-4 select-none ${
+            className={`scrollbar-hide flex gap-6 overflow-x-scroll pb-4 select-none ${
               isDragging ? "cursor-grabbing" : "cursor-grab"
             }`}
           >
             {loopedCategories.map((cat, idx) => (
               <div
                 key={`${cat.id}-${idx}`}
-                className="shrink-0 pointer-events-none w-[calc((100%-1.5rem)/2)] sm:w-[calc((100%-3rem)/3)] md:w-[calc((100%-4.5rem)/4)] lg:w-[calc((100%-6rem)/5)]"
+                className="pointer-events-none w-[calc((100%-1.5rem)/2)] shrink-0 sm:w-[calc((100%-3rem)/3)] md:w-[calc((100%-4.5rem)/4)] lg:w-[calc((100%-6rem)/5)]"
               >
-                <CategoryCard
-                  category={cat}
-                  active={idx % categories.length === activeSlide}
-                />
+                <CategoryCard category={cat} active={idx % categories.length === activeSlide} />
               </div>
             ))}
           </div>
 
           {/* Dots Navigation */}
-          <div className="flex justify-center gap-2 mt-4">
+          <div className="mt-4 flex justify-center gap-2">
             {Array.from({ length: totalSlides }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => scrollToSlide(index)}
                 className={`h-2 rounded-full transition-all ${
-                  activeSlide === index
-                    ? "w-8 bg-primary"
-                    : "w-2 bg-gray-300 hover:bg-gray-400"
+                  activeSlide === index ? "bg-primary w-8" : "w-2 bg-gray-300 hover:bg-gray-400"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
@@ -179,7 +169,7 @@ export default function CategorySection() {
         </div>
       ) : (
         // Normal grid for lg devices with 5 or fewer items
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {categories.map((cat, idx) => (
             <div key={cat.id} className="w-full">
               <CategoryCard category={cat} active={idx === 2} />

@@ -1,6 +1,5 @@
 import { Gender } from "@/constants/enum";
 
-
 export type TRegisterCustomerDto = {
   name: string;
   email: string;
