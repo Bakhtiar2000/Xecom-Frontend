@@ -1,1 +1,2 @@
-npm test
+# Pre-commit hook
+# Add any pre-commit checks here if needed
