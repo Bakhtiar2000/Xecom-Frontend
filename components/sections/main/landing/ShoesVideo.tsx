@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import SectionTitle from "../../shared/SectionTitle";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
 
 const ShoesVideo: React.FC = () => {
   return (

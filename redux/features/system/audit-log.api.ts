@@ -1,5 +1,6 @@
-import { TAuditLog, TQueryParam, TResponseRedux } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { TQueryParam, TResponseRedux } from "@/types";
+import { baseApi } from "@/redux/api/baseApi";
+import { TAuditLog } from "@/types/system.type";
 
 const auditLogApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

@@ -1,4 +1,4 @@
-import shoes8 from "../assets/shoes/shoes8.png";
+import shoes8 from "@/assets/shoes/shoes8.png";
 
 export const CartData = [
   {

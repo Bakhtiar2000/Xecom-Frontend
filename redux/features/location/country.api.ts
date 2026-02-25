@@ -1,6 +1,7 @@
-import { TCountry, TQueryParam, TResponseRedux } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { TQueryParam, TResponseRedux } from "@/types";
+import { baseApi } from "@/redux/api/baseApi";
 import { TAddCountryDto } from "./dto/country.dto";
+import { TCountry } from "@/types/location.type";
 
 const countryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

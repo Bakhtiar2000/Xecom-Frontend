@@ -1,6 +1,7 @@
-import { TInventoryLog, TQueryParam, TResponseRedux } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { TQueryParam, TResponseRedux } from "@/types";
+import { baseApi } from "@/redux/api/baseApi";
 import { TAddInventoryLogDto } from "./dto/inventory-log.dto";
+import { TInventoryLog } from "@/types/inventory.type";
 
 const inventoryLogApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

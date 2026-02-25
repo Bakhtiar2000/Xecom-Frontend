@@ -1,5 +1,5 @@
 import { TCustomer, TQueryParam, TResponseRedux } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { baseApi } from "@/redux/api/baseApi";
 import { TRegisterCustomerDto } from "./dto/customer.dto";
 
 const customerApi = baseApi.injectEndpoints({

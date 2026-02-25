@@ -4,7 +4,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Sparkles, TrendingUp, Trophy } from "lucide-react";
 import { shoesData, Sneaker } from "@/data/premium-shoes";
-import SectionTitle from "../../shared/SectionTitle";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
 import ProductCard from "@/components/custom/ProductCard";
 import { motion } from "framer-motion";
 
@@ -76,9 +76,8 @@ const PremiumShoes = (): React.JSX.Element => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
-                className={`flex cursor-pointer items-center space-x-1 px-3 py-2 text-sm font-semibold md:space-x-2 lg:px-6 lg:py-4 ${
-                  activeTab === tab.id ? "border-b-2 border-black dark:border-white" : ""
-                }`}
+                className={`flex cursor-pointer items-center space-x-1 px-3 py-2 text-sm font-semibold md:space-x-2 lg:px-6 lg:py-4 ${activeTab === tab.id ? "border-b-2 border-black dark:border-white" : ""
+                  }`}
               >
                 {tab.icon}
                 <span className="text-xs md:text-sm">{tab.label}</span>

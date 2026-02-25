@@ -1,6 +1,7 @@
-import { TQueryParam, TResponseRedux, TSetting } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { TQueryParam, TResponseRedux } from "@/types";
+import { baseApi } from "@/redux/api/baseApi";
 import { TAddSettingDto, TUpdateSettingDto } from "./dto/setting.dto";
+import { TSetting } from "@/types/system.type";
 
 const settingApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

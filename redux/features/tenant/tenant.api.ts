@@ -1,6 +1,7 @@
-import { TQueryParam, TResponseRedux, TTenant } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { TQueryParam, TResponseRedux } from "@/types";
+import { baseApi } from "@/redux/api/baseApi";
 import { TCreateTenantDto, TUpdateTenantDto } from "./dto/tenant.dto";
+import { TTenant } from "@/types/tenant.type";
 
 const tenantApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

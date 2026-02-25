@@ -1,5 +1,5 @@
 import { TQueryParam, TResponseRedux, TStaff } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { baseApi } from "@/redux/api/baseApi";
 import { TRegisterStaffDto } from "./dto/staff.dto";
 
 const staffApi = baseApi.injectEndpoints({

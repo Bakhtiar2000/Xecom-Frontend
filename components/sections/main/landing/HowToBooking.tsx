@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Search, ShoppingCart, Truck, Ruler } from "lucide-react";
-import SectionTitle from "../../shared/SectionTitle";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
 import StepCard from "@/components/sections/main/landing/sections/StepCard";
 
 const MotionDiv = motion.div;
@@ -108,9 +108,8 @@ const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
 
       <div className="relative">
         <div
-          className={`grid grid-cols-1 ${
-            sneakerSteps.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"
-          } gap-4 lg:gap-8`}
+          className={`grid grid-cols-1 ${sneakerSteps.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"
+            } gap-4 lg:gap-8`}
         >
           {sneakerSteps.map((step, index) => (
             <StepCard

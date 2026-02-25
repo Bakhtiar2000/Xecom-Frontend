@@ -1,9 +1,9 @@
 import { StaticImageData } from "next/image";
-import shoes5 from "../assets/shoes/shoes5.png";
-import shoes6 from "../assets/shoes/shoes6.png";
-import shoes7 from "../assets/shoes/shoes7.png";
-import shoes8 from "../assets/shoes/shoes8.png";
-import shoes9 from "../assets/shoes/shoes9.png";
+import shoes5 from "@/assets/shoes/shoes5.png";
+import shoes6 from "@/assets/shoes/shoes6.png";
+import shoes7 from "@/assets/shoes/shoes7.png";
+import shoes8 from "@/assets/shoes/shoes8.png";
+import shoes9 from "@/assets/shoes/shoes9.png";
 
 export type Sneaker = {
   id: number;

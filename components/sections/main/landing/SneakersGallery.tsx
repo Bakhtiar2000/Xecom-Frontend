@@ -6,7 +6,7 @@ import { X, Heart, Share2 } from "lucide-react";
 import Image from "next/image";
 import { sneakersGallery } from "@/data/shoes-data";
 import { SneakerGalleryItem } from "@/types/shoes.types";
-import SectionTitle from "../../shared/SectionTitle";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
 
 const SneakerMosaicGallery = () => {
@@ -118,11 +118,10 @@ const SneakerMosaicGallery = () => {
                     className="bg-muted absolute top-4 left-4 rounded-full p-1 backdrop-blur-sm transition-transform hover:scale-110"
                   >
                     <Heart
-                      className={`h-8 w-8 ${
-                        likedImages.includes(selectedImage.id)
+                      className={`h-8 w-8 ${likedImages.includes(selectedImage.id)
                           ? "fill-danger text-danger-foreground"
                           : "text-foreground"
-                      }`}
+                        }`}
                     />
                   </button>
                 </div>
@@ -177,11 +176,10 @@ const SneakerMosaicGallery = () => {
                             const index = sneakersGallery.findIndex((i) => i.id === img.id);
                             setSelectedImage(img);
                           }}
-                          className={`aspect-square overflow-hidden border-2 ${
-                            selectedImage.id === img.id
+                          className={`aspect-square overflow-hidden border-2 ${selectedImage.id === img.id
                               ? "border-success-foreground"
                               : "border-transparent"
-                          }`}
+                            }`}
                         >
                           <Image
                             src={img.src}

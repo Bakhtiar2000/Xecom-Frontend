@@ -1,4 +1,4 @@
-import { baseApi } from "../../api/baseApi";
+import { baseApi } from "@/redux/api/baseApi";
 import { TAddThanaDto } from "./dto/thana.dto";
 
 const thanaApi = baseApi.injectEndpoints({

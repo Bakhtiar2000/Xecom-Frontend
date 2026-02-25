@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { categories } from "@/data/category_shoes";
-import SectionTitle from "../../shared/SectionTitle";
+import { categories } from "@/data/category-shoes";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
 import CategoryCard from "@/components/sections/main/landing/sections/CategoryCard";
 
 export default function CategorySection() {
@@ -139,9 +139,8 @@ export default function CategorySection() {
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            className={`scrollbar-hide flex gap-6 overflow-x-scroll pb-4 select-none ${
-              isDragging ? "cursor-grabbing" : "cursor-grab"
-            }`}
+            className={`scrollbar-hide flex gap-6 overflow-x-scroll pb-4 select-none ${isDragging ? "cursor-grabbing" : "cursor-grab"
+              }`}
           >
             {loopedCategories.map((cat, idx) => (
               <div
@@ -159,9 +158,8 @@ export default function CategorySection() {
               <button
                 key={index}
                 onClick={() => scrollToSlide(index)}
-                className={`h-2 rounded-full transition-all ${
-                  activeSlide === index ? "bg-primary w-8" : "w-2 bg-gray-300 hover:bg-gray-400"
-                }`}
+                className={`h-2 rounded-full transition-all ${activeSlide === index ? "bg-primary w-8" : "w-2 bg-gray-300 hover:bg-gray-400"
+                  }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}

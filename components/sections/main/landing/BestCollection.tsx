@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import SectionTitle from "../../shared/SectionTitle";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
 import { products } from "@/data/best-collaction";
 import Link from "next/link";
 

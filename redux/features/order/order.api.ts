@@ -1,6 +1,7 @@
-import { TOrder, TQueryParam, TResponseRedux } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { TQueryParam, TResponseRedux } from "@/types";
+import { baseApi } from "@/redux/api/baseApi";
 import { TCreateOrderDto, TUpdateOrderDto } from "./dto/order.dto";
+import { TOrder } from "@/types/order.type";
 
 const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

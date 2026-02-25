@@ -1,10 +1,10 @@
 import { Shoe, SneakerGalleryItem } from "@/types/shoes.types";
-import shoes5 from "../assets/shoes/shoes5.png";
-import shoes6 from "../assets/shoes/shoes6.png";
-import shoes7 from "../assets/shoes/shoes7.png";
-import shoes8 from "../assets/shoes/shoes8.png";
-import shoes9 from "../assets/shoes/shoes9.png";
-import shoes10 from "../assets/shoes/categoryShoes4.webp";
+import shoes5 from "@/assets/shoes/shoes5.png";
+import shoes6 from "@/assets/shoes/shoes6.png";
+import shoes7 from "@/assets/shoes/shoes7.png";
+import shoes8 from "@/assets/shoes/shoes8.png";
+import shoes9 from "@/assets/shoes/shoes9.png";
+import shoes10 from "@/assets/CategoryShoes/categoryShoes4.webp";
 
 export const shoes: Shoe[] = [
   {

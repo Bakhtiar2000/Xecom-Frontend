@@ -1,6 +1,7 @@
-import { TQueryParam, TResponseRedux, TSubscription } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { TQueryParam, TResponseRedux } from "@/types";
+import { baseApi } from "@/redux/api/baseApi";
 import { TCreateSubscriptionDto } from "./dto/subscription.dto";
+import { TSubscription } from "@/types/tenant.type";
 
 const subscriptionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

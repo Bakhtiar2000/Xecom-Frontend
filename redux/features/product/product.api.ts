@@ -1,5 +1,5 @@
 import { TQueryParam, TResponseRedux } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { baseApi } from "@/redux/api/baseApi";
 import { TProduct } from "@/types/product.type";
 
 const productApi = baseApi.injectEndpoints({

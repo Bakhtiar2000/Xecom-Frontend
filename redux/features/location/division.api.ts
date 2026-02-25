@@ -1,6 +1,7 @@
-import { TDivision, TResponseRedux } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { TResponseRedux } from "@/types";
+import { baseApi } from "@/redux/api/baseApi";
 import { TAddDivisionDto } from "./dto/division.dto";
+import { TDivision } from "@/types/location.type";
 
 const divisionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

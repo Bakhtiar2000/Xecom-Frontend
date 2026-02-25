@@ -1,5 +1,5 @@
 import { TAdmin, TQueryParam, TResponseRedux } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { baseApi } from "@/redux/api/baseApi";
 import { TRegisterAdminDto } from "./dto/admin.dto";
 
 const adminApi = baseApi.injectEndpoints({

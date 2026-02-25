@@ -1,6 +1,7 @@
-import { TDistrict, TResponseRedux } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { TResponseRedux } from "@/types";
+import { baseApi } from "@/redux/api/baseApi";
 import { TAddDistrictDto } from "./dto/district.dto";
+import { TDistrict } from "@/types/location.type";
 
 const districtApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

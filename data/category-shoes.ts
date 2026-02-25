@@ -1,9 +1,9 @@
 // data/categories.
-import image1 from "../assets/shoes/categoryShoes1.webp";
-import image2 from "../assets/shoes/categoryShoes2.webp";
-import image3 from "../assets/shoes/categoryShoes3.webp";
-import image5 from "../assets/shoes/categoryShoes5.webp";
-import image4 from "../assets/shoes/categoryShoes6.webp";
+import image1 from "@/assets/CategoryShoes/categoryShoes1.webp";
+import image2 from "@/assets/CategoryShoes/categoryShoes2.webp";
+import image3 from "@/assets/CategoryShoes/categoryShoes3.webp";
+import image5 from "@/assets/CategoryShoes/categoryShoes5.webp";
+import image4 from "@/assets/CategoryShoes/categoryShoes6.webp";
 
 import { Category } from "@/types";
 

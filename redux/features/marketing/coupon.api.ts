@@ -1,6 +1,7 @@
-import { TCoupon, TQueryParam, TResponseRedux } from "@/types";
-import { baseApi } from "../../api/baseApi";
+import { TQueryParam, TResponseRedux } from "@/types";
+import { baseApi } from "@/redux/api/baseApi";
 import { TAddCouponDto, TUpdateCouponDto } from "./dto/coupon.dto";
+import { TCoupon } from "@/types/marketing.type";
 
 const couponApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

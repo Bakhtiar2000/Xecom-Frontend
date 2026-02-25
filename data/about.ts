@@ -1,7 +1,7 @@
 import { Award, BadgeCheck, Globe, Shield, Star, TrendingUp, Users } from "lucide-react";
-import shoes1 from "../assets/shoes/shoes1.jpg";
-import shoes2 from "../assets/shoes/shoes2.jpg";
-import shoes3 from "../assets/shoes/shoes3.jpg";
+import shoes1 from "@/assets/shoes/shoes1.jpg";
+import shoes2 from "@/assets/shoes/shoes2.jpg";
+import shoes3 from "@/assets/shoes/shoes3.jpg";
 
 export const values = [
   {

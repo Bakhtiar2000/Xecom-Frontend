@@ -10,6 +10,14 @@ import { shoesData, Sneaker } from "@/data/premium-shoes";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Eye, ShoppingBag, Plus, Minus } from "lucide-react";
 import { NoSneakersCard } from "@/components/custom/NoSneakersCard";
+import Nike from "@/assets/BrandLogo/Nike.png";
+import Adidas from "@/assets/BrandLogo/Adidas.png";
+import Puma from "@/assets/BrandLogo/Puma.png";
+import FILA from "@/assets/BrandLogo/FILA.png";
+import Lotto from "@/assets/BrandLogo/Lotto.png";
+import Bata from "@/assets/BrandLogo/Bata.png";
+import Reebok from "@/assets/BrandLogo/Reebok.png";
+import Jordan from "@/assets/BrandLogo/Jordan.png";
 
 export default function SneakerShoesPage() {
   const [activeBrand, setActiveBrand] = useState<string | null>(null);
@@ -21,14 +29,14 @@ export default function SneakerShoesPage() {
 
   const filteredShoes = activeBrand ? shoesData.filter((shoe) => shoe.brand === activeBrand) : [];
   const brands = [
-    { name: "Nike", logo: "/Nike.png" },
-    { name: "Adidas", logo: "/Adidas.png" },
-    { name: "Puma", logo: "/Puma.png" },
-    { name: "Fila", logo: "/FILA.png" },
-    { name: "Lotto", logo: "/Lotto.png" },
-    { name: "Bata", logo: "/Bata.png" },
-    { name: "Reebok", logo: "/Reebok.png" },
-    { name: "Jordan", logo: "/Jordan.png" },
+    { name: "Nike", logo: Nike },
+    { name: "Adidas", logo: Adidas },
+    { name: "Puma", logo: Puma },
+    { name: "Fila", logo: FILA },
+    { name: "Lotto", logo: Lotto },
+    { name: "Bata", logo: Bata },
+    { name: "Reebok", logo: Reebok },
+    { name: "Jordan", logo: Jordan },
   ];
 
   return (
