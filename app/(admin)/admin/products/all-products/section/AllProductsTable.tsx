@@ -3,6 +3,7 @@ import { TablePagination } from '@/components/custom/TablePagination';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { MultiSelect, MultiSelectContent, MultiSelectGroup, MultiSelectItem, MultiSelectTrigger, MultiSelectValue } from '@/components/ui/multi-select';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableEmpty, TableError, TableHead, TableHeader, TableLoading, TableRow } from '@/components/ui/table';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -19,10 +20,8 @@ type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
 const AllProductsTable = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [status, setStatus] = useState<string>("");
-    const [selectedColor, setSelectedColor] = useState<string>("");
-    const [selectedSize, setSelectedSize] = useState<string>("");
     const [selectedBrand, setSelectedBrand] = useState<string>("");
+    const [selectedAttributeValues, setSelectedAttributeValues] = useState<Record<string, string[]>>({});
 
 
 
@@ -66,64 +65,67 @@ const AllProductsTable = () => {
     // Debounce search term to avoid excessive API calls
     const debouncedSearchTerm = useDebounce(searchTerm);
 
-    // CHANGE buildQueryParams to:
+    //  buildQueryParams to:
     const buildQueryParams = () => {
         const params = [...getPaginationParams(), ...getSortParams()];
 
         if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
-        if (status) params.push({ name: "status", value: status });
-        if (selectedColor) params.push({ name: "colorId", value: selectedColor });
-        if (selectedSize) params.push({ name: "sizeId", value: selectedSize });
         if (selectedBrand) params.push({ name: "brandId", value: selectedBrand });
+
+        Object.entries(selectedAttributeValues).forEach(([attrName, values]) => {
+            if (values.length) params.push({ name: attrName, value: values.join(",") });
+        });
+
         return params;
     };
-
-
-
     const { data, isLoading, isFetching, isError } = useGetAllProductsQuery(buildQueryParams());
     const products = data?.data || [];
-    console.log('data is ', products);
     const hasNoData = products.length === 0 && !isLoading;
     const isRefetching = isFetching && !isLoading;
 
+
     const { data: attributesData } = useGetAllAttributesQuery(undefined);
     const attributes: TAttribute[] = attributesData?.data || [];
+    console.log('attribute data', attributesData);
 
     // brand data
     const { data: brandsData } = useGetAllBrandsQuery(undefined);
     const brands: TBrand[] = brandsData?.data || [];
 
-    const colorAttribute = attributes.find((a) => a.name.toLowerCase() === "color");
-    const sizeAttribute = attributes.find((a) => a.name.toLowerCase() === "size");
-
     const activeFilters = [
-        selectedColor && colorAttribute && {
-            label: colorAttribute.values.find((v) => v.id === selectedColor)?.value ?? "",
-            hexCode: colorAttribute.values.find((v) => v.id === selectedColor)?.hexCode ?? null,
-            onRemove: () => { setSelectedColor(""); resetPage(); },
-        },
-        selectedSize && sizeAttribute && {
-            label: sizeAttribute.values.find((v) => v.id === selectedSize)?.value ?? "",
-            hexCode: null,
-            onRemove: () => { setSelectedSize(""); resetPage(); },
-        },
         selectedBrand && {
             label: brands.find((b) => b.id === selectedBrand)?.name ?? "",
             hexCode: null,
             onRemove: () => { setSelectedBrand(""); resetPage(); },
         },
+        ...attributes.flatMap((attr) =>
+            (selectedAttributeValues[attr.name.toLowerCase()] ?? []).map((valId) => {
+                const attrVal = attr.values.find((v) => v.id === valId);
+                return attrVal ? {
+                    label: attrVal.value,
+                    hexCode: attrVal.hexCode ?? null,
+                    onRemove: () => {
+                        setSelectedAttributeValues((prev) => ({
+                            ...prev,
+                            [attr.name.toLowerCase()]: (prev[attr.name.toLowerCase()] ?? []).filter((id) => id !== valId),
+                        }));
+                        resetPage();
+                    },
+                } : null;
+            })
+        ),
     ].filter(Boolean) as { label: string; hexCode: string | null; onRemove: () => void }[];
 
-    const totalActiveFilters = [selectedColor, selectedSize, status, selectedBrand,].filter(Boolean).length;
+    const totalActiveFilters = [
+        selectedBrand,
+        ...Object.values(selectedAttributeValues).flat(),
+    ].filter(Boolean).length;
 
     const clearAllFilters = () => {
-        setSelectedColor("");
-        setSelectedSize("");
-        setStatus("");
         setSelectedBrand("");
+        setSelectedAttributeValues({});
         resetPage();
     };
-
     return (
         <div>
 
@@ -142,22 +144,6 @@ const AllProductsTable = () => {
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
 
-                    {/* Status — unchanged logic, minor class tweak */}
-                    <Select
-                        value={status}
-                        onValueChange={(value) => { setStatus(value === "__all__" ? "" : value); handleFilterChange(); }}
-                    >
-                        <SelectTrigger className={`w-36 bg-card-primary ${status ? "border-primary bg-primary/5" : ""}`}>
-                            <SelectValue placeholder="All Products" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="__all__">All Products</SelectItem>
-                            <SelectItem value="ACTIVE">Active</SelectItem>
-                            <SelectItem value="DRAFT">Draft</SelectItem>
-                            <SelectItem value="INACTIVE">Inactive</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    
                     {/* brand  */}
                     {brands.length > 0 && (
                         <Select
@@ -178,61 +164,44 @@ const AllProductsTable = () => {
                         </Select>
                     )}
 
-                    {/* NEW — Color dropdown */}
-                    {colorAttribute && (
-                        <Select
-                            value={selectedColor || "__all__"}
-                            onValueChange={(v) => { setSelectedColor(v === "__all__" ? "" : v); handleFilterChange(); }}
-                        >
-                            <SelectTrigger className={`w-36 bg-card-primary ${selectedColor ? "border-primary bg-primary/5" : ""}`}>
-                                <SelectValue placeholder="All Colors">
-                                    {selectedColor ? (
-                                        <span className="flex items-center gap-2">
-                                            <span
-                                                className="inline-block w-3.5 h-3.5 rounded-full border border-muted-foreground/30 shrink-0"
-                                                style={{ backgroundColor: colorAttribute.values.find((v) => v.id === selectedColor)?.hexCode ?? undefined }}
-                                            />
-                                            {colorAttribute.values.find((v) => v.id === selectedColor)?.value}
-                                        </span>
-                                    ) : "All Colors"}
-                                </SelectValue>
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="__all__">All Colors</SelectItem>
-                                {colorAttribute.values.map((v) => (
-                                    <SelectItem key={v.id} value={v.id}>
-                                        <span className="flex items-center gap-2">
-                                            <span
-                                                className="inline-block w-3.5 h-3.5 rounded-full border border-muted-foreground/30 shrink-0"
-                                                style={{ backgroundColor: v.hexCode ?? undefined }}
-                                            />
-                                            {v.value}
-                                        </span>
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    )}
+                    {attributes.map((attr) => {
+                        const attrKey = attr.name.toLowerCase();
+                        const selectedVals = selectedAttributeValues[attrKey] ?? [];
 
-                    {/* NEW — Size dropdown */}
-                    {sizeAttribute && (
-                        <Select
-                            value={selectedSize || "__all__"}
-                            onValueChange={(v) => { setSelectedSize(v === "__all__" ? "" : v); handleFilterChange(); }}
-                        >
-                            <SelectTrigger className={`w-28 bg-card-primary ${selectedSize ? "border-primary bg-primary/5" : ""}`}>
-                                <SelectValue placeholder="All Sizes" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="__all__">All Sizes</SelectItem>
-                                {sizeAttribute.values.map((v) => (
-                                    <SelectItem key={v.id} value={v.id}>{v.value}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    )}
+                        return (
+                            <MultiSelect
+                                key={attr.id}
+                                values={selectedVals}
+                                onValuesChange={(vals) => {
+                                    setSelectedAttributeValues((prev) => ({ ...prev, [attrKey]: vals }));
+                                    handleFilterChange();
+                                }}
+                            >
+                                <MultiSelectTrigger className={` min-w-36 max-w-100 bg-card-primary ${selectedVals.length ? "border-primary bg-primary/5" : ""}`}>
+                                    <MultiSelectValue placeholder={`All ${attr.name}s`} />
+                                </MultiSelectTrigger>
+                                <MultiSelectContent>
+                                    <MultiSelectGroup>
+                                        {attr.values.map((v) => (
+                                            <MultiSelectItem key={v.id} value={v.id}>
+                                                <span className="flex items-center gap-2">
+                                                    {v.hexCode && (
+                                                        <span
+                                                            className="inline-block w-3.5 h-3.5 rounded-full border border-muted-foreground/30 shrink-0"
+                                                            style={{ backgroundColor: v.hexCode }}
+                                                        />
+                                                    )}
+                                                    {v.value}
+                                                </span>
+                                            </MultiSelectItem>
+                                        ))}
+                                    </MultiSelectGroup>
+                                </MultiSelectContent>
+                            </MultiSelect>
+                        );
+                    })}
 
-                    {/* NEW — Clear all button */}
+                    {/* — Clear all button */}
                     {totalActiveFilters > 0 && (
                         <button
                             onClick={clearAllFilters}

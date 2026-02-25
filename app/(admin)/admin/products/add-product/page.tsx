@@ -978,14 +978,14 @@ export default function AddProductPage() {
             <TabsContent value="faq" className="space-y-4">
               <Card className="py-5">
                 <CardHeader className="border-b bg-muted/30 px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <div className="h-5 w-1 rounded-full bg-primary" />
-                    <CardTitle className="text-base font-semibold">Frequently Asked Questions</CardTitle>
-                  </div>
-                  <CardDescription className="text-xs mt-1 ml-3">
-                    Add common questions and answers about your product
-                  </CardDescription>
-                </CardHeader>
+      <div className="flex items-center gap-2">
+        <div className="h-5 w-1 rounded-full bg-primary" />
+        <CardTitle className="text-base font-semibold">Frequently Asked Questions</CardTitle>
+      </div>
+      <CardDescription className="text-xs mt-1 ml-3">
+        Add common questions and answers about your product
+      </CardDescription>
+    </CardHeader>
                 <CardContent className="space-y-4">
                   {form.watch("faqData").map((_, index) => (
                     <div

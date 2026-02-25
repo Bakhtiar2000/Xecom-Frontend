@@ -23,3 +23,10 @@ export type TAddProductDto = {
 };
 
 export type TUpdateProductDto = Partial<TAddProductDto>;
+
+export type TProductMetadata = {
+  totalProducts: number;
+  totalActiveProducts: number;
+  totalInactiveProducts: number;
+  totalSalesCount: number;
+};
