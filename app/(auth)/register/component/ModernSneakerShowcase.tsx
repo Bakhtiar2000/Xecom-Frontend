@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import shoes7 from "../../../../assets/shoes/shoes7.png";
+import shoes7 from "@/assets/shoes/shoes7.png";
 
 type HoverEffect = "rotate" | "float" | "pulse";
 

@@ -82,7 +82,7 @@ export default function ProductTopBar({
               }))
             }
           >
-            <SelectTrigger className="hidden w-[200px] lg:flex">
+            <SelectTrigger className="hidden w-50 lg:flex">
               <span className="text-sm font-medium">Sort options:</span>
               <SelectValue />
             </SelectTrigger>

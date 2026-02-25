@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import shoes6 from "../../../../assets/shoes/shoes6.png";
+import shoes6 from "@/assets/shoes/shoes6.png";
 
 const ModernSneakerShowcase: FC = () => {
   const [isHovered, setIsHovered] = useState<boolean>(true);
