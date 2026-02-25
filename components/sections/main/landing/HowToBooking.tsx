@@ -108,8 +108,9 @@ const HowtoBooking: React.FC<HowtoBookingProps> = ({ variant = "modern" }) => {
 
       <div className="relative">
         <div
-          className={`grid grid-cols-1 ${sneakerSteps.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"
-            } gap-4 lg:gap-8`}
+          className={`grid grid-cols-1 ${
+            sneakerSteps.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"
+          } gap-4 lg:gap-8`}
         >
           {sneakerSteps.map((step, index) => (
             <StepCard

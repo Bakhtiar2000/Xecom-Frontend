@@ -76,8 +76,9 @@ const PremiumShoes = (): React.JSX.Element => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
-                className={`flex cursor-pointer items-center space-x-1 px-3 py-2 text-sm font-semibold md:space-x-2 lg:px-6 lg:py-4 ${activeTab === tab.id ? "border-b-2 border-black dark:border-white" : ""
-                  }`}
+                className={`flex cursor-pointer items-center space-x-1 px-3 py-2 text-sm font-semibold md:space-x-2 lg:px-6 lg:py-4 ${
+                  activeTab === tab.id ? "border-b-2 border-black dark:border-white" : ""
+                }`}
               >
                 {tab.icon}
                 <span className="text-xs md:text-sm">{tab.label}</span>

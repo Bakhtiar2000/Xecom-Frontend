@@ -139,8 +139,9 @@ export default function CategorySection() {
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            className={`scrollbar-hide flex gap-6 overflow-x-scroll pb-4 select-none ${isDragging ? "cursor-grabbing" : "cursor-grab"
-              }`}
+            className={`scrollbar-hide flex gap-6 overflow-x-scroll pb-4 select-none ${
+              isDragging ? "cursor-grabbing" : "cursor-grab"
+            }`}
           >
             {loopedCategories.map((cat, idx) => (
               <div
@@ -158,8 +159,9 @@ export default function CategorySection() {
               <button
                 key={index}
                 onClick={() => scrollToSlide(index)}
-                className={`h-2 rounded-full transition-all ${activeSlide === index ? "bg-primary w-8" : "w-2 bg-gray-300 hover:bg-gray-400"
-                  }`}
+                className={`h-2 rounded-full transition-all ${
+                  activeSlide === index ? "bg-primary w-8" : "w-2 bg-gray-300 hover:bg-gray-400"
+                }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
