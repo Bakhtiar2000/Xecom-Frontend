@@ -5,6 +5,11 @@ const fileValidator = z.custom<File>(
   { message: "Must be a valid file" }
 );
 
+const optionalFileValidator = z.custom<File | null | undefined>(
+  (val) => val == null || (typeof window !== "undefined" && val instanceof File),
+  { message: "Must be a valid file" }
+).optional().nullable();
+
 export const productSchema = z.object({
   // Basic Info
   name: z.string().min(3, "Name must be at least 3 characters"),
@@ -18,50 +23,62 @@ export const productSchema = z.object({
 
   // Media
   images: z.array(fileValidator).min(1, "At least one image is required"),
-  video: z.array(fileValidator).optional(),
-  videoUrl: z.string().optional(),
-  manualUrl: z.string().optional(),
+  video: optionalFileValidator,      
+  manualFile: optionalFileValidator,  
 
   // Product Details
-  weight: z.string().optional().refine(
-    (val) => !val || !isNaN(Number(val)),
-    "Weight must be a valid number"
-  ),
+  weight: z.number() .min(0.01, "Weight must be greater than 0"),
   dimensions: z.object({
     unit: z.string().default("cm"),
-    width: z.number().min(0).default(0),
-    height: z.number().min(0).default(0),
-    length: z.number().min(0).default(0),
+    width: z.number().min(0.01, "Width must be greater than 0"),
+    height: z.number().min(0.01, "Height must be greater than 0"),
+    length: z.number().min(0.01, "Length must be greater than 0"),
   }),
-  tags: z.array(z.string()).default([]),
-  warranty: z.string().optional(),
+  tags: z.array(z.string()).min(1, "At least one tag is required"),
+  warranty: z.string().min(1, "Warranty is required"),
 
   // SEO
-  seoTitle: z.string().optional(),
-  seoDescription: z.string().optional(),
-  metaKeywords: z.array(z.string()).default([]),
+  seoTitle: z.string().min(10, "SEO title must be at least 10 characters"),
+  seoDescription: z.string().min(20, "SEO description must be at least 20 characters"),
+  metaKeywords: z.array(z.string()).min(1, "At least one meta keyword is required"),
 
   // Specifications
   specifications: z.object({
-    fitType: z.string().optional(),
-    occasion: z.string().optional(),
-    closureType: z.string().optional(),
-    soleMaterial: z.string().optional(),
-    upperMaterial: z.string().optional(),
+    fitType: z.string().min(1, "Fit type is required"),
+    occasion: z.string().min(1, "Occasion is required"),
+    closureType: z.string().min(1, "Closure type is required"),
+    soleMaterial: z.string().min(1, "Sole material is required"),
+    upperMaterial: z.string().min(1, "Upper material is required"),
   }),
 
   // FAQ
-  faqData: z.array(
-    z.object({
-      question: z.string().min(1, "Question is required"),
-      answer: z.string().min(1, "Answer is required"),
-    })
-  ).default([]),
+  faqs: z
+    .array(
+      z.object({
+        question: z.string().min(1, "Question is required"),
+        answer: z.string().min(1, "Answer is required"),
+      })
+    )
+    .min(1, "At least one FAQ is required"),
 
   // Inventory
   minOrderQty: z.number().min(1, "Minimum order quantity must be at least 1").default(1),
   maxOrderQty: z.number().min(1, "Maximum order quantity must be at least 1").default(10),
-  isBundle: z.boolean().default(false),
+
+  // Variants
+  variants: z
+    .array(
+      z.object({
+        sku: z.string().min(1, "SKU is required"),
+        price: z.number().min(0.01, "Price must be greater than 0"),
+        cost: z.number().min(0.01, "Cost must be greater than 0"),
+        stockQuantity: z.number().min(0, "Stock quantity must be 0 or more"),
+        stockAlertThreshold: z.number().min(0, "Alert threshold must be 0 or more"),
+        isDefault: z.boolean().default(false),
+        attributeValueIds: z.array(z.string()).min(1, "At least one attribute value is required"),
+      })
+    )
+    .min(1, "At least one variant is required"),
 
 }).refine(
   (data) => data.maxOrderQty >= data.minOrderQty,

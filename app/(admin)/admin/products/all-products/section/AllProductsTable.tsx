@@ -4,15 +4,13 @@ import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { MultiSelect, MultiSelectContent, MultiSelectGroup, MultiSelectItem, MultiSelectTrigger, MultiSelectValue } from '@/components/ui/multi-select';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableEmpty, TableError, TableHead, TableHeader, TableLoading, TableRow } from '@/components/ui/table';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useTablePagination } from '@/hooks/useTablePagination';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useGetAllAttributesQuery } from '@/redux/features/product/attribute.api';
-import { useGetAllBrandsQuery } from '@/redux/features/product/brand.api';
 import { useGetAllProductsQuery } from '@/redux/features/product/product.api';
-import { TAttribute, TBrand, TProduct } from '@/types';
+import { TAttribute, TProduct } from '@/types';
 import { Eye, Loader2, MoreHorizontal, Package, Pencil, Search, Trash2, X, } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -20,11 +18,7 @@ type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
 const AllProductsTable = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedBrand, setSelectedBrand] = useState<string>("");
-    const [selectedAttributeValues, setSelectedAttributeValues] = useState<Record<string, string[]>>({});
-
-
-
+    const [selectedAttributeValues, setSelectedAttributeValues] = useState<Record<string, string[]>>({})
 
     const {
         handlePageChange,
@@ -70,8 +64,6 @@ const AllProductsTable = () => {
         const params = [...getPaginationParams(), ...getSortParams()];
 
         if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
-        if (selectedBrand) params.push({ name: "brandId", value: selectedBrand });
-
         Object.entries(selectedAttributeValues).forEach(([attrName, values]) => {
             if (values.length) params.push({ name: attrName, value: values.join(",") });
         });
@@ -88,16 +80,8 @@ const AllProductsTable = () => {
     const attributes: TAttribute[] = attributesData?.data || [];
     console.log('attribute data', attributesData);
 
-    // brand data
-    const { data: brandsData } = useGetAllBrandsQuery(undefined);
-    const brands: TBrand[] = brandsData?.data || [];
 
     const activeFilters = [
-        selectedBrand && {
-            label: brands.find((b) => b.id === selectedBrand)?.name ?? "",
-            hexCode: null,
-            onRemove: () => { setSelectedBrand(""); resetPage(); },
-        },
         ...attributes.flatMap((attr) =>
             (selectedAttributeValues[attr.name.toLowerCase()] ?? []).map((valId) => {
                 const attrVal = attr.values.find((v) => v.id === valId);
@@ -117,12 +101,10 @@ const AllProductsTable = () => {
     ].filter(Boolean) as { label: string; hexCode: string | null; onRemove: () => void }[];
 
     const totalActiveFilters = [
-        selectedBrand,
         ...Object.values(selectedAttributeValues).flat(),
     ].filter(Boolean).length;
 
     const clearAllFilters = () => {
-        setSelectedBrand("");
         setSelectedAttributeValues({});
         resetPage();
     };
@@ -144,26 +126,7 @@ const AllProductsTable = () => {
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
 
-                    {/* brand  */}
-                    {brands.length > 0 && (
-                        <Select
-                            value={selectedBrand || "__all__"}
-                            onValueChange={(v) => { setSelectedBrand(v === "__all__" ? "" : v); handleFilterChange(); }}
-                        >
-                            <SelectTrigger className={`w-36 bg-card-primary ${selectedBrand ? "border-primary bg-primary/5" : ""}`}>
-                                <SelectValue placeholder="All Brands" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="__all__">All Brands</SelectItem>
-                                {brands.map((brand) => (
-                                    <SelectItem key={brand.id} value={brand.id}>
-                                        {brand.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    )}
-
+                    {/* all attribute */}
                     {attributes.map((attr) => {
                         const attrKey = attr.name.toLowerCase();
                         const selectedVals = selectedAttributeValues[attrKey] ?? [];
