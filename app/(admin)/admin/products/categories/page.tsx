@@ -17,7 +17,7 @@ export default function CategoriesPage() {
     setSelectedCategory(null);
     setIsModalOpen(true);
   };
- 
+
   const handleEditClick = (category: TCategory) => {
     setSelectedCategory(category);
     setIsModalOpen(true);

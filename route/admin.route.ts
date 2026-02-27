@@ -93,26 +93,26 @@ export const adminRoutes: RouteGroup[] = [
     ],
   },
   {
-    title:"Locations",
+    title: "Locations",
     icon: MapPinIcon,
-    routes:[
+    routes: [
       {
-        label:"Country",
-        href:"/admin/location/countries"
+        label: "Country",
+        href: "/admin/location/countries",
       },
       {
-        label:"Divisions",
-        href:"/admin/location/divisions"
+        label: "Divisions",
+        href: "/admin/location/divisions",
       },
       {
-        label:"Districts",
-        href:"/admin/location/districts"
+        label: "Districts",
+        href: "/admin/location/districts",
       },
       {
-        label:"Thanas",
-        href:"/admin/location/thanas"
+        label: "Thanas",
+        href: "/admin/location/thanas",
       },
-    ]
+    ],
   },
 ];
 

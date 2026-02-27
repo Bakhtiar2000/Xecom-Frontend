@@ -26,7 +26,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 
 interface Props {
@@ -48,7 +54,7 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
   } = useForm<TDivisionFormData>({
     resolver: zodResolver(divisionSchema),
     defaultValues: {
-    //   id:"",  
+      //   id:"",
       name: "",
       countryId: "",
     },
@@ -66,7 +72,7 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
   // Prefill form on edit
   useEffect(() => {
     if (division && open) {
-    //   setValue("id",division.id);  
+      //   setValue("id",division.id);
       setValue("name", division.name);
       setValue("countryId", division.countryId);
     } else {
@@ -77,7 +83,6 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
   const onSubmit = async (data: TDivisionFormData) => {
     try {
       if (isEditMode && division) {
-
         await updateDivision({
           id: division.id,
           data: {
@@ -105,9 +110,7 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{isEditMode ? "Edit Division" : "Add Division"}</DialogTitle>
-          <DialogDescription>
-            Manage division under selected country
-          </DialogDescription>
+          <DialogDescription>Manage division under selected country</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -133,7 +136,7 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
               )}
             />
             {errors.countryId && (
-              <p className="text-sm text-destructive">{errors.countryId.message}</p>
+              <p className="text-destructive text-sm">{errors.countryId.message}</p>
             )}
           </div>
 
@@ -141,9 +144,7 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
           <div>
             <Label>Division Name *</Label>
             <Input placeholder="Enter division name" {...register("name")} />
-            {errors.name && (
-              <p className="text-sm text-destructive">{errors.name.message}</p>
-            )}
+            {errors.name && <p className="text-destructive text-sm">{errors.name.message}</p>}
           </div>
 
           <DialogFooter>

@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import {
-  useDeleteBrandMutation,
-  useGetAllBrandsQuery,
-} from "@/redux/features/product/brand.api";
+import { useDeleteBrandMutation, useGetAllBrandsQuery } from "@/redux/features/product/brand.api";
 import {
   Table,
   TableBody,
@@ -47,7 +44,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { toast } from "sonner";
 
 type SortableFields = "name";
- 
+
 interface BrandTableProps {
   onEdit: (brand: TBrand) => void;
 }
@@ -61,20 +58,14 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
   const debouncedSearchTerm = useDebounce(searchTerm);
   const [deleteBrand, { isLoading: isDeleting }] = useDeleteBrandMutation();
 
-  const { handleSort, getSortIcon, getSortParams } =
-    useTableSort<SortableFields>(); 
-  const {
-    handlePageChange,
-    handlePageSizeChange,
-    getPaginationParams,
-    resetPage,
-  } = useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
+  const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
+  const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
+    useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
 
   const buildQueryParams = () => {
     const params = [...getPaginationParams(), ...getSortParams()];
 
-    if (debouncedSearchTerm)
-      params.push({ name: "searchTerm", value: debouncedSearchTerm });
+    if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
     if (isActive) params.push({ name: "isActive", value: isActive });
     return params;
   };
@@ -118,8 +109,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
       setDeleteDialogOpen(false);
       setBrandToDelete(null);
     } catch (error: any) {
-      const errorMessage =
-        error?.data?.message || error?.message || "Failed to delete brand";
+      const errorMessage = error?.data?.message || error?.message || "Failed to delete brand";
       toast.error(errorMessage);
     }
   };
@@ -130,10 +120,10 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
     <>
       {/* Filters Section */}
 
-      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         {/* Search Input */}
-        <div className="relative max-w-80 w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 text-muted-foreground" />
+        <div className="relative w-full max-w-80">
+          <Search className="text-muted-foreground absolute top-1/2 left-3 w-4 -translate-y-1/2" />
           <Input
             placeholder="Search by name or description..."
             value={searchTerm}
@@ -142,7 +132,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
           />
         </div>
 
-        <div className="flex flex-wrap lg:flex-row lg:justify-end items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4 lg:flex-row lg:justify-end">
           {/* IsActive Filter */}
           <Select
             value={isActive}
@@ -152,9 +142,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
             }}
           >
             <SelectTrigger
-              className={
-                isActive ? "border-primary bg-primary/5 min-w-32" : "min-w-32"
-              }
+              className={isActive ? "border-primary bg-primary/5 min-w-32" : "min-w-32"}
             >
               <SelectValue placeholder="Status" />
             </SelectTrigger>
@@ -170,7 +158,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
               variant="outline"
               size="sm"
               onClick={clearFilters}
-              className="hover:text-white hover:bg-danger hover:border-danger duration-300 gap-2"
+              className="hover:bg-danger hover:border-danger gap-2 duration-300 hover:text-white"
             >
               <X className="h-4 w-4" />
               Clear
@@ -181,7 +169,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
 
       {/* Table */}
 
-      <div className="rounded-md border border-border">
+      <div className="border-border rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -204,9 +192,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
             {isLoading ? (
               <TableLoading colSpan={7} rows={5} />
             ) : isError ? (
-              <TableError colSpan={7}>
-                Error loading brands. Please try again.
-              </TableError>
+              <TableError colSpan={7}>Error loading brands. Please try again.</TableError>
             ) : brands.length === 0 ? (
               <TableEmpty colSpan={7}>No brands found</TableEmpty>
             ) : (
@@ -214,23 +200,18 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
                 <TableRow key={brand.id}>
                   <TableCell>
                     {brand.logoUrl ? (
-                      <div className="relative w-10 h-10 rounded-md overflow-hidden bg-muted">
-                        <Image
-                          src={brand.logoUrl}
-                          alt={brand.name}
-                          fill
-                          className="object-cover"
-                        />
+                      <div className="bg-muted relative h-10 w-10 overflow-hidden rounded-md">
+                        <Image src={brand.logoUrl} alt={brand.name} fill className="object-cover" />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center">
-                        <Folder className="h-6 w-6 text-muted-foreground" />
+                      <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-md">
+                        <Folder className="text-muted-foreground h-6 w-6" />
                       </div>
                     )}
                   </TableCell>
                   <TableCell className="font-medium">{brand.name}</TableCell>
                   <TableCell>
-                    <span className="text-sm text-muted-foreground line-clamp-2">
+                    <span className="text-muted-foreground line-clamp-2 text-sm">
                       {brand.description || "No description"}
                     </span>
                   </TableCell>
@@ -243,9 +224,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center">
-                    <span className="font-medium">
-                      {brand._count?.products ?? 0}
-                    </span>
+                    <span className="font-medium">{brand._count?.products ?? 0}</span>
                   </TableCell>
                   {/* <TableCell className="text-center">{brand.sortOrder}</TableCell> */}
                   <TableCell>
@@ -254,7 +233,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
                         variant="ghost"
                         size="icon"
                         onClick={() => onEdit(brand)}
-                        className="h-8 w-8 hover:bg-primary/10 hover:text-primary"
+                        className="hover:bg-primary/10 hover:text-primary h-8 w-8"
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
@@ -262,7 +241,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDeleteClick(brand)}
-                        className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
+                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

@@ -3,11 +3,7 @@ import { useGetBrandMetadataQuery } from "@/redux/features/product/brand.api";
 import { FolderKanban, FolderCheck, FolderX } from "lucide-react";
 
 export default function BrandMetadata() {
-  const {
-    data: metadataData,
-    isLoading,
-    isError,
-  } = useGetBrandMetadataQuery(undefined);
+  const { data: metadataData, isLoading, isError } = useGetBrandMetadataQuery(undefined);
   const metadata = metadataData?.data;
 
   const statsCards = [
@@ -33,7 +29,7 @@ export default function BrandMetadata() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {statsCards.map((card, index) => (
           <StatsCard
             key={index}

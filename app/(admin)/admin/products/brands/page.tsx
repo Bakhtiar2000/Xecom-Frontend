@@ -20,18 +20,15 @@ export default function BrandsPage() {
 
   const handleEditClick = (brand: TBrand) => {
     setSelectedBrand(brand);
-    setIsModalOpen(true); 
+    setIsModalOpen(true);
   };
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-        <Title
-          mainTitle="Brands"
-          subTitle="Manage product brands and their organization"
-        />
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <Title mainTitle="Brands" subTitle="Manage product brands and their organization" />
 
-        <Button onClick={handleAddClick} className="gap-2 w-fit">
+        <Button onClick={handleAddClick} className="w-fit gap-2">
           <Plus className="h-4 w-4" />
           Add Brand
         </Button>
@@ -45,11 +42,7 @@ export default function BrandsPage() {
       </div>
 
       {/* brand Modal */}
-            <BrandModal
-              open={isModalOpen}
-              onOpenChange={setIsModalOpen}
-              brand={selectedBrand}
-            />
-    </div> 
+      <BrandModal open={isModalOpen} onOpenChange={setIsModalOpen} brand={selectedBrand} />
+    </div>
   );
 }

@@ -5,27 +5,24 @@ import { TDistrict } from "@/types/location.type";
 
 const districtApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-
     // -----------Get All District--------------------
 
-
     getAllDistrict: builder.query({
-      query: (args) =>{
+      query: (args) => {
         const params = new URLSearchParams();
 
-        if(args){
-          args.forEach((item: TQueryParam) =>{
-            params.append(item.name , item.value as string)
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
           });
         }
-        return { 
+        return {
           url: "/district",
           method: "GET",
           params: params,
         };
-
-      }
-    }), 
+      },
+    }),
 
     //-----------------Add District-----------------
     addDistrict: builder.mutation({
@@ -51,27 +48,22 @@ const districtApi = baseApi.injectEndpoints({
       },
     }),
 
-
     //-----------------update District-----------------
 
     updateDistrict: builder.mutation({
-      query: (args: { id: string; data: any }) => ({   
+      query: (args: { id: string; data: any }) => ({
         url: `/district/${args.id}`,
         method: "PUT",
         body: args.data,
       }),
       invalidatesTags: ["district"],
     }),
-
-
-
   }),
 });
 
-export const { 
+export const {
   useAddDistrictMutation,
-   useGetSingleDistrictQuery, 
-   useGetAllDistrictQuery , 
-   useUpdateDistrictMutation 
-  } =
-  districtApi;
+  useGetSingleDistrictQuery,
+  useGetAllDistrictQuery,
+  useUpdateDistrictMutation,
+} = districtApi;

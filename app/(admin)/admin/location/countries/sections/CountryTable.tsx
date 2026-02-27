@@ -54,21 +54,15 @@ interface CountryTableProps {
 }
 
 export default function CountryTable({ onEdit }) {
-  
   const [searchTerm, setSearchTerm] = useState("");
   const [isActive, setIsActive] = useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState("");
 
   const debouncedSearchTerm = useDebounce(searchTerm);
 
-  const { handleSort, getSortIcon, getSortParams } =
-    useTableSort<SortableFields>();
-  const {
-    handlePageChange,
-    handlePageSizeChange,
-    getPaginationParams,
-    resetPage,
-  } = useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
+  const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
+  const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
+    useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
 
   //   const buildQueryParams = () => {
   //     const params = [...getPaginationParams(), ...getSortParams()];
@@ -92,8 +86,7 @@ export default function CountryTable({ onEdit }) {
     return params;
   };
 
-  const { data, isLoading, isError } =
-    useGetAllCountriesQuery(buildQueryParams());
+  const { data, isLoading, isError } = useGetAllCountriesQuery(buildQueryParams());
 
   const countries = data?.data || [];
   const hasNoData = countries.length === 0 && !isLoading;
@@ -124,7 +117,7 @@ export default function CountryTable({ onEdit }) {
     <>
       {/* Filters Section */}
 
-      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-4">
+      <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         {/* Search Input */}
         {/* <div className="relative max-w-80 w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 text-muted-foreground" />
@@ -136,7 +129,7 @@ export default function CountryTable({ onEdit }) {
           />
         </div> */}
 
-        <div className="flex flex-wrap lg:flex-row lg:justify-end items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4 lg:flex-row lg:justify-end">
           {/* IsActive Filter */}
           <Select
             value={selectedCountry}
@@ -146,18 +139,14 @@ export default function CountryTable({ onEdit }) {
             }}
           >
             <SelectTrigger
-              className={
-                selectedCountry
-                  ? "border-primary bg-primary/5 min-w-32"
-                  : "min-w-32"
-              }
+              className={selectedCountry ? "border-primary bg-primary/5 min-w-32" : "min-w-32"}
             >
               <SelectValue placeholder="Select Country" />
             </SelectTrigger>
 
             <SelectContent>
-              <div className="relative max-w-80 w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 text-muted-foreground" />
+              <div className="relative w-full max-w-80">
+                <Search className="text-muted-foreground absolute top-1/2 left-3 w-4 -translate-y-1/2" />
                 <Input
                   placeholder="Search by name or description..."
                   value={searchTerm}
@@ -179,7 +168,7 @@ export default function CountryTable({ onEdit }) {
               variant="outline"
               size="sm"
               onClick={clearFilters}
-              className="hover:text-white hover:bg-danger hover:border-danger duration-300 gap-2"
+              className="hover:bg-danger hover:border-danger gap-2 duration-300 hover:text-white"
             >
               <X className="h-4 w-4" />
               Clear
@@ -188,7 +177,7 @@ export default function CountryTable({ onEdit }) {
         </div>
       </div>
 
-      <div className="rounded-md border border-border">
+      <div className="border-border rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -211,9 +200,7 @@ export default function CountryTable({ onEdit }) {
             {isLoading ? (
               <TableLoading colSpan={7} rows={5} />
             ) : isError ? (
-              <TableError colSpan={7}>
-                Error loading countries. Please try again.
-              </TableError>
+              <TableError colSpan={7}>Error loading countries. Please try again.</TableError>
             ) : countries.length === 0 ? (
               <TableEmpty colSpan={7}>No country found</TableEmpty>
             ) : (
@@ -228,15 +215,9 @@ export default function CountryTable({ onEdit }) {
                       <p>{country.name}</p>
                     )}
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {country._count?.divisions ?? 0}
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {country._count?.districts ?? 0}
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {country._count?.thanas ?? 0}
-                  </TableCell>
+                  <TableCell className="font-medium">{country._count?.divisions ?? 0}</TableCell>
+                  <TableCell className="font-medium">{country._count?.districts ?? 0}</TableCell>
+                  <TableCell className="font-medium">{country._count?.thanas ?? 0}</TableCell>
                   {/* <TableCell>
                           <span className="text-sm text-muted-foreground line-clamp-2">
                             {brand.description || "No description"}
@@ -262,7 +243,7 @@ export default function CountryTable({ onEdit }) {
                         variant="ghost"
                         size="icon"
                         onClick={() => onEdit(country)}
-                        className="h-8 w-8 hover:bg-primary/10 hover:text-primary"
+                        className="hover:bg-primary/10 hover:text-primary h-8 w-8"
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>

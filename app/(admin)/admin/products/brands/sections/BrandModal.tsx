@@ -174,8 +174,7 @@ export default function BrandModal({ open, onOpenChange, brand }) {
       reset();
       setImagePreview(null);
     } catch (error: any) {
-      const errorMessage =
-        error?.data?.message || error?.message || "Failed to save Brand";
+      const errorMessage = error?.data?.message || error?.message || "Failed to save Brand";
       toast.error(errorMessage);
     }
   };
@@ -198,11 +197,7 @@ export default function BrandModal({ open, onOpenChange, brand }) {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Category Image */}
             <div className="flex justify-center">
-              <ImageUpload
-                value={imagePreview}
-                onChange={handleImageChange}
-                size="lg"
-              />
+              <ImageUpload value={imagePreview} onChange={handleImageChange} size="lg" />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -217,11 +212,7 @@ export default function BrandModal({ open, onOpenChange, brand }) {
                   onChange={handleNameChange}
                   placeholder="e.g., Men's Shoes"
                 />
-                {errors.name && (
-                  <p className="text-sm text-destructive">
-                    {errors.name.message}
-                  </p>
-                )}
+                {errors.name && <p className="text-destructive text-sm">{errors.name.message}</p>}
               </div>
 
               {/* Slug Field */}
@@ -229,16 +220,8 @@ export default function BrandModal({ open, onOpenChange, brand }) {
                 <Label htmlFor="slug">
                   Slug <span className="text-destructive">*</span>
                 </Label>
-                <Input
-                  id="slug"
-                  {...register("slug")}
-                  placeholder="e.g., mens-shoes"
-                />
-                {errors.slug && (
-                  <p className="text-sm text-destructive">
-                    {errors.slug.message}
-                  </p>
-                )}
+                <Input id="slug" {...register("slug")} placeholder="e.g., mens-shoes" />
+                {errors.slug && <p className="text-destructive text-sm">{errors.slug.message}</p>}
               </div>
             </div>
 
@@ -252,9 +235,7 @@ export default function BrandModal({ open, onOpenChange, brand }) {
                 rows={3}
               />
               {errors.description && (
-                <p className="text-sm text-destructive">
-                  {errors.description.message}
-                </p>
+                <p className="text-destructive text-sm">{errors.description.message}</p>
               )}
             </div>
 
@@ -264,9 +245,7 @@ export default function BrandModal({ open, onOpenChange, brand }) {
                 <Label htmlFor="parentId">Parent Brand</Label>
                 <Select
                   value={parentIdValue || "none"}
-                  onValueChange={(value) =>
-                    setValue("parentId", value === "none" ? null : value)
-                  }
+                  onValueChange={(value) => setValue("parentId", value === "none" ? null : value)}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select parent brand" />
@@ -283,9 +262,7 @@ export default function BrandModal({ open, onOpenChange, brand }) {
                   </SelectContent>
                 </Select>
                 {errors.parentId && (
-                  <p className="text-sm text-destructive">
-                    {errors.parentId.message}
-                  </p>
+                  <p className="text-destructive text-sm">{errors.parentId.message}</p>
                 )}
               </div>
             </div>

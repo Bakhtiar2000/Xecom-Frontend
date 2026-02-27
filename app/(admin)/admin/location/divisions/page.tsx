@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Title from "@/components/sections/shared/Title";
 import { Button } from "@/components/ui/button";
@@ -10,9 +10,7 @@ import DivisionModal from "./sections/DivisionModal";
 
 export default function Divisions() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDivision, setSelectedDivision] = useState<TDivision | null>(
-    null,
-  );
+  const [selectedDivision, setSelectedDivision] = useState<TDivision | null>(null);
 
   const handleAddClick = () => {
     setSelectedDivision(null);
@@ -26,12 +24,9 @@ export default function Divisions() {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-        <Title
-          mainTitle="Divisions"
-          subTitle="Manage Divisions and their organization"
-        />
-        <Button onClick={handleAddClick} className="gap-2 w-fit">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <Title mainTitle="Divisions" subTitle="Manage Divisions and their organization" />
+        <Button onClick={handleAddClick} className="w-fit gap-2">
           <Plus className="h-4 w-4" />
           Add Division
         </Button>
@@ -40,11 +35,7 @@ export default function Divisions() {
         <DivisionTable onEdit={handleEditClick} />
       </div>
 
-      <DivisionModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        division={selectedDivision}
-      />
+      <DivisionModal open={isModalOpen} onOpenChange={setIsModalOpen} division={selectedDivision} />
     </>
   );
 }

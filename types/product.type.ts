@@ -104,7 +104,7 @@ export type TProductRelation = {
 export type TAttribute = {
   id: string;
   name: string;
-  values?:TAttributeValue[];
+  values?: TAttributeValue[];
   createdAt: string;
 };
 export type TAttributeValue = {

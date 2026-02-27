@@ -51,39 +51,25 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
   const [selectedAttribute, setSelectedAttribute] = useState<string>("all");
 
   const [attributeValueModalOpen, setAttributeValueModalOpen] = useState(false);
-  const [selectedAttributeId, setSelectedAttributeId] = useState<string | null>(
-    null
-  );
+  const [selectedAttributeId, setSelectedAttributeId] = useState<string | null>(null);
 
-  const [editingAttributeValue, setEditingAttributeValue] =
-    useState<TAttributeValue | null>(null);
-
+  const [editingAttributeValue, setEditingAttributeValue] = useState<TAttributeValue | null>(null);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [attributeToDelete, setAttributeToDelete] = useState<TAttribute | null>(
-    null
-  );
-  const [confirmAttributeInput, setConfirmAttributeInput] = useState(""); 
-  const [deleteAttribute, { isLoading: isDeleting }] =
-    useDeleteAttributeMutation();
-
+  const [attributeToDelete, setAttributeToDelete] = useState<TAttribute | null>(null);
+  const [confirmAttributeInput, setConfirmAttributeInput] = useState("");
+  const [deleteAttribute, { isLoading: isDeleting }] = useDeleteAttributeMutation();
 
   const [deleteValueDialogOpen, setDeleteValueDialogOpen] = useState(false);
-  const [attributeValueToDelete, setAttributeValueToDelete] =
-    useState<TAttributeValue | null>(null);
-  const [confirmValueInput, setConfirmValueInput] = useState(""); 
+  const [attributeValueToDelete, setAttributeValueToDelete] = useState<TAttributeValue | null>(
+    null
+  );
+  const [confirmValueInput, setConfirmValueInput] = useState("");
 
-  const [deleteAttributeValue, { isLoading: isDeletingValue }] =
-    useDeleteAttributeValueMutation();
+  const [deleteAttributeValue, { isLoading: isDeletingValue }] = useDeleteAttributeValueMutation();
 
-
-  const { handleSort, getSortIcon, getSortParams } =
-    useTableSort<SortableFields>();
-  const {
-    handlePageChange,
-    handlePageSizeChange,
-    getPaginationParams,
-  } = useTablePagination({
+  const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
+  const { handlePageChange, handlePageSizeChange, getPaginationParams } = useTablePagination({
     initialPageNumber: 1,
     initialPageSize: 10,
   });
@@ -99,9 +85,7 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
     return params;
   };
 
-  const { data, isLoading, isError } = useGetAllAttributesQuery(
-    buildQueryParams()
-  );
+  const { data, isLoading, isError } = useGetAllAttributesQuery(buildQueryParams());
   const attributes = data?.data || [];
   const hasNoData = attributes.length === 0 && !isLoading;
 
@@ -119,9 +103,7 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
       setDeleteDialogOpen(false);
       setAttributeToDelete(null);
     } catch (error: any) {
-      toast.error(
-        error?.data?.message || error?.message || "Failed to delete attribute"
-      );
+      toast.error(error?.data?.message || error?.message || "Failed to delete attribute");
     }
   };
 
@@ -139,9 +121,7 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
       setDeleteValueDialogOpen(false);
       setAttributeValueToDelete(null);
     } catch (error: any) {
-      toast.error(
-        error?.data?.message || error?.message || "Failed to delete value"
-      );
+      toast.error(error?.data?.message || error?.message || "Failed to delete value");
     }
   };
 
@@ -150,7 +130,6 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
     setEditingAttributeValue(value || null);
     setAttributeValueModalOpen(true);
   };
-
 
   return (
     <>
@@ -161,7 +140,9 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
             <TableRow>
               <TableHead colSpan={1}>Attribute Name</TableHead>
               <TableHead colSpan={1}>Attribute Values</TableHead>
-              <TableHead colSpan={2} className="text-right w-24">Actions</TableHead>
+              <TableHead colSpan={2} className="w-24 text-right">
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
 
@@ -176,19 +157,14 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
               attributes.map((attribute) => (
                 <TableRow key={attribute.id}>
                   {/* Name */}
-                  <TableCell className="font-medium capitalize">
-                    {attribute.name}
-                  </TableCell>
+                  <TableCell className="font-medium capitalize">{attribute.name}</TableCell>
 
                   {/* Values */}
-                  <TableCell >
+                  <TableCell>
                     {attribute.values?.length ? (
                       <ul className="flex items-center justify-start gap-3">
                         {attribute.values.map((value, idx) => (
-                          <li
-                            key={value.id}
-                            className="flex items-center gap-2 text-sm"
-                          >
+                          <li key={value.id} className="flex items-center gap-2 text-sm">
                             <Badge
                               variant="secondary"
                               className="group flex items-center gap-1 px-2 py-0.5"
@@ -204,17 +180,15 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
                               <div className="ml-2 group-hover:flex">
                                 <button
                                   type="button"
-                                  onClick={() =>
-                                    openAttributeValueModal(attribute.id, value)
-                                  }
-                                  className="rounded-full p-1 text-muted-foreground hover:bg-accent hover:text-primary"
+                                  onClick={() => openAttributeValueModal(attribute.id, value)}
+                                  className="text-muted-foreground hover:bg-accent hover:text-primary rounded-full p-1"
                                 >
                                   <Pencil className="h-3 w-3" />
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleDeleteValueClick(value)}
-                                  className="rounded-full p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-full p-1"
                                   disabled={isDeletingValue}
                                 >
                                   <Trash2 className="h-3 w-3" />
@@ -226,20 +200,14 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
                         ))}
                       </ul>
                     ) : (
-                      <span className="text-muted-foreground text-sm">
-                        No values
-                      </span>
+                      <span className="text-muted-foreground text-sm">No values</span>
                     )}
                   </TableCell>
 
                   {/* Actions */}
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onEdit(attribute)}
-                      >
+                      <Button variant="ghost" size="icon" onClick={() => onEdit(attribute)}>
                         <Pencil className="h-4 w-4" />
                       </Button>
                       <Button
@@ -284,7 +252,7 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
             </AlertDialogDescription>
             <input
               type="text"
-              className="mt-2 w-full border rounded px-2 py-1"
+              className="mt-2 w-full rounded border px-2 py-1"
               placeholder={`Type "${attributeToDelete?.name}"`}
               value={confirmAttributeInput}
               onChange={(e) => setConfirmAttributeInput(e.target.value)}
@@ -294,13 +262,11 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
             <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirmDelete}
-              disabled={
-                isDeleting || confirmAttributeInput !== attributeToDelete?.name
-              }
+              disabled={isDeleting || confirmAttributeInput !== attributeToDelete?.name}
               className={`bg-destructive hover:bg-destructive/90 ${
                 confirmAttributeInput === attributeToDelete?.name
                   ? ""
-                  : "opacity-50 cursor-not-allowed"
+                  : "cursor-not-allowed opacity-50"
               }`}
             >
               {isDeleting ? "Deleting..." : "Delete"}
@@ -324,7 +290,7 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
             </AlertDialogDescription>
             <input
               type="text"
-              className="mt-2 w-full border rounded px-2 py-1"
+              className="mt-2 w-full rounded border px-2 py-1"
               placeholder={`Type "${attributeValueToDelete?.value}"`}
               value={confirmValueInput}
               onChange={(e) => setConfirmValueInput(e.target.value)}
@@ -334,13 +300,11 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
             <AlertDialogCancel disabled={isDeletingValue}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirmDeleteValue}
-              disabled={
-                isDeletingValue || confirmValueInput !== attributeValueToDelete?.value
-              }
+              disabled={isDeletingValue || confirmValueInput !== attributeValueToDelete?.value}
               className={`bg-destructive hover:bg-destructive/90 ${
                 confirmValueInput === attributeValueToDelete?.value
                   ? ""
-                  : "opacity-50 cursor-not-allowed"
+                  : "cursor-not-allowed opacity-50"
               }`}
             >
               {isDeletingValue ? "Deleting..." : "Delete"}
@@ -353,9 +317,7 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
       <AttributeValueModal
         open={attributeValueModalOpen}
         onOpenChange={setAttributeValueModalOpen}
-        attribute={
-          attributes.find((attr) => attr.id === selectedAttributeId) || null
-        }
+        attribute={attributes.find((attr) => attr.id === selectedAttributeId) || null}
         attributeValue={editingAttributeValue}
       />
     </>

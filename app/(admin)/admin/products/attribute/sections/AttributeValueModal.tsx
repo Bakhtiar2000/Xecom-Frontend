@@ -5,10 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-import {
-  attributeValueSchema,
-  TAttributeValueFormData,
-} from "@/lib/attribute.schema";
+import { attributeValueSchema, TAttributeValueFormData } from "@/lib/attribute.schema";
 import {
   useAddAttributeValueMutation,
   useUpdateAttributeValueMutation,
@@ -58,10 +55,8 @@ export default function AttributeValueModal({
     },
   });
 
-  const [addAttributeValue, { isLoading: isAdding }] =
-    useAddAttributeValueMutation();
-  const [updateAttributeValue, { isLoading: isUpdating }] =
-    useUpdateAttributeValueMutation();
+  const [addAttributeValue, { isLoading: isAdding }] = useAddAttributeValueMutation();
+  const [updateAttributeValue, { isLoading: isUpdating }] = useUpdateAttributeValueMutation();
 
   const isColorAttribute =
     attribute?.name?.toLowerCase() === "color" ||
@@ -70,62 +65,58 @@ export default function AttributeValueModal({
 
   // Set values in Edit mode
   useEffect(() => {
-  if (isEditMode && attributeValue && open) {
-    setValue("value", attributeValue.value);
-    setValue("hexCode", attributeValue.hexCode || "");
-  } else if (!open) {
-    reset(); 
-  }
-}, [attributeValue, open, isEditMode, setValue, reset]);
-
-const onSubmit = async (data: TAttributeValueFormData) => {
-  try {
-    if (!attribute?.id && !isEditMode) {
-      toast.error("Attribute ID is required");
-      return;
+    if (isEditMode && attributeValue && open) {
+      setValue("value", attributeValue.value);
+      setValue("hexCode", attributeValue.hexCode || "");
+    } else if (!open) {
+      reset();
     }
+  }, [attributeValue, open, isEditMode, setValue, reset]);
 
-    const payload: any = { value: data.value };
-    if (isColorAttribute && data.hexCode) {
-      payload.hexCode = data.hexCode;
+  const onSubmit = async (data: TAttributeValueFormData) => {
+    try {
+      if (!attribute?.id && !isEditMode) {
+        toast.error("Attribute ID is required");
+        return;
+      }
+
+      const payload: any = { value: data.value };
+      if (isColorAttribute && data.hexCode) {
+        payload.hexCode = data.hexCode;
+      }
+
+      if (isEditMode && attributeValue) {
+        await updateAttributeValue({
+          id: attributeValue.id,
+          data: { ...payload },
+        }).unwrap();
+
+        toast.success("Attribute value updated successfully");
+      } else {
+        await addAttributeValue({
+          attributeId: attribute!.id,
+          ...payload,
+        }).unwrap();
+
+        toast.success("Attribute value added successfully");
+      }
+
+      onOpenChange(false);
+      reset();
+    } catch (error: any) {
+      toast.error(error?.data?.message || error?.message || "Failed to save attribute value");
     }
-
-    if (isEditMode && attributeValue) {
-      await updateAttributeValue({
-        id: attributeValue.id,
-        data: { ...payload },
-      }).unwrap();
-
-      toast.success("Attribute value updated successfully");
-    } else {
-      await addAttributeValue({
-        attributeId: attribute!.id,
-        ...payload,
-      }).unwrap();
-
-      toast.success("Attribute value added successfully");
-    }
-
-    onOpenChange(false);
-    reset();
-  } catch (error: any) {
-    toast.error(
-      error?.data?.message || error?.message || "Failed to save attribute value"
-    );
-  }
-};
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>
-            {isEditMode ? "Edit Attribute Value" : "Add Attribute Value"}
-          </DialogTitle>
+          <DialogTitle>{isEditMode ? "Edit Attribute Value" : "Add Attribute Value"}</DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? `Update the attribute value ${isColorAttribute ? "and hex code below ": ""}`
-              : `Enter a new attribute value ${isColorAttribute ? "and hex code below ": ""}`}
+              ? `Update the attribute value ${isColorAttribute ? "and hex code below " : ""}`
+              : `Enter a new attribute value ${isColorAttribute ? "and hex code below " : ""}`}
           </DialogDescription>
         </DialogHeader>
 
@@ -135,31 +126,17 @@ const onSubmit = async (data: TAttributeValueFormData) => {
               <Label htmlFor="value">
                 Attribute Value <span className="text-destructive">*</span>
               </Label>
-              <Input
-                id="value"
-                placeholder="e.g. Red, Large"
-                {...register("value")}
-              />
-              {errors.value && (
-                <p className="text-sm text-destructive">
-                  {errors.value.message}
-                </p>
-              )}
+              <Input id="value" placeholder="e.g. Red, Large" {...register("value")} />
+              {errors.value && <p className="text-destructive text-sm">{errors.value.message}</p>}
             </div>
 
             <div>
               {isColorAttribute && (
                 <div>
                   <Label htmlFor="hexCode">Hex Code</Label>
-                  <Input
-                    id="hexCode"
-                    placeholder="#ffffff"
-                    {...register("hexCode")}
-                  />
+                  <Input id="hexCode" placeholder="#ffffff" {...register("hexCode")} />
                   {errors.hexCode && (
-                    <p className="text-sm text-destructive">
-                      {errors.hexCode.message}
-                    </p>
+                    <p className="text-destructive text-sm">{errors.hexCode.message}</p>
                   )}
                 </div>
               )}

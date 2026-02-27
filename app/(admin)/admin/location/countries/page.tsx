@@ -24,13 +24,10 @@ export default function Countries() {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-        <Title
-          mainTitle="Countries"
-          subTitle="Manage Countries and their organization"
-        />
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <Title mainTitle="Countries" subTitle="Manage Countries and their organization" />
 
-        <Button onClick={handleAddClick} className="gap-2 w-fit">
+        <Button onClick={handleAddClick} className="w-fit gap-2">
           <Plus className="h-4 w-4" />
           Add Country
         </Button>
@@ -41,11 +38,7 @@ export default function Countries() {
       </div>
 
       {/* brand Modal */}
-      <CountryModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        country={selectedCountry}
-      />
+      <CountryModal open={isModalOpen} onOpenChange={setIsModalOpen} country={selectedCountry} />
     </>
   );
 }

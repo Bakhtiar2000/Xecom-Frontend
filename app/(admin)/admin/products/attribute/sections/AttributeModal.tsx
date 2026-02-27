@@ -34,12 +34,7 @@ interface AttributesModalProps {
   attribute?: TAttribute | null;
 }
 
-export default function AttributeModal({
-  open,
-  onOpenChange,
-  attribute,
-
-}) {
+export default function AttributeModal({ open, onOpenChange, attribute }) {
   const isEditMode = !!attribute;
 
   const {
@@ -57,8 +52,7 @@ export default function AttributeModal({
   });
 
   const [addAttribute, { isLoading: isAdding }] = useAddAttributeMutation();
-  const [updateAttribute, { isLoading: isUpdating }] =
-    useUpdateAttributeMutation();
+  const [updateAttribute, { isLoading: isUpdating }] = useUpdateAttributeMutation();
 
   const { data: attributesData } = useGetAllAttributesQuery([
     { name: "fields", value: "name" },
@@ -76,90 +70,78 @@ export default function AttributeModal({
   }, [attribute, open, setValue, reset]);
 
   const onSubmit = async (data: TAttributeFormData) => {
-  try {
-    let result;
+    try {
+      let result;
 
-    if (isEditMode && attribute) {
-      result = await updateAttribute({
-        id: attribute.id,
-        data: {id:attribute.id, name: data.name }, 
-      }).unwrap();
+      if (isEditMode && attribute) {
+        result = await updateAttribute({
+          id: attribute.id,
+          data: { id: attribute.id, name: data.name },
+        }).unwrap();
 
-      toast.success(result?.message || "Attribute updated successfully");
-    } else {
-      result = await addAttribute({
-        name: data.name, 
-      }).unwrap();
+        toast.success(result?.message || "Attribute updated successfully");
+      } else {
+        result = await addAttribute({
+          name: data.name,
+        }).unwrap();
 
-      toast.success(result?.message || "Attribute added successfully");
+        toast.success(result?.message || "Attribute added successfully");
+      }
+
+      onOpenChange(false);
+      reset();
+    } catch (error: any) {
+      toast.error(error?.data?.message || error?.message || "Failed to save Attribute");
     }
+  };
 
-    onOpenChange(false);
-    reset();
-  } catch (error: any) {
-    toast.error(
-      error?.data?.message || error?.message || "Failed to save Attribute"
-    );
-  }
-};
+  return (
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{isEditMode ? "Edit Attribute" : "Add Attribute"}</DialogTitle>
+            <DialogDescription>
+              {isEditMode
+                ? "Update the attribute name below"
+                : "Enter a name to create a new attribute"}
+            </DialogDescription>
+          </DialogHeader>
 
-  return <>
-    
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>
-            {isEditMode ? "Edit Attribute" : "Add Attribute"}
-          </DialogTitle>
-          <DialogDescription>
-            {isEditMode
-              ? "Update the attribute name below"
-              : "Enter a name to create a new attribute"}
-          </DialogDescription>
-        </DialogHeader>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Attribute Name */}
+            <div>
+              <Label htmlFor="name">
+                Attribute Name <span className="text-destructive">*</span>
+              </Label>
+              <Input id="name" placeholder="e.g. Color, Size, Material" {...register("name")} />
+              {errors.name && <p className="text-destructive text-sm">{errors.name.message}</p>}
+            </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Attribute Name */}
-          <div>
-            <Label htmlFor="name">
-              Attribute Name <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="name"
-              placeholder="e.g. Color, Size, Material"
-              {...register("name")}
-            />
-            {errors.name && (
-              <p className="text-sm text-destructive">
-                {errors.name.message}
-              </p>
-            )}
-          </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                disabled={isAdding || isUpdating}
+              >
+                Cancel
+              </Button>
 
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              disabled={isAdding || isUpdating}
-            >
-              Cancel
-            </Button>
-
-            <Button type="submit" disabled={isAdding || isUpdating}>
-              {isAdding || isUpdating ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                "Save"
-              )}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
-
-  </>;
+              <Button type="submit" disabled={isAdding || isUpdating}>
+                {isAdding || isUpdating ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  "Save"
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
 }

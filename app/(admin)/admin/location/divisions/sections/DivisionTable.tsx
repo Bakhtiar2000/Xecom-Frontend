@@ -1,12 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import {
-  useGetAllDivisonQuery,
-} from "@/redux/features/location/division.api";
-import {
-  useGetAllCountriesQuery,
-} from "@/redux/features/location/country.api";
+import { useGetAllDivisonQuery } from "@/redux/features/location/division.api";
+import { useGetAllCountriesQuery } from "@/redux/features/location/country.api";
 
 import {
   Table,
@@ -45,15 +41,10 @@ interface DivisionTableProps {
 export default function DivisionTable({ onEdit }: DivisionTableProps) {
   const [selectedCountry, setSelectedCountry] = useState("");
 
-  const { handleSort, getSortIcon, getSortParams } =
-    useTableSort<SortableFields>();
+  const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
 
-  const {
-    handlePageChange,
-    handlePageSizeChange,
-    getPaginationParams,
-    resetPage,
-  } = useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
+  const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
+    useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
 
   const { data: countryData } = useGetAllCountriesQuery([]);
   const countries = countryData?.data || [];
@@ -68,8 +59,7 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
     return params;
   };
 
-  const { data, isLoading, isError } =
-    useGetAllDivisonQuery(buildQueryParams());
+  const { data, isLoading, isError } = useGetAllDivisonQuery(buildQueryParams());
 
   const divisions = data?.data || [];
   const hasNoData = divisions.length === 0 && !isLoading;
@@ -87,7 +77,7 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
   return (
     <>
       {/* 🔹 Filters Section */}
-      <div className="flex justify-start items-center gap-4 mb-4">
+      <div className="mb-4 flex items-center justify-start gap-4">
         <Select
           value={selectedCountry}
           onValueChange={(value) => {
@@ -96,21 +86,14 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
           }}
         >
           <SelectTrigger
-            className={
-              selectedCountry
-                ? "border-primary bg-primary/5 min-w-40"
-                : "min-w-40"
-            }
+            className={selectedCountry ? "border-primary bg-primary/5 min-w-40" : "min-w-40"}
           >
             <SelectValue placeholder="Select Country" />
           </SelectTrigger>
 
           <SelectContent>
             {countries.map((country: any) => (
-              <SelectItem
-                key={country.id}
-                value={String(country.id)}
-              >
+              <SelectItem key={country.id} value={String(country.id)}>
                 {country.name}
               </SelectItem>
             ))}
@@ -122,7 +105,7 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
             variant="outline"
             size="sm"
             onClick={clearFilters}
-            className="hover:text-white hover:bg-danger hover:border-danger duration-300 gap-2"
+            className="hover:bg-danger hover:border-danger gap-2 duration-300 hover:text-white"
           >
             <X className="h-4 w-4" />
             Clear
@@ -131,7 +114,7 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
       </div>
 
       {/* 🔹 Table */}
-      <div className="rounded-md border border-border">
+      <div className="border-border rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -152,27 +135,17 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
             {isLoading ? (
               <TableLoading colSpan={4} rows={5} />
             ) : isError ? (
-              <TableError colSpan={4}>
-                Error loading division. Please try again.
-              </TableError>
+              <TableError colSpan={4}>Error loading division. Please try again.</TableError>
             ) : divisions.length === 0 ? (
-              <TableEmpty colSpan={4}>
-                No division found
-              </TableEmpty>
+              <TableEmpty colSpan={4}>No division found</TableEmpty>
             ) : (
               divisions.map((division: TDivision) => (
                 <TableRow key={division.id}>
-                  <TableCell className="font-medium">
-                    {division.name}
-                  </TableCell>
+                  <TableCell className="font-medium">{division.name}</TableCell>
 
-                  <TableCell>
-                    {division._count?.districts ?? 0}
-                  </TableCell>
+                  <TableCell>{division._count?.districts ?? 0}</TableCell>
 
-                  <TableCell>
-                    {division._count?.thanas ?? 0}
-                  </TableCell>
+                  <TableCell>{division._count?.thanas ?? 0}</TableCell>
 
                   <TableCell>
                     <div className="flex justify-end gap-2">
@@ -180,7 +153,7 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
                         variant="ghost"
                         size="icon"
                         onClick={() => onEdit(division)}
-                        className="h-8 w-8 hover:bg-primary/10 hover:text-primary"
+                        className="hover:bg-primary/10 hover:text-primary h-8 w-8"
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
