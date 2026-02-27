@@ -6,7 +6,9 @@ import {
   BarChart3,
   Store,
   ShoppingBag,
+  MapPinCheck,
   type LucideIcon,
+  MapPinIcon,
 } from "lucide-react";
 
 export interface RouteItem {
@@ -37,6 +39,14 @@ export const adminRoutes: RouteGroup[] = [
       {
         label: "Categories",
         href: "/admin/products/categories",
+      },
+      {
+        label: "Brands",
+        href: "/admin/products/brands",
+      },
+      {
+        label: "Attribute",
+        href: "/admin/products/attribute",
       },
     ],
   },
@@ -81,6 +91,28 @@ export const adminRoutes: RouteGroup[] = [
         href: "/admin/analytics/sales",
       },
     ],
+  },
+  {
+    title:"Locations",
+    icon: MapPinIcon,
+    routes:[
+      {
+        label:"Country",
+        href:"/admin/location/countries"
+      },
+      {
+        label:"Divisions",
+        href:"/admin/location/divisions"
+      },
+      {
+        label:"Districts",
+        href:"/admin/location/districts"
+      },
+      {
+        label:"Thanas",
+        href:"/admin/location/thanas"
+      },
+    ]
   },
 ];
 

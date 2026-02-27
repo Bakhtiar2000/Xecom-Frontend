@@ -11,7 +11,7 @@ const countryApi = baseApi.injectEndpoints({
         url: "/country",
         method: "POST",
         body: data,
-      }),
+      }), 
       invalidatesTags: ["country"],
     }),
 
@@ -54,6 +54,17 @@ const countryApi = baseApi.injectEndpoints({
         };
       },
     }),
+
+     //-----------------Update Single Country-----------------
+     updateCountry: builder.mutation({
+      query: (args:{id:string , data:any}) =>({
+        url: `/country/${args.id}`,
+        method: "PUT",
+        body: args.data
+      }),
+      invalidatesTags: ["country"]
+     })
+
   }),
 });
 

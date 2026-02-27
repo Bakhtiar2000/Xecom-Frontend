@@ -7,6 +7,7 @@ export type TCountry = {
   name: string;
   code?: string | null;
   isActive: boolean;
+  _count: any;
   createdAt: string;
   updatedAt: string;
 };
@@ -16,6 +17,7 @@ export type TDivision = {
   countryId: string;
   name: string;
   isActive: boolean;
+   _count: any;
   createdAt: string;
   updatedAt: string;
 };
@@ -25,7 +27,8 @@ export type TDistrict = {
   divisionId: string;
   name: string;
   isActive: boolean;
-  createdAt: string;
+   _count: any;
+  createdAt: string; 
   updatedAt: string;
 };
 
@@ -34,6 +37,7 @@ export type TThana = {
   districtId: string;
   name: string;
   isActive: boolean;
+   _count: any;
   createdAt: string;
   updatedAt: string;
 };
