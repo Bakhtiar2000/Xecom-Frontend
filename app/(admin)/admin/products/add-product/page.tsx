@@ -17,6 +17,8 @@ import SeoTab from "./sections/SeoTab";
 import MediaTab from "./sections/MediaTab";
 import FaqTab from "./sections/FaqTab";
 import VariantsTab from "./sections/VariantsTab";
+import { useAddProductMutation } from "@/redux/features/product/product.api";
+import { toast } from "sonner";
 
 
 
@@ -25,13 +27,13 @@ const TAB_ORDER = ["basic", "details", "specifications", "seo", "media", "faq", 
 type TabName = (typeof TAB_ORDER)[number];
 
 const TAB_FIELDS: Record<TabName, string[]> = {
-  basic:          ["name", "slug", "shortDescription", "fullDescription", "brandId", "categoryId", "status", "featured"],
-  details:        ["weight", "warranty", "dimensions.width", "dimensions.height", "dimensions.length", "tags", "minOrderQty", "maxOrderQty"],
+  basic: ["name", "slug", "shortDescription", "fullDescription", "brandId", "categoryId", "status", "featured"],
+  details: ["weight", "warranty", "dimensions.width", "dimensions.height", "dimensions.length", "tags", "minOrderQty", "maxOrderQty"],
   specifications: ["specifications.fitType", "specifications.occasion", "specifications.closureType", "specifications.soleMaterial", "specifications.upperMaterial"],
-  seo:            ["seoTitle", "seoDescription", "metaKeywords"],
-  media:          ["images"],
-  faq:            ["faqs"],
-  variants:       ["variants"],
+  seo: ["seoTitle", "seoDescription", "metaKeywords"],
+  media: ["images"],
+  faq: ["faqs"],
+  variants: ["variants"],
 };
 
 // Map every field key → its tab (root key used for nested, e.g. "variants.0.sku" → "variants")
@@ -44,9 +46,10 @@ for (const [tab, fields] of Object.entries(TAB_FIELDS)) {
 
 // ─── Page ───────────
 export default function AddProductPage() {
-  const [activeTab, setActiveTab]   = useState<TabName>("basic");
+  const [activeTab, setActiveTab] = useState<TabName>("basic");
   const [imageFiles, setImageFiles] = useState<{ file: File; url: string }[]>([]);
   const [showSummary, setShowSummary] = useState(false);
+  const [addProduct, { isLoading: isAdding }] = useAddProductMutation();
 
   const fieldRefs = useRef<Record<string, HTMLElement | null>>({});
 
@@ -111,7 +114,7 @@ export default function AddProductPage() {
 
       if (flatKeys.length > 0) {
         const firstKey = flatKeys[0];
-        const rootKey  = firstKey.split(".")[0];
+        const rootKey = firstKey.split(".")[0];
         const targetTab = FIELD_TO_TAB[rootKey] || FIELD_TO_TAB[firstKey] || "basic";
         setActiveTab(targetTab);
 
@@ -127,41 +130,71 @@ export default function AddProductPage() {
     setShowSummary(true);
   };
 
+
   // ── Final submit (API call) ─
   const onSubmit = async (data: ProductFormData) => {
-    const formData = new FormData();
-    data.images.forEach((file: File) => formData.append("images", file));
-    if (data.video)      formData.append("video", data.video);
-    if (data.manualFile) formData.append("manualFile", data.manualFile);
+    try {
+      const formData = new FormData();
+      if (data.images && data.images.length > 0) {
+        data.images.forEach((file: File) => {
+          formData.append("images", file);
+        });
+      }
+      if (data.video) {
+        formData.append("videoUrl", data.video);
+      }
 
-    formData.append("name",            data.name);
-    formData.append("slug",            data.slug);
-    formData.append("shortDescription",data.shortDescription);
-    formData.append("fullDescription", data.fullDescription);
-    formData.append("brandId",         data.brandId);
-    formData.append("categoryId",      data.categoryId);
-    formData.append("status",          data.status);
-    formData.append("featured",        String(data.featured));
-    formData.append("weight",          String(data.weight));
-    formData.append("warranty",        data.warranty);
-    formData.append("minOrderQty",     String(data.minOrderQty));
-    formData.append("maxOrderQty",     String(data.maxOrderQty));
-    formData.append("seoTitle",        data.seoTitle);
-    formData.append("seoDescription",  data.seoDescription);
-    formData.append("tags",            JSON.stringify(data.tags));
-    formData.append("metaKeywords",    JSON.stringify(data.metaKeywords));
-    formData.append("faqs",            JSON.stringify(data.faqs));
-    formData.append("variants",        JSON.stringify(data.variants));
-    formData.append("dimensions",      JSON.stringify(data.dimensions));
-    formData.append("specifications",  JSON.stringify(data.specifications));
+      if (data.manualFile) {
+        formData.append("manualUrl", data.manualFile);
+      }
 
-    console.log("Submitting product:", data);
-    // TODO: await yourApiCall(formData);
+      // Prepare all other data as JSON
+      const payload = {
+        name: data.name,
+        slug: data.slug,
+        shortDescription: data.shortDescription,
+        fullDescription: data.fullDescription,
+        brandId: data.brandId,
+        categoryId: data.categoryId,
+        status: data.status,
+        featured: data.featured,
+        weight: data.weight,
+        warranty: data.warranty,
+        tags: data.tags,
+        metaKeywords: data.metaKeywords,
+        faqs: data.faqs,
+        minOrderQty: data.minOrderQty,
+        maxOrderQty: data.maxOrderQty,
+        seoTitle: data.seoTitle,
+        seoDescription: data.seoDescription,
+        dimension: data.dimensions,
+        specifications: data.specifications,
+        variants: data.variants,
+      };
+
+      formData.append("text", JSON.stringify(payload));
+
+      // POST API CALL
+      const result = await addProduct(formData).unwrap();
+
+      toast.success(result?.message || "Product created successfully 🎉");
+
+      form.reset();
+      setImageFiles([]);
+      setShowSummary(false);
+
+    } catch (error: any) {
+      const errorMessage =
+        error?.data?.message ||
+        error?.message ||
+        "Failed to create product";
+
+      toast.error(errorMessage);
+    }
   };
-
   // ── Tab navigation helpers ──
   const currentIndex = TAB_ORDER.indexOf(activeTab);
-  const goNext     = () => { if (currentIndex < TAB_ORDER.length - 1) setActiveTab(TAB_ORDER[currentIndex + 1]); };
+  const goNext = () => { if (currentIndex < TAB_ORDER.length - 1) setActiveTab(TAB_ORDER[currentIndex + 1]); };
   const goPrevious = () => { if (currentIndex > 0) setActiveTab(TAB_ORDER[currentIndex - 1]); };
 
   // ── Handle edit from summary 
@@ -204,13 +237,13 @@ export default function AddProductPage() {
             </TabsList>
 
             {/* Each tab is its own component */}
-            <BasicInfoTab      form={form} fieldRefs={fieldRefs} onNameChange={handleNameChange} />
-            <DetailsTab        form={form} />
-            <SpecificationsTab  form={form} />
-            <SeoTab            form={form} />
-            <MediaTab          form={form} fieldRefs={fieldRefs} imageFiles={imageFiles} setImageFiles={setImageFiles} />
-            <FaqTab             form={form} />
-            <VariantsTab       form={form} fieldRefs={fieldRefs} />
+            <BasicInfoTab form={form} fieldRefs={fieldRefs} onNameChange={handleNameChange} />
+            <DetailsTab form={form} />
+            <SpecificationsTab form={form} />
+            <SeoTab form={form} />
+            <MediaTab form={form} fieldRefs={fieldRefs} imageFiles={imageFiles} setImageFiles={setImageFiles} />
+            <FaqTab form={form} />
+            <VariantsTab form={form} fieldRefs={fieldRefs} />
 
           </Tabs>
 
@@ -227,8 +260,12 @@ export default function AddProductPage() {
                 <Button type="button" variant="outline" onClick={() => handleSubmitWithValidation("DRAFT")}>
                   Save as Draft
                 </Button>
-                <Button type="button" onClick={() => handleSubmitWithValidation()}>
-                  Create Product
+                <Button
+                  type="button"
+                  disabled={isAdding}
+                  onClick={() => handleSubmitWithValidation()}
+                >
+                  {isAdding ? "Creating..." : "Create Product"}
                 </Button>
               </div>
             )}

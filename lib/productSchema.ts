@@ -16,8 +16,8 @@ export const productSchema = z.object({
   slug: z.string().min(3, "Slug must be at least 3 characters"),
   shortDescription: z.string().min(10, "Short description must be at least 10 characters"),
   fullDescription: z.string().min(20, "Full description must be at least 20 characters"),
-  brandId: z.string().min(1, "Please select a brand"),
-  categoryId: z.string().min(1, "Please select a category"),
+  brandId: z.string().optional(),
+  categoryId: z.string().optional(),
   status: z.enum(["ACTIVE", "INACTIVE", "DRAFT"]),
   featured: z.boolean().default(false),
 

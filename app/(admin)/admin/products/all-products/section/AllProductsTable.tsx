@@ -1,3 +1,4 @@
+import CustomSelect, { SelectOption } from '@/components/custom/customSelect';
 import { SortableTableHead } from '@/components/custom/SortableTableHead';
 import { TablePagination } from '@/components/custom/TablePagination';
 import { Badge } from '@/components/ui/badge';
@@ -19,6 +20,7 @@ type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 const AllProductsTable = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedAttributeValues, setSelectedAttributeValues] = useState<Record<string, string[]>>({})
+    const [selectedCategories, setSelectedCategories] = useState<SelectOption[]>([]);
 
     const {
         handlePageChange,
@@ -26,6 +28,18 @@ const AllProductsTable = () => {
         getPaginationParams,
         resetPage,
     } = useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
+
+    const FAKE_CATEGORIES = Array.from({ length: 80 }, (_, i) => ({
+        value: `cat-${i + 1}`,
+        label: ["Electronics", "Clothing", "Food", "Home", "Sports", "Books", "Toys", "Beauty", "Automotive", "Health"][i % 10] + (i >= 10 ? ` (${Math.floor(i / 10) + 1})` : ""),
+    }));
+
+    async function fetchCategories({ search, page, pageSize }) {
+        await new Promise(r => setTimeout(r, 300));
+        const filtered = FAKE_CATEGORIES.filter(c => c.label.toLowerCase().includes(search.toLowerCase()));
+        const start = (page - 1) * pageSize;
+        return { data: filtered.slice(start, start + pageSize), hasMore: start + pageSize < filtered.length };
+    }
 
 
     const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
@@ -163,6 +177,18 @@ const AllProductsTable = () => {
                             </MultiSelect>
                         );
                     })}
+
+                    <div className={`min-w-44 max-w-64 ${selectedCategories.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""}`}>
+                        <CustomSelect
+                            fetchOptions={fetchCategories}
+                            value={selectedCategories}
+                            onChange={(vals) => { setSelectedCategories(vals as SelectOption[]); handleFilterChange(); }}
+                            multiSelect
+                            searchable
+                            placeholder="All Categories"
+                            pageSize={20}
+                        />
+                    </div>
 
                     {/* — Clear all button */}
                     {totalActiveFilters > 0 && (
