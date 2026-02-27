@@ -80,8 +80,6 @@ export type TProduct = {
     images: number;
     variants: number;
   };
-  brand?: TBrand;
-  category?: TCategory;
 };
 
 export type TBundleItem = {
@@ -108,7 +106,6 @@ export type TAttribute = {
   name: string;
   values?:TAttributeValue[];
   createdAt: string;
-  values: TAttributeValue[];
 };
 export type TAttributeValue = {
   id: string;

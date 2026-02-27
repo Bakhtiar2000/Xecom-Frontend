@@ -68,5 +68,9 @@ const countryApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useAddCountryMutation, useGetAllCountriesQuery, useGetSingleCountryQuery } =
-  countryApi;
+export const {
+  useAddCountryMutation,
+  useGetAllCountriesQuery,
+  useGetSingleCountryQuery,
+  useUpdateCountryMutation
+} = countryApi;

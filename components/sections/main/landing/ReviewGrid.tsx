@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { testimonials } from "@/data/review";
 import SectionTitle from "@/components/sections/shared/SectionTitle";
 import Link from "next/link";
-import ReviewCard from "./sections/Reviewcard";
+import ReviewCard from "./sections/ReviewCard";
 
 // Define the type for a single review
 export interface Review {

@@ -1,5 +1,4 @@
-import type { Metadata } from "next";
-import BrandShoesClient from "./BrandShoesClient";
+"use client";
 
 import { useState } from "react";
 import Image from "next/image";
@@ -141,9 +140,8 @@ export default function SneakerShoesPage() {
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`rounded-md border px-3 py-1 ${
-                        selectedSize === size ? "bg-black text-white" : "hover:border-primary"
-                      } `}
+                      className={`rounded-md border px-3 py-1 ${selectedSize === size ? "bg-black text-white" : "hover:border-primary"
+                        } `}
                     >
                       {size}
                     </button>
@@ -159,9 +157,8 @@ export default function SneakerShoesPage() {
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
-                      className={`h-9 w-9 rounded-full border-2 ${
-                        selectedColor === color ? "border-primary scale-110" : ""
-                      } `}
+                      className={`h-9 w-9 rounded-full border-2 ${selectedColor === color ? "border-primary scale-110" : ""
+                        } `}
                       style={{ backgroundColor: color }}
                     />
                   ))}
