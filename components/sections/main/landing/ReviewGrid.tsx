@@ -2,10 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import ReviewCard from "@/components/sections/main/landing/sections/ReviewCard";
 import { testimonials } from "@/data/review";
 import SectionTitle from "@/components/sections/shared/SectionTitle";
 import Link from "next/link";
+import ReviewCard from "./sections/Reviewcard";
 
 // Define the type for a single review
 export interface Review {

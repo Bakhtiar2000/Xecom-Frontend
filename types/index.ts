@@ -2,6 +2,7 @@ import type { StaticImageData } from "next/image";
 
 export * from "./user.type";
 export * from "./global.type";
+export * from "./product.type";
 
 export interface Product {
   id: number;

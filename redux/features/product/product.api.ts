@@ -1,6 +1,7 @@
 import { TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "@/redux/api/baseApi";
 import { TProduct } from "@/types/product.type";
+import { TProductMetadata } from "./dto/product.dto";
 
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -63,6 +64,19 @@ const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["product"],
     }),
+    // -------------product Metadata............
+    getProductMetadata: builder.query({
+      query: () => ({
+        url: "/product/metadata",
+        method: "GET",
+      }),
+      providesTags: ["product"],
+      transformResponse: (response: TResponseRedux<TProductMetadata>) => {
+        return {
+          data: response.data,
+        };
+      },
+    }),
 
     //-----------------Delete Product-----------------
     deleteProduct: builder.mutation({
@@ -75,10 +89,12 @@ const productApi = baseApi.injectEndpoints({
   }),
 });
 
+
 export const {
   useGetAllProductsQuery,
   useGetSingleProductQuery,
   useAddProductMutation,
   useUpdateProductMutation,
+  useGetProductMetadataQuery,
   useDeleteProductMutation,
 } = productApi;

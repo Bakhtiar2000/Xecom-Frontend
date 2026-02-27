@@ -45,11 +45,15 @@ export type TProduct = {
   id: string;
   tenantId?: string | null;
   name: string;
+  variants: string[];
   slug: string;
   shortDescription?: string | null;
   fullDescription?: string | null;
   brandId?: string | null;
   categoryId?: string | null;
+  brand?: TBrand | null;
+  category?: TCategory | null;
+  images?: Array<{ id?: string; url: string; isFeatured?: boolean }> | null;
   status: ProductStatus;
   featured: boolean;
   weight?: string | null;
@@ -68,7 +72,7 @@ export type TProduct = {
   isBundle: boolean;
   totalSales: number;
   viewCount: number;
-  avgRating?: string | null;
+  avgRating?: number | null;
   reviewCount: number;
   createdAt: string;
   updatedAt: string;
@@ -103,8 +107,8 @@ export type TAttribute = {
   id: string;
   name: string;
   createdAt: string;
+  values: TAttributeValue[];
 };
-
 export type TAttributeValue = {
   id: string;
   attributeId: string;
