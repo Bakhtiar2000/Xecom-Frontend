@@ -47,7 +47,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { toast } from "sonner";
 
 type SortableFields = "name";
-
+ 
 interface BrandTableProps {
   onEdit: (brand: TBrand) => void;
 }
@@ -62,7 +62,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
   const [deleteBrand, { isLoading: isDeleting }] = useDeleteBrandMutation();
 
   const { handleSort, getSortIcon, getSortParams } =
-    useTableSort<SortableFields>();
+    useTableSort<SortableFields>(); 
   const {
     handlePageChange,
     handlePageSizeChange,

@@ -27,7 +27,7 @@ const brandApi = baseApi.injectEndpoints({
         return {
           data: response.data,
           meta: response.meta,
-        };
+        }; 
       },
     }),
 

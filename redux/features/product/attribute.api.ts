@@ -21,7 +21,7 @@ const attributeApi = baseApi.injectEndpoints({
           });
         }
 
-        return {
+        return { 
           url: "/attribute",
           method: "GET",
           params: params,
@@ -72,7 +72,7 @@ const attributeApi = baseApi.injectEndpoints({
 
     //-----------------Update Attribute-----------------
     updateAttribute: builder.mutation({
-      query: (args: { id: string; data: TUpdateAttributeDto }) => ({
+      query: (args: { id: string; data: any }) => ({   //(TUpdateAttributeDto change it and use any because it need id also in data)
         url: `/attribute/${args.id}`,
         method: "PUT",
         body: args.data,
@@ -82,7 +82,7 @@ const attributeApi = baseApi.injectEndpoints({
 
     //-----------------Update Attribute Value-----------------
     updateAttributeValue: builder.mutation({
-      query: (args: { id: string; data: TUpdateAttributeValueDto }) => ({
+      query: (args: { id: string; data: any }) => ({
         url: `/attribute/attribute-value/${args.id}`,
         method: "PUT",
         body: args.data,
@@ -91,7 +91,7 @@ const attributeApi = baseApi.injectEndpoints({
     }),
 
     //-----------------Delete Attribute-----------------
-    deleteAttribute: builder.mutation({
+    deleteAttribute: builder.mutation({ 
       query: (id: string) => ({
         url: `/attribute/${id}`,
         method: "DELETE",
@@ -107,6 +107,7 @@ const attributeApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["attribute", "attributeValue"],
     }),
+  
   }),
 });
 
@@ -118,5 +119,5 @@ export const {
   useUpdateAttributeMutation,
   useUpdateAttributeValueMutation,
   useDeleteAttributeMutation,
-  useDeleteAttributeValueMutation,
+  useDeleteAttributeValueMutation, 
 } = attributeApi;

@@ -13,6 +13,7 @@ export type TAddAttributeValueDto = {
 };
 
 export type TUpdateAttributeValueDto = {
+  attributeId: string;
   value?: string;
   hexCode?: string;
 };

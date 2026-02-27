@@ -4,6 +4,28 @@ import { TAddDistrictDto } from "./dto/district.dto";
 
 const districtApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+
+    // -----------Get All District--------------------
+
+
+    getAllDistrict: builder.query({
+      query: (args) =>{
+        const params = new URLSearchParams();
+
+        if(args){
+          args.forEach((item: TDistrict) =>{
+            params.append(item.name , item.value as string)
+          });
+        }
+        return { 
+          url: "/district",
+          method: "GET",
+          params: params,
+        };
+
+      }
+    }), 
+
     //-----------------Add District-----------------
     addDistrict: builder.mutation({
       query: (data: TAddDistrictDto) => ({
@@ -27,8 +49,28 @@ const districtApi = baseApi.injectEndpoints({
         };
       },
     }),
+
+
+    //-----------------update District-----------------
+
+    updateDistrict: builder.mutation({
+      query: (args: { id: string; data: any }) => ({   
+        url: `/district/${args.id}`,
+        method: "PUT",
+        body: args.data,
+      }),
+      invalidatesTags: ["district"],
+    }),
+
+
+
   }),
 });
 
-export const { useAddDistrictMutation, useGetSingleDistrictQuery } =
+export const { 
+  useAddDistrictMutation,
+   useGetSingleDistrictQuery, 
+   useGetAllDistrictQuery , 
+   useUpdateDistrictMutation 
+  } =
   districtApi;

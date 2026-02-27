@@ -20,7 +20,7 @@ export default function BrandsPage() {
 
   const handleEditClick = (brand: TBrand) => {
     setSelectedBrand(brand);
-    setIsModalOpen(true);
+    setIsModalOpen(true); 
   };
 
   return (
@@ -44,12 +44,12 @@ export default function BrandsPage() {
         <BrandTable onEdit={handleEditClick} />
       </div>
 
-      {/* Category Modal */}
+      {/* brand Modal */}
             <BrandModal
               open={isModalOpen}
               onOpenChange={setIsModalOpen}
               brand={selectedBrand}
             />
-    </div>
+    </div> 
   );
 }

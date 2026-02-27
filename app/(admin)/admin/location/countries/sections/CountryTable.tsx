@@ -1,0 +1,295 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import {
+  useAddCountryMutation,
+  useGetAllCountriesQuery,
+  useGetSingleCountryQuery,
+} from "@/redux/features/location/country.api";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableEmpty,
+  TableLoading,
+  TableError,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { TCountry } from "@/types/location.type";
+import { TablePagination } from "@/components/custom/TablePagination";
+import { SortableTableHead } from "@/components/custom/SortableTableHead";
+import { Search, X, Folder, Pencil, Trash2 } from "lucide-react";
+import { useTableSort } from "@/hooks/useTableSort";
+import { useTablePagination } from "@/hooks/useTablePagination";
+import { useDebounce } from "@/hooks/useDebounce";
+import { toast } from "sonner";
+
+type SortableFields = "name";
+
+interface CountryTableProps {
+  onEdit: (country: TCountry) => void;
+}
+
+export default function CountryTable({ onEdit }) {
+  
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isActive, setIsActive] = useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState("");
+
+  const debouncedSearchTerm = useDebounce(searchTerm);
+
+  const { handleSort, getSortIcon, getSortParams } =
+    useTableSort<SortableFields>();
+  const {
+    handlePageChange,
+    handlePageSizeChange,
+    getPaginationParams,
+    resetPage,
+  } = useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
+
+  //   const buildQueryParams = () => {
+  //     const params = [...getPaginationParams(), ...getSortParams()];
+
+  //     if (debouncedSearchTerm)
+  //       params.push({ name: "searchTerm", value: debouncedSearchTerm });
+  //     if (selectedCountry) params.push({ name: "sort", value: selectedCountry });
+  //     return params;
+  //   };
+
+  const buildQueryParams = () => {
+    const params = [...getPaginationParams(), ...getSortParams()];
+
+    // priority: select > search input
+    const finalSearchTerm = selectedCountry || debouncedSearchTerm;
+
+    if (finalSearchTerm) {
+      params.push({ name: "searchTerm", value: finalSearchTerm });
+    }
+
+    return params;
+  };
+
+  const { data, isLoading, isError } =
+    useGetAllCountriesQuery(buildQueryParams());
+
+  const countries = data?.data || [];
+  const hasNoData = countries.length === 0 && !isLoading;
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    resetPage();
+  };
+
+  const handleFilterChange = () => {
+    resetPage();
+  };
+
+  const handleSortClick = (field: SortableFields) => {
+    handleSort(field);
+    resetPage();
+  };
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCountry("");
+    resetPage();
+  };
+
+  const hasActiveFilters = debouncedSearchTerm || selectedCountry;
+
+  return (
+    <>
+      {/* Filters Section */}
+
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-4">
+        {/* Search Input */}
+        {/* <div className="relative max-w-80 w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by name or description..."
+            value={searchTerm}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className={`pl-9 ${searchTerm ? "border-primary bg-primary/5" : ""}`}
+          />
+        </div> */}
+
+        <div className="flex flex-wrap lg:flex-row lg:justify-end items-center gap-4">
+          {/* IsActive Filter */}
+          <Select
+            value={selectedCountry}
+            onValueChange={(value) => {
+              setSelectedCountry(value);
+              resetPage();
+            }}
+          >
+            <SelectTrigger
+              className={
+                selectedCountry
+                  ? "border-primary bg-primary/5 min-w-32"
+                  : "min-w-32"
+              }
+            >
+              <SelectValue placeholder="Select Country" />
+            </SelectTrigger>
+
+            <SelectContent>
+              <div className="relative max-w-80 w-full">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by name or description..."
+                  value={searchTerm}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  className={`pl-9 ${searchTerm ? "border-primary bg-primary/5" : ""}`}
+                />
+              </div>
+              {countries.map((country: TCountry) => (
+                <SelectItem key={country.id} value={country.name}>
+                  {country.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Clear Filters Button */}
+          {hasActiveFilters && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={clearFilters}
+              className="hover:text-white hover:bg-danger hover:border-danger duration-300 gap-2"
+            >
+              <X className="h-4 w-4" />
+              Clear
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <div className="rounded-md border border-border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {/* <TableHead className="w-20">Country Name</TableHead> */}
+              <SortableTableHead
+                field="name"
+                label="Country Name"
+                onSort={handleSortClick}
+                getSortIcon={getSortIcon}
+                disabled={hasNoData}
+              />
+              <TableHead>Total Divisions</TableHead>
+              <TableHead className="w-24">Total Districts</TableHead>
+              <TableHead className="w-32">Total Thanas</TableHead>
+              {/* <TableHead className="w-24">Sort Order</TableHead> */}
+              <TableHead className="w-24 text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              <TableLoading colSpan={7} rows={5} />
+            ) : isError ? (
+              <TableError colSpan={7}>
+                Error loading countries. Please try again.
+              </TableError>
+            ) : countries.length === 0 ? (
+              <TableEmpty colSpan={7}>No country found</TableEmpty>
+            ) : (
+              countries.map((country: TCountry) => (
+                <TableRow key={country.id}>
+                  <TableCell className="font-medium">
+                    {country.code ? (
+                      <p>
+                        {country.name} {`(${country.code})`}
+                      </p>
+                    ) : (
+                      <p>{country.name}</p>
+                    )}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {country._count?.divisions ?? 0}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {country._count?.districts ?? 0}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {country._count?.thanas ?? 0}
+                  </TableCell>
+                  {/* <TableCell>
+                          <span className="text-sm text-muted-foreground line-clamp-2">
+                            {brand.description || "No description"}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={brand.isActive ? "default" : "secondary"}
+                            className={brand.isActive ? "bg-success" : ""}
+                          >
+                            {brand.isActive ? "Active" : "Inactive"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <span className="font-medium">
+                            {brand._count?.products ?? 0}
+                          </span>
+                        </TableCell> */}
+                  {/* <TableCell className="text-center">{brand.sortOrder}</TableCell> */}
+                  <TableCell>
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => onEdit(country)}
+                        className="h-8 w-8 hover:bg-primary/10 hover:text-primary"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      {/* <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleDeleteClick(brand)}
+                              className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button> */}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+        {data?.meta && (
+          <TablePagination
+            meta={data.meta}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            disabled={hasNoData}
+          />
+        )}
+      </div>
+    </>
+  );
+}
