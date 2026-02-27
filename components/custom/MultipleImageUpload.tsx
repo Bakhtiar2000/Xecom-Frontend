@@ -78,14 +78,13 @@ export const MultiImageUpload = ({
 
   return (
     <div className={`w-full space-y-4 ${className}`}>
-
       {/* Preview Grid */}
       {values.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {values.map((image, index) => (
             <div
               key={image.url}
-              className="relative group rounded-lg border overflow-hidden aspect-square bg-muted"
+              className="group bg-muted relative aspect-square overflow-hidden rounded-lg border"
             >
               <Image
                 src={image.url}
@@ -96,18 +95,18 @@ export const MultiImageUpload = ({
 
               {/* First image badge */}
               {index === 0 && (
-                <span className="absolute top-1.5 left-1.5 text-[10px] font-semibold bg-primary text-primary-foreground px-1.5 py-0.5 rounded">
+                <span className="bg-primary text-primary-foreground absolute top-1.5 left-1.5 rounded px-1.5 py-0.5 text-[10px] font-semibold">
                   Main
                 </span>
               )}
 
               {/* Overlay actions */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+              <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
                 {index !== 0 && (
                   <button
                     type="button"
                     onClick={() => handleMoveFirst(index)}
-                    className="text-[10px] font-medium bg-white/90 hover:bg-white text-black px-2 py-1 rounded transition-colors"
+                    className="rounded bg-white/90 px-2 py-1 text-[10px] font-medium text-black transition-colors hover:bg-white"
                   >
                     Set Main
                   </button>
@@ -118,7 +117,7 @@ export const MultiImageUpload = ({
               <button
                 type="button"
                 onClick={() => handleRemove(index)}
-                className="absolute top-1.5 right-1.5 bg-black/60 hover:bg-destructive text-white rounded-full p-1 transition-colors opacity-0 group-hover:opacity-100"
+                className="hover:bg-destructive absolute top-1.5 right-1.5 rounded-full bg-black/60 p-1 text-white opacity-0 transition-colors group-hover:opacity-100"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -130,7 +129,7 @@ export const MultiImageUpload = ({
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="aspect-square rounded-lg border-2 border-dashed flex flex-col items-center justify-center gap-1 text-muted-foreground hover:bg-muted/60 transition-colors"
+              className="text-muted-foreground hover:bg-muted/60 flex aspect-square flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed transition-colors"
             >
               <Upload className="h-5 w-5" />
               <span className="text-xs">Add more</span>
@@ -143,9 +142,9 @@ export const MultiImageUpload = ({
       {values.length === 0 && (
         <label
           onClick={() => inputRef.current?.click()}
-          className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer bg-muted/40 hover:bg-muted/60 transition-colors"
+          className="bg-muted/40 hover:bg-muted/60 flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors"
         >
-          <div className="flex flex-col items-center gap-2 text-muted-foreground">
+          <div className="text-muted-foreground flex flex-col items-center gap-2">
             <ImageIcon className="h-8 w-8" />
             <span className="text-sm font-medium">Click to upload images</span>
             <span className="text-xs">PNG, JPG, WEBP up to {maxSizeMB}MB each</span>
@@ -155,11 +154,11 @@ export const MultiImageUpload = ({
       )}
 
       {/* Counter */}
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>{values.length} / {maxFiles} images</span>
-        {isMaxReached && (
-          <span className="text-destructive font-medium">Maximum reached</span>
-        )}
+      <div className="text-muted-foreground flex items-center justify-between text-xs">
+        <span>
+          {values.length} / {maxFiles} images
+        </span>
+        {isMaxReached && <span className="text-destructive font-medium">Maximum reached</span>}
       </div>
 
       {/* Hidden Input */}

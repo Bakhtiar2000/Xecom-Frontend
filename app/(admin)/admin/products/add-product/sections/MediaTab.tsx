@@ -32,117 +32,136 @@ export default function MediaTab({ form, fieldRefs, imageFiles, setImageFiles }:
   return (
     <TabsContent value="media" className="space-y-4">
       <Card className="py-5">
-        <CardHeader className="border-b bg-muted/30 px-6 py-4">
+        <CardHeader className="bg-muted/30 border-b px-6 py-4">
           <div className="flex items-center gap-2">
-            <div className="h-5 w-1 rounded-full bg-primary" />
+            <div className="bg-primary h-5 w-1 rounded-full" />
             <CardTitle className="text-base font-semibold">Media Files</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-
           {/* Images */}
-          <FormField control={form.control} name="images" render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Images *</FormLabel>
-              <FormControl>
-                <div ref={(el) => { fieldRefs.current["images"] = el; }}>
-                  <MultiImageUpload
-                    values={imageFiles}
-                    onChange={(images) => {
-                      setImageFiles(images);
-                      form.setValue("images", images.map((i) => i.file));
+          <FormField
+            control={form.control}
+            name="images"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Product Images *</FormLabel>
+                <FormControl>
+                  <div
+                    ref={(el) => {
+                      fieldRefs.current["images"] = el;
                     }}
-                    maxFiles={8}
-                    maxSizeMB={5}
-                  />
-                </div>
-              </FormControl>
-              <FormMessage className="text-danger" />
-            </FormItem>
-          )} />
+                  >
+                    <MultiImageUpload
+                      values={imageFiles}
+                      onChange={(images) => {
+                        setImageFiles(images);
+                        form.setValue(
+                          "images",
+                          images.map((i) => i.file)
+                        );
+                      }}
+                      maxFiles={8}
+                      maxSizeMB={5}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage className="text-danger" />
+              </FormItem>
+            )}
+          />
 
           {/* Video */}
-          <FormField control={form.control} name="video" render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Video</FormLabel>
-              <FormControl>
-                <VideoUpload
-                  value={videoPreview}
-                  onChange={(file) => {
-                    if (file) {
-                      const url = URL.createObjectURL(file);
-                      field.onChange(file);
-                      setVideoPreview(url);
-                    } else {
-                      field.onChange(null);
-                      setVideoPreview(null);
-                    }
-                  }}
-                  maxSizeMB={100}
-                />
-              </FormControl>
-              <FormDescription>Upload a product demo or walkthrough video</FormDescription>
-              <FormMessage className="text-danger" />
-            </FormItem>
-          )} />
+          <FormField
+            control={form.control}
+            name="video"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Product Video</FormLabel>
+                <FormControl>
+                  <VideoUpload
+                    value={videoPreview}
+                    onChange={(file) => {
+                      if (file) {
+                        const url = URL.createObjectURL(file);
+                        field.onChange(file);
+                        setVideoPreview(url);
+                      } else {
+                        field.onChange(null);
+                        setVideoPreview(null);
+                      }
+                    }}
+                    maxSizeMB={100}
+                  />
+                </FormControl>
+                <FormDescription>Upload a product demo or walkthrough video</FormDescription>
+                <FormMessage className="text-danger" />
+              </FormItem>
+            )}
+          />
 
           {/* Manual / PDF */}
-          <FormField control={form.control} name="manualFile" render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Manual (PDF)</FormLabel>
-              <FormControl>
-                <div className="flex items-center gap-3">
-                  <label className="flex-1 cursor-pointer">
-                    <div className="flex items-center gap-3 border border-input rounded-md px-3 py-2 hover:bg-muted/50 transition-colors">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-muted-foreground shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+          <FormField
+            control={form.control}
+            name="manualFile"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Product Manual (PDF)</FormLabel>
+                <FormControl>
+                  <div className="flex items-center gap-3">
+                    <label className="flex-1 cursor-pointer">
+                      <div className="border-input hover:bg-muted/50 flex items-center gap-3 rounded-md border px-3 py-2 transition-colors">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="text-muted-foreground h-5 w-5 shrink-0"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                        <span className="text-muted-foreground truncate text-sm">
+                          {manualFileName || "Click to upload PDF or document"}
+                        </span>
+                      </div>
+                      <input
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0] || null;
+                          field.onChange(file);
+                          setManualFileName(file ? file.name : null);
+                        }}
+                      />
+                    </label>
+                    {manualFileName && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          field.onChange(null);
+                          setManualFileName(null);
+                        }}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                      <span className="text-sm text-muted-foreground truncate">
-                        {manualFileName || "Click to upload PDF or document"}
-                      </span>
-                    </div>
-                    <input
-                      type="file"
-                      accept=".pdf,.doc,.docx"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0] || null;
-                        field.onChange(file);
-                        setManualFileName(file ? file.name : null);
-                      }}
-                    />
-                  </label>
-                  {manualFileName && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        field.onChange(null);
-                        setManualFileName(null);
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              </FormControl>
-              <FormDescription>Upload the product manual or documentation (PDF, DOC)</FormDescription>
-              <FormMessage className="text-danger" />
-            </FormItem>
-          )} />
-
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </FormControl>
+                <FormDescription>
+                  Upload the product manual or documentation (PDF, DOC)
+                </FormDescription>
+                <FormMessage className="text-danger" />
+              </FormItem>
+            )}
+          />
         </CardContent>
       </Card>
     </TabsContent>

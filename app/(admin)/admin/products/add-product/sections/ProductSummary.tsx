@@ -3,12 +3,7 @@
 import { ProductFormData } from "@/lib/productSchema";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
 import Title from "@/components/sections/shared/Title";
 import Image from "next/image";
@@ -31,11 +26,19 @@ const CATEGORY_MAP: Record<string, string> = {
   "category-3": "Kids Shoe",
 };
 
-function SummaryRow({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) {
+function SummaryRow({
+  label,
+  value,
+  mono,
+}: {
+  label: string;
+  value: React.ReactNode;
+  mono?: boolean;
+}) {
   return (
-    <div className="flex justify-between items-start gap-2">
+    <div className="flex items-start justify-between gap-2">
       <span className="text-muted-foreground shrink-0">{label}</span>
-      <span className={mono ? "font-mono text-xs text-right break-all" : "text-right font-medium"}>
+      <span className={mono ? "text-right font-mono text-xs break-all" : "text-right font-medium"}>
         {value}
       </span>
     </div>
@@ -55,35 +58,44 @@ function SummaryCard({
 }) {
   return (
     <Card>
-      <CardHeader className="border-b bg-muted/30 px-6 py-4">
+      <CardHeader className="bg-muted/30 border-b px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-5 w-1 rounded-full bg-primary" />
+            <div className="bg-primary h-5 w-1 rounded-full" />
             <CardTitle className="text-base font-semibold">{title}</CardTitle>
           </div>
-          <Button size="sm" variant="ghost" onClick={() => onEdit(tab)}>Edit</Button>
+          <Button size="sm" variant="ghost" onClick={() => onEdit(tab)}>
+            Edit
+          </Button>
         </div>
       </CardHeader>
-      <CardContent className="pt-4 space-y-2 text-sm">{children}</CardContent>
+      <CardContent className="space-y-2 pt-4 text-sm">{children}</CardContent>
     </Card>
   );
 }
 
-export default function ProductSummary({ data, imageFiles, onEdit, onConfirm }: ProductSummaryProps) {
+export default function ProductSummary({
+  data,
+  imageFiles,
+  onEdit,
+  onConfirm,
+}: ProductSummaryProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <Title mainTitle="Product Summary" />
         <div className="flex gap-3">
-          <Button variant="outline" onClick={() => onEdit("basic")}>← Edit</Button>
+          <Button variant="outline" onClick={() => onEdit("basic")}>
+            ← Edit
+          </Button>
           <Button onClick={onConfirm} className="bg-green-600 hover:bg-green-700">
-            <CheckCircle2 className="h-4 w-4 mr-2" />Confirm & Publish
+            <CheckCircle2 className="mr-2 h-4 w-4" />
+            Confirm & Publish
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {/* Basic */}
         <SummaryCard title="Basic Information" tab="basic" onEdit={onEdit}>
           <SummaryRow label="Name" value={data.name} />
@@ -108,8 +120,12 @@ export default function ProductSummary({ data, imageFiles, onEdit, onConfirm }: 
           {data.tags.length > 0 && (
             <div>
               <span className="text-muted-foreground text-xs">Tags</span>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {data.tags.map((t, i) => <Badge key={i} variant="secondary">{t}</Badge>)}
+              <div className="mt-1 flex flex-wrap gap-1">
+                {data.tags.map((t, i) => (
+                  <Badge key={i} variant="secondary">
+                    {t}
+                  </Badge>
+                ))}
               </div>
             </div>
           )}
@@ -135,8 +151,12 @@ export default function ProductSummary({ data, imageFiles, onEdit, onConfirm }: 
           {data.metaKeywords.length > 0 && (
             <div>
               <span className="text-muted-foreground text-xs">Keywords</span>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {data.metaKeywords.map((k, i) => <Badge key={i} variant="secondary">{k}</Badge>)}
+              <div className="mt-1 flex flex-wrap gap-1">
+                {data.metaKeywords.map((k, i) => (
+                  <Badge key={i} variant="secondary">
+                    {k}
+                  </Badge>
+                ))}
               </div>
             </div>
           )}
@@ -148,9 +168,16 @@ export default function ProductSummary({ data, imageFiles, onEdit, onConfirm }: 
           {data.video && <SummaryRow label="Video" value={data.video.name} />}
           {data.manualFile && <SummaryRow label="Manual" value={data.manualFile.name} />}
           {imageFiles.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
+            <div className="mt-3 flex flex-wrap gap-2">
               {imageFiles.map((img, i) => (
-                <Image width={200} height={200} key={i} src={img.url} alt="" className="w-14 h-14 object-cover rounded-lg border" />
+                <Image
+                  width={200}
+                  height={200}
+                  key={i}
+                  src={img.url}
+                  alt=""
+                  className="h-14 w-14 rounded-lg border object-cover"
+                />
               ))}
             </div>
           )}
@@ -162,8 +189,10 @@ export default function ProductSummary({ data, imageFiles, onEdit, onConfirm }: 
             <p className="text-muted-foreground">No FAQs added.</p>
           ) : (
             data.faqs.map((faq, i) => (
-              <div key={i} className="border rounded-lg p-3 space-y-1">
-                <p className="font-medium">Q{i + 1}: {faq.question}</p>
+              <div key={i} className="space-y-1 rounded-lg border p-3">
+                <p className="font-medium">
+                  Q{i + 1}: {faq.question}
+                </p>
                 <p className="text-muted-foreground">{faq.answer}</p>
               </div>
             ))
@@ -172,20 +201,22 @@ export default function ProductSummary({ data, imageFiles, onEdit, onConfirm }: 
 
         {/* Variants */}
         <Card className="md:col-span-2">
-          <CardHeader className="border-b bg-muted/30 px-6 py-4">
+          <CardHeader className="bg-muted/30 border-b px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="h-5 w-1 rounded-full bg-primary" />
+                <div className="bg-primary h-5 w-1 rounded-full" />
                 <CardTitle className="text-base font-semibold">
                   Variants ({data.variants.length})
                 </CardTitle>
               </div>
-              <Button size="sm" variant="ghost" onClick={() => onEdit("variants")}>Edit</Button>
+              <Button size="sm" variant="ghost" onClick={() => onEdit("variants")}>
+                Edit
+              </Button>
             </div>
           </CardHeader>
-          <CardContent className="pt-4 space-y-3 text-sm">
+          <CardContent className="space-y-3 pt-4 text-sm">
             {data.variants.map((v, i) => (
-              <div key={i} className="border rounded-lg p-3 grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div key={i} className="grid grid-cols-2 gap-2 rounded-lg border p-3 md:grid-cols-4">
                 <SummaryRow label="SKU" value={v.sku} mono />
                 <SummaryRow label="Price" value={`$${v.price}`} />
                 <SummaryRow label="Cost" value={`$${v.cost}`} />
@@ -196,19 +227,18 @@ export default function ProductSummary({ data, imageFiles, onEdit, onConfirm }: 
             ))}
           </CardContent>
         </Card>
-
       </div>
 
       {/* Full Description */}
       {data.fullDescription && (
         <Card>
-          <CardHeader className="border-b bg-muted/30 px-6 py-4">
+          <CardHeader className="bg-muted/30 border-b px-6 py-4">
             <div className="flex items-center gap-2">
-              <div className="h-5 w-1 rounded-full bg-primary" />
+              <div className="bg-primary h-5 w-1 rounded-full" />
               <CardTitle className="text-base font-semibold">Full Description</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="pt-4 text-sm text-muted-foreground leading-relaxed">
+          <CardContent className="text-muted-foreground pt-4 text-sm leading-relaxed">
             {data.fullDescription}
           </CardContent>
         </Card>

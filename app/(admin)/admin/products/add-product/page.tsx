@@ -20,16 +20,46 @@ import VariantsTab from "./sections/VariantsTab";
 import { useAddProductMutation } from "@/redux/features/product/product.api";
 import { toast } from "sonner";
 
-
-
 // ─── Tab config ─────
-const TAB_ORDER = ["basic", "details", "specifications", "seo", "media", "faq", "variants"] as const;
+const TAB_ORDER = [
+  "basic",
+  "details",
+  "specifications",
+  "seo",
+  "media",
+  "faq",
+  "variants",
+] as const;
 type TabName = (typeof TAB_ORDER)[number];
 
 const TAB_FIELDS: Record<TabName, string[]> = {
-  basic: ["name", "slug", "shortDescription", "fullDescription", "brandId", "categoryId", "status", "featured"],
-  details: ["weight", "warranty", "dimensions.width", "dimensions.height", "dimensions.length", "tags", "minOrderQty", "maxOrderQty"],
-  specifications: ["specifications.fitType", "specifications.occasion", "specifications.closureType", "specifications.soleMaterial", "specifications.upperMaterial"],
+  basic: [
+    "name",
+    "slug",
+    "shortDescription",
+    "fullDescription",
+    "brandId",
+    "categoryId",
+    "status",
+    "featured",
+  ],
+  details: [
+    "weight",
+    "warranty",
+    "dimensions.width",
+    "dimensions.height",
+    "dimensions.length",
+    "tags",
+    "minOrderQty",
+    "maxOrderQty",
+  ],
+  specifications: [
+    "specifications.fitType",
+    "specifications.occasion",
+    "specifications.closureType",
+    "specifications.soleMaterial",
+    "specifications.upperMaterial",
+  ],
   seo: ["seoTitle", "seoDescription", "metaKeywords"],
   media: ["images"],
   faq: ["faqs"],
@@ -79,14 +109,23 @@ export default function AddProductPage() {
       seoTitle: "",
       seoDescription: "",
       dimensions: { unit: "cm", width: 0, height: 0, length: 0 },
-      specifications: { fitType: "", occasion: "", closureType: "", soleMaterial: "", upperMaterial: "" },
+      specifications: {
+        fitType: "",
+        occasion: "",
+        closureType: "",
+        soleMaterial: "",
+        upperMaterial: "",
+      },
       variants: [],
     },
   });
 
   // ── Auto-generate slug from name ────────────────────────────────────────────
   const handleNameChange = (name: string) => {
-    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const slug = name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
     form.setValue("slug", slug);
   };
 
@@ -129,7 +168,6 @@ export default function AddProductPage() {
 
     setShowSummary(true);
   };
-
 
   // ── Final submit (API call) ─
   const onSubmit = async (data: ProductFormData) => {
@@ -182,22 +220,22 @@ export default function AddProductPage() {
       form.reset();
       setImageFiles([]);
       setShowSummary(false);
-
     } catch (error: any) {
-      const errorMessage =
-        error?.data?.message ||
-        error?.message ||
-        "Failed to create product";
+      const errorMessage = error?.data?.message || error?.message || "Failed to create product";
 
       toast.error(errorMessage);
     }
   };
   // ── Tab navigation helpers ──
   const currentIndex = TAB_ORDER.indexOf(activeTab);
-  const goNext = () => { if (currentIndex < TAB_ORDER.length - 1) setActiveTab(TAB_ORDER[currentIndex + 1]); };
-  const goPrevious = () => { if (currentIndex > 0) setActiveTab(TAB_ORDER[currentIndex - 1]); };
+  const goNext = () => {
+    if (currentIndex < TAB_ORDER.length - 1) setActiveTab(TAB_ORDER[currentIndex + 1]);
+  };
+  const goPrevious = () => {
+    if (currentIndex > 0) setActiveTab(TAB_ORDER[currentIndex - 1]);
+  };
 
-  // ── Handle edit from summary 
+  // ── Handle edit from summary
   const handleEditFromSummary = (tab: string) => {
     setShowSummary(false);
     setActiveTab(tab as TabName);
@@ -215,18 +253,19 @@ export default function AddProductPage() {
     );
   }
 
-  // ── Main form view 
+  // ── Main form view
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <Title mainTitle="Add New Product" />
-        <Button variant="outline" onClick={() => window.history.back()}>Cancel</Button>
+        <Button variant="outline" onClick={() => window.history.back()}>
+          Cancel
+        </Button>
       </div>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabName)}>
-
             {/* Free tab navigation */}
             <TabsList className="grid w-full grid-cols-7">
               {TAB_ORDER.map((tab) => (
@@ -241,23 +280,38 @@ export default function AddProductPage() {
             <DetailsTab form={form} />
             <SpecificationsTab form={form} />
             <SeoTab form={form} />
-            <MediaTab form={form} fieldRefs={fieldRefs} imageFiles={imageFiles} setImageFiles={setImageFiles} />
+            <MediaTab
+              form={form}
+              fieldRefs={fieldRefs}
+              imageFiles={imageFiles}
+              setImageFiles={setImageFiles}
+            />
             <FaqTab form={form} />
             <VariantsTab form={form} fieldRefs={fieldRefs} />
-
           </Tabs>
 
           {/* Navigation buttons */}
           <div className="flex justify-between gap-4">
-            <Button type="button" variant="outline" disabled={currentIndex === 0} onClick={goPrevious}>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={currentIndex === 0}
+              onClick={goPrevious}
+            >
               Previous
             </Button>
 
             {currentIndex < TAB_ORDER.length - 1 ? (
-              <Button type="button" onClick={goNext}>Next</Button>
+              <Button type="button" onClick={goNext}>
+                Next
+              </Button>
             ) : (
               <div className="flex gap-4">
-                <Button type="button" variant="outline" onClick={() => handleSubmitWithValidation("DRAFT")}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleSubmitWithValidation("DRAFT")}
+                >
                   Save as Draft
                 </Button>
                 <Button

@@ -67,11 +67,7 @@ export const CustomSelect = ({
   const [loadingMore, setLoadingMore] = useState(false);
 
   // Normalise value to array internally
-  const selectedArray: SelectOption[] = value
-    ? Array.isArray(value)
-      ? value
-      : [value]
-    : [];
+  const selectedArray: SelectOption[] = value ? (Array.isArray(value) ? value : [value]) : [];
 
   // ── Fetch ──────────────────────────────────────────────────────────────────
 
@@ -125,8 +121,7 @@ export const CustomSelect = ({
 
   // ── Selection logic ────────────────────────────────────────────────────────
 
-  const isSelected = (opt: SelectOption) =>
-    selectedArray.some((s) => s.value === opt.value);
+  const isSelected = (opt: SelectOption) => selectedArray.some((s) => s.value === opt.value);
 
   const toggleOption = (opt: SelectOption) => {
     if (!multiSelect) {
@@ -163,20 +158,13 @@ export const CustomSelect = ({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   const triggerLabel =
-    selectedArray.length === 0
-      ? placeholder
-      : !multiSelect
-      ? selectedArray[0].label
-      : null;
+    selectedArray.length === 0 ? placeholder : !multiSelect ? selectedArray[0].label : null;
 
   return (
     <div ref={containerRef} className={`relative w-full ${className}`}>
       {/* Label */}
       {label && (
-        <label
-          htmlFor={uid}
-          className="block text-sm font-medium text-foreground mb-1.5"
-        >
+        <label htmlFor={uid} className="text-foreground mb-1.5 block text-sm font-medium">
           {label}
         </label>
       )}
@@ -188,11 +176,11 @@ export const CustomSelect = ({
         disabled={disabled}
         onClick={() => !disabled && setOpen((p) => !p)}
         className={[
-          "w-full min-h-10 px-3 py-2 flex items-center gap-2 flex-wrap",
-          "rounded-md border bg-background text-left text-sm",
-          "transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "flex min-h-10 w-full flex-wrap items-center gap-2 px-3 py-2",
+          "bg-background rounded-md border text-left text-sm",
+          "focus-visible:ring-ring transition-colors focus:outline-none focus-visible:ring-2",
           open ? "border-ring shadow-sm" : "border-input",
-          disabled ? "opacity-50 cursor-not-allowed" : "hover:border-ring/70 cursor-pointer",
+          disabled ? "cursor-not-allowed opacity-50" : "hover:border-ring/70 cursor-pointer",
           error ? "border-destructive" : "",
         ].join(" ")}
       >
@@ -201,11 +189,11 @@ export const CustomSelect = ({
           selectedArray.map((s) => (
             <span
               key={s.value}
-              className="inline-flex items-center gap-1 bg-primary/10 text-primary text-xs font-medium px-2 py-0.5 rounded-full"
+              className="bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
             >
               {s.label}
               <X
-                className="h-3 w-3 cursor-pointer hover:text-destructive"
+                className="hover:text-destructive h-3 w-3 cursor-pointer"
                 onClick={(e) => removeSelected(s, e)}
               />
             </span>
@@ -213,11 +201,7 @@ export const CustomSelect = ({
 
         {/* Single / empty placeholder */}
         {triggerLabel && (
-          <span
-            className={
-              selectedArray.length === 0 ? "text-muted-foreground flex-1" : "flex-1"
-            }
-          >
+          <span className={selectedArray.length === 0 ? "text-muted-foreground flex-1" : "flex-1"}>
             {triggerLabel}
           </span>
         )}
@@ -227,44 +211,42 @@ export const CustomSelect = ({
         {/* Clear all (single) */}
         {!multiSelect && selectedArray.length > 0 && (
           <X
-            className="h-4 w-4 text-muted-foreground hover:text-destructive shrink-0"
+            className="text-muted-foreground hover:text-destructive h-4 w-4 shrink-0"
             onClick={(e) => removeSelected(selectedArray[0], e)}
           />
         )}
 
         <ChevronDown
-          className={`h-4 w-4 text-muted-foreground shrink-0 transition-transform duration-200 ${
+          className={`text-muted-foreground h-4 w-4 shrink-0 transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         />
       </button>
 
       {/* Error */}
-      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
+      {error && <p className="text-destructive mt-1 text-xs">{error}</p>}
 
       {/* Dropdown */}
       {open && (
         <div
           className={[
-            "absolute z-50 mt-1.5 w-full rounded-md border bg-popover shadow-lg",
+            "bg-popover absolute z-50 mt-1.5 w-full rounded-md border shadow-lg",
             "animate-in fade-in-0 zoom-in-95 slide-in-from-top-1",
           ].join(" ")}
         >
           {/* Search bar */}
           {searchable && (
-            <div className="flex items-center gap-2 px-3 py-2 border-b">
-              <Search className="h-4 w-4 text-muted-foreground shrink-0" />
+            <div className="flex items-center gap-2 border-b px-3 py-2">
+              <Search className="text-muted-foreground h-4 w-4 shrink-0" />
               <input
                 ref={searchRef}
                 type="text"
                 value={search}
                 onChange={handleSearchChange}
                 placeholder="Search..."
-                className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                className="placeholder:text-muted-foreground flex-1 bg-transparent text-sm outline-none"
               />
-              {loading && (
-                <Loader2 className="h-3.5 w-3.5 text-muted-foreground animate-spin" />
-              )}
+              {loading && <Loader2 className="text-muted-foreground h-3.5 w-3.5 animate-spin" />}
             </div>
           )}
 
@@ -275,14 +257,12 @@ export const CustomSelect = ({
             className="max-h-60 overflow-y-auto overscroll-contain"
           >
             {loading && options.length === 0 ? (
-              <div className="flex items-center justify-center py-8 text-muted-foreground gap-2 text-sm">
+              <div className="text-muted-foreground flex items-center justify-center gap-2 py-8 text-sm">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 Loading...
               </div>
             ) : options.length === 0 ? (
-              <div className="py-8 text-center text-sm text-muted-foreground">
-                No results found
-              </div>
+              <div className="text-muted-foreground py-8 text-center text-sm">No results found</div>
             ) : (
               <>
                 {options.map((opt) => {
@@ -293,31 +273,25 @@ export const CustomSelect = ({
                       type="button"
                       onClick={() => toggleOption(opt)}
                       className={[
-                        "w-full flex items-center gap-2 px-3 py-2 text-sm text-left",
-                        "transition-colors hover:bg-accent hover:text-accent-foreground",
+                        "flex w-full items-center gap-2 px-3 py-2 text-left text-sm",
+                        "hover:bg-accent hover:text-accent-foreground transition-colors",
                         selected ? "bg-primary/8 text-primary font-medium" : "",
                       ].join(" ")}
                     >
                       {/* Checkbox-style tick for multi, dot for single */}
                       <span
                         className={[
-                          "shrink-0 flex items-center justify-center rounded transition-colors",
-                          multiSelect
-                            ? "h-4 w-4 border rounded-sm"
-                            : "h-4 w-4",
+                          "flex shrink-0 items-center justify-center rounded transition-colors",
+                          multiSelect ? "h-4 w-4 rounded-sm border" : "h-4 w-4",
                           selected && multiSelect
                             ? "bg-primary border-primary text-primary-foreground"
                             : multiSelect
-                            ? "border-input"
-                            : "",
+                              ? "border-input"
+                              : "",
                         ].join(" ")}
                       >
-                        {selected && multiSelect && (
-                          <Check className="h-3 w-3" />
-                        )}
-                        {selected && !multiSelect && (
-                          <Check className="h-4 w-4 text-primary" />
-                        )}
+                        {selected && multiSelect && <Check className="h-3 w-3" />}
+                        {selected && !multiSelect && <Check className="text-primary h-4 w-4" />}
                       </span>
                       <span className="flex-1 truncate">{opt.label}</span>
                     </button>
@@ -326,7 +300,7 @@ export const CustomSelect = ({
 
                 {/* Loading more indicator */}
                 {loadingMore && (
-                  <div className="flex items-center justify-center py-3 text-muted-foreground gap-2 text-xs">
+                  <div className="text-muted-foreground flex items-center justify-center gap-2 py-3 text-xs">
                     <Loader2 className="h-3 w-3 animate-spin" />
                     Loading more...
                   </div>
@@ -334,7 +308,7 @@ export const CustomSelect = ({
 
                 {/* End of results */}
                 {!hasMore && options.length > 0 && (
-                  <div className="py-2 text-center text-xs text-muted-foreground/60">
+                  <div className="text-muted-foreground/60 py-2 text-center text-xs">
                     — End of results —
                   </div>
                 )}
@@ -344,7 +318,7 @@ export const CustomSelect = ({
 
           {/* Footer: selected count for multi */}
           {multiSelect && selectedArray.length > 0 && (
-            <div className="flex items-center justify-between px-3 py-2 border-t text-xs text-muted-foreground">
+            <div className="text-muted-foreground flex items-center justify-between border-t px-3 py-2 text-xs">
               <span>{selectedArray.length} selected</span>
               <button
                 type="button"

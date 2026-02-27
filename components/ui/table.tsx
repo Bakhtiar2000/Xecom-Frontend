@@ -25,7 +25,7 @@ function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
   return (
     <tbody
       data-slot="table-body"
-      className={cn("[&_tr:last-child]:border-0  bg-card-primary", className)}
+      className={cn("bg-card-primary [&_tr:last-child]:border-0", className)}
       {...props}
     />
   );
