@@ -1,7 +1,7 @@
 export type TAddWishlistDto = {
-    productId: string;
+  productId: string;
 };
 
 export type TRemoveWishlistDto = {
-    id: string;
+  id: string;
 };

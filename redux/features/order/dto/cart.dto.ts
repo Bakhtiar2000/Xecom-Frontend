@@ -1,8 +1,8 @@
 export type TAddToCartDto = {
-    variantId: string;
-    quantity: number;
+  variantId: string;
+  quantity: number;
 };
 
 export type TUpdateCartQuantityDto = {
-    quantity: number;
+  quantity: number;
 };

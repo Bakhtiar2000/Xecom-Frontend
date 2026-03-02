@@ -134,18 +134,18 @@ const AllProductsTable = () => {
         const attrVal = attr.values.find((v) => v.id === valId);
         return attrVal
           ? {
-            label: attrVal.value,
-            hexCode: attrVal.hexCode ?? null,
-            onRemove: () => {
-              setSelectedAttributeValues((prev) => ({
-                ...prev,
-                [attr.name.toLowerCase()]: (prev[attr.name.toLowerCase()] ?? []).filter(
-                  (id) => id !== valId
-                ),
-              }));
-              resetPage();
-            },
-          }
+              label: attrVal.value,
+              hexCode: attrVal.hexCode ?? null,
+              onRemove: () => {
+                setSelectedAttributeValues((prev) => ({
+                  ...prev,
+                  [attr.name.toLowerCase()]: (prev[attr.name.toLowerCase()] ?? []).filter(
+                    (id) => id !== valId
+                  ),
+                }));
+                resetPage();
+              },
+            }
           : null;
       })
     ),
