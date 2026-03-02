@@ -134,18 +134,18 @@ const AllProductsTable = () => {
         const attrVal = attr.values.find((v) => v.id === valId);
         return attrVal
           ? {
-              label: attrVal.value,
-              hexCode: attrVal.hexCode ?? null,
-              onRemove: () => {
-                setSelectedAttributeValues((prev) => ({
-                  ...prev,
-                  [attr.name.toLowerCase()]: (prev[attr.name.toLowerCase()] ?? []).filter(
-                    (id) => id !== valId
-                  ),
-                }));
-                resetPage();
-              },
-            }
+            label: attrVal.value,
+            hexCode: attrVal.hexCode ?? null,
+            onRemove: () => {
+              setSelectedAttributeValues((prev) => ({
+                ...prev,
+                [attr.name.toLowerCase()]: (prev[attr.name.toLowerCase()] ?? []).filter(
+                  (id) => id !== valId
+                ),
+              }));
+              resetPage();
+            },
+          }
           : null;
       })
     ),
@@ -162,9 +162,9 @@ const AllProductsTable = () => {
   return (
     <div>
       {/* Filters (unchanged) */}
-      <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="bg-card-primary relative w-full max-w-80">
-          <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="relative w-full max-w-80">
+          <Search className="text-muted-foreground absolute top-1/2 left-3 w-4 -translate-y-1/2" />
           <Input
             placeholder="Search by name, email, or phone..."
             value={searchTerm}
@@ -275,142 +275,144 @@ const AllProductsTable = () => {
             ))}
           </div>
         )}
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <SortableTableHead
-                field="name"
-                label="Product"
-                onSort={handleSortClick}
-                getSortIcon={getSortIcon}
-                disabled={hasNoData}
-              />
-              <TableHead>Max Order Quantity</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Featured</TableHead>
+        <div className="border-border relative mt-4 rounded-md border lg:mt-6">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <SortableTableHead
+                  field="name"
+                  label="Product"
+                  onSort={handleSortClick}
+                  getSortIcon={getSortIcon}
+                  disabled={hasNoData}
+                />
+                <TableHead>Max Order Quantity</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Featured</TableHead>
 
-              <SortableTableHead
-                field="avgRating"
-                label="Rating"
-                onSort={handleSortClick}
-                getSortIcon={getSortIcon}
-                disabled={hasNoData}
-              />
-              <SortableTableHead
-                field="totalSales"
-                label="Sales"
-                onSort={handleSortClick}
-                getSortIcon={getSortIcon}
-                disabled={hasNoData}
-              />
-              <SortableTableHead
-                field="viewCount"
-                label="Views"
-                onSort={handleSortClick}
-                getSortIcon={getSortIcon}
-                disabled={hasNoData}
-              />
-              <TableHead className="text-right">Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableLoading colSpan={8} rows={5} />
-            ) : isError ? (
-              <TableError colSpan={8}>Error loading users. Please try again.</TableError>
-            ) : products.length === 0 ? (
-              <TableEmpty colSpan={8}>No users found</TableEmpty>
-            ) : (
-              products.map((product: TProduct) => (
-                <TableRow key={product.id} className="bg-card-primary">
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      {product.images && product.images.length > 0 ? (
-                        <Image
-                          src={product.images[0].url}
-                          alt={product.name}
-                          width={40}
-                          height={40}
-                          className="rounded object-cover"
-                        />
-                      ) : (
-                        <div className="bg-muted flex h-12 w-12 items-center justify-center rounded">
-                          <Package className="text-muted-foreground h-6 w-6" />
+                <SortableTableHead
+                  field="avgRating"
+                  label="Rating"
+                  onSort={handleSortClick}
+                  getSortIcon={getSortIcon}
+                  disabled={hasNoData}
+                />
+                <SortableTableHead
+                  field="totalSales"
+                  label="Sales"
+                  onSort={handleSortClick}
+                  getSortIcon={getSortIcon}
+                  disabled={hasNoData}
+                />
+                <SortableTableHead
+                  field="viewCount"
+                  label="Views"
+                  onSort={handleSortClick}
+                  getSortIcon={getSortIcon}
+                  disabled={hasNoData}
+                />
+                <TableHead className="text-right">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableLoading colSpan={8} rows={5} />
+              ) : isError ? (
+                <TableError colSpan={8}>Error loading users. Please try again.</TableError>
+              ) : products.length === 0 ? (
+                <TableEmpty colSpan={8}>No users found</TableEmpty>
+              ) : (
+                products.map((product: TProduct) => (
+                  <TableRow key={product.id} className="bg-card-primary">
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        {product.images && product.images.length > 0 ? (
+                          <Image
+                            src={product.images[0].url}
+                            alt={product.name}
+                            width={40}
+                            height={40}
+                            className="rounded object-cover"
+                          />
+                        ) : (
+                          <div className="bg-muted flex h-12 w-12 items-center justify-center rounded">
+                            <Package className="text-muted-foreground h-6 w-6" />
+                          </div>
+                        )}
+                        <div>
+                          <p className="font-medium">{product.name}</p>
+                          <p className="text-muted-foreground line-clamp-1 text-xs">
+                            {product.shortDescription}
+                          </p>
                         </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{product?.maxOrderQty}</TableCell>
+                    <TableCell>
+                      <Badge variant={product.status === "ACTIVE" ? "default" : "secondary"}>
+                        {product.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {product.featured ? (
+                        <Badge variant="default" className="bg-rating">
+                          Featured
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="bg-card-primary">
+                          No
+                        </Badge>
                       )}
-                      <div>
-                        <p className="font-medium">{product.name}</p>
-                        <p className="text-muted-foreground line-clamp-1 text-xs">
-                          {product.shortDescription}
-                        </p>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>{product?.maxOrderQty}</TableCell>
-                  <TableCell>
-                    <Badge variant={product.status === "ACTIVE" ? "default" : "secondary"}>
-                      {product.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {product.featured ? (
-                      <Badge variant="default" className="bg-rating">
-                        Featured
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline" className="bg-card-primary">
-                        No
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {product.avgRating ? (
-                      <div className="flex items-center gap-1">
-                        <span className="font-medium">{product.avgRating.toFixed(1)}</span>
-                        <span className="text-muted-foreground text-xs">
-                          ({product.reviewCount})
-                        </span>
-                      </div>
-                    ) : (
-                      <span className="text-muted-foreground">No reviews</span>
-                    )}
-                  </TableCell>
-                  <TableCell>{product.totalSales}</TableCell>
-                  <TableCell>{product.viewCount}</TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button className="hover:bg-muted rounded-md p-2">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </button>
-                      </DropdownMenuTrigger>
+                    </TableCell>
+                    <TableCell>
+                      {product.avgRating ? (
+                        <div className="flex items-center gap-1">
+                          <span className="font-medium">{product.avgRating.toFixed(1)}</span>
+                          <span className="text-muted-foreground text-xs">
+                            ({product.reviewCount})
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground">No reviews</span>
+                      )}
+                    </TableCell>
+                    <TableCell>{product.totalSales}</TableCell>
+                    <TableCell>{product.viewCount}</TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button className="hover:bg-muted rounded-md p-2">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </button>
+                        </DropdownMenuTrigger>
 
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleView(product.id)}>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View Details
-                        </DropdownMenuItem>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleView(product.id)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Details
+                          </DropdownMenuItem>
 
-                        <DropdownMenuItem onClick={() => handleEdit(product.id)}>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleEdit(product.id)}>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
 
-                        <DropdownMenuItem
-                          onClick={() => handleDelete(product.id)}
-                          className="text-destructive focus:text-destructive"
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(product.id)}
+                            className="text-destructive focus:text-destructive"
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
         {data?.meta && (
           <TablePagination
             meta={data.meta}
