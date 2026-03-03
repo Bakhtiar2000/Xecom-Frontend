@@ -10,14 +10,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
-  MultiSelect,
-  MultiSelectContent,
-  MultiSelectGroup,
-  MultiSelectItem,
-  MultiSelectTrigger,
-  MultiSelectValue,
-} from "@/components/ui/multi-select";
-import {
   Table,
   TableBody,
   TableCell,
@@ -31,12 +23,15 @@ import {
 import { useDebounce } from "@/hooks/useDebounce";
 import { useTablePagination } from "@/hooks/useTablePagination";
 import { useTableSort } from "@/hooks/useTableSort";
+import { API_URL } from "@/redux/api/baseApi";
 import { useGetAllAttributesQuery } from "@/redux/features/product/attribute.api";
 import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
 import { TAttribute, TProduct } from "@/types";
 import { Eye, Loader2, MoreHorizontal, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { AttributeFilter } from "./AttributeFilter";
+
 type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
 const AllProductsTable = () => {
@@ -48,35 +43,6 @@ const AllProductsTable = () => {
 
   const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
     useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
-
-  const FAKE_CATEGORIES = Array.from({ length: 80 }, (_, i) => ({
-    value: `cat-${i + 1}`,
-    label:
-      [
-        "Electronics",
-        "Clothing",
-        "Food",
-        "Home",
-        "Sports",
-        "Books",
-        "Toys",
-        "Beauty",
-        "Automotive",
-        "Health",
-      ][i % 10] + (i >= 10 ? ` (${Math.floor(i / 10) + 1})` : ""),
-  }));
-
-  async function fetchCategories({ search, page, pageSize }) {
-    await new Promise((r) => setTimeout(r, 300));
-    const filtered = FAKE_CATEGORIES.filter((c) =>
-      c.label.toLowerCase().includes(search.toLowerCase())
-    );
-    const start = (page - 1) * pageSize;
-    return {
-      data: filtered.slice(start, start + pageSize),
-      hasMore: start + pageSize < filtered.length,
-    };
-  }
 
   const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
 
@@ -128,29 +94,6 @@ const AllProductsTable = () => {
   const attributes: TAttribute[] = attributesData?.data || [];
   console.log("attribute data", attributesData);
 
-  const activeFilters = [
-    ...attributes.flatMap((attr) =>
-      (selectedAttributeValues[attr.name.toLowerCase()] ?? []).map((valId) => {
-        const attrVal = attr.values.find((v) => v.id === valId);
-        return attrVal
-          ? {
-              label: attrVal.value,
-              hexCode: attrVal.hexCode ?? null,
-              onRemove: () => {
-                setSelectedAttributeValues((prev) => ({
-                  ...prev,
-                  [attr.name.toLowerCase()]: (prev[attr.name.toLowerCase()] ?? []).filter(
-                    (id) => id !== valId
-                  ),
-                }));
-                resetPage();
-              },
-            }
-          : null;
-      })
-    ),
-  ].filter(Boolean) as { label: string; hexCode: string | null; onRemove: () => void }[];
-
   const totalActiveFilters = [...Object.values(selectedAttributeValues).flat()].filter(
     Boolean
   ).length;
@@ -179,37 +122,15 @@ const AllProductsTable = () => {
             const selectedVals = selectedAttributeValues[attrKey] ?? [];
 
             return (
-              <MultiSelect
+              <AttributeFilter
                 key={attr.id}
-                values={selectedVals}
+                attribute={attr}
+                selectedValues={selectedVals}
                 onValuesChange={(vals) => {
                   setSelectedAttributeValues((prev) => ({ ...prev, [attrKey]: vals }));
                   handleFilterChange();
                 }}
-              >
-                <MultiSelectTrigger
-                  className={`bg-card-primary max-w-100 min-w-36 ${selectedVals.length ? "border-primary bg-primary/5" : ""}`}
-                >
-                  <MultiSelectValue placeholder={`All ${attr.name}s`} />
-                </MultiSelectTrigger>
-                <MultiSelectContent>
-                  <MultiSelectGroup>
-                    {attr.values.map((v) => (
-                      <MultiSelectItem key={v.id} value={v.id}>
-                        <span className="flex items-center gap-2">
-                          {v.hexCode && (
-                            <span
-                              className="border-muted-foreground/30 inline-block h-3.5 w-3.5 shrink-0 rounded-full border"
-                              style={{ backgroundColor: v.hexCode }}
-                            />
-                          )}
-                          {v.value}
-                        </span>
-                      </MultiSelectItem>
-                    ))}
-                  </MultiSelectGroup>
-                </MultiSelectContent>
-              </MultiSelect>
+              />
             );
           })}
 
@@ -217,7 +138,12 @@ const AllProductsTable = () => {
             className={`max-w-64 min-w-44 ${selectedCategories.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""}`}
           >
             <CustomSelect
-              fetchOptions={fetchCategories}
+              endpoint={`${API_URL}/category`}
+              fields={["name", "id"]}
+              mapToOption={(item) => ({
+                value: item.id,
+                label: item.name,
+              })}
               value={selectedCategories}
               onChange={(vals) => {
                 setSelectedCategories(vals as SelectOption[]);
@@ -225,8 +151,8 @@ const AllProductsTable = () => {
               }}
               multiSelect
               searchable
+              paginated
               placeholder="All Categories"
-              pageSize={20}
             />
           </div>
 
@@ -250,29 +176,6 @@ const AllProductsTable = () => {
         {isRefetching && (
           <div className="absolute top-3 right-3 z-10">
             <Loader2 className="text-primary h-5 w-5 animate-spin" />
-          </div>
-        )}
-        {/* active attribute  */}
-        {activeFilters.length > 0 && (
-          <div className="mb-3 flex flex-wrap items-center gap-2">
-            <span className="text-muted-foreground text-xs">Active filters:</span>
-            {activeFilters.map((filter, idx) => (
-              <span
-                key={idx}
-                className="bg-primary/10 text-primary border-primary/20 flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs"
-              >
-                {filter.hexCode && (
-                  <span
-                    className="border-primary/30 h-3 w-3 shrink-0 rounded-full border"
-                    style={{ backgroundColor: filter.hexCode }}
-                  />
-                )}
-                {filter.label}
-                <button onClick={filter.onRemove}>
-                  <X className="hover:text-destructive ml-0.5 h-3 w-3" />
-                </button>
-              </span>
-            ))}
           </div>
         )}
         <div className="border-border relative mt-4 rounded-md border lg:mt-6">

@@ -117,43 +117,20 @@ export default function BrandModal({ open, onOpenChange, brand }) {
     }
   };
 
-  // const onSubmit = async (data: TBrandFormData) => {
-  //     try {
-  //         const formData = new FormData();
-  //         formData.append("name", data.name);
-  //         formData.append("slug", data.slug);
-  //         if (data.description) formData.append("description", data.description);
-  //         if (data.parentId) formData.append("parentId", data.parentId);
-  //         if (data.file) formData.append("file", data.file);
-
-  //         let result;
-  //         if (isEditMode && brand) {
-  //             result = await updateBrand({ id: brand.id, data: formData }).unwrap();
-  //             toast.success(result?.message || "Brand updated successfully");
-  //         } else {
-  //             result = await addBrand(formData).unwrap();
-  //             toast.success(result?.message || "Brand added successfully");
-  //         }
-
-  //         onOpenChange(false);
-  //         reset();
-  //         setImagePreview(null);
-  //     } catch (error: any) {
-  //         const errorMessage = error?.data?.message || error?.message || "Failed to save Brand";
-  //         toast.error(errorMessage);
-  //     }
-  // };
-
   const onSubmit = async (data: TBrandFormData) => {
     try {
       const formData = new FormData();
 
-      const payload = {
+      const payload: any = {
         name: data.name,
         slug: data.slug,
         description: data.description,
         parentId: data.parentId,
       };
+
+      if (isEditMode && brand) {
+        payload.id = brand?.id;
+      }
 
       formData.append("text", JSON.stringify(payload));
 

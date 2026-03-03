@@ -31,14 +31,14 @@ export default function MediaTab({ form, fieldRefs, imageFiles, setImageFiles }:
 
   return (
     <TabsContent value="media" className="space-y-4">
-      <Card className="py-5">
-        <CardHeader className="bg-muted/30 border-b px-6 py-4">
-          <div className="flex items-center gap-2">
-            <div className="bg-primary h-5 w-1 rounded-full" />
-            <CardTitle className="text-base font-semibold">Media Files</CardTitle>
+      <Card className="pt-0 pb-4 lg:pb-6 rounded-lg">
+        <CardHeader className="bg-success text-success-foreground rounded-t-lg px-4 lg:px-6 py-4">
+          <div className="flex items-center gap-2 mt-2 text-xl">
+            <div className="bg-primary h-5 w-1 rounded-full"></div>
+            <CardTitle className="font-semibold">Media Files</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 px-4 lg:px-6">
           {/* Images */}
           <FormField
             control={form.control}

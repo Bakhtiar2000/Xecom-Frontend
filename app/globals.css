@@ -46,17 +46,17 @@
   --color-foreground: #111827;
   --color-card-primary: #ffffff;
   --color-card-primary-foreground: #0a0a0a;
-  --color-batch: #b5e6ff;
+  --color-batch: #1ea7ff; /* Used for badge backgrounds */
   --color-batch-foreground: #f5f5f5;
-  --color-rating: #fbbf24;
+  --color-rating: #fbbf24; /* Used for ratings, stars, highlights, or positive emphasis. */
   --color-button-primary: #111827;
-  --color-button-secondary: #f08a1e;
+  --color-button-secondary: #f08a1e; 
   --color-button-ternary: #2563eb;
-  --color-popover: #f8f8f8;
+  --color-popover: #f8f8f8;  /* Background of floating UI elements like: Dropdown menus, Tooltips, Popovers, Modals */
   --color-popover-foreground: #0a0a0a;
-  --color-muted: #f0f0f0;
+  --color-muted: #f0f0f0;  /* Used for subtle backgrounds: Disabled areas, Card backgrounds, Sections, Inputs background */
   --color-muted-foreground: #4b5563;
-  --color-accent: #e8e8e8;
+  --color-accent: #e8e8e8; /* Used for hover states, highlighted rows, or slight emphasis background. */
   --color-accent-foreground: #1a1a1a;
 
   /* Border */
@@ -110,22 +110,11 @@
   --color-tertiary: linear-gradient(to top, #000000cc, transparent);
   --color-tertiary-foreground: #fdba74;
 
-  --color-success: #4ade80;
-  --color-success-foreground: #052e16;
-  --color-danger: #f2d5d5;
-  --color-danger-foreground: #4a2a2a;
-  --color-destructive: #f87171;
-  --color-destructive-foreground: #1c1917;
-  --color-warning: #f5efd5;
-  --color-warning-foreground: #4a3f2a;
-  --color-info: #d5dfe8;
-  --color-info-foreground: #2a3543;
-
   --color-background: #1e293b;
   --color-foreground: #f5f5f5;
   --color-card-primary: #0f172a;
   --color-card-primary-foreground: #f5f5f5;
-  --color-batch: #ffd6cc;
+  --color-batch: #ff6b57;
   --color-batch-foreground: #f5f5f5;
   --color-button-primary: #343b47;
   --color-button-secondary: #f08a1e;

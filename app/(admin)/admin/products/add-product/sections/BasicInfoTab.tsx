@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { ProductFormData } from "@/lib/productSchema";
 import {
@@ -20,8 +21,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
+import CustomSelect, { SelectOption } from "@/components/custom/customSelect";
+import { API_URL } from "@/redux/api/baseApi";
 
 interface BasicInfoTabProps {
   form: UseFormReturn<ProductFormData>;
@@ -30,20 +33,19 @@ interface BasicInfoTabProps {
 }
 
 export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInfoTabProps) {
+  const [selectedBrand, setSelectedBrand] = useState<SelectOption | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<SelectOption | null>(null);
   return (
     <TabsContent value="basic" className="space-y-4">
-      <Card className="py-5">
-        <CardHeader className="bg-muted/30 border-b px-6 py-4">
-          <div className="flex items-center gap-2">
-            <div className="bg-primary h-5 w-1 rounded-full" />
-            <CardTitle className="text-base font-semibold">Basic Information</CardTitle>
+      <Card className="pt-0 pb-4 lg:pb-6 rounded-lg">
+        <CardHeader className="bg-success text-success-foreground rounded-t-lg px-4 lg:px-6 py-4">
+          <div className="flex items-center gap-2 mt-2 text-xl">
+            <div className="bg-primary h-5 w-1 rounded-full"></div>
+            <CardTitle className="font-semibold">Basic Information</CardTitle>
           </div>
-          <CardDescription className="mt-1 ml-3 text-xs">
-            Enter the core details of your product
-          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <CardContent className="space-y-4 px-4 lg:px-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             <FormField
               control={form.control}
               name="name"
@@ -87,74 +89,38 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
                 </FormItem>
               )}
             />
-          </div>
 
-          <FormField
-            control={form.control}
-            name="shortDescription"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Short Description *</FormLabel>
-                <FormControl>
-                  <Textarea
-                    ref={(el) => {
-                      fieldRefs.current["shortDescription"] = el;
-                    }}
-                    placeholder="Stylish everyday sneakers built for comfort and versatility."
-                    rows={2}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-danger" />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="fullDescription"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Full Description *</FormLabel>
-                <FormControl>
-                  <Textarea
-                    ref={(el) => {
-                      fieldRefs.current["fullDescription"] = el;
-                    }}
-                    placeholder="Urban Flex casual sneakers are designed for all-day wear..."
-                    rows={4}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-danger" />
-              </FormItem>
-            )}
-          />
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <FormField
               control={form.control}
               name="brandId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Brand *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger
-                        className="w-full"
-                        ref={(el) => {
-                          fieldRefs.current["brandId"] = el;
+                  <FormControl>
+                    <div
+                      ref={(el) => {
+                        fieldRefs.current["brandId"] = el;
+                      }}
+                    >
+                      <CustomSelect
+                        endpoint={`${API_URL}/brand`}
+                        fields={["name", "id"]}
+                        mapToOption={(item) => ({
+                          value: item.id,
+                          label: item.name,
+                        })}
+                        value={selectedBrand}
+                        onChange={(val) => {
+                          const option = val as SelectOption | null;
+                          setSelectedBrand(option);
+                          field.onChange(option ? option.value : "");
                         }}
-                      >
-                        <SelectValue placeholder="Select a brand" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="3912d37f-50e6-4160-a412-3f7dd86c3b7b">Nike</SelectItem>
-                      <SelectItem value="brand-2">Adidas</SelectItem>
-                      <SelectItem value="brand-3">Puma</SelectItem>
-                    </SelectContent>
-                  </Select>
+                        searchable
+                        paginated
+                        placeholder="Select a brand"
+                      />
+                    </div>
+                  </FormControl>
                   <FormMessage className="text-danger" />
                 </FormItem>
               )}
@@ -166,32 +132,77 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger
-                        className="w-full"
-                        ref={(el) => {
-                          fieldRefs.current["categoryId"] = el;
+                  <FormControl>
+                    <div
+                      ref={(el) => {
+                        fieldRefs.current["categoryId"] = el;
+                      }}
+                    >
+                      <CustomSelect
+                        endpoint={`${API_URL}/category`}
+                        fields={["name", "id"]}
+                        mapToOption={(item) => ({
+                          value: item.id,
+                          label: item.name,
+                        })}
+                        value={selectedCategory}
+                        onChange={(val) => {
+                          const option = val as SelectOption | null;
+                          setSelectedCategory(option);
+                          field.onChange(option ? option.value : "");
                         }}
-                      >
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="9bd04cc8-354a-4c6d-8d44-dd1d9a720eba">
-                        Men&apos;s Shoe
-                      </SelectItem>
-                      <SelectItem value="category-2">Women&apos;s Shoe</SelectItem>
-                      <SelectItem value="category-3">Kids Shoe</SelectItem>
-                    </SelectContent>
-                  </Select>
+                        searchable
+                        paginated
+                        placeholder="Select a category"
+                      />
+                    </div>
+                  </FormControl>
                   <FormMessage className="text-danger" />
                 </FormItem>
               )}
             />
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="shortDescription"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Short Description *</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      ref={(el) => {
+                        fieldRefs.current["shortDescription"] = el;
+                      }}
+                      placeholder="Stylish everyday sneakers built for comfort and versatility."
+                      rows={2}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-danger" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="fullDescription"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full Description *</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      ref={(el) => {
+                        fieldRefs.current["fullDescription"] = el;
+                      }}
+                      placeholder="Urban Flex casual sneakers are designed for all-day wear..."
+                      rows={4}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-danger" />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="status"
@@ -208,6 +219,8 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
                       <SelectItem value="ACTIVE">Active</SelectItem>
                       <SelectItem value="INACTIVE">Inactive</SelectItem>
                       <SelectItem value="DRAFT">Draft</SelectItem>
+                      <SelectItem value="OUT_OF_STOCK">Out of Stock</SelectItem>
+                      <SelectItem value="DISCONTINUED">Distontinued</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage className="text-danger" />

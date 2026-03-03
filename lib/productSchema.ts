@@ -32,6 +32,7 @@ export const productSchema = z
 
     // Product Details
     weight: z.number().min(0.01, "Weight must be greater than 0"),
+    weightUnit: z.string().default("KG"),
     dimensions: z.object({
       unit: z.string().default("cm"),
       width: z.number().min(0.01, "Width must be greater than 0"),
@@ -46,14 +47,8 @@ export const productSchema = z
     seoDescription: z.string().min(20, "SEO description must be at least 20 characters"),
     metaKeywords: z.array(z.string()).min(1, "At least one meta keyword is required"),
 
-    // Specifications
-    specifications: z.object({
-      fitType: z.string().min(1, "Fit type is required"),
-      occasion: z.string().min(1, "Occasion is required"),
-      closureType: z.string().min(1, "Closure type is required"),
-      soleMaterial: z.string().min(1, "Sole material is required"),
-      upperMaterial: z.string().min(1, "Upper material is required"),
-    }),
+    // Specifications - Dynamic key-value pairs
+    specifications: z.record(z.string(), z.string()).default({}),
 
     // FAQ
     faqs: z
