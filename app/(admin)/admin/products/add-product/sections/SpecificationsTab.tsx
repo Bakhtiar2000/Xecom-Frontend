@@ -45,9 +45,9 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
   };
   return (
     <TabsContent value="specifications" className="space-y-4">
-      <Card className="pt-0 pb-4 lg:pb-6 rounded-lg">
-        <CardHeader className="bg-success text-success-foreground rounded-t-lg px-4 lg:px-6 py-4">
-          <div className="flex items-center gap-2 mt-2 text-xl">
+      <Card className="rounded-lg pt-0 pb-4 lg:pb-6">
+        <CardHeader className="bg-success text-success-foreground rounded-t-lg px-4 py-4 lg:px-6">
+          <div className="mt-2 flex items-center gap-2 text-xl">
             <div className="bg-primary h-5 w-1 rounded-full"></div>
             <CardTitle className="font-semibold">Product Specifications</CardTitle>
           </div>
@@ -81,26 +81,19 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
                   }
                 }}
               />
-              <Button
-                type="button"
-                onClick={addSpecification}
-                className="md:col-span-1"
-              >
+              <Button type="button" onClick={addSpecification} className="md:col-span-1">
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
           </div>
 
           {/* Display existing specifications */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             {Object.entries(specifications).length === 0 ? (
               <p className="text-muted-foreground text-sm">No specifications added yet.</p>
             ) : (
               Object.entries(specifications).map(([key, value]) => (
-                <div
-                  key={key}
-                  className="flex items-center gap-2 rounded-lg border p-3"
-                >
+                <div key={key} className="flex items-center gap-2 rounded-lg border p-3">
                   <div className="grid flex-1 grid-cols-1 gap-2 md:grid-cols-2">
                     <div>
                       <span className="text-muted-foreground text-xs">Field</span>

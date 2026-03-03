@@ -41,9 +41,9 @@ export default function SeoTab({ form }: SeoTabProps) {
 
   return (
     <TabsContent value="seo" className="space-y-4">
-      <Card className="pt-0 pb-4 lg:pb-6 rounded-lg">
-        <CardHeader className="bg-success text-success-foreground rounded-t-lg px-4 lg:px-6 py-4">
-          <div className="flex items-center gap-2 mt-2 text-xl">
+      <Card className="rounded-lg pt-0 pb-4 lg:pb-6">
+        <CardHeader className="bg-success text-success-foreground rounded-t-lg px-4 py-4 lg:px-6">
+          <div className="mt-2 flex items-center gap-2 text-xl">
             <div className="bg-primary h-5 w-1 rounded-full"></div>
             <CardTitle className="font-semibold">SEO Settings</CardTitle>
           </div>

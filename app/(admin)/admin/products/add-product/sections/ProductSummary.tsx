@@ -137,13 +137,7 @@ export default function ProductSummary({
             <p className="text-muted-foreground">No specifications added.</p>
           ) : (
             Object.entries(data.specifications).map(([k, v]) =>
-              v ? (
-                <SummaryRow
-                  key={k}
-                  label={k}
-                  value={v}
-                />
-              ) : null
+              v ? <SummaryRow key={k} label={k} value={v} /> : null
             )
           )}
         </SummaryCard>

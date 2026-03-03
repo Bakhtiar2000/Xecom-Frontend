@@ -128,13 +128,14 @@ export const CustomSelect = ({
           const mappedData = mapToOption
             ? json.data.map(mapToOption)
             : json.data.map((item: any) => ({
-              value: item.id,
-              label: item.name || item.label,
-              ...item,
-            }));
+                value: item.id,
+                label: item.name || item.label,
+                ...item,
+              }));
 
           // Determine if there are more pages
-          const hasMorePages = json.meta?.hasNextPage ??
+          const hasMorePages =
+            json.meta?.hasNextPage ??
             (json.meta?.pageNumber && json.meta?.totalPages
               ? json.meta.pageNumber < json.meta.totalPages
               : false);
@@ -254,7 +255,7 @@ export const CustomSelect = ({
         disabled={disabled}
         onClick={() => !disabled && setOpen((p) => !p)}
         className={[
-          "flex min-h-10 min-w-40 w-full items-center gap-2 px-3 py-2",
+          "flex min-h-10 w-full min-w-40 items-center gap-2 px-3 py-2",
           "bg-background rounded-md border text-left text-sm",
           "focus-visible:ring-ring transition-colors focus:outline-none focus-visible:ring-2",
           open ? "border-ring shadow-sm" : "border-input",
@@ -283,9 +284,7 @@ export const CustomSelect = ({
             </>
           ) : (
             // Show count for 3+ items
-            <span className="flex-1">
-              {selectedArray.length} items selected
-            </span>
+            <span className="flex-1">{selectedArray.length} items selected</span>
           )
         ) : null}
 
@@ -305,8 +304,9 @@ export const CustomSelect = ({
         )}
 
         <ChevronDown
-          className={`text-muted-foreground h-4 w-4 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""
-            }`}
+          className={`text-muted-foreground h-4 w-4 shrink-0 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
         />
       </button>
 

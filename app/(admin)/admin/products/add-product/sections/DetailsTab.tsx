@@ -3,7 +3,14 @@
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { ProductFormData } from "@/lib/productSchema";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -18,11 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ProductWeightUnit, ProductDimensionUnit } from "@/constants/enum";
 
 interface DetailsTabProps {
@@ -61,9 +64,9 @@ export default function DetailsTab({ form }: DetailsTabProps) {
 
   return (
     <TabsContent value="details" className="space-y-4">
-      <Card className="pt-0 pb-4 lg:pb-6 rounded-lg">
-        <CardHeader className="bg-success text-success-foreground rounded-t-lg px-4 lg:px-6 py-4">
-          <div className="flex items-center gap-2 mt-2 text-xl">
+      <Card className="rounded-lg pt-0 pb-4 lg:pb-6">
+        <CardHeader className="bg-success text-success-foreground rounded-t-lg px-4 py-4 lg:px-6">
+          <div className="mt-2 flex items-center gap-2 text-xl">
             <div className="bg-primary h-5 w-1 rounded-full"></div>
             <CardTitle className="font-semibold">Product Details</CardTitle>
           </div>
@@ -91,7 +94,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                         <PopoverTrigger asChild>
                           <button
                             type="button"
-                            className="cursor-pointer text-muted-foreground hover:text-foreground absolute right-0 top-0 flex h-full items-center gap-1 px-3 text-sm transition-colors"
+                            className="text-muted-foreground hover:text-foreground absolute top-0 right-0 flex h-full cursor-pointer items-center gap-1 px-3 text-sm transition-colors"
                           >
                             {form.watch("weightUnit")}
                             <ChevronDown className="h-3 w-3" />
@@ -104,8 +107,9 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                                 key={unit}
                                 type="button"
                                 onClick={() => form.setValue("weightUnit", unit)}
-                                className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${form.watch("weightUnit") === unit ? "bg-accent font-medium" : ""
-                                  }`}
+                                className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${
+                                  form.watch("weightUnit") === unit ? "bg-accent font-medium" : ""
+                                }`}
                               >
                                 {unit}
                               </button>
@@ -145,7 +149,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                               <PopoverTrigger asChild>
                                 <button
                                   type="button"
-                                  className="cursor-pointer text-muted-foreground hover:text-foreground absolute right-0 top-0 flex h-full items-center gap-1 px-3 text-sm transition-colors"
+                                  className="text-muted-foreground hover:text-foreground absolute top-0 right-0 flex h-full cursor-pointer items-center gap-1 px-3 text-sm transition-colors"
                                 >
                                   {form.watch("dimensions.unit")}
                                   <ChevronDown className="h-3 w-3" />
@@ -158,10 +162,11 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                                       key={unit}
                                       type="button"
                                       onClick={() => form.setValue("dimensions.unit", unit)}
-                                      className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${form.watch("dimensions.unit") === unit
-                                        ? "bg-accent font-medium"
-                                        : ""
-                                        }`}
+                                      className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${
+                                        form.watch("dimensions.unit") === unit
+                                          ? "bg-accent font-medium"
+                                          : ""
+                                      }`}
                                     >
                                       {unit}
                                     </button>
@@ -228,8 +233,6 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                 </FormItem>
               )}
             />
-
-
 
             {/* Tags */}
             <div className="space-y-2">
@@ -338,6 +341,6 @@ export default function DetailsTab({ form }: DetailsTabProps) {
           </div>
         </CardContent>
       </Card>
-    </TabsContent >
+    </TabsContent>
   );
 }

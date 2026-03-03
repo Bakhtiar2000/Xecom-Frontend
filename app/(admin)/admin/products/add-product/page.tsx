@@ -21,14 +21,7 @@ import { toast } from "sonner";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 
 // ─── Tab config ─────
-const TAB_ORDER = [
-  "basic",
-  "details",
-  "specifications",
-  "media",
-  "faq",
-  "variants",
-] as const;
+const TAB_ORDER = ["basic", "details", "specifications", "media", "faq", "variants"] as const;
 type TabName = (typeof TAB_ORDER)[number];
 
 const TAB_FIELDS: Record<TabName, string[]> = {
