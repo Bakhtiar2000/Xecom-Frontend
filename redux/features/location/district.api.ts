@@ -58,6 +58,18 @@ const districtApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["district"],
     }),
+
+
+    //-----------------update District-----------------
+
+    deleteDistrict: builder.mutation({
+      query: (id:string) => ({
+        url: `/district/${id}`,
+        method:"DELETE",
+      }),
+      invalidatesTags: ["district"]
+    })
+
   }),
 });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useGetAllDivisonQuery } from "@/redux/features/location/division.api";
+import { useGetAllDivisonQuery,useDeleteDivisionMutation } from "@/redux/features/location/division.api";
 import { useGetAllCountriesQuery } from "@/redux/features/location/country.api";
 
 import {
@@ -28,9 +28,19 @@ import {
 import { TDivision } from "@/types/location.type";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { SortableTableHead } from "@/components/custom/SortableTableHead";
-import { X, Pencil } from "lucide-react";
+import { X, Pencil, Trash2 } from "lucide-react";
 import { useTableSort } from "@/hooks/useTableSort";
 import { useTablePagination } from "@/hooks/useTablePagination";
+import { toast } from "sonner";
+
+import { AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,} from "@/components/ui/alert-dialog";
 
 type SortableFields = "name";
 
@@ -42,6 +52,14 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
   const [selectedCountry, setSelectedCountry] = useState("");
 
   const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
+
+
+      const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+      const [divisionToDelete, setDivisionToDelete] = useState<TDivision | null>(null);
+  
+      const [deleteDivision, { isLoading: isDeleting }] = useDeleteDivisionMutation();
+  
+
 
   const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
     useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
@@ -73,6 +91,26 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
     handleSort(field);
     resetPage();
   };
+
+
+  const handleDeleteClick = (division: TDivision) => {
+      setDivisionToDelete(division);
+      setDeleteDialogOpen(true);
+    };
+  
+    const handleConfirmDelete = async () => {
+      if (!divisionToDelete) return;
+  
+      try {
+        const result = await deleteDivision(divisionToDelete.id).unwrap();
+        toast.success(result?.message || "Division deleted successfully");
+        setDeleteDialogOpen(false);
+        setDivisionToDelete(null);
+      } catch (error: any) {
+        const errorMessage = error?.data?.message || error?.message || "Failed to delete Division";
+        toast.error(errorMessage);
+      }
+    };
 
   return (
     <>
@@ -157,6 +195,14 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
+                                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleDeleteClick(division)}
+                              className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -174,6 +220,29 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
           />
         )}
       </div>
+
+                {/* Delete Confirmation Dialog */}
+            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently delete the brand &quot;
+                    {divisionToDelete?.name}&quot;. This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleConfirmDelete}
+                    disabled={isDeleting}
+                    className="bg-destructive hover:bg-destructive/90"
+                  >
+                    {isDeleting ? "Deleting..." : "Delete"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
     </>
   );
 }

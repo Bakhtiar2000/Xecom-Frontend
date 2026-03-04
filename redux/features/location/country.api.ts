@@ -64,6 +64,16 @@ const countryApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["country"],
     }),
+
+        //-----------------Delete  Country-----------------
+
+        deleteCountry: builder.mutation({
+          query: (id:string) => ({
+            url: `/country/${id}`,
+            method:"DELETE"
+          }),
+          invalidatesTags: ["country"]
+        })
   }),
 });
 
@@ -72,4 +82,5 @@ export const {
   useGetAllCountriesQuery,
   useGetSingleCountryQuery,
   useUpdateCountryMutation,
+  useDeleteCountryMutation
 } = countryApi;
