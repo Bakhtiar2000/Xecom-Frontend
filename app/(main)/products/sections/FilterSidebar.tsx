@@ -4,16 +4,27 @@ import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 
 type FilterOptions = {
-  brands: string[];
-  sizes: string[];
-  colors: { name: string; value: string }[];
-  categories: string[];
+  brands: { id: string; name: string }[];
+  sizes: { id: string; value: string }[];
+  colors: { id: string; name: string; value: string }[];
+  materials: { id: string; name: string }[];
+  categories: { id: string; name: string }[];
   targets: string[];
+
+};
+
+type Brand = {
+  id: string;
+  name: string;
+  _count?: {
+    products: number;
+  };
 };
 
 type Props = {
   filters: FilterState;
   filterOptions: FilterOptions;
+  brands: Brand[];
   showFilters: boolean;
   toggleFilter: (type: keyof FilterState, value: string) => void;
   setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
@@ -23,6 +34,7 @@ type Props = {
 export default function FilterSidebar({
   filters,
   filterOptions,
+  brands,
   showFilters,
   toggleFilter,
   setFilters,
@@ -41,23 +53,6 @@ export default function FilterSidebar({
             Clear All
           </button>
         </div>
-
-        {/* Target Audience */}
-        <div className="mb-8">
-          <h3 className="mb-4 font-semibold">Target Audience</h3>
-          <div className="space-y-3">
-            {filterOptions.targets.map((target) => (
-              <label key={target} className="flex cursor-pointer items-center gap-3">
-                <Checkbox
-                  checked={filters.targets.includes(target)}
-                  onCheckedChange={() => toggleFilter("targets", target)}
-                />
-                <span className="capitalize">{target}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
         {/* Price Range */}
         <div className="mb-8">
           <h3 className="mb-4 font-semibold">Price Range</h3>
@@ -88,13 +83,13 @@ export default function FilterSidebar({
         <div className="mb-8">
           <h3 className="mb-4 font-semibold">Brands</h3>
           <div className="space-y-3">
-            {filterOptions.brands.map((brand) => (
-              <label key={brand} className="flex cursor-pointer items-center gap-3">
+            {brands.map((brand) => (
+              <label key={brand.id} className="flex cursor-pointer items-center gap-3">
                 <Checkbox
-                  checked={filters.brands.includes(brand)}
-                  onCheckedChange={() => toggleFilter("brands", brand)}
+                  checked={filters.brands.includes(brand.id)}
+                  onCheckedChange={() => toggleFilter("brands", brand.id)}
                 />
-                <span>{brand}</span>
+                <span>{brand.name}</span>
               </label>
             ))}
           </div>
@@ -106,15 +101,14 @@ export default function FilterSidebar({
           <div className="grid grid-cols-3 gap-2">
             {filterOptions.sizes.map((size) => (
               <button
-                key={size}
-                onClick={() => toggleFilter("sizes", size)}
-                className={`rounded py-2 ${
-                  filters.sizes.includes(size)
-                    ? "bg-button-primary text-white"
-                    : "bg-muted text-black dark:text-white"
-                }`}
+                key={size.id}
+                onClick={() => toggleFilter("sizes", size.id)}
+                className={`rounded py-2 ${filters.sizes.includes(size.id)
+                  ? "bg-button-primary text-white"
+                  : "bg-muted text-black dark:text-white"
+                  }`}
               >
-                {size}
+                {size.value}
               </button>
             ))}
           </div>
@@ -126,17 +120,18 @@ export default function FilterSidebar({
           <div className="grid grid-cols-4 gap-3">
             {filterOptions.colors.map((color) => (
               <button
-                key={color.name}
-                onClick={() => toggleFilter("colors", color.value)}
-                className={`relative h-8 w-8 rounded-full border-2 ${
-                  filters.colors.includes(color.value) ? "border-button-secondary" : "border-muted"
-                }`}
+                key={color.id}
+                onClick={() => toggleFilter("colors", color.id)}
+                className={`relative h-8 w-8 rounded-full border-2 ${filters.colors.includes(color.id)
+                  ? "border-button-secondary"
+                  : "border-muted"
+                  }`}
               >
                 <div
                   className="h-full w-full rounded-full"
                   style={{ backgroundColor: color.value }}
                 />
-                {filters.colors.includes(color.value) && (
+                {filters.colors.includes(color.id) && (
                   <Check className="absolute inset-0 m-auto h-5 w-5 text-white" />
                 )}
               </button>
@@ -149,12 +144,12 @@ export default function FilterSidebar({
           <h3 className="mb-4 font-semibold">Categories</h3>
           <div className="space-y-3">
             {filterOptions.categories.map((category) => (
-              <label key={category} className="flex cursor-pointer items-center gap-3">
+              <label key={category.id} className="flex cursor-pointer items-center gap-3">
                 <Checkbox
-                  checked={filters.categories.includes(category)}
-                  onCheckedChange={() => toggleFilter("categories", category)}
+                  checked={filters.categories.includes(category.id)}
+                  onCheckedChange={() => toggleFilter("categories", category.id)}
                 />
-                <span className="capitalize">{category}</span>
+                <span className="capitalize">{category.name}</span>
               </label>
             ))}
           </div>

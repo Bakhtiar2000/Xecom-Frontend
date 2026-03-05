@@ -10,6 +10,18 @@ type Props = {
 };
 
 export default function ProductGrid({ products, isLoading, viewMode, getBadgeColor }: Props) {
+  if (!isLoading && products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <div className="mb-4 text-6xl">👟</div>
+        <h3 className="mb-2 text-xl font-semibold">No Products Found</h3>
+        <p className="text-muted-foreground text-sm">
+          Try adjusting your filters or search to find what you&apos;re looking for.
+        </p>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div
@@ -20,18 +32,16 @@ export default function ProductGrid({ products, isLoading, viewMode, getBadgeCol
         {[...Array(6)].map((_, index) => (
           <div
             key={index}
-            className={`group cart-sec-bg relative animate-pulse overflow-hidden rounded-sm shadow-sm ${
-              viewMode === "list" ? "flex flex-col md:flex-row" : ""
-            }`}
+            className={`group cart-sec-bg relative animate-pulse overflow-hidden rounded-sm shadow-sm ${viewMode === "list" ? "flex flex-col md:flex-row" : ""
+              }`}
           >
             <div className="absolute top-4 left-4 z-10">
               <Skeleton className="h-6 w-20 rounded-full" />
             </div>
 
             <div
-              className={`relative ${
-                viewMode === "list" ? "md:w-64" : "h-64"
-              } img-primary-bg overflow-hidden`}
+              className={`relative ${viewMode === "list" ? "md:w-64" : "h-64"
+                } img-primary-bg overflow-hidden`}
             >
               <Skeleton className="absolute inset-0 h-full w-full" />
             </div>
@@ -75,10 +85,14 @@ export default function ProductGrid({ products, isLoading, viewMode, getBadgeCol
         viewMode === "grid" ? "grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3" : "space-y-6"
       }
     >
-      {products.map((product) => (
+      {products.map((product: any) => (
         <ProductCard
           key={product.id}
-          product={product}
+          product={{
+            ...product,
+            rating: product.avgRating ?? 0,
+            reviews: product.reviewCount ?? 0,
+          }}
           viewMode={viewMode}
           getBadgeColor={getBadgeColor}
         />

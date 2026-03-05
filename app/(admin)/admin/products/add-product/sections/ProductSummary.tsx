@@ -4,7 +4,7 @@ import { ProductFormData } from "@/lib/productSchema";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import Title from "@/components/sections/shared/Title";
 import Image from "next/image";
 
@@ -13,6 +13,7 @@ interface ProductSummaryProps {
   imageFiles: { file: File; url: string }[];
   onEdit: (tab: string) => void;
   onConfirm: () => void;
+  isSubmitting: boolean;
 }
 
 const BRAND_MAP: Record<string, string> = {
@@ -79,6 +80,7 @@ export default function ProductSummary({
   imageFiles,
   onEdit,
   onConfirm,
+  isSubmitting,
 }: ProductSummaryProps) {
   return (
     <div className="space-y-6">
@@ -89,8 +91,18 @@ export default function ProductSummary({
             ← Edit
           </Button>
           <Button onClick={onConfirm} className="bg-green-600 hover:bg-green-700">
-            <CheckCircle2 className="mr-2 h-4 w-4" />
-            Confirm & Publish
+
+
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Creating...
+              </>
+            ) : (
+              <>
+                <CheckCircle2 className="mr-2 h-4 w-4" />
+                Confirm & Create</>
+            )}
           </Button>
         </div>
       </div>

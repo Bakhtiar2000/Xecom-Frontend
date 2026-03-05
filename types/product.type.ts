@@ -1,4 +1,4 @@
-import { ProductRelationType, ProductStatus } from "@/constants/enum";
+import { ProductRelationType, ProductStatus, TargetAudience } from "@/constants/enum";
 
 // ========================================
 // PRODUCT CATALOG MANAGEMENT
@@ -19,6 +19,7 @@ export type TCategory = {
   metadata: any;
   createdAt: string;
   updatedAt: string;
+  targetAudience :TargetAudience[]
   _count: {
     products: number;
   };

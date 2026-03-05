@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, ShoppingCart, Navigation, User, LogIn, LogOut, LayoutDashboard } from "lucide-react";
+import { Menu, ShoppingCart, Navigation, LogIn, LogOut, LayoutDashboard } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { mainRoutes } from "@/route/main.route";
 import { usePathname, useRouter } from "next/navigation";
@@ -20,23 +20,25 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { CartData } from "@/data/cart";
 import CartSheet from "@/components/sections/shared/CartSheet";
-import { navbarConfig } from "@/constants/navbar.config";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TargetAudience } from "@/constants/enum";
+import { useGetAllCategoriesQuery } from "@/redux/features/product/category.api";
+import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [cartItems, setCartItems] = useState(CartData);
+
   const [lastScrollY, setLastScrollY] = useState(0);
   const [cartOpen, setCartOpen] = useState(false);
 
   // Auth state
   const user = useAppSelector(selectCurrentUser);
-  const { data: userData, isLoading: isLoadingUser } = useGetMeQuery(undefined, {
-    skip: !user, // Only fetch when user is logged in
+  const { data: userData, } = useGetMeQuery(undefined, {
+    skip: !user,
   });
 
   // Get user initials from name
@@ -100,13 +102,35 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+
+  //  Add inside Navbar component body
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery([]);
+  const { data: cardData } = useGetAllProductsQuery([]);
+
+  const getCategoriesForAudience = (audience: TargetAudience) => {
+    if (!categoriesData?.data) return [];
+    return categoriesData.data.filter((cat: any) => {
+      const t = cat.targetAudience;
+      if (!t) return false;
+      if (Array.isArray(t)) {
+        return t.some((v: string) => v?.toString().toUpperCase() === audience.toUpperCase());
+      }
+      return t.toString().toUpperCase() === audience.toUpperCase();
+    });
+  };
+
+  const AUDIENCE_LABELS: Record<TargetAudience, string> = {
+    [TargetAudience.MEN]: "Men",
+    [TargetAudience.WOMEN]: "Women",
+    [TargetAudience.KIDS]: "Children",
+  };
+
   return (
-    <div className="bg-secondary w-full">
+    <div className="bg-secondary  w-full">
       {/* Top Bar */}
       <div
-        className={`bg-primary container mx-auto hidden py-2! text-sm text-white transition-all duration-300 ease-in-out lg:flex ${
-          isSticky ? "h-0 overflow-hidden opacity-0" : "h-auto overflow-visible py-2! opacity-100"
-        }`}
+        className={`bg-primary container  mx-auto hidden py-2! text-sm text-white transition-all duration-300 ease-in-out lg:flex ${isSticky ? "h-0 overflow-hidden opacity-0" : "h-auto overflow-visible py-2! opacity-100"
+          }`}
       >
         <div className="flex w-1/2 items-center justify-between">
           <p className="flex items-center gap-2">
@@ -125,12 +149,11 @@ const Navbar = () => {
       </div>
 
       <nav
-        className={`bg-secondary left-0 w-full transition-all duration-300 ${
-          isSticky ? "fixed top-0 z-40 py-3 shadow-md" : "relative py-3 shadow-sm"
-        }`}
+        className={`bg-secondary left-0 w-full transition-all duration-300 ${isSticky ? "fixed top-0 z-40 py-3 shadow-md" : "relative py-3 shadow-sm"
+          }`}
       >
         <div
-          className={`container mx-auto flex max-w-11/12 items-center justify-between py-0! md:px-4`}
+          className={`mx-auto flex container items-center justify-between py-0! md:px-4`}
         >
           <div className="flex items-center justify-center gap-20">
             <div className="merriweather-font text-3xl font-extrabold tracking-widest">STEPS</div>
@@ -145,40 +168,64 @@ const Navbar = () => {
                   <Link
                     key={route.href}
                     href={route.href}
-                    className={`relative text-sm font-thin transition-colors ${
-                      isActive
-                        ? "text-primary after:bg-primary font-semibold after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full dark:text-white dark:after:bg-white"
-                        : "text-foreground hover:text-foreground"
-                    }`}
+                    className={`relative text-sm font-thin transition-colors ${isActive
+                      ? "text-primary after:bg-primary font-semibold after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full dark:text-white dark:after:bg-white"
+                      : "text-foreground hover:text-foreground"
+                      }`}
                   >
                     {route.label}
                   </Link>
                 );
               })}
-
               <NavigationMenu>
                 <NavigationMenuList className="-mt-0.5 hidden gap-6 lg:flex">
-                  {navbarConfig.categories.map((category) => (
-                    <NavigationMenuItem key={category.label}>
-                      <NavigationMenuTrigger className="font-thin">
-                        {category.trigger}
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        <ul className="grid w-48">
-                          {category.items.map((item) => (
-                            <li key={item.href}>
+                  {Object.values(TargetAudience).map((audience) => {
+                    const cats = getCategoriesForAudience(audience);
+                    return (
+                      <NavigationMenuItem key={audience}>
+                        <NavigationMenuTrigger className="font-thin">
+                          {AUDIENCE_LABELS[audience]}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <ul className="grid w-48">
+                            {/* All link */}
+                            <li>
                               <Link
-                                href={item.href}
-                                className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
+                                href={`/products?audience=${audience}`}
+                                className="hover:bg-muted block rounded-md px-3 py-2 text-sm font-medium transition-colors"
                               >
-                                {item.label}
+                                All {AUDIENCE_LABELS[audience]}
                               </Link>
                             </li>
-                          ))}
-                        </ul>
-                      </NavigationMenuContent>
-                    </NavigationMenuItem>
-                  ))}
+
+                            {/* Loading skeleton */}
+                            {isCategoriesLoading ? (
+                              <>
+                                <li className="px-3 py-2"><Skeleton className="h-4 w-28" /></li>
+                                <li className="px-3 py-2"><Skeleton className="h-4 w-24" /></li>
+                                <li className="px-3 py-2"><Skeleton className="h-4 w-20" /></li>
+                              </>
+                            ) : cats.length > 0 ? (
+                              cats.map((cat: any) => (
+                                <li key={cat._id ?? cat.id}>
+                                  <Link
+                                    href={`/products?audience=${audience}&category=${cat._id ?? cat.id}`}
+                                    className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
+                                  >
+                                    {cat.name}
+                                  </Link>
+                                </li>
+                              ))
+                            ) : (
+                              <li className="text-muted-foreground px-3 py-2 text-xs">
+                                No categories
+                              </li>
+                            )}
+                          </ul>
+                        </NavigationMenuContent>
+                      </NavigationMenuItem>
+                    );
+                  })}
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
@@ -195,7 +242,7 @@ const Navbar = () => {
                       className="flex cursor-pointer items-center gap-1"
                       onClick={() => setCartOpen(true)}
                     >
-                      <ShoppingCart /> ({cartItems.length})
+                      <ShoppingCart /> ({cardData?.data?.length ?? 0})
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -298,7 +345,7 @@ const Navbar = () => {
                     className="flex cursor-pointer items-center gap-1"
                     onClick={() => setCartOpen(true)}
                   >
-                    <ShoppingCart /> ({cartItems.length})
+                    <ShoppingCart />({cardData?.data?.length ?? 0})
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -413,45 +460,65 @@ const Navbar = () => {
                         <Link
                           key={route.href}
                           href={route.href}
-                          className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                            isActive
-                              ? "bg-primary/10 text-primary"
-                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                          }`}
+                          className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive
+                            ? "bg-primary/10 text-primary"
+                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                            }`}
                         >
                           {route.label}
                         </Link>
                       );
                     })}
                   </nav>
-
-                  {/* Products Section */}
                   <div className="mt-5 ml-3">
-                    <p className="mb-2 text-xs font-bold tracking-widest uppercase">Products</p>
-
+                    <p className="mb-2 text-xs font-bold tracking-widest uppercase">Shop By</p>
                     <NavigationMenu>
                       <NavigationMenuList className="flex gap-6">
-                        {navbarConfig.categories.map((category) => (
-                          <NavigationMenuItem key={category.label}>
-                            <NavigationMenuTrigger className="">
-                              {category.trigger}
-                            </NavigationMenuTrigger>
-                            <NavigationMenuContent>
-                              <ul className="grid w-48">
-                                {category.items.map((item) => (
-                                  <li key={item.href}>
+                        {Object.values(TargetAudience).map((audience) => {
+                          const cats = getCategoriesForAudience(audience);
+                          return (
+                            <NavigationMenuItem key={audience}>
+                              <NavigationMenuTrigger>
+                                {AUDIENCE_LABELS[audience]}
+                              </NavigationMenuTrigger>
+                              <NavigationMenuContent>
+                                <ul className="grid w-48">
+                                  <li>
                                     <Link
-                                      href={item.href}
-                                      className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
+                                      href={`/products?audience=${audience}`}
+                                      className="hover:bg-muted block rounded-md px-3 py-2 text-sm font-medium transition-colors"
                                     >
-                                      {item.label}
+                                      All {AUDIENCE_LABELS[audience]}
                                     </Link>
                                   </li>
-                                ))}
-                              </ul>
-                            </NavigationMenuContent>
-                          </NavigationMenuItem>
-                        ))}
+
+                                  {isCategoriesLoading ? (
+                                    <>
+                                      <li className="px-3 py-2"><Skeleton className="h-4 w-28" /></li>
+                                      <li className="px-3 py-2"><Skeleton className="h-4 w-24" /></li>
+                                      <li className="px-3 py-2"><Skeleton className="h-4 w-20" /></li>
+                                    </>
+                                  ) : cats.length > 0 ? (
+                                    cats.map((cat: any) => (
+                                      <li key={cat._id ?? cat.id}>
+                                        <Link
+                                          href={`/products?audience=${audience}&category=${cat._id ?? cat.id}`}
+                                          className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
+                                        >
+                                          {cat.name}
+                                        </Link>
+                                      </li>
+                                    ))
+                                  ) : (
+                                    <li className="text-muted-foreground px-3 py-2 text-xs">
+                                      No categories
+                                    </li>
+                                  )}
+                                </ul>
+                              </NavigationMenuContent>
+                            </NavigationMenuItem>
+                          );
+                        })}
                       </NavigationMenuList>
                     </NavigationMenu>
                   </div>

@@ -32,6 +32,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { ImageUpload } from "@/components/custom/ImageUpload";
+import { TargetAudience } from "@/constants/enum";
 
 interface CategoryModalProps {
   open: boolean;
@@ -58,6 +59,7 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
       description: "",
       parentId: null,
       sortOrder: 0,
+      targetAudience: [],
     },
   });
 
@@ -70,6 +72,7 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
     { name: "fields", value: "id" },
   ]);
 
+
   const categories = categoriesData?.data || [];
 
   // Load category data when editing
@@ -80,6 +83,7 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
       setValue("description", category.description || "");
       setValue("parentId", category.parentId || null);
       setValue("sortOrder", category.sortOrder || 0);
+      setValue("targetAudience", category.targetAudience || []);
       if (category.imageUrl) {
         setImagePreview(category.imageUrl);
       }
@@ -121,6 +125,10 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
   };
 
   const onSubmit = async (data: TCategoryFormData) => {
+
+    console.log("RAW FORM DATA:", data); 
+    console.log("targetAudience:", data.targetAudience);
+
     try {
       const formData = new FormData();
 
@@ -131,6 +139,7 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
         description: data.description || undefined,
         parentId: data.parentId || null,
         sortOrder: data.sortOrder,
+        targetAudience: data.targetAudience,
       };
 
       // Include id only for update requests
@@ -140,6 +149,7 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
 
       // Append JSON data as a single field
       formData.append("text", JSON.stringify(payload));
+      console.log("PAYLOAD BEING SENT:", JSON.stringify(payload));
 
       // Append file if present
       if (data.file) {
@@ -252,7 +262,6 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
                 <p className="text-destructive text-sm">{errors.parentId.message}</p>
               )}
             </div>
-
             {/* Sort Order */}
             <div>
               <Label htmlFor="sortOrder">Sort Order</Label>
@@ -267,6 +276,41 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
                 <p className="text-destructive text-sm">{errors.sortOrder.message}</p>
               )}
             </div>
+          </div>
+
+          {/* Target Audience */}
+          <div>
+            <Label>Target Audience</Label>
+            <div className="flex gap-5 mt-1">
+              {Object.values(TargetAudience).map((audience) => {
+                const current = watch("targetAudience") || [];
+                const isChecked = current.includes(audience);
+                return (
+                  <div key={audience} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id={audience}
+                      checked={isChecked}
+                      onChange={(e) => {
+                        const current = watch("targetAudience") || [];
+                        const updated = e.target.checked
+                          ? [...current, audience]
+                          : current.filter((a) => a !== audience);
+                        setValue("targetAudience", updated, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                          shouldTouch: true,
+                        });
+                      }}
+                    />
+                    <label htmlFor={audience}>{audience}</label>
+                  </div>
+                );
+              })}
+            </div>
+            {errors.targetAudience && (
+              <p className="text-destructive text-sm">{errors.targetAudience.message}</p>
+            )}
           </div>
 
           <DialogFooter>

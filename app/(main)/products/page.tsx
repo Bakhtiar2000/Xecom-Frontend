@@ -2,11 +2,14 @@
 
 import ProductTopBar from "./sections/ProductTopBar";
 import ProductGrid from "./sections/ProductGrid";
-import { ManProductData } from "@/data/category-products";
-import { FilterState, Product } from "@/types";
-import { useState, useEffect, useMemo } from "react";
+import { FilterState } from "@/types";
+import { useState, useMemo } from "react";
+import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
 import FilterSidebar from "./sections/FilterSidebar";
 import { useSearchParams } from "next/navigation";
+import { useGetAllBrandsQuery } from "@/redux/features/product/brand.api";
+import { useGetAllAttributesQuery } from "@/redux/features/product/attribute.api";
+import { useGetAllCategoriesQuery } from "@/redux/features/product/category.api";
 
 export default function ProductsPage() {
   const searchParams = useSearchParams();
@@ -17,145 +20,97 @@ export default function ProductsPage() {
   const urlTarget = searchParams.get("target");
   const urlCategory = searchParams.get("category");
 
-  // Filter state
   const [filters, setFilters] = useState<FilterState>({
     brands: [],
-    priceRange: [0, 500],
+    priceRange: [0, 2500],
     sizes: [],
     colors: [],
-    categories: [],
-    targets: [],
+    categories: urlCategory ? [urlCategory] : [],
+    targets: urlTarget ? [urlTarget] : [],
     sortBy: "none",
   });
+  // fetch attributes
+  const { data: attributesData } = useGetAllAttributesQuery([]);
+  const { data: brandsData } = useGetAllBrandsQuery([
+    { name: "fields", value: "name,id" },
+  ]);
+  const { data: categoriesData } = useGetAllCategoriesQuery([
+    { name: "fields", value: "name,id" },
+  ]);
 
-  // Set filters from URL params on mount
-  useEffect(() => {
-    setFilters((prev) => ({
-      ...prev,
-      targets: urlTarget ? [urlTarget] : [],
-      categories: urlCategory ? [urlCategory] : [],
-    }));
-  }, [urlTarget, urlCategory]);
+  const filterOptions = useMemo(() => {
+    const attributes = attributesData?.data ?? [];
 
-  // Available filter options
-  const filterOptions = {
-    targets: ["men", "women", "kids"],
-    brands: ["Nike", "Adidas", "Puma", "New Balance", "Reebok", "Converse", "Vans", "Under Armour"],
-    sizes: ["7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "12", "13"],
-    colors: [
-      { name: "Black", value: "#000000" },
-      { name: "White", value: "#FFFFFF" },
-      { name: "Blue", value: "#3B82F6" },
-      { name: "Red", value: "#EF4444" },
-      { name: "Green", value: "#10B981" },
-      { name: "Gray", value: "#6B7280" },
-      { name: "Orange", value: "#F97316" },
-      { name: "Purple", value: "#8B5CF6" },
-    ],
-    categories: [
-      "sneakers",
-      "loafers",
-      "boots",
-      "sandals",
-      "formal",
-      "heels",
-      "flats",
-      "school-shoes",
-      "sports",
-      "casual",
-    ],
-    sortOptions: [
-      { value: "none", label: "None" },
-      { value: "featured", label: "Featured" },
-      { value: "newest", label: "Newest" },
-      { value: "price-low", label: "Price: Low to High" },
-      { value: "price-high", label: "Price: High to Low" },
-      { value: "rating", label: "Highest Rated" },
-      { value: "popular", label: "Most Popular" },
-    ],
+    const sizeAttr = attributes.find((a) => a.name.toLowerCase() === "size");
+    const colorAttr = attributes.find((a) => a.name.toLowerCase() === "color");
+    const materialAttr = attributes.find((a) => a.name.toLowerCase() === "material");
+
+    return {
+      targets: ["men", "women", "kids"],
+      sizes: sizeAttr?.values.map((v) => ({ id: v.id, value: v.value })) ?? [],
+      colors: colorAttr?.values.map((v) => ({ id: v.id, name: v.value, value: v.hexCode ?? "#000000" })) ?? [],
+      materials: materialAttr?.values.map((v) => ({ id: v.id, name: v.value })) ?? [],
+      categories: categoriesData?.data?.map((c) => ({ id: c.id, name: c.name })) ?? [],
+      sortOptions: [
+        { label: "None", value: "none" },
+        { label: "Price: Low to High", value: "price-low" },
+        { label: "Price: High to Low", value: "price-high" },
+        { label: "Newest", value: "newest" },
+        { label: "Top Rated", value: "rating" },
+        { label: "Most Popular", value: "popular" },
+      ],
+      brands: brandsData?.data || [],
+    };
+  }, [attributesData, brandsData, categoriesData]);
+
+
+  const buildQueryParams = () => {
+    const params: { name: string; value: string }[] = [];
+
+    if (filters.categories.length > 0)
+      params.push({ name: "categoryIds", value: filters.categories.join(",") });
+
+    if (filters.brands.length > 0)
+      params.push({ name: "brandIds", value: filters.brands.join(",") });
+    const attributeValueIds = [
+      ...filters.sizes,
+      ...filters.colors,
+    ];
+    if (attributeValueIds.length > 0)
+      params.push({ name: "attributeValueIds", value: attributeValueIds.join(",") });
+
+    if (filters.sortBy === "price-low")
+      params.push({ name: "sortBy", value: "price" }, { name: "sortOrder", value: "asc" });
+
+    if (filters.sortBy === "price-high")
+      params.push({ name: "sortBy", value: "price" }, { name: "sortOrder", value: "desc" });
+
+    if (filters.sortBy === "newest")
+      params.push({ name: "sortBy", value: "createdAt" }, { name: "sortOrder", value: "desc" });
+
+    params.push({ name: "priceStarts", value: String(filters.priceRange[0]) });
+    params.push({ name: "priceEnds", value: String(filters.priceRange[1]) });
+
+    return params;
   };
+  const { data, isLoading, isFetching } = useGetAllProductsQuery(buildQueryParams());
 
-  // Product data (you'll need to combine all products from different sources)
-  const [products] = useState<Product[]>(ManProductData as Product[]);
+
 
   const filteredProducts = useMemo(() => {
-    let result: Product[] = [...products];
+    const products = data?.data ?? [];
+    const result = [...products];
 
-    // Filter by target audience (this would need a target field in Product interface)
-    // For now, we'll filter based on the data source
-    if (filters.targets.length > 0) {
-      // You'll need to add a target field to Product interface
-      // and filter accordingly. For now, this is a placeholder
-      // result = result.filter((product) =>
-      //   filters.targets.includes(product.target)
-      // );
-    }
+    if (filters.sortBy === "rating")
+      result.sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0));
 
-    // Filter by brands
-    if (filters.brands.length > 0) {
-      result = result.filter((product) => filters.brands.includes(product.brand));
-    }
-
-    // Filter by price range
-    result = result.filter(
-      (product) => product.price >= filters.priceRange[0] && product.price <= filters.priceRange[1]
-    );
-
-    // Filter by sizes
-    if (filters.sizes.length > 0) {
-      result = result.filter((product) =>
-        product.sizes.some((size) => filters.sizes.includes(size))
-      );
-    }
-
-    // Filter by colors
-    if (filters.colors.length > 0) {
-      result = result.filter((product) =>
-        product.colors.some((color) => filters.colors.includes(color))
-      );
-    }
-
-    // Filter by categories
-    if (filters.categories.length > 0) {
-      result = result.filter((product) =>
-        filters.categories.some((cat) => product.category.toLowerCase().includes(cat.toLowerCase()))
-      );
-    }
-
-    // Sort products
-    switch (filters.sortBy) {
-      case "price-low":
-        result.sort((a, b) => a.price - b.price);
-        break;
-      case "price-high":
-        result.sort((a, b) => b.price - a.price);
-        break;
-      case "rating":
-        result.sort((a, b) => b.rating - a.rating);
-        break;
-      case "newest":
-        result.sort((a, b) => b.id - a.id);
-        break;
-      case "popular":
-        result.sort((a, b) => b.reviews - a.reviews);
-        break;
-      default:
-        const badgePriority = {
-          "BEST SELLER": 4,
-          TRENDING: 3,
-          NEW: 2,
-          LIMITED: 1,
-          CLASSIC: 0,
-        };
-        result.sort((a, b) => {
-          const aPriority = a.badge ? badgePriority[a.badge] || 0 : 0;
-          const bPriority = b.badge ? badgePriority[b.badge] || 0 : 0;
-          return bPriority - aPriority;
-        });
-    }
+    if (filters.sortBy === "popular")
+      result.sort((a, b) => (b.totalSales ?? 0) - (a.totalSales ?? 0));
 
     return result;
-  }, [filters, products]);
+  }, [filters.sortBy, data?.data]);
+
+
 
   const toggleFilter = (type: keyof FilterState, value: string) => {
     setFilters((prev) => {
@@ -173,7 +128,6 @@ export default function ProductsPage() {
       }
     });
   };
-
   const clearAllFilters = () => {
     setFilters({
       brands: [],
@@ -201,19 +155,13 @@ export default function ProductsPage() {
     }
   };
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <div className="min-h-screen">
-      <div className="mx-auto w-11/12 px-4 py-8">
+    <div>
+      <div className="container lg:-mt-8">
         <div className="flex flex-col gap-8 lg:flex-row">
           <FilterSidebar
             filters={filters}
+            brands={brandsData?.data || []}
             filterOptions={filterOptions}
             showFilters={showFilters}
             toggleFilter={toggleFilter}
@@ -224,7 +172,7 @@ export default function ProductsPage() {
           <div className="flex-1">
             <ProductTopBar
               filters={filters}
-              productsLength={products.length}
+              productsLength={data?.meta?.totalCount ?? 0}
               filteredLength={filteredProducts.length}
               viewMode={viewMode}
               setViewMode={setViewMode}
@@ -236,8 +184,8 @@ export default function ProductsPage() {
             />
 
             <ProductGrid
-              products={filteredProducts}
-              isLoading={isLoading}
+              products={filteredProducts as any}
+              isLoading={isLoading || isFetching}
               viewMode={viewMode}
               getBadgeColor={getBadgeColor}
             />
