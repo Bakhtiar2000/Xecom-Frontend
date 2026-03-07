@@ -25,12 +25,14 @@ import { useTablePagination } from "@/hooks/useTablePagination";
 import { useTableSort } from "@/hooks/useTableSort";
 import { API_URL } from "@/redux/api/baseApi";
 import { useGetAllAttributesQuery } from "@/redux/features/product/attribute.api";
-import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
+import { useDeleteProductMutation, useGetAllProductsQuery } from "@/redux/features/product/product.api";
 import { TAttribute, TProduct } from "@/types";
 import { Eye, Loader2, MoreHorizontal, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { AttributeFilter } from "./AttributeFilter";
+import { toast } from "sonner";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
@@ -39,6 +41,7 @@ const AllProductsTable = () => {
   const [selectedAttributeValues, setSelectedAttributeValues] = useState<Record<string, string[]>>(
     {}
   );
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<SelectOption[]>([]);
 
   const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
@@ -67,8 +70,22 @@ const AllProductsTable = () => {
     console.log("edit ", id);
   };
 
-  const handleDelete = (id: string) => {
-    console.log("Delete product:", id);
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
+
+  const openDeleteModal = (id: string) => {
+    setDeleteTargetId(id);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTargetId) return;
+    try {
+      await deleteProduct(deleteTargetId).unwrap();
+      toast.success("Product deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete product", error);
+    } finally {
+      setDeleteTargetId(null);
+    }
   };
 
   // Debounce search term to avoid excessive API calls
@@ -231,7 +248,7 @@ const AllProductsTable = () => {
                       <div className="flex items-center gap-3">
                         {product.images && product.images.length > 0 ? (
                           <Image
-                            src={product.images[0].url}
+                            src={product.images[0].imageUrl || "/placeholder-product.png"}
                             alt={product.name}
                             width={40}
                             height={40}
@@ -301,7 +318,7 @@ const AllProductsTable = () => {
                           </DropdownMenuItem>
 
                           <DropdownMenuItem
-                            onClick={() => handleDelete(product.id)}
+                            onClick={() => openDeleteModal(product.id)}
                             className="text-destructive focus:text-destructive"
                           >
                             <Trash2 className="mr-2 h-4 w-4" />
@@ -324,6 +341,28 @@ const AllProductsTable = () => {
             disabled={hasNoData}
           />
         )}
+
+        <AlertDialog open={!!deleteTargetId} onOpenChange={(open) => !open && setDeleteTargetId(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Product?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete the product and remove it from our servers.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="bg-destructive hover:bg-destructive/90"
+              >
+                {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

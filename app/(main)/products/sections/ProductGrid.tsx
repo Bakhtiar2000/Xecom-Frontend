@@ -32,16 +32,18 @@ export default function ProductGrid({ products, isLoading, viewMode, getBadgeCol
         {[...Array(6)].map((_, index) => (
           <div
             key={index}
-            className={`group cart-sec-bg relative animate-pulse overflow-hidden rounded-sm shadow-sm ${viewMode === "list" ? "flex flex-col md:flex-row" : ""
-              }`}
+            className={`group cart-sec-bg relative animate-pulse overflow-hidden rounded-sm shadow-sm ${
+              viewMode === "list" ? "flex flex-col md:flex-row" : ""
+            }`}
           >
             <div className="absolute top-4 left-4 z-10">
               <Skeleton className="h-6 w-20 rounded-full" />
             </div>
 
             <div
-              className={`relative ${viewMode === "list" ? "md:w-64" : "h-64"
-                } img-primary-bg overflow-hidden`}
+              className={`relative ${
+                viewMode === "list" ? "md:w-64" : "h-64"
+              } img-primary-bg overflow-hidden`}
             >
               <Skeleton className="absolute inset-0 h-full w-full" />
             </div>

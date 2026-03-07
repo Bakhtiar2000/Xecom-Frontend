@@ -72,7 +72,6 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
     { name: "fields", value: "id" },
   ]);
 
-
   const categories = categoriesData?.data || [];
 
   // Load category data when editing
@@ -125,8 +124,7 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
   };
 
   const onSubmit = async (data: TCategoryFormData) => {
-
-    console.log("RAW FORM DATA:", data); 
+    console.log("RAW FORM DATA:", data);
     console.log("targetAudience:", data.targetAudience);
 
     try {
@@ -281,7 +279,7 @@ export function CategoryModal({ open, onOpenChange, category }: CategoryModalPro
           {/* Target Audience */}
           <div>
             <Label>Target Audience</Label>
-            <div className="flex gap-5 mt-1">
+            <div className="mt-1 flex gap-5">
               {Object.values(TargetAudience).map((audience) => {
                 const current = watch("targetAudience") || [];
                 const isChecked = current.includes(audience);

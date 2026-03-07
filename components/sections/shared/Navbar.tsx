@@ -37,7 +37,7 @@ const Navbar = () => {
 
   // Auth state
   const user = useAppSelector(selectCurrentUser);
-  const { data: userData, } = useGetMeQuery(undefined, {
+  const { data: userData } = useGetMeQuery(undefined, {
     skip: !user,
   });
 
@@ -102,9 +102,11 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
   //  Add inside Navbar component body
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery([]);
+
+  console.log('category data', categoriesData?.data);
+
   const { data: cardData } = useGetAllProductsQuery([]);
 
   const getCategoriesForAudience = (audience: TargetAudience) => {
@@ -126,10 +128,10 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-secondary  w-full">
+    <div className="bg-secondary w-full">
       {/* Top Bar */}
       <div
-        className={`bg-primary container  mx-auto hidden py-2! text-sm text-white transition-all duration-300 ease-in-out lg:flex ${isSticky ? "h-0 overflow-hidden opacity-0" : "h-auto overflow-visible py-2! opacity-100"
+        className={`bg-primary container mx-auto hidden py-2! text-sm text-white transition-all duration-300 ease-in-out lg:flex ${isSticky ? "h-0 overflow-hidden opacity-0" : "h-auto overflow-visible py-2! opacity-100"
           }`}
       >
         <div className="flex w-1/2 items-center justify-between">
@@ -152,9 +154,7 @@ const Navbar = () => {
         className={`bg-secondary left-0 w-full transition-all duration-300 ${isSticky ? "fixed top-0 z-40 py-3 shadow-md" : "relative py-3 shadow-sm"
           }`}
       >
-        <div
-          className={`mx-auto flex container items-center justify-between py-0! md:px-4`}
-        >
+        <div className={`container mx-auto flex items-center justify-between py-0! md:px-4`}>
           <div className="flex items-center justify-center gap-20">
             <div className="merriweather-font text-3xl font-extrabold tracking-widest">STEPS</div>
 
@@ -189,27 +189,31 @@ const Navbar = () => {
                         <NavigationMenuContent>
                           <ul className="grid w-48">
                             {/* All link */}
-                            <li>
-                              <Link
-                                href={`/products?audience=${audience}`}
-                                className="hover:bg-muted block rounded-md px-3 py-2 text-sm font-medium transition-colors"
-                              >
-                                All {AUDIENCE_LABELS[audience]}
-                              </Link>
-                            </li>
+                            <Link
+                              href={`/products?categories=${getCategoriesForAudience(audience).map((cat: any) => cat._id ?? cat.id).join(",")}`}
+                              className="hover:bg-muted block rounded-md px-3 py-2 text-sm font-medium transition-colors"
+                            >
+                              All {AUDIENCE_LABELS[audience]}
+                            </Link>
 
                             {/* Loading skeleton */}
                             {isCategoriesLoading ? (
                               <>
-                                <li className="px-3 py-2"><Skeleton className="h-4 w-28" /></li>
-                                <li className="px-3 py-2"><Skeleton className="h-4 w-24" /></li>
-                                <li className="px-3 py-2"><Skeleton className="h-4 w-20" /></li>
+                                <li className="px-3 py-2">
+                                  <Skeleton className="h-4 w-28" />
+                                </li>
+                                <li className="px-3 py-2">
+                                  <Skeleton className="h-4 w-24" />
+                                </li>
+                                <li className="px-3 py-2">
+                                  <Skeleton className="h-4 w-20" />
+                                </li>
                               </>
                             ) : cats.length > 0 ? (
                               cats.map((cat: any) => (
                                 <li key={cat._id ?? cat.id}>
                                   <Link
-                                    href={`/products?audience=${audience}&category=${cat._id ?? cat.id}`}
+                                    href={`/products?categories=${cat._id ?? cat.id}`}
                                     className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
                                   >
                                     {cat.name}
@@ -494,9 +498,15 @@ const Navbar = () => {
 
                                   {isCategoriesLoading ? (
                                     <>
-                                      <li className="px-3 py-2"><Skeleton className="h-4 w-28" /></li>
-                                      <li className="px-3 py-2"><Skeleton className="h-4 w-24" /></li>
-                                      <li className="px-3 py-2"><Skeleton className="h-4 w-20" /></li>
+                                      <li className="px-3 py-2">
+                                        <Skeleton className="h-4 w-28" />
+                                      </li>
+                                      <li className="px-3 py-2">
+                                        <Skeleton className="h-4 w-24" />
+                                      </li>
+                                      <li className="px-3 py-2">
+                                        <Skeleton className="h-4 w-20" />
+                                      </li>
                                     </>
                                   ) : cats.length > 0 ? (
                                     cats.map((cat: any) => (

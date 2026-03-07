@@ -5,13 +5,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 type FilterOptions = {
   brands: { id: string; name: string }[];
-  sizes: { id: string; value: string }[];
-  colors: { id: string; name: string; value: string }[];
-  materials: { id: string; name: string }[];
+  extraAttributes: {
+    id: string;
+    name: string;
+    type: "color" | "size" | "checkbox";
+    values: { id: string; label: string; hexCode?: string }[];
+  }[];
   categories: { id: string; name: string }[];
   targets: string[];
-
 };
+
 
 type Brand = {
   id: string;
@@ -95,49 +98,61 @@ export default function FilterSidebar({
           </div>
         </div>
 
-        {/* Sizes */}
-        <div className="mb-8">
-          <h3 className="mb-4 font-semibold">Sizes</h3>
-          <div className="grid grid-cols-3 gap-2">
-            {filterOptions.sizes.map((size) => (
-              <button
-                key={size.id}
-                onClick={() => toggleFilter("sizes", size.id)}
-                className={`rounded py-2 ${filters.sizes.includes(size.id)
-                  ? "bg-button-primary text-white"
-                  : "bg-muted text-black dark:text-white"
-                  }`}
-              >
-                {size.value}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* Dynamic Attributes (sizes, colors, and others) */}
+        {filterOptions.extraAttributes.map((attr) => (
+          <div key={attr.id} className="mb-8">
+            <h3 className="mb-4 font-semibold capitalize">{attr.name}</h3>
 
-        {/* Colors */}
-        <div className="mb-8">
-          <h3 className="mb-4 font-semibold">Colors</h3>
-          <div className="grid grid-cols-4 gap-3">
-            {filterOptions.colors.map((color) => (
-              <button
-                key={color.id}
-                onClick={() => toggleFilter("colors", color.id)}
-                className={`relative h-8 w-8 rounded-full border-2 ${filters.colors.includes(color.id)
-                  ? "border-button-secondary"
-                  : "border-muted"
-                  }`}
-              >
-                <div
-                  className="h-full w-full rounded-full"
-                  style={{ backgroundColor: color.value }}
-                />
-                {filters.colors.includes(color.id) && (
-                  <Check className="absolute inset-0 m-auto h-5 w-5 text-white" />
-                )}
-              </button>
-            ))}
+            {attr.type === "color" && (
+              <div className="grid grid-cols-4 gap-3">
+                {attr.values.map((v) => (
+                  <button
+                    key={v.id}
+                    onClick={() => toggleFilter("colors", v.id)}
+                    className={`relative h-8 w-8 rounded-full border-2 ${filters.colors.includes(v.id) ? "border-button-secondary" : "border-muted"
+                      }`}
+                  >
+                    <div className="h-full w-full rounded-full" style={{ backgroundColor: v.hexCode }} />
+                    {filters.colors.includes(v.id) && (
+                      <Check className="absolute inset-0 m-auto h-5 w-5 text-white" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {attr.type === "size" && (
+              <div className="grid grid-cols-3 gap-2">
+                {attr.values.map((v) => (
+                  <button
+                    key={v.id}
+                    onClick={() => toggleFilter("sizes", v.id)}
+                    className={`rounded py-2 text-sm ${filters.sizes.includes(v.id)
+                        ? "bg-button-primary text-white"
+                        : "bg-muted text-black dark:text-white"
+                      }`}
+                  >
+                    {v.label}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {attr.type === "checkbox" && (
+              <div className="space-y-3">
+                {attr.values.map((v) => (
+                  <label key={v.id} className="flex cursor-pointer items-center gap-3">
+                    <Checkbox
+                      checked={filters.attributes.includes(v.id)}
+                      onCheckedChange={() => toggleFilter("attributes", v.id)}
+                    />
+                    <span className="capitalize">{v.label}</span>
+                  </label>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
+        ))}
 
         {/* Categories */}
         <div>

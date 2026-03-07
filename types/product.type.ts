@@ -19,7 +19,7 @@ export type TCategory = {
   metadata: any;
   createdAt: string;
   updatedAt: string;
-  targetAudience :TargetAudience[]
+  targetAudience: TargetAudience[];
   _count: {
     products: number;
   };
@@ -54,7 +54,7 @@ export type TProduct = {
   categoryId?: string | null;
   brand?: TBrand | null;
   category?: TCategory | null;
-  images?: Array<{ id?: string; url: string; isFeatured?: boolean }> | null;
+  images?: { id?: string; url?: string; imageUrl?: string; isFeatured?: boolean }[];
   status: ProductStatus;
   featured: boolean;
   weight?: string | null;

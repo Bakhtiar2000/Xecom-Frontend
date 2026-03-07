@@ -91,8 +91,6 @@ export default function ProductSummary({
             ← Edit
           </Button>
           <Button onClick={onConfirm} className="bg-green-600 hover:bg-green-700">
-
-
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -101,7 +99,8 @@ export default function ProductSummary({
             ) : (
               <>
                 <CheckCircle2 className="mr-2 h-4 w-4" />
-                Confirm & Create</>
+                Confirm & Create
+              </>
             )}
           </Button>
         </div>

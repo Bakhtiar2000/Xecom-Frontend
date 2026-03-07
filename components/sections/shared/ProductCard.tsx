@@ -21,7 +21,7 @@ type ApiProduct = {
     size?: string;
     images?: { url: string }[];
   }[];
-  images?: { url: string; isPrimary: boolean }[];
+  images?: { imageUrl: string; isFeatured: boolean }[];
 };
 
 type Props = {
@@ -33,12 +33,10 @@ type Props = {
 export default function ProductCard({ product, viewMode, getBadgeColor }: Props) {
 
 
-  console.log('priducts', product._count.images);
   // Primary image: from images array or first variant image
   const primaryImage =
-    product.images?.find((img) => img.isPrimary)?.url ||
-    product.images?.[0]?.url ||
-    product.variants?.[0]?.images?.[0]?.url ||
+    product.images?.find((img) => img.isFeatured)?.imageUrl ||
+    product.images?.[0]?.imageUrl ||
     "/placeholder-product.png";
 
   // Price: from first variant
@@ -102,17 +100,14 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
         {/* Rating row */}
         <div className="mb-2 flex items-center justify-between">
           {/* Tag pill instead of brand (no brand name in response root) */}
-          <span className="text-xs font-semibold uppercase">
-            {product.tags?.[0] ?? "—"}
-          </span>
+          <span className="text-xs font-semibold uppercase">{product.tags?.[0] ?? "—"}</span>
 
           <div className="flex items-center gap-1">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
                 size={13}
-                className={`text-rating ${i < Math.floor(rating) ? "fill-current" : "fill-none"
-                  }`}
+                className={`text-rating ${i < Math.floor(rating) ? "fill-current" : "fill-none"}`}
               />
             ))}
             <span className="ml-1 text-xs">({product.reviewCount})</span>
@@ -120,9 +115,7 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
         </div>
 
         {/* Name */}
-        <h3 className="tranding-secondry-text mb-1 line-clamp-2 font-semibold">
-          {product.name}
-        </h3>
+        <h3 className="tranding-secondry-text mb-1 line-clamp-2 font-semibold">{product.name}</h3>
 
         {/* Short description */}
         <p className="text-muted-foreground mb-3 line-clamp-2 text-xs">
@@ -153,8 +146,6 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
             </span>
           )}
         </div>
-
-
 
         {/* CTA */}
         <Link

@@ -212,8 +212,7 @@ export default function AddProductPage() {
       const errorMessage = error?.data?.message || error?.message || "Failed to create product";
 
       toast.error(errorMessage);
-    }
-    finally {
+    } finally {
       setIsSubmitting(false);
     }
   };

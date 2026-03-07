@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import {
-  useGetAllCategoriesQuery,
-} from "@/redux/features/product/category.api";
+import { useGetAllCategoriesQuery } from "@/redux/features/product/category.api";
 import {
   Table,
   TableBody,
@@ -47,8 +45,6 @@ export function CategoryTable({ onEdit }: CategoryTableProps) {
   // Debounce search term to avoid excessive API calls
   const debouncedSearchTerm = useDebounce(searchTerm);
 
-
-
   const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
   const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
     useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
@@ -64,7 +60,7 @@ export function CategoryTable({ onEdit }: CategoryTableProps) {
   const { data, isLoading, isFetching, isError } = useGetAllCategoriesQuery(buildQueryParams());
 
   const categories = data?.data || [];
-  console.log('categoryu ', categories);
+  console.log("categoryu ", categories);
   const hasNoData = categories.length === 0 && !isLoading;
   const isRefetching = isFetching && !isLoading;
 
