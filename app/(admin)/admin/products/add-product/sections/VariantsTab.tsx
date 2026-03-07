@@ -58,9 +58,7 @@ export default function VariantsTab({ form, fieldRefs }: VariantsTabProps) {
 
     // For each attribute, find the selected value
     attributes.forEach((attribute) => {
-      const selectedValue = attribute.values?.find((v) =>
-        attributeValueIds.includes(v.id)
-      );
+      const selectedValue = attribute.values?.find((v) => attributeValueIds.includes(v.id));
       if (selectedValue) {
         selectedValues.push(selectedValue.value.toUpperCase().replace(/\s+/g, "-"));
       }
@@ -98,8 +96,7 @@ export default function VariantsTab({ form, fieldRefs }: VariantsTabProps) {
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 items-start">
-
+              <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <FormField
                   control={form.control}
                   name={`variants.${index}.attributeValueIds`}
@@ -226,17 +223,12 @@ export default function VariantsTab({ form, fieldRefs }: VariantsTabProps) {
                         <FormDescription>Set as the default selected variant</FormDescription>
                       </div>
                       <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                     </FormItem>
                   )}
                 />
               </div>
-
-
             </div>
           ))}
 

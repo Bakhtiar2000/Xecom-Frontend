@@ -72,7 +72,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
           </div>
         </CardHeader>
         <CardContent className="space-y-4 px-4 lg:px-6">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 items-start">
+          <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2 lg:grid-cols-4">
             {/* Weight with inline unit */}
             <FormField
               control={form.control}
@@ -107,8 +107,9 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                                 key={unit}
                                 type="button"
                                 onClick={() => form.setValue("weightUnit", unit)}
-                                className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${form.watch("weightUnit") === unit ? "bg-accent font-medium" : ""
-                                  }`}
+                                className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${
+                                  form.watch("weightUnit") === unit ? "bg-accent font-medium" : ""
+                                }`}
                               >
                                 {unit}
                               </button>
@@ -139,7 +140,11 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                             <Input
                               type="number"
                               step="0.01"
-                              placeholder={dim.charAt(0).toUpperCase() + dim.slice(1) + ` in ${form.watch("dimensions.unit")}`}
+                              placeholder={
+                                dim.charAt(0).toUpperCase() +
+                                dim.slice(1) +
+                                ` in ${form.watch("dimensions.unit")}`
+                              }
                               {...field}
                               onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                               className="pr-20"
@@ -161,10 +166,11 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                                       key={unit}
                                       type="button"
                                       onClick={() => form.setValue("dimensions.unit", unit)}
-                                      className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${form.watch("dimensions.unit") === unit
+                                      className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${
+                                        form.watch("dimensions.unit") === unit
                                           ? "bg-accent font-medium"
                                           : ""
-                                        }`}
+                                      }`}
                                     >
                                       {unit}
                                     </button>
@@ -240,10 +246,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                 <FormItem className="items-start gap-0">
                   <FormLabel>SEO Title *</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Recommended: 50-60 characters"
-                      {...field}
-                    />
+                    <Input placeholder="Recommended: 50-60 characters" {...field} />
                   </FormControl>
                   <FormMessage className="text-danger" />
                 </FormItem>
@@ -257,11 +260,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                 <FormItem>
                   <FormLabel>SEO Description *</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Recommended: 150-160 characters"
-                      rows={3}
-                      {...field}
-                    />
+                    <Textarea placeholder="Recommended: 150-160 characters" rows={3} {...field} />
                   </FormControl>
                   <FormMessage className="text-danger" />
                 </FormItem>
@@ -294,14 +293,17 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                 {form.watch("metaKeywords").map((keyword, index) => (
                   <Badge key={index} variant="secondary" className="bg-batch text-batch-foreground">
                     {keyword}
-                    <button type="button" onClick={() => removeKeyword(index)} className="ml-2 cursor-pointer hover:text-danger duration-300">
+                    <button
+                      type="button"
+                      onClick={() => removeKeyword(index)}
+                      className="hover:text-danger ml-2 cursor-pointer duration-300"
+                    >
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
                 ))}
               </div>
             </div>
-
 
             {/* Tags */}
             <div>
@@ -329,7 +331,11 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                 {form.watch("tags").map((tag, index) => (
                   <Badge key={index} variant="secondary" className="bg-batch text-batch-foreground">
                     {tag}
-                    <button type="button" onClick={() => removeTag(index)} className="ml-2 cursor-pointer hover:text-danger duration-300">
+                    <button
+                      type="button"
+                      onClick={() => removeTag(index)}
+                      className="hover:text-danger ml-2 cursor-pointer duration-300"
+                    >
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>

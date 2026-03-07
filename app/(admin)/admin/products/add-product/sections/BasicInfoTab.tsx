@@ -45,7 +45,7 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
           </div>
         </CardHeader>
         <CardContent className="space-y-4 px-4 lg:px-6">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 items-start">
+          <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2 lg:grid-cols-4">
             <FormField
               control={form.control}
               name="name"
@@ -238,10 +238,7 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
                     <FormDescription>Display this product as featured</FormDescription>
                   </div>
                   <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                 </FormItem>
               )}

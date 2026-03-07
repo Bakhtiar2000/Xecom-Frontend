@@ -149,7 +149,7 @@ export default function AttributeValueModal({
                   />
                 </div>
                 {errors.hexCode && (
-                  <p className="text-destructive text-sm mt-1">{errors.hexCode.message}</p>
+                  <p className="text-destructive mt-1 text-sm">{errors.hexCode.message}</p>
                 )}
               </div>
             )}
