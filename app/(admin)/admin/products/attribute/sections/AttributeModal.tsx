@@ -12,7 +12,7 @@ import {
   useUpdateAttributeMutation,
 } from "@/redux/features/product/attribute.api";
 
-import { TAttribute, TAttributeValue } from "@/types/product.type";
+import { TAttribute } from "@/types/product.type";
 
 import {
   Dialog,
@@ -34,7 +34,7 @@ interface AttributesModalProps {
   attribute?: TAttribute | null;
 }
 
-export default function AttributeModal({ open, onOpenChange, attribute }) {
+export default function AttributeModal({ open, onOpenChange, attribute }: AttributesModalProps) {
   const isEditMode = !!attribute;
 
   const {
@@ -53,13 +53,6 @@ export default function AttributeModal({ open, onOpenChange, attribute }) {
 
   const [addAttribute, { isLoading: isAdding }] = useAddAttributeMutation();
   const [updateAttribute, { isLoading: isUpdating }] = useUpdateAttributeMutation();
-
-  const { data: attributesData } = useGetAllAttributesQuery([
-    { name: "fields", value: "name" },
-    { name: "fields", value: "id" },
-  ]);
-
-  const attributes = attributesData?.data || [];
 
   useEffect(() => {
     if (attribute && open) {

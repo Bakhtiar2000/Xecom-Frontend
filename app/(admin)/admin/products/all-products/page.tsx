@@ -8,7 +8,7 @@ export default function AllProductsPage() {
     <div className="space-y-6">
       <Title
         mainTitle="All Products"
-        subTitle="The All Products page provides a complete overview of all products available in the system."
+        subTitle="The All Products page provides a complete overview of products available in the system."
       />
 
       {/* Stats Cards */}

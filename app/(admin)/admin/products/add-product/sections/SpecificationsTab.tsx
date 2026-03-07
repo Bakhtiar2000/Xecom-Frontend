@@ -58,7 +58,7 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
             <FormLabel>Add Specification</FormLabel>
             <div className="grid grid-cols-1 gap-2 md:grid-cols-12">
               <Input
-                placeholder="Field name (e.g., Fit Type, Material)"
+                placeholder="Field name (e.g., Fit Type / Material)"
                 value={fieldName}
                 onChange={(e) => setFieldName(e.target.value)}
                 className="md:col-span-4"
@@ -70,7 +70,7 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
                 }}
               />
               <Input
-                placeholder="Value (e.g., Regular, Leather)"
+                placeholder="Value (e.g., Regular / Leather)"
                 value={fieldValue}
                 onChange={(e) => setFieldValue(e.target.value)}
                 className="md:col-span-7"

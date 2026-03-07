@@ -46,8 +46,8 @@
   --color-foreground: #111827;
   --color-card-primary: #ffffff;
   --color-card-primary-foreground: #0a0a0a;
-  --color-batch: #1ea7ff; /* Used for badge backgrounds */
-  --color-batch-foreground: #f5f5f5;
+  --color-batch: #C6D88A; /* Used for badge backgrounds */
+  --color-batch-foreground: #1f2937;
   --color-rating: #fbbf24; /* Used for ratings, stars, highlights, or positive emphasis. */
   --color-button-primary: #111827;
   --color-button-secondary: #f08a1e;
@@ -114,8 +114,8 @@
   --color-foreground: #f5f5f5;
   --color-card-primary: #0f172a;
   --color-card-primary-foreground: #f5f5f5;
-  --color-batch: #ff6b57;
-  --color-batch-foreground: #f5f5f5;
+  --color-batch: #6B8E23;
+  --color-batch-foreground: #F9FAFB;
   --color-button-primary: #343b47;
   --color-button-secondary: #f08a1e;
   --color-rating: #fbbf24;

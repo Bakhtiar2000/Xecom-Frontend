@@ -167,7 +167,7 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
                           <li key={value.id} className="flex items-center gap-2 text-sm">
                             <Badge
                               variant="secondary"
-                              className="group flex items-center gap-1 px-2 py-0.5"
+                              className="group flex items-center gap-1 px-2 py-0.5 bg-batch text-batch-foreground"
                             >
                               {value.hexCode && (
                                 <span
@@ -181,14 +181,14 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
                                 <button
                                   type="button"
                                   onClick={() => openAttributeValueModal(attribute.id, value)}
-                                  className="text-muted-foreground hover:bg-accent hover:text-primary rounded-full p-1"
+                                  className="text-muted-foreground hover:bg-accent hover:text-primary rounded-full p-1 cursor-pointer duration-300"
                                 >
                                   <Pencil className="h-3 w-3" />
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleDeleteValueClick(value)}
-                                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-full p-1"
+                                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-full p-1 cursor-pointer duration-300"
                                   disabled={isDeletingValue}
                                 >
                                   <Trash2 className="h-3 w-3" />
