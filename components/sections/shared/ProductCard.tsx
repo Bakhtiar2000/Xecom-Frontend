@@ -31,8 +31,6 @@ type Props = {
 };
 
 export default function ProductCard({ product, viewMode, getBadgeColor }: Props) {
-
-
   // Primary image: from images array or first variant image
   const primaryImage =
     product.images?.find((img) => img.isFeatured)?.imageUrl ||
@@ -149,7 +147,7 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
 
         {/* CTA */}
         <Link
-          href={`/product-details/${product.slug}`}
+          href={`/product/${product.id}`}
           className={`bg-button-primary flex justify-center rounded-lg px-4 py-3 font-semibold text-white ${viewMode === "grid" ? "w-full" : "w-40"
             }`}
         >

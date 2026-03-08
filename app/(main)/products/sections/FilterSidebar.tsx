@@ -15,7 +15,6 @@ type FilterOptions = {
   targets: string[];
 };
 
-
 type Brand = {
   id: string;
   name: string;
@@ -109,10 +108,14 @@ export default function FilterSidebar({
                   <button
                     key={v.id}
                     onClick={() => toggleFilter("colors", v.id)}
-                    className={`relative h-8 w-8 rounded-full border-2 ${filters.colors.includes(v.id) ? "border-button-secondary" : "border-muted"
-                      }`}
+                    className={`relative h-8 w-8 rounded-full border-2 ${
+                      filters.colors.includes(v.id) ? "border-button-secondary" : "border-muted"
+                    }`}
                   >
-                    <div className="h-full w-full rounded-full" style={{ backgroundColor: v.hexCode }} />
+                    <div
+                      className="h-full w-full rounded-full"
+                      style={{ backgroundColor: v.hexCode }}
+                    />
                     {filters.colors.includes(v.id) && (
                       <Check className="absolute inset-0 m-auto h-5 w-5 text-white" />
                     )}
@@ -127,10 +130,11 @@ export default function FilterSidebar({
                   <button
                     key={v.id}
                     onClick={() => toggleFilter("sizes", v.id)}
-                    className={`rounded py-2 text-sm ${filters.sizes.includes(v.id)
+                    className={`rounded py-2 text-sm ${
+                      filters.sizes.includes(v.id)
                         ? "bg-button-primary text-white"
                         : "bg-muted text-black dark:text-white"
-                      }`}
+                    }`}
                   >
                     {v.label}
                   </button>

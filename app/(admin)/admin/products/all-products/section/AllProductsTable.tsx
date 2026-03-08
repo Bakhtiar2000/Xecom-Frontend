@@ -25,14 +25,26 @@ import { useTablePagination } from "@/hooks/useTablePagination";
 import { useTableSort } from "@/hooks/useTableSort";
 import { API_URL } from "@/redux/api/baseApi";
 import { useGetAllAttributesQuery } from "@/redux/features/product/attribute.api";
-import { useDeleteProductMutation, useGetAllProductsQuery } from "@/redux/features/product/product.api";
+import {
+  useDeleteProductMutation,
+  useGetAllProductsQuery,
+} from "@/redux/features/product/product.api";
 import { TAttribute, TProduct } from "@/types";
 import { Eye, Loader2, MoreHorizontal, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { AttributeFilter } from "./AttributeFilter";
 import { toast } from "sonner";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
@@ -342,12 +354,16 @@ const AllProductsTable = () => {
           />
         )}
 
-        <AlertDialog open={!!deleteTargetId} onOpenChange={(open) => !open && setDeleteTargetId(null)}>
+        <AlertDialog
+          open={!!deleteTargetId}
+          onOpenChange={(open) => !open && setDeleteTargetId(null)}
+        >
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Delete Product?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the product and remove it from our servers.
+                This action cannot be undone. This will permanently delete the product and remove it
+                from our servers.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

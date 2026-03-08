@@ -42,11 +42,114 @@ export type TBrand = {
   };
 };
 
+export type TDimension = {
+  id?: string;
+  productId?: string;
+  length: string;
+  width: string;
+  height: string;
+  unit: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+// ── Attribute types (nested inside variant) ──────────────────────────────────
+
+export type TAttributeInfo = {
+  id: string;
+  name: string;
+  createdAt?: string;
+};
+
+export type TAttributeValueFull = {
+  id: string;
+  attributeId: string;
+  value: string;
+  hexCode?: string | null;
+  attribute: TAttributeInfo;
+};
+
+export type TVariantAttribute = {
+  id: string;
+  variantId: string;
+  attributeValueId: string;
+  attributeValue: TAttributeValueFull;
+};
+
+// ── Variant (full object as returned by the API) ─────────────────────────────
+
+export type TProductVariantFull = {
+  id: string;
+  productId: string;
+  sku: string;
+  price: string;
+  cost?: string | null;
+  stockQuantity: number;
+  stockAlertThreshold: number;
+  isDefault: boolean;
+  createdAt: string;
+  attributes: TVariantAttribute[];
+};
+
+// ── Flat variant type (used in list/table views) ─────────────────────────────
+
+export type TProductVariant = {
+  id: string;
+  productId: string;
+  sku: string;
+  price: string;
+  cost?: string | null;
+  stockQuantity: number;
+  stockAlertThreshold: number;
+  isDefault: boolean;
+  createdAt: string;
+};
+
+// ── Product image ─────────────────────────────────────────────────────────────
+
+export type TProductImage = {
+  id: string;
+  productId: string;
+  imageUrl: string;
+  isFeatured: boolean;
+  createdAt: string;
+};
+
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+
+export type TProductFaq = {
+  id: string;
+  productId: string;
+  question: string;
+  answer: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+// ── Top-level attribute (used in product list cards) ─────────────────────────
+
+export type TProductAttribute = {
+  id: string;
+  attributeValue: {
+    value: string;
+    hexCode?: string | null;
+    attribute: {
+      name: string;
+    };
+  };
+};
+
+// ── Main product type ─────────────────────────────────────────────────────────
+
 export type TProduct = {
   id: string;
   tenantId?: string | null;
   name: string;
-  variants: string[];
+
+  // ✅ FIX: variants is an array of full variant objects, NOT string[]
+  variants: TProductVariantFull[];
+
   slug: string;
   shortDescription?: string | null;
   fullDescription?: string | null;
@@ -54,18 +157,28 @@ export type TProduct = {
   categoryId?: string | null;
   brand?: TBrand | null;
   category?: TCategory | null;
-  images?: { id?: string; url?: string; imageUrl?: string; isFeatured?: boolean }[];
+
+  // ✅ FIX: images uses TProductImage shape (imageUrl, not url)
+  images?: TProductImage[];
+
+  // ✅ FIX: faqs is a proper typed array (was faqData: any)
+  faqs?: TProductFaq[];
+
+  dimension?: TDimension | null;
+
   status: ProductStatus;
   featured: boolean;
   weight?: string | null;
-  dimensions?: any | null;
   tags: string[];
+
+  // ✅ FIX: weightUnit is a string ("KG", "G", etc.), not number
+  weightUnit: string;
+
   seoTitle?: string | null;
   seoDescription?: string | null;
   metaKeywords: string[];
   warranty?: string | null;
-  specifications: any;
-  faqData: any;
+  specifications: Record<string, string>;
   videoUrl?: string | null;
   manualUrl?: string | null;
   minOrderQty: number;
@@ -77,11 +190,17 @@ export type TProduct = {
   reviewCount: number;
   createdAt: string;
   updatedAt: string;
+
+  // ✅ FIX: attributes typed properly (used in product list/card views)
+  attributes: TProductAttribute[];
+
   _count?: {
     images: number;
     variants: number;
   };
 };
+
+// ── Other catalog types ───────────────────────────────────────────────────────
 
 export type TBundleItem = {
   id: string;
@@ -108,6 +227,7 @@ export type TAttribute = {
   values?: TAttributeValue[];
   createdAt: string;
 };
+
 export type TAttributeValue = {
   id: string;
   attributeId: string;
@@ -119,26 +239,6 @@ export type TProductVariantAttribute = {
   id: string;
   variantId: string;
   attributeValueId: string;
-};
-
-export type TProductVariant = {
-  id: string;
-  productId: string;
-  sku: string;
-  price: string;
-  cost?: string | null;
-  stockQuantity: number;
-  stockAlertThreshold: number;
-  isDefault: boolean;
-  createdAt: string;
-};
-
-export type TProductImage = {
-  id: string;
-  productId: string;
-  imageUrl: string;
-  isFeatured: boolean;
-  createdAt: string;
 };
 
 export type TReview = {
