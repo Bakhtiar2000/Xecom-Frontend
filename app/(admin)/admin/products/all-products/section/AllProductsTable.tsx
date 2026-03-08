@@ -79,8 +79,16 @@ const AllProductsTable = () => {
     const params = [...getPaginationParams(), ...getSortParams()];
 
     if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
-    Object.entries(selectedAttributeValues).forEach(([attrName, values]) => {
-      if (values.length) params.push({ name: attrName, value: values.join(",") });
+
+    // Flatten all attribute values and send each as attributeValueIds
+    const allAttributeValueIds = Object.values(selectedAttributeValues).flat();
+    allAttributeValueIds.forEach((valueId) => {
+      params.push({ name: "attributeValueIds", value: valueId });
+    });
+
+    // Add category IDs
+    selectedCategories.forEach((category) => {
+      params.push({ name: "categoryIds", value: category.value.toString() });
     });
 
     return params;
@@ -94,12 +102,14 @@ const AllProductsTable = () => {
   const attributes: TAttribute[] = attributesData?.data || [];
   console.log("attribute data", attributesData);
 
-  const totalActiveFilters = [...Object.values(selectedAttributeValues).flat()].filter(
-    Boolean
-  ).length;
+  const totalActiveFilters = [
+    ...Object.values(selectedAttributeValues).flat(),
+    ...selectedCategories.map((c) => c.value),
+  ].filter(Boolean).length;
 
   const clearAllFilters = () => {
     setSelectedAttributeValues({});
+    setSelectedCategories([]);
     resetPage();
   };
   return (
