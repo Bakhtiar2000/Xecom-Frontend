@@ -16,7 +16,7 @@ import {
   TableEmpty,
   TableError,
   TableHead,
-  TableHeader,
+  TableHeader, 
   TableLoading,
   TableRow,
 } from "@/components/ui/table";
@@ -75,7 +75,7 @@ const AllProductsTable = () => {
   const debouncedSearchTerm = useDebounce(searchTerm);
 
   //  buildQueryParams to:
-  const buildQueryParams = () => {
+const buildQueryParams = () => {
     const params = [...getPaginationParams(), ...getSortParams()];
 
     if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
@@ -93,6 +93,7 @@ const AllProductsTable = () => {
 
     return params;
   };
+
   const { data, isLoading, isFetching, isError } = useGetAllProductsQuery(buildQueryParams());
   const products = data?.data || [];
   const hasNoData = products.length === 0 && !isLoading;
