@@ -170,7 +170,7 @@ const AllProductsTable = () => {
           {totalActiveFilters > 0 && (
             <button
               onClick={clearAllFilters}
-              className="cursor-pointer  text-destructive hover:text-destructive/80 border-destructive/30 flex items-center gap-1 rounded-md border px-2 py-1.5 text-xs transition-colors"
+              className="text-destructive hover:text-destructive/80 border-destructive/30 flex cursor-pointer items-center gap-1 rounded-md border px-2 py-1.5 text-xs transition-colors"
             >
               <X className="h-3 w-3" />
               Clear ({totalActiveFilters})
