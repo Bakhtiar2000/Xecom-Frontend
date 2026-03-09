@@ -55,13 +55,13 @@ const divisionApi = baseApi.injectEndpoints({
       },
     }),
 
-    //-----------------Update Division-----------------
+    //-----------------Update Division-----------------id:string,data: TUpdateDivisionDto
 
     updateDivision: builder.mutation({
-      query: (data: TUpdateDivisionDto) => ({
-        url: "/division",
+      query: (args:{id:string, data:TUpdateDivisionDto}) => ({
+        url: `/division/${args.id}`,
         method: "PUT",
-        body: data,
+        body: args.data,
       }),
       invalidatesTags: ["division"],
     }),
@@ -75,16 +75,7 @@ const divisionApi = baseApi.injectEndpoints({
       invalidatesTags: ["division"],
     }),
 
-        //-----------------delete Division-----------------
-
-        deleteDivision: builder.mutation({
-          query: (id:string) => ({
-            url :`/division/${id}`,
-            method: "DELETE"
-          }),
-          invalidatesTags:["division"]
-        })
-
+       
   }),
 });
 
@@ -92,7 +83,6 @@ export const {
   useAddDivisionMutation,
   useGetSingleDivisionQuery,
   useUpdateDivisionMutation,
-  useDeleteDivisionMutation,
   useGetAllDivisonQuery,
   useDeleteDivisionMutation
 } = divisionApi;

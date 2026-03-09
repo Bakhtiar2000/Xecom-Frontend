@@ -16,7 +16,7 @@ import {
   TableEmpty,
   TableError,
   TableHead,
-  TableHeader,
+  TableHeader, 
   TableLoading,
   TableRow,
 } from "@/components/ui/table";
@@ -75,16 +75,25 @@ const AllProductsTable = () => {
   const debouncedSearchTerm = useDebounce(searchTerm);
 
   //  buildQueryParams to:
-  const buildQueryParams = () => {
+const buildQueryParams = () => {
     const params = [...getPaginationParams(), ...getSortParams()];
 
     if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
-    Object.entries(selectedAttributeValues).forEach(([attrName, values]) => {
-      if (values.length) params.push({ name: attrName, value: values.join(",") });
+
+    // Flatten all attribute values and send each as attributeValueIds
+    const allAttributeValueIds = Object.values(selectedAttributeValues).flat();
+    allAttributeValueIds.forEach((valueId) => {
+      params.push({ name: "attributeValueIds", value: valueId });
+    });
+
+    // Add category IDs
+    selectedCategories.forEach((category) => {
+      params.push({ name: "categoryId", value: category.value.toString() });
     });
 
     return params;
   };
+
   const { data, isLoading, isFetching, isError } = useGetAllProductsQuery(buildQueryParams());
   const products = data?.data || [];
   const hasNoData = products.length === 0 && !isLoading;

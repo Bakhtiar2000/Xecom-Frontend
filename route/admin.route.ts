@@ -98,19 +98,19 @@ export const adminRoutes: RouteGroup[] = [
     routes: [
       {
         label: "Country",
-        href: "/admin/location/countries",
+        href: "/admin/location/country",
       },
       {
         label: "Divisions",
-        href: "/admin/location/divisions",
+        href: "/admin/location/division",
       },
       {
         label: "Districts",
-        href: "/admin/location/districts",
+        href: "/admin/location/district",
       },
       {
         label: "Thanas",
-        href: "/admin/location/thanas",
+        href: "/admin/location/thana",
       },
     ],
   },
