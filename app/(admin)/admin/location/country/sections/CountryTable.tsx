@@ -163,7 +163,6 @@ export default function CountryTable({ onEdit }) {
         <Table>
           <TableHeader>
             <TableRow>
-              {/* <TableHead className="w-20">Country Name</TableHead> */}
               <SortableTableHead
                 field="name"
                 label="Country Name"
@@ -174,17 +173,16 @@ export default function CountryTable({ onEdit }) {
               <TableHead>Total Divisions</TableHead>
               <TableHead className="w-24">Total Districts</TableHead>
               <TableHead className="w-32">Total Thanas</TableHead>
-              {/* <TableHead className="w-24">Sort Order</TableHead> */}
               <TableHead className="w-24 text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableLoading colSpan={7} rows={5} />
+              <TableLoading colSpan={5} rows={5} />
             ) : isError ? (
-              <TableError colSpan={7}>Error loading countries. Please try again.</TableError>
+              <TableError colSpan={5}>Error loading countries. Please try again.</TableError>
             ) : countries.length === 0 ? (
-              <TableEmpty colSpan={7}>No country found</TableEmpty>
+              <TableEmpty colSpan={5}>No country found</TableEmpty>
             ) : (
               countries.map((country: TCountry) => (
                 <TableRow key={country.id}>

@@ -13,9 +13,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     // If user is already logged in, redirect to appropriate dashboard
     if (user) {
-      if (user.role === UserRole.CUSTOMER) {
-        router.push("/customer");
-      } else if (
+      if (
         user.role === UserRole.SUPER_ADMIN ||
         user.role === UserRole.ADMIN ||
         user.role === UserRole.STAFF

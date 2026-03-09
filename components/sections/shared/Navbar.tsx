@@ -50,7 +50,6 @@ const Navbar = () => {
   // Get dashboard route based on user role
   const getDashboardRoute = (): string => {
     if (!user) return "/";
-    if (user.role === UserRole.CUSTOMER) return "/customer";
     if (
       user.role === UserRole.SUPER_ADMIN ||
       user.role === UserRole.ADMIN ||
