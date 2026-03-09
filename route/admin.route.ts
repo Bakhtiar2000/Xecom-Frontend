@@ -5,8 +5,6 @@ import {
   Users,
   BarChart3,
   Store,
-  ShoppingBag,
-  MapPinCheck,
   type LucideIcon,
   MapPinIcon,
 } from "lucide-react";
@@ -75,6 +73,14 @@ export const adminRoutes: RouteGroup[] = [
       {
         label: "Customers",
         href: "/admin/users/customers",
+      },
+      {
+        label: "Add Admin",
+        href: "/admin/users/add-admin",
+      },
+      {
+        label: "Add Staff",
+        href: "/admin/users/add-staff",
       },
     ],
   },
