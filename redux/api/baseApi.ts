@@ -10,8 +10,10 @@ import {
 import { logout, setUser } from "@/redux/features/auth/authSlice";
 import { toast } from "sonner";
 
+export const API_URL = "http://localhost:5002";
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5002",
+  baseUrl: API_URL,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -42,7 +44,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs, BaseQueryApi, Definition
     //* Send Refresh
     console.log("Sending refresh token");
 
-    const res = await fetch("http://localhost:5002/auth/refresh-token", {
+    const res = await fetch(`${API_URL}/auth/refresh-token`, {
       method: "POST",
       credentials: "include",
     });
@@ -88,6 +90,9 @@ export const baseApi = createApi({
     "attribute",
     "attributeValue",
     "productVariant",
+    "wishlist",
+    "review",
+    "cart",
     "order",
     "coupon",
     "notification",

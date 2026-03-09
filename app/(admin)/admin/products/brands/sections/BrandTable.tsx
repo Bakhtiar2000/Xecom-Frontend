@@ -169,7 +169,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
 
       {/* Table */}
 
-      <div className="border-border rounded-md border">
+      <div className="border-border relative mt-4 rounded-md border lg:mt-6">
         <Table>
           <TableHeader>
             <TableRow>

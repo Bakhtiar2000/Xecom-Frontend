@@ -13,12 +13,22 @@ export interface SelectOption {
 }
 
 export interface CustomSelectProps {
-  /** Async function that fetches options. Return { data, hasMore } */
-  fetchOptions: (params: {
-    search: string;
-    page: number;
+  /** API endpoint to fetch options from (e.g., "End of results/brands") */
+  endpoint?: string;
+
+  /** Custom async function that fetches options. Return { data, hasMore, meta } */
+  fetchOptions?: (params: {
+    searchTerm: string;
+    pageNumber: number;
     pageSize: number;
-  }) => Promise<{ data: SelectOption[]; hasMore: boolean }>;
+    fields?: string[];
+  }) => Promise<{ data: SelectOption[]; hasMore: boolean; meta?: any }>;
+
+  /** Fields to request from the API (e.g., ["name", "id"]) */
+  fields?: string[];
+
+  /** Map response data to SelectOption format */
+  mapToOption?: (item: any) => SelectOption;
 
   /** Controlled value(s) */
   value?: SelectOption | SelectOption[] | null;
@@ -28,8 +38,9 @@ export interface CustomSelectProps {
   multiSelect?: boolean;
   /** Show the search bar inside the dropdown */
   searchable?: boolean;
+  /** Enable infinite scrolling pagination */
+  paginated?: boolean;
 
-  pageSize?: number;
   placeholder?: string;
   disabled?: boolean;
   className?: string;
@@ -40,12 +51,15 @@ export interface CustomSelectProps {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export const CustomSelect = ({
+  endpoint,
   fetchOptions,
+  fields,
+  mapToOption,
   value,
   onChange,
   multiSelect = false,
   searchable = true,
-  pageSize = 20,
+  paginated = true,
   placeholder = "Select...",
   disabled = false,
   className = "",
@@ -57,11 +71,12 @@ export const CustomSelect = ({
   const listRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loadingRef = useRef(false);
 
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [options, setOptions] = useState<SelectOption[]>([]);
-  const [page, setPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -73,51 +88,115 @@ export const CustomSelect = ({
 
   const load = useCallback(
     async (q: string, p: number, replace: boolean) => {
+      // Prevent duplicate calls
+      if (loadingRef.current) return;
+
+      loadingRef.current = true;
       if (p === 1) setLoading(true);
       else setLoadingMore(true);
 
       try {
-        const res = await fetchOptions({ search: q, page: p, pageSize });
+        let res: { data: SelectOption[]; hasMore: boolean };
+
+        if (fetchOptions) {
+          // Use custom fetch function
+          res = await fetchOptions({
+            searchTerm: q,
+            pageNumber: p,
+            pageSize: 20,
+            fields,
+          });
+        } else if (endpoint) {
+          // Build query params for API endpoint
+          const params = new URLSearchParams();
+          if (paginated) {
+            params.append("pageNumber", p.toString());
+            params.append("pageSize", "20");
+          }
+          if (q) params.append("searchTerm", q);
+          if (fields && fields.length > 0) {
+            fields.forEach((field) => params.append("fields", field));
+          }
+
+          const url = `${endpoint}?${params.toString()}`;
+          const response = await fetch(url);
+          if (!response.ok) throw new Error("Failed to fetch options");
+
+          const json = await response.json();
+
+          // Map response data to SelectOption format
+          const mappedData = mapToOption
+            ? json.data.map(mapToOption)
+            : json.data.map((item: any) => ({
+                value: item.id,
+                label: item.name || item.label,
+                ...item,
+              }));
+
+          // Determine if there are more pages
+          const hasMorePages =
+            json.meta?.hasNextPage ??
+            (json.meta?.pageNumber && json.meta?.totalPages
+              ? json.meta.pageNumber < json.meta.totalPages
+              : false);
+
+          res = {
+            data: mappedData,
+            hasMore: paginated ? hasMorePages : false,
+          };
+        } else {
+          throw new Error("Either endpoint or fetchOptions must be provided");
+        }
+
         setOptions((prev) => (replace ? res.data : [...prev, ...res.data]));
-        setHasMore(res.hasMore);
-        setPage(p);
-      } catch {
-        // silently ignore
+        setHasMore(paginated && res.hasMore);
+        setPageNumber(p);
+      } catch (err) {
+        console.error("Error fetching options:", err);
       } finally {
         setLoading(false);
         setLoadingMore(false);
+        loadingRef.current = false;
       }
     },
-    [fetchOptions, pageSize]
+    [endpoint, fetchOptions, fields, mapToOption, paginated]
   );
 
   // Initial load when opened
   useEffect(() => {
     if (open) {
-      load(search, 1, true);
+      load(searchTerm, 1, true);
       if (searchable) setTimeout(() => searchRef.current?.focus(), 50);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // Debounced search
+  // Debounced search (300ms)
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const q = e.target.value;
-    setSearch(q);
+    setSearchTerm(q);
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => load(q, 1, true), 350);
+    debounceRef.current = setTimeout(() => load(q, 1, true), 300);
   };
 
   // ── Infinite scroll ────────────────────────────────────────────────────────
 
   const handleScroll = useCallback(() => {
+    if (!paginated || !listRef.current || loadingRef.current || !hasMore) return;
+
     const el = listRef.current;
-    if (!el || loadingMore || !hasMore) return;
-    const scrolled = el.scrollTop / (el.scrollHeight - el.clientHeight);
-    if (scrolled >= 0.9) {
-      load(search, page + 1, false);
+    const scrollTop = el.scrollTop;
+    const scrollHeight = el.scrollHeight;
+    const clientHeight = el.clientHeight;
+
+    // Calculate how far from the bottom we are
+    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+
+    // Trigger load when within 100px of the bottom (approximately 2-3 items)
+    if (distanceFromBottom < 100) {
+      load(searchTerm, pageNumber + 1, false);
     }
-  }, [loadingMore, hasMore, load, search, page]);
+  }, [paginated, hasMore, load, searchTerm, pageNumber]);
 
   // ── Selection logic ────────────────────────────────────────────────────────
 
@@ -176,7 +255,7 @@ export const CustomSelect = ({
         disabled={disabled}
         onClick={() => !disabled && setOpen((p) => !p)}
         className={[
-          "flex min-h-10 w-full flex-wrap items-center gap-2 px-3 py-2",
+          "flex min-h-10 w-full min-w-40 items-center gap-2 px-3 py-2",
           "bg-background rounded-md border text-left text-sm",
           "focus-visible:ring-ring transition-colors focus:outline-none focus-visible:ring-2",
           open ? "border-ring shadow-sm" : "border-input",
@@ -184,20 +263,30 @@ export const CustomSelect = ({
           error ? "border-destructive" : "",
         ].join(" ")}
       >
-        {/* Multi-select chips */}
-        {multiSelect &&
-          selectedArray.map((s) => (
-            <span
-              key={s.value}
-              className="bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
-            >
-              {s.label}
-              <X
-                className="hover:text-destructive h-3 w-3 cursor-pointer"
-                onClick={(e) => removeSelected(s, e)}
-              />
-            </span>
-          ))}
+        {/* Multi-select: show chips for few items, count for many */}
+        {multiSelect && selectedArray.length > 0 ? (
+          selectedArray.length <= 2 ? (
+            // Show chips for 1-2 items
+            <>
+              {selectedArray.map((s) => (
+                <span
+                  key={s.value}
+                  className="bg-batch text-batch-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
+                >
+                  <span className="max-w-30 truncate">{s.label}</span>
+                  <X
+                    className="hover:text-destructive h-3 w-3 shrink-0 cursor-pointer"
+                    onClick={(e) => removeSelected(s, e)}
+                  />
+                </span>
+              ))}
+              <span className="flex-1" />
+            </>
+          ) : (
+            // Show count for 3+ items
+            <span className="flex-1">{selectedArray.length} items selected</span>
+          )
+        ) : null}
 
         {/* Single / empty placeholder */}
         {triggerLabel && (
@@ -205,8 +294,6 @@ export const CustomSelect = ({
             {triggerLabel}
           </span>
         )}
-
-        {multiSelect && selectedArray.length > 0 && <span className="flex-1" />}
 
         {/* Clear all (single) */}
         {!multiSelect && selectedArray.length > 0 && (
@@ -241,7 +328,7 @@ export const CustomSelect = ({
               <input
                 ref={searchRef}
                 type="text"
-                value={search}
+                value={searchTerm}
                 onChange={handleSearchChange}
                 placeholder="Search..."
                 className="placeholder:text-muted-foreground flex-1 bg-transparent text-sm outline-none"

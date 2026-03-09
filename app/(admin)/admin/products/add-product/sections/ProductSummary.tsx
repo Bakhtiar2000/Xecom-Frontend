@@ -109,7 +109,7 @@ export default function ProductSummary({
 
         {/* Details */}
         <SummaryCard title="Product Details" tab="details" onEdit={onEdit}>
-          <SummaryRow label="Weight" value={`${data.weight} kg`} />
+          <SummaryRow label="Weight" value={`${data.weight} ${data.weightUnit}`} />
           <SummaryRow label="Warranty" value={data.warranty} />
           <SummaryRow label="Min Qty" value={String(data.minOrderQty)} />
           <SummaryRow label="Max Qty" value={String(data.maxOrderQty)} />
@@ -133,19 +133,17 @@ export default function ProductSummary({
 
         {/* Specifications */}
         <SummaryCard title="Specifications" tab="specifications" onEdit={onEdit}>
-          {Object.entries(data.specifications).map(([k, v]) =>
-            v ? (
-              <SummaryRow
-                key={k}
-                label={k.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())}
-                value={v}
-              />
-            ) : null
+          {Object.entries(data.specifications).length === 0 ? (
+            <p className="text-muted-foreground">No specifications added.</p>
+          ) : (
+            Object.entries(data.specifications).map(([k, v]) =>
+              v ? <SummaryRow key={k} label={k} value={v} /> : null
+            )
           )}
         </SummaryCard>
 
         {/* SEO */}
-        <SummaryCard title="SEO Settings" tab="seo" onEdit={onEdit}>
+        <SummaryCard title="SEO Settings" tab="details" onEdit={onEdit}>
           <SummaryRow label="SEO Title" value={data.seoTitle} />
           <SummaryRow label="SEO Description" value={data.seoDescription} />
           {data.metaKeywords.length > 0 && (

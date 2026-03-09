@@ -1,8 +1,36 @@
+import { TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "@/redux/api/baseApi";
-import { TAddThanaDto } from "./dto/thana.dto";
+import { TAddThanaDto, TUpdateThanaDto } from "./dto/thana.dto";
+import { TThana } from "@/types/location.type";
 
 const thanaApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    //-----------------Get All Thanas-----------------
+    getAllThanas: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/thana",
+          method: "GET",
+          params: params,
+        };
+      },
+      providesTags: ["thana"],
+      transformResponse: (response: TResponseRedux<TThana[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+    }),
+
     //-----------------Add Thana-----------------
     addThana: builder.mutation({
       query: (data: TAddThanaDto) => ({
@@ -12,7 +40,31 @@ const thanaApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["thana"],
     }),
+
+    //-----------------Update Thana-----------------
+    updateThana: builder.mutation({
+      query: (data: TUpdateThanaDto) => ({
+        url: "/thana",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["thana"],
+    }),
+
+    //-----------------Delete Thana-----------------
+    deleteThana: builder.mutation({
+      query: (id: string) => ({
+        url: `/thana/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["thana"],
+    }),
   }),
 });
 
-export const { useAddThanaMutation } = thanaApi;
+export const {
+  useGetAllThanasQuery,
+  useAddThanaMutation,
+  useUpdateThanaMutation,
+  useDeleteThanaMutation,
+} = thanaApi;

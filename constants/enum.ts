@@ -49,6 +49,12 @@ export enum CustomerType {
   WHOLESALE = "WHOLESALE",
 }
 
+export enum AddressType {
+  HOME = "HOME",
+  OFFICE = "OFFICE",
+  OTHER = "OTHER",
+}
+
 // Product Enums
 export enum ProductStatus {
   ACTIVE = "ACTIVE",
@@ -62,6 +68,33 @@ export enum ProductRelationType {
   RELATED = "RELATED",
   CROSS_SELL = "CROSS_SELL",
   UP_SELL = "UP_SELL",
+}
+
+export enum ProductDimensionUnit {
+  CM = "CM",
+  INCH = "INCH",
+  METER = "METER",
+  FOOT = "FOOT",
+  YARD = "YARD",
+}
+
+export enum ProductWeightUnit {
+  KG = "KG",
+  G = "G",
+  LB = "LB",
+  OZ = "OZ",
+}
+
+export enum TargetAudience {
+  MEN = "MEN",
+  WOMEN = "WOMEN",
+  KIDS = "KIDS",
+}
+
+export enum Currency {
+  USD = "USD",
+  EUR = "EUR",
+  BDT = "BDT",
 }
 
 // Order Enums

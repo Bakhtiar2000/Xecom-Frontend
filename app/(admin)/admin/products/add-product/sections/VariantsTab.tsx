@@ -30,17 +30,14 @@ export default function VariantsTab({ form, fieldRefs }: VariantsTabProps) {
 
   return (
     <TabsContent value="variants" className="space-y-4">
-      <Card className="py-5">
-        <CardHeader className="bg-muted/30 border-b px-6 py-4">
-          <div className="flex items-center gap-2">
-            <div className="bg-primary h-5 w-1 rounded-full" />
-            <CardTitle className="text-base font-semibold">Product Variants</CardTitle>
+      <Card className="rounded-lg pt-0 pb-4 lg:pb-6">
+        <CardHeader className="bg-success text-success-foreground rounded-t-lg px-4 py-4 lg:px-6">
+          <div className="mt-2 flex items-center gap-2 text-xl">
+            <div className="bg-primary h-5 w-1 rounded-full"></div>
+            <CardTitle className="font-semibold">Product Variants</CardTitle>
           </div>
-          <CardDescription className="mt-1 ml-3 text-xs">
-            Add SKU, pricing and stock for each variant
-          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 px-4 lg:px-6">
           {form.formState.errors.variants?.message && (
             <p className="text-danger text-sm">{form.formState.errors.variants.message}</p>
           )}

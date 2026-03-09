@@ -1,6 +1,6 @@
 import { TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "@/redux/api/baseApi";
-import { TAddCountryDto } from "./dto/country.dto";
+import { TAddCountryDto, TUpdateCountryDto } from "./dto/country.dto";
 import { TCountry } from "@/types/location.type";
 
 const countryApi = baseApi.injectEndpoints({
@@ -55,25 +55,25 @@ const countryApi = baseApi.injectEndpoints({
       },
     }),
 
-    //-----------------Update Single Country-----------------
+    //-----------------Update Country-----------------
     updateCountry: builder.mutation({
-      query: (args: { id: string; data: any }) => ({
-        url: `/country/${args.id}`,
+      query: (data: TUpdateCountryDto) => ({
+        url: "/country",
         method: "PUT",
-        body: args.data,
+        body: data,
       }),
       invalidatesTags: ["country"],
     }),
 
-        //-----------------Delete  Country-----------------
+    //-----------------Delete Country-----------------
+    deleteCountry: builder.mutation({
+      query: (id: string) => ({
+        url: `/country/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["country"],
+    }),
 
-        deleteCountry: builder.mutation({
-          query: (id:string) => ({
-            url: `/country/${id}`,
-            method:"DELETE"
-          }),
-          invalidatesTags: ["country"]
-        })
   }),
 });
 

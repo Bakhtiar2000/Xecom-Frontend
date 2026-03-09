@@ -1,11 +1,11 @@
 import { TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "@/redux/api/baseApi";
-import { TAddDistrictDto } from "./dto/district.dto";
+import { TAddDistrictDto, TUpdateDistrictDto } from "./dto/district.dto";
 import { TDistrict } from "@/types/location.type";
 
 const districtApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // -----------Get All District--------------------
+    // -----------Get All Districts--------------------
 
     getAllDistrict: builder.query({
       query: (args) => {
@@ -20,6 +20,13 @@ const districtApi = baseApi.injectEndpoints({
           url: "/district",
           method: "GET",
           params: params,
+        };
+      },
+      providesTags: ["district"],
+      transformResponse: (response: TResponseRedux<TDistrict[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
         };
       },
     }),
@@ -48,13 +55,22 @@ const districtApi = baseApi.injectEndpoints({
       },
     }),
 
-    //-----------------update District-----------------
+    //-----------------Update District-----------------
 
     updateDistrict: builder.mutation({
-      query: (args: { id: string; data: any }) => ({
-        url: `/district/${args.id}`,
+      query: (data: TUpdateDistrictDto) => ({
+        url: "/district",
         method: "PUT",
-        body: args.data,
+        body: data,
+      }),
+      invalidatesTags: ["district"],
+    }),
+
+    //-----------------Delete District-----------------
+    deleteDistrict: builder.mutation({
+      query: (id: string) => ({
+        url: `/district/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["district"],
     }),
@@ -78,4 +94,5 @@ export const {
   useGetSingleDistrictQuery,
   useGetAllDistrictQuery,
   useUpdateDistrictMutation,
+  useDeleteDistrictMutation,
 } = districtApi;

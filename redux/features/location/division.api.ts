@@ -1,11 +1,11 @@
 import { TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "@/redux/api/baseApi";
-import { TAddDivisionDto } from "./dto/division.dto";
+import { TAddDivisionDto, TUpdateDivisionDto } from "./dto/division.dto";
 import { TDivision } from "@/types/location.type";
 
 const divisionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // -----------Get All District--------------------
+    // -----------Get All Divisions--------------------
 
     getAllDivison: builder.query({
       query: (args) => {
@@ -20,6 +20,13 @@ const divisionApi = baseApi.injectEndpoints({
           url: "/division",
           method: "GET",
           params: params,
+        };
+      },
+      providesTags: ["division"],
+      transformResponse: (response: TResponseRedux<TDivision[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
         };
       },
     }),
@@ -48,13 +55,22 @@ const divisionApi = baseApi.injectEndpoints({
       },
     }),
 
-    //-----------------update Division-----------------
+    //-----------------Update Division-----------------
 
     updateDivision: builder.mutation({
-      query: (args: { id: string; data: any }) => ({
-        url: `/division/${args.id}`,
+      query: (data: TUpdateDivisionDto) => ({
+        url: "/division",
         method: "PUT",
-        body: args.data,
+        body: data,
+      }),
+      invalidatesTags: ["division"],
+    }),
+
+    //-----------------Delete Division-----------------
+    deleteDivision: builder.mutation({
+      query: (id: string) => ({
+        url: `/division/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["division"],
     }),
@@ -76,6 +92,7 @@ export const {
   useAddDivisionMutation,
   useGetSingleDivisionQuery,
   useUpdateDivisionMutation,
+  useDeleteDivisionMutation,
   useGetAllDivisonQuery,
   useDeleteDivisionMutation
 } = divisionApi;

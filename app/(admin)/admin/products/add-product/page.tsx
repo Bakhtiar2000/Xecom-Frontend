@@ -13,23 +13,15 @@ import ProductSummary from "./sections/ProductSummary";
 import BasicInfoTab from "./sections/BasicInfoTab";
 import DetailsTab from "./sections/DetailsTab";
 import SpecificationsTab from "./sections/SpecificationsTab";
-import SeoTab from "./sections/SeoTab";
 import MediaTab from "./sections/MediaTab";
 import FaqTab from "./sections/FaqTab";
 import VariantsTab from "./sections/VariantsTab";
 import { useAddProductMutation } from "@/redux/features/product/product.api";
 import { toast } from "sonner";
+import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 
 // ─── Tab config ─────
-const TAB_ORDER = [
-  "basic",
-  "details",
-  "specifications",
-  "seo",
-  "media",
-  "faq",
-  "variants",
-] as const;
+const TAB_ORDER = ["basic", "details", "specifications", "media", "faq", "variants"] as const;
 type TabName = (typeof TAB_ORDER)[number];
 
 const TAB_FIELDS: Record<TabName, string[]> = {
@@ -45,22 +37,20 @@ const TAB_FIELDS: Record<TabName, string[]> = {
   ],
   details: [
     "weight",
+    "weightUnit",
     "warranty",
     "dimensions.width",
     "dimensions.height",
     "dimensions.length",
+    "dimensions.unit",
     "tags",
     "minOrderQty",
     "maxOrderQty",
+    "seoTitle",
+    "seoDescription",
+    "metaKeywords",
   ],
-  specifications: [
-    "specifications.fitType",
-    "specifications.occasion",
-    "specifications.closureType",
-    "specifications.soleMaterial",
-    "specifications.upperMaterial",
-  ],
-  seo: ["seoTitle", "seoDescription", "metaKeywords"],
+  specifications: ["specifications"],
   media: ["images"],
   faq: ["faqs"],
   variants: ["variants"],
@@ -99,23 +89,18 @@ export default function AddProductPage() {
       images: [],
       video: null,
       manualFile: null,
-      weight: 0,
+      weight: null,
+      weightUnit: "KG",
       warranty: "",
       tags: [],
       metaKeywords: [],
       faqs: [],
       minOrderQty: 1,
-      maxOrderQty: 10,
+      maxOrderQty: 20,
       seoTitle: "",
       seoDescription: "",
-      dimensions: { unit: "cm", width: 0, height: 0, length: 0 },
-      specifications: {
-        fitType: "",
-        occasion: "",
-        closureType: "",
-        soleMaterial: "",
-        upperMaterial: "",
-      },
+      dimensions: { unit: "CM", width: null, height: null, length: null },
+      specifications: {},
       variants: [],
     },
   });
@@ -197,6 +182,7 @@ export default function AddProductPage() {
         status: data.status,
         featured: data.featured,
         weight: data.weight,
+        weightUnit: data.weightUnit,
         warranty: data.warranty,
         tags: data.tags,
         metaKeywords: data.metaKeywords,
@@ -267,7 +253,7 @@ export default function AddProductPage() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabName)}>
             {/* Free tab navigation */}
-            <TabsList className="grid w-full grid-cols-7">
+            <TabsList className="grid w-full grid-cols-6">
               {TAB_ORDER.map((tab) => (
                 <TabsTrigger key={tab} value={tab}>
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -279,7 +265,6 @@ export default function AddProductPage() {
             <BasicInfoTab form={form} fieldRefs={fieldRefs} onNameChange={handleNameChange} />
             <DetailsTab form={form} />
             <SpecificationsTab form={form} />
-            <SeoTab form={form} />
             <MediaTab
               form={form}
               fieldRefs={fieldRefs}
@@ -298,12 +283,12 @@ export default function AddProductPage() {
               disabled={currentIndex === 0}
               onClick={goPrevious}
             >
-              Previous
+              <ArrowBigLeft /> Previous
             </Button>
 
             {currentIndex < TAB_ORDER.length - 1 ? (
               <Button type="button" onClick={goNext}>
-                Next
+                Next <ArrowBigRight />
               </Button>
             ) : (
               <div className="flex gap-4">
