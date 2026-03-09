@@ -58,7 +58,7 @@ const districtApi = baseApi.injectEndpoints({
     //-----------------Update District-----------------
 
     updateDistrict: builder.mutation({
-      query: (args:{id:string,data: TUpdateDistrictDto}) => ({
+      query: (args: { id: string; data: TUpdateDistrictDto }) => ({
         url: `/district/${args.id}`,
         method: "PUT",
         body: args.data,
@@ -74,7 +74,6 @@ const districtApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["district"],
     }),
-
   }),
 });
 

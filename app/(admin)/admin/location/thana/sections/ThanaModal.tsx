@@ -7,10 +7,7 @@ import { toast } from "sonner";
 
 import { thanatSchema, TThanaFormData } from "@/lib/thana.schema";
 
-import {
-  useAddThanaMutation,
-  useUpdateThanaMutation,
-} from "@/redux/features/location/thana.api";
+import { useAddThanaMutation, useUpdateThanaMutation } from "@/redux/features/location/thana.api";
 
 import { useGetAllCountriesQuery } from "@/redux/features/location/country.api";
 import { useGetAllDivisonQuery } from "@/redux/features/location/division.api";
@@ -84,17 +81,11 @@ export default function ThanaModal({ open, onOpenChange, thana }: Props) {
       const division = divisions.find((d) => String(d.id) === String(district?.divisionId));
       const country = countries.find((c) => String(c.id) === String(division?.countryId));
 
-      setSelectedCountry(
-        country ? [{ value: String(country.id), label: country.name }] : []
-      );
+      setSelectedCountry(country ? [{ value: String(country.id), label: country.name }] : []);
 
-      setSelectedDivision(
-        division ? [{ value: String(division.id), label: division.name }] : []
-      );
+      setSelectedDivision(division ? [{ value: String(division.id), label: division.name }] : []);
 
-      setSelectedDistrict(
-        district ? [{ value: String(district.id), label: district.name }] : []
-      );
+      setSelectedDistrict(district ? [{ value: String(district.id), label: district.name }] : []);
     } else {
       reset();
       setSelectedCountry([]);
@@ -108,11 +99,11 @@ export default function ThanaModal({ open, onOpenChange, thana }: Props) {
       if (isEditMode && thana) {
         await updateThana({
           id: thana.id,
-          data:{
-            id:thana.id,
+          data: {
+            id: thana.id,
             name: thana.name,
-            districtId:data.districtId
-          }
+            districtId: data.districtId,
+          },
         }).unwrap();
 
         toast.success("Thana updated successfully");
@@ -139,7 +130,6 @@ export default function ThanaModal({ open, onOpenChange, thana }: Props) {
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
           {/* Country */}
           <div>
             <Label>Country</Label>
@@ -210,9 +200,7 @@ export default function ThanaModal({ open, onOpenChange, thana }: Props) {
             />
 
             {errors.districtId && (
-              <p className="text-destructive text-sm">
-                {errors.districtId.message}
-              </p>
+              <p className="text-destructive text-sm">{errors.districtId.message}</p>
             )}
           </div>
 
@@ -222,17 +210,11 @@ export default function ThanaModal({ open, onOpenChange, thana }: Props) {
 
             <Input placeholder="Enter thana name" {...register("name")} />
 
-            {errors.name && (
-              <p className="text-destructive text-sm">{errors.name.message}</p>
-            )}
+            {errors.name && <p className="text-destructive text-sm">{errors.name.message}</p>}
           </div>
 
           <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
 
@@ -247,7 +229,6 @@ export default function ThanaModal({ open, onOpenChange, thana }: Props) {
               )}
             </Button>
           </DialogFooter>
-
         </form>
       </DialogContent>
     </Dialog>

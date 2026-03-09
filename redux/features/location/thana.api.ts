@@ -43,7 +43,7 @@ const thanaApi = baseApi.injectEndpoints({
 
     //-----------------Update Thana-----------------
     updateThana: builder.mutation({
-      query: (agrs:{id:string,data:TUpdateThanaDto}) => ({
+      query: (agrs: { id: string; data: TUpdateThanaDto }) => ({
         url: `/thana/${agrs.id}`,
         method: "PUT",
         body: agrs.data,

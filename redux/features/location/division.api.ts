@@ -58,7 +58,7 @@ const divisionApi = baseApi.injectEndpoints({
     //-----------------Update Division-----------------id:string,data: TUpdateDivisionDto
 
     updateDivision: builder.mutation({
-      query: (args:{id:string, data:TUpdateDivisionDto}) => ({
+      query: (args: { id: string; data: TUpdateDivisionDto }) => ({
         url: `/division/${args.id}`,
         method: "PUT",
         body: args.data,
@@ -74,8 +74,6 @@ const divisionApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["division"],
     }),
-
-       
   }),
 });
 
@@ -84,5 +82,5 @@ export const {
   useGetSingleDivisionQuery,
   useUpdateDivisionMutation,
   useGetAllDivisonQuery,
-  useDeleteDivisionMutation
+  useDeleteDivisionMutation,
 } = divisionApi;

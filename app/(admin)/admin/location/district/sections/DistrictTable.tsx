@@ -90,29 +90,28 @@ export default function DistrictTable({ onEdit }: DistrictTableProps) {
     return country?.name || "N/A";
   };
 
- // Debounce search term to avoid excessive API calls
+  // Debounce search term to avoid excessive API calls
   const debouncedSearchTerm = useDebounce(searchTerm);
 
   //  buildQueryParams to:
-const buildQueryParams = () => {
-  const params = [...getPaginationParams(), ...getSortParams()];
+  const buildQueryParams = () => {
+    const params = [...getPaginationParams(), ...getSortParams()];
 
-  if (debouncedSearchTerm) {
-    params.push({ name: "searchTerm", value: debouncedSearchTerm });
-  }
+    if (debouncedSearchTerm) {
+      params.push({ name: "searchTerm", value: debouncedSearchTerm });
+    }
 
-  // single object handle
-  if (selectedCountry && "value" in selectedCountry) {
-    params.push({ name: "countryId", value: selectedCountry.value.toString() });
-  }
+    // single object handle
+    if (selectedCountry && "value" in selectedCountry) {
+      params.push({ name: "countryId", value: selectedCountry.value.toString() });
+    }
 
-  if( selectedDivision && "value" in selectedDivision){
-    params.push({name:"divisionId",value: selectedDivision.value.toString()});
-  }
+    if (selectedDivision && "value" in selectedDivision) {
+      params.push({ name: "divisionId", value: selectedDivision.value.toString() });
+    }
 
-  return params;
-};
-
+    return params;
+  };
 
   const { data, isLoading, isError } = useGetAllDistrictQuery(buildQueryParams());
 
@@ -163,21 +162,18 @@ const buildQueryParams = () => {
       <div>
         {/* Filters Section */}
         <div className="mb-4 flex items-center justify-between gap-4">
-
-          <div className="relative max-w-80 w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 text-muted-foreground" />
+          <div className="relative w-full max-w-80">
+            <Search className="text-muted-foreground absolute top-1/2 left-3 w-4 -translate-y-1/2" />
             <Input
               placeholder="Search by name..."
               value={searchTerm}
               onChange={(e) => handleSearchChange(e.target.value)}
               className={`pl-9 ${searchTerm ? "border-primary bg-primary/5" : ""}`}
             />
-
-
           </div>
- 
+
           <div className="flex items-center gap-x-4">
-              {/* Country Filter */}
+            {/* Country Filter */}
             <div
               className={`max-w-64 min-w-44 ${
                 selectedCountry?.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""
@@ -201,9 +197,8 @@ const buildQueryParams = () => {
               />
             </div>
 
-
-             {/* division Filter */}
-             <div
+            {/* division Filter */}
+            <div
               className={`max-w-64 min-w-44 ${
                 selectedDivision?.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""
               }`}
@@ -224,8 +219,7 @@ const buildQueryParams = () => {
                 paginated
                 placeholder="All Divisions"
               />
-            </div>           
-
+            </div>
           </div>
         </div>
 
@@ -276,7 +270,7 @@ const buildQueryParams = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => handleDeleteClick(district)}
-                          className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
+                          className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

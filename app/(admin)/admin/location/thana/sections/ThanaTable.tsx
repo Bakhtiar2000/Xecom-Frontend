@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  useGetAllThanasQuery,
-  useDeleteThanaMutation,
-} from "@/redux/features/location/thana.api";
+import { useGetAllThanasQuery, useDeleteThanaMutation } from "@/redux/features/location/thana.api";
 import { useGetAllCountriesQuery } from "@/redux/features/location/country.api";
 import { useGetAllDivisonQuery } from "@/redux/features/location/division.api";
 import { useGetAllDistrictQuery } from "@/redux/features/location/district.api";
@@ -67,8 +64,7 @@ export default function ThanaTable({ onEdit }: ThanaTableProps) {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { handleSort, getSortIcon, getSortParams } =
-    useTableSort<SortableFields>();
+  const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [thanaToDelete, setThanaToDelete] = useState<TThana | null>(null);
@@ -87,7 +83,6 @@ export default function ThanaTable({ onEdit }: ThanaTableProps) {
   const { data: districtData } = useGetAllDistrictQuery([]);
   const districts = districtData?.data || [];
 
-
   const getDistrict = (districtId: string) =>
     districts.find((d) => String(d.id) === String(districtId));
 
@@ -105,31 +100,31 @@ export default function ThanaTable({ onEdit }: ThanaTableProps) {
   const getDivisionName = (districtId: string) => getDivision(districtId)?.name || "N/A";
   const getCountryName = (districtId: string) => getCountry(districtId)?.name || "N/A";
 
- // Debounce search term to avoid excessive API calls
+  // Debounce search term to avoid excessive API calls
   const debouncedSearchTerm = useDebounce(searchTerm);
 
   //  buildQueryParams to:
-const buildQueryParams = () => {
-  const params = [...getPaginationParams(), ...getSortParams()];
+  const buildQueryParams = () => {
+    const params = [...getPaginationParams(), ...getSortParams()];
 
-  if (debouncedSearchTerm) {
-    params.push({ name: "searchTerm", value: debouncedSearchTerm });
-  }
+    if (debouncedSearchTerm) {
+      params.push({ name: "searchTerm", value: debouncedSearchTerm });
+    }
 
-  // single object handle
-  if (selectedCountry && "value" in selectedCountry) {
-    params.push({ name: "countryId", value: selectedCountry.value.toString() });
-  }
+    // single object handle
+    if (selectedCountry && "value" in selectedCountry) {
+      params.push({ name: "countryId", value: selectedCountry.value.toString() });
+    }
 
-  if( selectedDivision && "value" in selectedDivision){
-    params.push({name:"divisionId",value: selectedDivision.value.toString()});
-  }
-  if( selectedDistrict && "value" in selectedDistrict){
-    params.push({name:"districtId",value: selectedDistrict.value.toString()});
-  }  
+    if (selectedDivision && "value" in selectedDivision) {
+      params.push({ name: "divisionId", value: selectedDivision.value.toString() });
+    }
+    if (selectedDistrict && "value" in selectedDistrict) {
+      params.push({ name: "districtId", value: selectedDistrict.value.toString() });
+    }
 
-  return params;
-};
+    return params;
+  };
 
   const { data, isLoading, isError } = useGetAllThanasQuery(buildQueryParams());
   const thanas = data?.data || [];
@@ -154,7 +149,7 @@ const buildQueryParams = () => {
 
   const handleFilterChange = () => {
     resetPage();
-  };  
+  };
 
   const handleDeleteClick = (thana: TThana) => {
     setThanaToDelete(thana);
@@ -170,100 +165,97 @@ const buildQueryParams = () => {
       setDeleteDialogOpen(false);
       setThanaToDelete(null);
     } catch (error: any) {
-      const errorMessage =
-        error?.data?.message || error?.message || "Failed to delete thana";
+      const errorMessage = error?.data?.message || error?.message || "Failed to delete thana";
       toast.error(errorMessage);
     }
   };
 
   return (
     <>
-        {/* Filters Section */}
-        <div className="mb-4 flex items-center justify-between gap-4">
-          <div className="relative max-w-80 w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name..."
-              value={searchTerm}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              className={`pl-9 ${searchTerm ? "border-primary bg-primary/5" : ""}`}
+      {/* Filters Section */}
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <div className="relative w-full max-w-80">
+          <Search className="text-muted-foreground absolute top-1/2 left-3 w-4 -translate-y-1/2" />
+          <Input
+            placeholder="Search by name..."
+            value={searchTerm}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className={`pl-9 ${searchTerm ? "border-primary bg-primary/5" : ""}`}
+          />
+        </div>
+
+        <div className="flex items-center gap-x-4">
+          {/* Country Filter */}
+          <div
+            className={`max-w-64 min-w-44 ${
+              selectedCountry?.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""
+            }`}
+          >
+            <CustomSelect
+              endpoint={`${API_URL}/country`}
+              fields={["name", "id"]}
+              mapToOption={(item) => ({
+                value: item.id,
+                label: item.name,
+              })}
+              value={selectedCountry}
+              onChange={(vals) => {
+                setSelectedCountry(vals as SelectOption[]);
+                handleFilterChange();
+              }}
+              searchable
+              paginated
+              placeholder="All Countries"
             />
-
-
           </div>
- 
-          <div className="flex items-center gap-x-4">
-              {/* Country Filter */}
-            <div
-              className={`max-w-64 min-w-44 ${
-                selectedCountry?.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""
-              }`}
-            >
-              <CustomSelect
-                endpoint={`${API_URL}/country`}
-                fields={["name", "id"]}
-                mapToOption={(item) => ({
-                  value: item.id,
-                  label: item.name,
-                })}
-                value={selectedCountry}
-                onChange={(vals) => {
-                  setSelectedCountry(vals as SelectOption[]);
-                  handleFilterChange();
-                }}
-                searchable
-                paginated
-                placeholder="All Countries"
-              />
-            </div>
 
-             {/* division Filter */}
-             <div
-              className={`max-w-64 min-w-44 ${
-                selectedDivision?.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""
-              }`}
-            >
-              <CustomSelect
-                endpoint={`${API_URL}/division`}
-                fields={["name", "id"]}
-                mapToOption={(item) => ({
-                  value: item.id,
-                  label: item.name,
-                })}
-                value={selectedDivision}
-                onChange={(vals) => {
-                  setSelectedDivision(vals as SelectOption[]);
-                  handleFilterChange();
-                }}
-                searchable
-                paginated
-                placeholder="All Divisions"
-              />
-            </div>           
-             <div
-              className={`max-w-64 min-w-44 ${
-                selectedDivision?.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""
-              }`}
-            >
-              <CustomSelect
-                endpoint={`${API_URL}/district`}
-                fields={["name", "id"]}
-                mapToOption={(item) => ({
-                  value: item.id,
-                  label: item.name,
-                })}
-                value={selectedDistrict}
-                onChange={(vals) => {
-                  setSelectedDistrict(vals as SelectOption[]);
-                  handleFilterChange();
-                }}
-                searchable
-                paginated
-                placeholder="All District"
-              />
-            </div> 
+          {/* division Filter */}
+          <div
+            className={`max-w-64 min-w-44 ${
+              selectedDivision?.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""
+            }`}
+          >
+            <CustomSelect
+              endpoint={`${API_URL}/division`}
+              fields={["name", "id"]}
+              mapToOption={(item) => ({
+                value: item.id,
+                label: item.name,
+              })}
+              value={selectedDivision}
+              onChange={(vals) => {
+                setSelectedDivision(vals as SelectOption[]);
+                handleFilterChange();
+              }}
+              searchable
+              paginated
+              placeholder="All Divisions"
+            />
+          </div>
+          <div
+            className={`max-w-64 min-w-44 ${
+              selectedDivision?.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""
+            }`}
+          >
+            <CustomSelect
+              endpoint={`${API_URL}/district`}
+              fields={["name", "id"]}
+              mapToOption={(item) => ({
+                value: item.id,
+                label: item.name,
+              })}
+              value={selectedDistrict}
+              onChange={(vals) => {
+                setSelectedDistrict(vals as SelectOption[]);
+                handleFilterChange();
+              }}
+              searchable
+              paginated
+              placeholder="All District"
+            />
           </div>
         </div>
+      </div>
 
       {/* Table */}
       <div className="border-border rounded-md border">
@@ -312,7 +304,7 @@ const buildQueryParams = () => {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDeleteClick(thana)}
-                        className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
+                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -340,8 +332,8 @@ const buildQueryParams = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the thana &quot;{thanaToDelete?.name}&quot;. This
-              action cannot be undone.
+              This will permanently delete the thana &quot;{thanaToDelete?.name}&quot;. This action
+              cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

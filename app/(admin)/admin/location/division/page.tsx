@@ -20,7 +20,7 @@ export default function Divisions() {
   const handleEditClick = (division: TDivision) => {
     setSelectedDivision(division);
     setIsModalOpen(true);
-  }; 
+  };
 
   return (
     <>

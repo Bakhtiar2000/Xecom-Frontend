@@ -9,7 +9,6 @@ import {
   useGetSingleCountryQuery,
 } from "@/redux/features/location/country.api";
 
-
 import {
   Table,
   TableBody,
@@ -55,16 +54,15 @@ type SortableFields = "name";
 interface CountryTableProps {
   onEdit: (country: TCountry) => void;
 }
- 
-export default function CountryTable({ onEdit }) {
 
+export default function CountryTable({ onEdit }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
 
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [countryToDelete, setCountryToDelete] = useState<TCountry | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [countryToDelete, setCountryToDelete] = useState<TCountry | null>(null);
 
-    const [deleteCountry, { isLoading: isDeleting }] = useDeleteCountryMutation();
+  const [deleteCountry, { isLoading: isDeleting }] = useDeleteCountryMutation();
 
   const debouncedSearchTerm = useDebounce(searchTerm);
 
@@ -119,25 +117,24 @@ export default function CountryTable({ onEdit }) {
     resetPage();
   };
 
-    const handleDeleteClick = (country: TCountry) => {
-      setCountryToDelete(country);
-      setDeleteDialogOpen(true);
-    };
-  
-    const handleConfirmDelete = async () => {
-      if (!countryToDelete) return;
-  
-      try {
-        const result = await deleteCountry(countryToDelete.id).unwrap();
-        toast.success(result?.message || "Country deleted successfully");
-        setDeleteDialogOpen(false);
-        setCountryToDelete(null);
-      } catch (error: any) {
-        const errorMessage = error?.data?.message || error?.message || "Failed to delete Country";
-        toast.error(errorMessage);
-      }
-    };
+  const handleDeleteClick = (country: TCountry) => {
+    setCountryToDelete(country);
+    setDeleteDialogOpen(true);
+  };
 
+  const handleConfirmDelete = async () => {
+    if (!countryToDelete) return;
+
+    try {
+      const result = await deleteCountry(countryToDelete.id).unwrap();
+      toast.success(result?.message || "Country deleted successfully");
+      setDeleteDialogOpen(false);
+      setCountryToDelete(null);
+    } catch (error: any) {
+      const errorMessage = error?.data?.message || error?.message || "Failed to delete Country";
+      toast.error(errorMessage);
+    }
+  };
 
   const hasActiveFilters = debouncedSearchTerm || selectedCountry;
 
@@ -147,8 +144,8 @@ export default function CountryTable({ onEdit }) {
 
       <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         {/* Search Input */}
-        <div className="relative max-w-80 w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 text-muted-foreground" />
+        <div className="relative w-full max-w-80">
+          <Search className="text-muted-foreground absolute top-1/2 left-3 w-4 -translate-y-1/2" />
           <Input
             placeholder="Search by name or description..."
             value={searchTerm}
@@ -156,7 +153,6 @@ export default function CountryTable({ onEdit }) {
             className={`pl-9 ${searchTerm ? "border-primary bg-primary/5" : ""}`}
           />
         </div>
-
       </div>
 
       <div className="border-border rounded-md border">
@@ -228,13 +224,13 @@ export default function CountryTable({ onEdit }) {
                         <Pencil className="h-4 w-4" />
                       </Button>
                       <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleDeleteClick(country)}
-                              className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDeleteClick(country)}
+                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -252,7 +248,7 @@ export default function CountryTable({ onEdit }) {
         )}
       </div>
 
-            {/* Delete Confirmation Dialog */}
+      {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>

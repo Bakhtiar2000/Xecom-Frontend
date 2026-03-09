@@ -54,7 +54,7 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
   const [isActive, setIsActive] = useState<string>("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [brandToDelete, setBrandToDelete] = useState<TBrand | null>(null);
- 
+
   const debouncedSearchTerm = useDebounce(searchTerm);
   const [deleteBrand, { isLoading: isDeleting }] = useDeleteBrandMutation();
 

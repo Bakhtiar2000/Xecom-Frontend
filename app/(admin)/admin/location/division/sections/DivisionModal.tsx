@@ -14,7 +14,14 @@ import { useGetAllCountriesQuery } from "@/redux/features/location/country.api";
 
 import { TDivision } from "@/types/location.type";
 import { API_URL } from "@/redux/api/baseApi";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,8 +69,8 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
       setValue("countryId", division.countryId);
 
       const countryOption = countries
-        .map(c => ({ value: c.id, label: c.name }))
-        .find(c => c.value === division.countryId);
+        .map((c) => ({ value: c.id, label: c.name }))
+        .find((c) => c.value === division.countryId);
 
       setSelectedCountry(countryOption ? [countryOption] : []);
     } else {
@@ -116,7 +123,7 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
               render={({ field }) => (
                 <CustomSelect
                   endpoint={`${API_URL}/country`}
-                  fields={["id","name"]}
+                  fields={["id", "name"]}
                   mapToOption={(item) => ({ value: item.id, label: item.name })}
                   value={selectedCountry}
                   onChange={(vals) => {
@@ -145,9 +152,7 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit">
-              {isAdding || isUpdating ? "Saving..." : "Save"}
-            </Button>
+            <Button type="submit">{isAdding || isUpdating ? "Saving..." : "Save"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

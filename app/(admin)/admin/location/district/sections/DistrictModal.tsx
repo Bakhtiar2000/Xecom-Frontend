@@ -16,7 +16,14 @@ import { useGetAllDivisonQuery } from "@/redux/features/location/division.api";
 import { TDistrict } from "@/types/location.type";
 import { API_URL } from "@/redux/api/baseApi";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,7 +39,14 @@ interface Props {
 export default function DistrictModal({ open, onOpenChange, district }: Props) {
   const isEditMode = !!district;
 
-  const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<TDistrictFormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<TDistrictFormData>({
     resolver: zodResolver(districtSchema),
     defaultValues: {
       name: "",
@@ -59,28 +73,30 @@ export default function DistrictModal({ open, onOpenChange, district }: Props) {
       setValue("divisionId", district.divisionId);
 
       // Set country only for display
-      const division = divisions.find(d => d.id === district.divisionId);
-      const country = countries.find(c => c.id === division?.countryId);
+      const division = divisions.find((d) => d.id === district.divisionId);
+      const country = countries.find((c) => c.id === division?.countryId);
       setSelectedCountry(country ? [{ value: country.id, label: country.name }] : []);
 
-      const divisionOption = divisions.find(d => d.id === district.divisionId);
-      setSelectedDivision(divisionOption ? [{ value: divisionOption.id, label: divisionOption.name }] : []);
+      const divisionOption = divisions.find((d) => d.id === district.divisionId);
+      setSelectedDivision(
+        divisionOption ? [{ value: divisionOption.id, label: divisionOption.name }] : []
+      );
     } else {
       reset();
       setSelectedCountry([]);
       setSelectedDivision([]);
     }
-  }, [district, open,countries, divisions, setValue, reset]);  // countries, divisions, setValue, reset
+  }, [district, open, countries, divisions, setValue, reset]); // countries, divisions, setValue, reset
 
   const onSubmit = async (data: TDistrictFormData) => {
     try {
       if (isEditMode && district) {
         await updateDistrict({
           id: district.id,
-          data:{
+          data: {
             id: district.id,
-            name:district.name,
-            divisionId: data.divisionId
+            name: district.name,
+            divisionId: data.divisionId,
           },
         }).unwrap();
         toast.success("District updated successfully");
@@ -98,7 +114,7 @@ export default function DistrictModal({ open, onOpenChange, district }: Props) {
   };
 
   // Filter divisions by selected country (for display)
-  const filteredDivisions = divisions.filter(d => d.countryId === selectedCountry[0]?.value);
+  const filteredDivisions = divisions.filter((d) => d.countryId === selectedCountry[0]?.value);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -114,7 +130,7 @@ export default function DistrictModal({ open, onOpenChange, district }: Props) {
             <Label>Country</Label>
             <CustomSelect
               endpoint={`${API_URL}/country`}
-              fields={["id","name"]}
+              fields={["id", "name"]}
               mapToOption={(item) => ({ value: item.id, label: item.name })}
               value={selectedCountry}
               onChange={(vals) => {
@@ -129,26 +145,28 @@ export default function DistrictModal({ open, onOpenChange, district }: Props) {
           </div>
 
           {/* Division Select */}
-<div>
-  <Label>Division *</Label>
-  <CustomSelect
-    endpoint={`${API_URL}/division`} 
-    fields={["id","name"]}
-    mapToOption={(item) => ({
-      value: String(item.id), 
-      label: item.name
-    })}
-    value={selectedDivision}
-    onChange={(vals) => {
-      setSelectedDivision(vals as SelectOption[]);
-      setValue("divisionId", String((vals as SelectOption[])[0]?.value ?? ""));
-    }}
-    searchable
-    paginated
-    placeholder="Select Division"
-  />
-  {errors.divisionId && <p className="text-destructive text-sm">{errors.divisionId.message}</p>}
-</div>
+          <div>
+            <Label>Division *</Label>
+            <CustomSelect
+              endpoint={`${API_URL}/division`}
+              fields={["id", "name"]}
+              mapToOption={(item) => ({
+                value: String(item.id),
+                label: item.name,
+              })}
+              value={selectedDivision}
+              onChange={(vals) => {
+                setSelectedDivision(vals as SelectOption[]);
+                setValue("divisionId", String((vals as SelectOption[])[0]?.value ?? ""));
+              }}
+              searchable
+              paginated
+              placeholder="Select Division"
+            />
+            {errors.divisionId && (
+              <p className="text-destructive text-sm">{errors.divisionId.message}</p>
+            )}
+          </div>
 
           {/* District Name */}
           <div>

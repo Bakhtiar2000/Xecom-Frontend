@@ -57,7 +57,7 @@ const countryApi = baseApi.injectEndpoints({
 
     //-----------------Update Country-----------------
     updateCountry: builder.mutation({
-      query: (args:{id:string, data: TUpdateCountryDto}) => ({
+      query: (args: { id: string; data: TUpdateCountryDto }) => ({
         url: `/country/${args.id}`,
         method: "PUT",
         body: args.data,
@@ -73,7 +73,6 @@ const countryApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["country"],
     }),
-
   }),
 });
 
@@ -82,5 +81,5 @@ export const {
   useGetAllCountriesQuery,
   useGetSingleCountryQuery,
   useUpdateCountryMutation,
-  useDeleteCountryMutation
+  useDeleteCountryMutation,
 } = countryApi;
