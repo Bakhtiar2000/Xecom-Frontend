@@ -249,8 +249,14 @@ export type TReview = {
   comment?: string | null;
   isApproved: boolean;
   createdAt: string;
+  customer?: {
+    user?: {
+      name?: string | null;
+      email?: string | null;
+      profilePicture?: string | null;
+    };
+  };
 };
-
 export type TWishlist = {
   id: string;
   userId: string;
@@ -262,6 +268,7 @@ export type TCart = {
   id: string;
   customerId: string;
   createdAt: string;
+  items: string;
 };
 
 export type TCartItem = {

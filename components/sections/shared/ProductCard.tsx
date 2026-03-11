@@ -59,8 +59,9 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
 
   return (
     <div
-      className={`group bg-card-primary relative transform overflow-hidden rounded-sm shadow-sm transition-all duration-500 hover:shadow-lg ${viewMode === "list" ? "flex flex-col md:flex-row" : ""
-        }`}
+      className={`group bg-card-primary relative transform overflow-hidden rounded-sm shadow-sm transition-all duration-500 hover:shadow-lg ${
+        viewMode === "list" ? "flex flex-col md:flex-row" : ""
+      }`}
     >
       {/* Badge */}
       {badge && (
@@ -73,8 +74,9 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
 
       {/* Image */}
       <div
-        className={`relative ${viewMode === "list" ? "md:w-64" : "h-64"
-          } img-primary-bg overflow-hidden`}
+        className={`relative ${
+          viewMode === "list" ? "md:w-64" : "h-64"
+        } img-primary-bg overflow-hidden`}
       >
         <Image
           src={primaryImage}
@@ -148,8 +150,9 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
         {/* CTA */}
         <Link
           href={`/product/${product.id}`}
-          className={`bg-button-primary flex justify-center rounded-lg px-4 py-3 font-semibold text-white ${viewMode === "grid" ? "w-full" : "w-40"
-            }`}
+          className={`bg-button-primary flex justify-center rounded-lg px-4 py-3 font-semibold text-white ${
+            viewMode === "grid" ? "w-full" : "w-40"
+          }`}
         >
           View Details
         </Link>

@@ -8,9 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, ChevronDown, FastForward } from "lucide-react";
-import { Review } from "@/types";
-import { productReviews } from "@/data/product-reivew";
+import { Plus, ChevronDown, FastForward, Loader2 } from "lucide-react";
+import { Review, TReview } from "@/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,31 +18,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical, Edit, Trash2 } from "lucide-react";
 import { StarRating } from "@/components/custom/StarRating";
+import { toast } from "sonner";
+import { useAddReviewMutation, useDeleteReviewMutation, useGetAllReviewsOfProductQuery, useGetMyReviewsQuery, useUpdateReviewMutation } from "@/redux/features/product/review.api";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
-const CURRENT_USER_EMAIL = "john@gmail.com";
+interface ProductReviewsProps {
+  productId: string;
+}
 
-export default function ProductReviews() {
-  const [reviews, setReviews] = useState<Review[]>(productReviews);
+export default function ProductReviews({ productId }: ProductReviewsProps) {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Review | null>(null);
-  // image modal
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [activeImages, setActiveImages] = useState<string[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const openImageModal = (images: string[] = [], index: number) => {
-    setActiveImages(images);
-    setActiveIndex(index);
-    setImageModalOpen(true);
-  };
-
-  const nextImage = () => {
-    setActiveIndex((prev) => (prev === activeImages.length - 1 ? 0 : prev + 1));
-  };
-
-  const prevImage = () => {
-    setActiveIndex((prev) => (prev === 0 ? activeImages.length - 1 : prev - 1));
-  };
 
   const [form, setForm] = useState<{
     userName: string;
@@ -57,46 +46,80 @@ export default function ProductReviews() {
     images: [],
   });
 
+
+  const { data, isLoading: reviewsLoading } = useGetAllReviewsOfProductQuery({ productId });
+  const currentUser = useAppSelector(selectCurrentUser);
+  const reviews: TReview[] = data?.data ?? [];
+
+  const [addReview, { isLoading: adding }] = useAddReviewMutation();
+  const [updateReview, { isLoading: updating }] = useUpdateReviewMutation();
+  const [deleteReview] = useDeleteReviewMutation();
+
+
   const averageRating =
     reviews.length > 0
       ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
       : "0.0";
 
+  const openImageModal = (images: string[] = [], index: number) => {
+    setActiveImages(images);
+    setActiveIndex(index);
+    setImageModalOpen(true);
+  };
+
+  const nextImage = () =>
+    setActiveIndex((prev) => (prev === activeImages.length - 1 ? 0 : prev + 1));
+
+  const prevImage = () =>
+    setActiveIndex((prev) => (prev === 0 ? activeImages.length - 1 : prev - 1));
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-
     const urls = Array.from(files).map((file) => URL.createObjectURL(file));
+    setForm((prev) => ({ ...prev, images: [...prev.images, ...urls] }));
+  };
 
+  const removeImage = (index: number) => {
     setForm((prev) => ({
       ...prev,
-      images: [...prev.images, ...urls],
+      images: prev.images.filter((_, i) => i !== index),
     }));
   };
 
-  const handleSubmit = () => {
-    if (!form.comment.trim()) return;
-
-    if (editing) {
-      setReviews((prev) => prev.map((r) => (r.id === editing.id ? { ...r, ...form } : r)));
-    } else {
-      setReviews((prev) => [
-        {
-          id: crypto.randomUUID(),
-          userName: form.userName || "Anonymous",
-          userEmail: CURRENT_USER_EMAIL,
-          rating: form.rating,
-          comment: form.comment,
-          images: form.images,
-          date: new Date().toISOString().split("T")[0],
-        },
-        ...prev,
-      ]);
-    }
-
+  const resetForm = () => {
     setForm({ userName: "", rating: 5, comment: "", images: [] });
     setEditing(null);
     setOpen(false);
+  };
+
+  const handleSubmit = async () => {
+    if (!form.comment.trim()) return;
+
+    try {
+      if (editing) {
+        await updateReview({
+          id: editing.id,
+          data: {
+            rating: form.rating,
+            comment: form.comment,
+          },
+        }).unwrap();
+        toast.success("Review updated successfully");
+      } else {
+        // ── ADD ──
+        await addReview({
+          productId,
+          userName: form.userName || "Anonymous",
+          rating: form.rating,
+          comment: form.comment,
+        }).unwrap();
+        toast.success("Review added successfully");
+      }
+      resetForm();
+    } catch (err) {
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   const handleEdit = (review: Review) => {
@@ -110,15 +133,14 @@ export default function ProductReviews() {
     setOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    setReviews((prev) => prev.filter((r) => r.id !== id));
-  };
-
-  const removeImage = (index: number) => {
-    setForm((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteReview(id).unwrap();
+      toast.success("Review deleted");
+    } catch (err) {
+      toast.error("Failed to delete review");
+      console.error(err);
+    }
   };
 
   const ratingDistribution = [5, 4, 3, 2, 1].map((stars) => {
@@ -126,6 +148,8 @@ export default function ProductReviews() {
     const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
     return { stars, count, percentage };
   });
+
+  const isSubmitting = adding || updating;
 
   return (
     <section>
@@ -144,13 +168,13 @@ export default function ProductReviews() {
                 <div className="w-full min-w-50 flex-1 sm:w-auto">
                   {ratingDistribution.map(({ stars, count, percentage }) => (
                     <div key={stars} className="mb-1 flex items-center gap-2 text-sm">
-                      <span className="te4xt-muted-foreground w-8">{stars}</span>
+                      <span className="text-muted-foreground w-8">{stars}</span>
                       <FastForward className="text-rating h-3 w-3" />
                       <div className="bg-card-primary h-2 flex-1 rounded-full">
                         <div
                           className="from-rating to-rating/90 h-2 rounded-full bg-linear-to-r"
                           style={{ width: `${percentage}%` }}
-                        ></div>
+                        />
                       </div>
                       <span className="text-muted-foreground w-8 text-right">{count}</span>
                     </div>
@@ -169,8 +193,14 @@ export default function ProductReviews() {
           </CardHeader>
         </div>
 
-        {/* Modal */}
-        <Dialog open={open} onOpenChange={setOpen}>
+        {/* Add / Edit Modal */}
+        <Dialog
+          open={open}
+          onOpenChange={(val) => {
+            if (!val) resetForm();
+            setOpen(val);
+          }}
+        >
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>{editing ? "Update Review" : "Add Review"}</DialogTitle>
@@ -197,7 +227,6 @@ export default function ProductReviews() {
 
               <Input type="file" multiple accept="image/*" onChange={handleImageUpload} />
 
-              {/* Image Preview + Delete */}
               {form.images.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {form.images.map((img, i) => (
@@ -209,11 +238,10 @@ export default function ProductReviews() {
                         height={80}
                         className="h-20 w-20 rounded-lg border object-cover"
                       />
-
                       <button
                         type="button"
                         onClick={() => removeImage(i)}
-                        className="bg-destructive text-whit absolute top-0 right-0 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold opacity-0 transition group-hover:opacity-100"
+                        className="bg-destructive absolute top-0 right-0 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold text-white opacity-0 transition group-hover:opacity-100"
                       >
                         ✕
                       </button>
@@ -225,7 +253,9 @@ export default function ProductReviews() {
               <Button
                 className="bg-button-primary hover:bg-button-primary/80 w-full cursor-pointer"
                 onClick={handleSubmit}
+                disabled={isSubmitting}
               >
+                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {editing ? "Update Review" : "Submit Review"}
               </Button>
             </div>
@@ -234,165 +264,137 @@ export default function ProductReviews() {
 
         {/* Reviews List */}
         <div>
-          {reviews.map((r) => (
-            <div className="border-b" key={r.id}>
-              <CardContent className="space-y-4 py-6">
-                <div className="gap-5 space-y-4 md:flex">
-                  <div className="flex space-y-4 space-x-2">
-                    <div className="flex justify-between">
-                      <div className="flex gap-3">
-                        {r.userImage ? (
-                          <Avatar>
-                            <Image
-                              src={r.userImage}
-                              alt={r.userName}
-                              width={40}
-                              height={40}
-                              className="h-10 w-10 rounded-full"
-                            />
-                          </Avatar>
-                        ) : (
-                          <Avatar>
-                            <AvatarFallback>
-                              {r.userName
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
-                        )}
-
-                        <div>
-                          <h4 className="flex gap-6 font-semibold">
-                            {r.userName}{" "}
-                            <span>
-                              {" "}
-                              <StarRating rating={r.rating} />
-                            </span>
-                          </h4>
-                          <p className="text-muted-foreground text-xs">{r.date}</p>
-
-                          <p>{r.comment}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="items-start gap-2 md:hidden">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <button className="hover:bg-muted rounded p-1">
-                            <MoreVertical className="h-4 w-4" />
-                          </button>
-                        </DropdownMenuTrigger>
-
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleEdit(r)}>
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit
-                          </DropdownMenuItem>
-
-                          <DropdownMenuItem
-                            onClick={() => handleDelete(r.id)}
-                            className="text-destructive"
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-
-                  <div>
-                    {r.images && r.images.length > 0 && (
-                      <div className="flex gap-2">
-                        {r.images.map((img, i) => (
-                          <Image
-                            key={i}
-                            src={img}
-                            alt={`Review image ${i}`}
-                            width={80}
-                            height={80}
-                            onClick={() => openImageModal(r.images!, i)}
-                            className="bg-muted h-20 w-20 cursor-pointer rounded-lg object-cover transition hover:opacity-90"
-                          />
-                        ))}
-                      </div>
-                    )}
-
-                    {/* image modal  */}
-                    <Dialog open={imageModalOpen} onOpenChange={setImageModalOpen}>
-                      <DialogHeader>
-                        <DialogTitle></DialogTitle>
-                      </DialogHeader>
-
-                      <DialogContent className="bg-card-primary max-w-7xl border-none p-0">
-                        <div className="relative flex h-[80vh] items-center justify-center">
-                          {/* Image */}
-                          <Image
-                            src={activeImages[activeIndex]}
-                            alt="Review preview"
-                            fill
-                            className="object-contain"
-                          />
-
-                          {/* Left Arrow */}
-                          {activeImages.length > 1 && (
-                            <button
-                              onClick={prevImage}
-                              className="absolute left-4 cursor-pointer rounded-full bg-black/50 p-2 text-xl text-white hover:bg-black/70"
-                            >
-                              ‹
-                            </button>
-                          )}
-
-                          {/* Right Arrow */}
-                          {activeImages.length > 1 && (
-                            <button
-                              onClick={nextImage}
-                              className="absolute right-4 cursor-pointer rounded-full bg-black/50 p-2 text-xl text-white hover:bg-black/70"
-                            >
-                              ›
-                            </button>
-                          )}
-
-                          {/* Counter */}
-                          {activeImages.length > 1 && (
-                            <div className="absolute bottom-4 rounded-full bg-black/50 px-3 py-1 text-sm text-white">
-                              {activeIndex + 1} / {activeImages.length}
-                            </div>
-                          )}
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-                  <div className="hidden items-start gap-2 md:flex">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button className="hover:bg-muted rounded p-1">
-                          <MoreVertical className="h-4 w-4" />
-                        </button>
-                      </DropdownMenuTrigger>
-
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleEdit(r)}>
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem
-                          onClick={() => handleDelete(r.id)}
-                          className="text-destructive"
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </div>
-              </CardContent>
+          {reviewsLoading ? (
+            <div className="flex items-center justify-center py-10">
+              <Loader2 className="h-6 w-6 animate-spin" />
             </div>
-          ))}
+          ) : reviews.length === 0 ? (
+            <p className="text-muted-foreground py-10 text-center text-sm">
+              No reviews yet. Be the first to review!
+            </p>
+          ) : (
+            reviews.map((r) => (
+              <div className="border-b" key={r.id}>
+                <CardContent className="space-y-4 py-6">
+                  <div className="gap-5 space-y-4 md:flex">
+                    <div className="flex space-y-4 space-x-2">
+                      <div className="flex justify-between">
+                        <div className="flex gap-3">
+                          {r.userImage ? (
+                            <Avatar>
+                              <Image
+                                src={r.userImage}
+                                alt={r.userName}
+                                width={40}
+                                height={40}
+                                className="h-10 w-10 rounded-full"
+                              />
+                            </Avatar>
+                          ) : (
+                            <Avatar>
+                              <AvatarFallback>
+                                {(r.customer?.user?.name ?? "A")
+                                  .split(" ")
+                                  .map((n: string) => n[0])
+                                  .join("")}
+                              </AvatarFallback>
+                            </Avatar>
+                          )}
+
+                          <div>
+                            <h4 className="flex gap-6 font-semibold">
+                              {r.userName}
+                              <span>
+                                <StarRating rating={r.rating} />
+                              </span>
+                            </h4>
+                            <p className="text-muted-foreground text-xs">{r.date}</p>
+                            <p>{r.comment}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Mobile dropdown */}
+                      <div className="items-start gap-2 md:hidden">
+                        {r.userEmail === currentUser && (
+                          <ReviewActions
+                            onEdit={() => handleEdit(r)}
+                            onDelete={() => handleDelete(r.id)}
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      {r.images && r.images.length > 0 && (
+                        <div className="flex gap-2">
+                          {r.images.map((img, i) => (
+                            <Image
+                              key={i}
+                              src={img}
+                              alt={`Review image ${i}`}
+                              width={80}
+                              height={80}
+                              onClick={() => openImageModal(r.images as string[], i)}
+                              className="bg-muted h-20 w-20 cursor-pointer rounded-lg object-cover transition hover:opacity-90"
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Image lightbox modal */}
+                      <Dialog open={imageModalOpen} onOpenChange={setImageModalOpen}>
+                        <DialogHeader>
+                          <DialogTitle />
+                        </DialogHeader>
+                        <DialogContent className="bg-card-primary max-w-7xl border-none p-0">
+                          <div className="relative flex h-[80vh] items-center justify-center">
+                            {activeImages[activeIndex] && (
+                              <Image
+                                src={activeImages[activeIndex]}
+                                alt="Review preview"
+                                fill
+                                className="object-contain"
+                              />
+                            )}
+                            {activeImages.length > 1 && (
+                              <>
+                                <button
+                                  onClick={prevImage}
+                                  className="absolute left-4 cursor-pointer rounded-full bg-black/50 p-2 text-xl text-white hover:bg-black/70"
+                                >
+                                  ‹
+                                </button>
+                                <button
+                                  onClick={nextImage}
+                                  className="absolute right-4 cursor-pointer rounded-full bg-black/50 p-2 text-xl text-white hover:bg-black/70"
+                                >
+                                  ›
+                                </button>
+                                <div className="absolute bottom-4 rounded-full bg-black/50 px-3 py-1 text-sm text-white">
+                                  {activeIndex + 1} / {activeImages.length}
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+
+                    {/* Desktop dropdown — only for current user's reviews */}
+                    <div className="hidden items-start gap-2 md:flex">
+                      {r.userEmail === currentUser && (
+                        <ReviewActions
+                          onEdit={() => handleEdit(r)}
+                          onDelete={() => handleDelete(r.id)}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
@@ -401,5 +403,34 @@ export default function ProductReviews() {
         <ChevronDown className="h-4 w-4" />
       </button>
     </section>
+  );
+}
+
+// ─── Small helper component ────────────────────────────────────────────────
+function ReviewActions({
+  onEdit,
+  onDelete,
+}: {
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="hover:bg-muted rounded p-1">
+          <MoreVertical className="h-4 w-4" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={onEdit}>
+          <Edit className="mr-2 h-4 w-4" />
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onDelete} className="text-destructive">
+          <Trash2 className="mr-2 h-4 w-4" />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

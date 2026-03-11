@@ -1,13 +1,27 @@
 "use client";
 import React, { useRef, useState } from "react";
 import Image from "next/image";
-import { Truck, ZoomIn, Heart, Share2, ShieldCheck, RotateCcw, ChevronDown, ChevronUp, Star, Package, Eye, Loader2 } from "lucide-react";
+import {
+  Truck,
+  ZoomIn,
+  Heart,
+  Share2,
+  ShieldCheck,
+  RotateCcw,
+  ChevronDown,
+  ChevronUp,
+  Star,
+  Package,
+  Eye,
+  Loader2,
+} from "lucide-react";
 import ProductSugation from "./section/ProductSugation";
 import ProductReviews from "./section/ProductReview";
 import { useParams } from "next/navigation";
 import { useGetSingleProductQuery } from "@/redux/features/product/product.api";
-import { useAddToCartMutation, useGetMyCartQuery } from "@/redux/features/order/cart.api";
+import { useAddToCartMutation } from "@/redux/features/order/cart.api";
 import { toast } from "sonner";
+import { useAddToWishlistMutation, useGetAllWishlistsQuery, useRemoveFromWishlistMutation } from "@/redux/features/product/wishlist.api";
 
 export default function ProductDetails() {
   const params = useParams();
@@ -17,13 +31,15 @@ export default function ProductDetails() {
   const product = apiResponse?.data;
 
   const [addToCart, { isLoading: isAddingToCart }] = useAddToCartMutation();
+  const { data: wishlistData } = useGetAllWishlistsQuery(undefined);
+  const [addToWishlist, { isLoading: isWishlisting }] = useAddToWishlistMutation();
+  const [removeFromWishlist, { isLoading: isUnwishlisting }] = useRemoveFromWishlistMutation();
 
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"description" | "specs" | "shipping">("description");
 
@@ -39,6 +55,28 @@ export default function ProductDetails() {
       x: Math.min(100, Math.max(0, x)),
       y: Math.min(100, Math.max(0, y)),
     });
+  };
+
+
+  // Derive wishlist state from API data
+  const wishlistItem = wishlistData?.data?.find(
+    (item: any) => item.productId === id || item.product?.id === id
+  );
+  const isWishlisted = !!wishlistItem;
+
+  // Add this handler:
+  const handleWishlistToggle = async () => {
+    try {
+      if (isWishlisted && wishlistItem?.id) {
+        await removeFromWishlist(wishlistItem.id).unwrap();
+        toast.success("Removed from wishlist");
+      } else {
+        await addToWishlist({ productId: id }).unwrap();
+        toast.success("Added to wishlist");
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message ?? "Wishlist action failed");
+    }
   };
 
   if (isLoading) {
@@ -60,8 +98,6 @@ export default function ProductDetails() {
     );
   }
 
-
-
   const handleAddToCart = async () => {
     if (!selectedVariant?.id) {
       toast.error("Please select a variant");
@@ -78,7 +114,7 @@ export default function ProductDetails() {
       console.log("Cart result:", result);
       toast.success(`${product.name} added to cart!`);
     } catch (error: any) {
-      // console.error("Cart error full:", error);    
+      // console.error("Cart error full:", error);
     }
   };
   // const handleBuyNow = async () => {
@@ -173,7 +209,10 @@ export default function ProductDetails() {
     if (stockQty === 0)
       return { label: "Out of Stock", color: "text-red-500 bg-red-50 border-red-200" };
     if (stockQty <= stockAlert)
-      return { label: `Only ${stockQty} left`, color: "text-orange-500 bg-orange-50 border-orange-200" };
+      return {
+        label: `Only ${stockQty} left`,
+        color: "text-orange-500 bg-orange-50 border-orange-200",
+      };
     return { label: "In Stock", color: "text-green-600 bg-green-50 border-green-200" };
   };
   const stockStatus = getStockStatus();
@@ -206,7 +245,6 @@ export default function ProductDetails() {
 
       {/* Main Product Section */}
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-
         {/* ─── LEFT: Images + Tabs below ─── */}
         <div>
           {/* Image area */}
@@ -267,7 +305,7 @@ export default function ProductDetails() {
 
               {/* Zoom Indicator Overlay */}
               <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-colors group-hover:opacity-100">
-                <div className="flex scale-90 transform items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-gray-900 shadow-lg backdrop-blur-sm transition-all group-hover:scale-100 ">
+                <div className="flex scale-90 transform items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-gray-900 shadow-lg backdrop-blur-sm transition-all group-hover:scale-100">
                   <ZoomIn className="h-4 w-4" />
                   <span className="text-sm font-medium">Hover to preview</span>
                 </div>
@@ -289,7 +327,7 @@ export default function ProductDetails() {
 
               {/* View Count */}
               {product.viewCount > 0 && (
-                <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-black/60 px-3 py-1 text-xs text-white backdrop-blur-sm">
+                <div className="absolute right-4 bottom-4 flex items-center gap-1 rounded-full bg-black/60 px-3 py-1 text-xs text-white backdrop-blur-sm">
                   <Eye className="h-3 w-3" />
                   <span>{product.viewCount} views</span>
                 </div>
@@ -300,7 +338,7 @@ export default function ProductDetails() {
             {isHovering && currentImage && (
               <div
                 ref={zoomBoxRef}
-                className=" absolute top-70 left-[calc(80%+2rem)] z-30 hidden h-100 w-120 -translate-y-1/2 overflow-hidden rounded-lg border-2 border-white bg-white shadow-2xl lg:block "
+                className="absolute top-70 left-[calc(80%+2rem)] z-30 hidden h-100 w-120 -translate-y-1/2 overflow-hidden rounded-lg border-2 border-white bg-white shadow-2xl lg:block"
                 style={{ marginLeft: "1rem" }}
               >
                 <div className="relative h-full w-full">
@@ -332,13 +370,11 @@ export default function ProductDetails() {
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab
-                    ? "border-b-2 border-black dark:border-white "
+                    ? "border-b-2 border-black dark:border-white"
                     : "text-muted-foreground hover:text-foreground"
                     }`}
                 >
-                  {tab === "specs"
-                    ? "Specifications"
-                    : tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  {tab === "specs" ? "Specifications" : tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
               ))}
             </div>
@@ -387,12 +423,12 @@ export default function ProductDetails() {
 
             {/* Specs Tab */}
             {activeTab === "specs" && (
-              <div className="overflow-hidden bg-card-primary rounded-lg border">
+              <div className="bg-card-primary overflow-hidden rounded-lg border">
                 <table className="w-full text-sm">
                   <tbody>
                     {Object.entries(specs).map(([key, value], idx) => (
                       <tr key={key} className={idx % 2 === 0 ? "bg-muted/40" : "bg-background"}>
-                        <td className="border-border w-2/5 border-r px-4 py-3 font-medium capitalize  ">
+                        <td className="border-border w-2/5 border-r px-4 py-3 font-medium capitalize">
                           {key.replace(/([A-Z])/g, " $1").trim()}
                         </td>
                         <td className="px-4 py-3 font-medium">{value as string}</td>
@@ -414,7 +450,7 @@ export default function ProductDetails() {
                               : "bg-background"
                           }
                         >
-                          <td className="border-border w-2/5 border-r px-4 py-3 font-medium capitalize  ">
+                          <td className="border-border w-2/5 border-r px-4 py-3 font-medium capitalize">
                             {name}
                           </td>
                           <td className="px-4 py-3 font-medium">{val}</td>
@@ -430,7 +466,7 @@ export default function ProductDetails() {
             {activeTab === "shipping" && (
               <div className="space-y-3 text-sm">
                 <div className="border-border bg-card-primary flex items-start gap-3 rounded-lg border p-3">
-                  <Truck className="mt-0.5 h-4 w-4 shrink-0 " />
+                  <Truck className="mt-0.5 h-4 w-4 shrink-0" />
                   <div>
                     <p className="font-medium">Standard Delivery</p>
                     <p className="text-muted-foreground text-xs">
@@ -439,7 +475,7 @@ export default function ProductDetails() {
                   </div>
                 </div>
                 <div className="border-border bg-card-primary flex items-start gap-3 rounded-lg border p-3">
-                  <RotateCcw className="mt-0.5 h-4 w-4 shrink-0 " />
+                  <RotateCcw className="mt-0.5 h-4 w-4 shrink-0" />
                   <div>
                     <p className="font-medium">Return Policy</p>
                     <p className="text-muted-foreground text-xs">
@@ -449,7 +485,7 @@ export default function ProductDetails() {
                 </div>
                 {product.warranty && (
                   <div className="border-border bg-card-primary flex items-start gap-3 rounded-lg border p-3">
-                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 " />
+                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
                     <div>
                       <p className="font-medium">Warranty</p>
                       <p className="text-muted-foreground text-xs">{product.warranty}</p>
@@ -470,7 +506,7 @@ export default function ProductDetails() {
                 {/* Brand + Category chips */}
                 <div className="mb-2 flex flex-wrap items-center gap-2">
                   {product.brand?.name && (
-                    <span className="detailsPage-text-primary rounded border px-2 py-0.5 text-xs font-semibold uppercase tracking-wider">
+                    <span className="detailsPage-text-primary rounded border px-2 py-0.5 text-xs font-semibold tracking-wider uppercase">
                       {product.brand.name}
                     </span>
                   )}
@@ -478,20 +514,25 @@ export default function ProductDetails() {
                     <span className="text-muted-foreground text-xs">{product.category.name}</span>
                   )}
                 </div>
-                <h1 className="mb-2 text-xl font-bold leading-tight lg:text-3xl">{product.name}</h1>
+                <h1 className="mb-2 text-xl leading-tight font-bold lg:text-3xl">{product.name}</h1>
                 <p className="text-muted-foreground text-sm">{product.shortDescription}</p>
               </div>
               {/* Wishlist + Share */}
               <div className="flex shrink-0 items-center gap-2">
                 <button
-                  onClick={() => setIsWishlisted(!isWishlisted)}
-                  className={`border-border flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:scale-110 ${isWishlisted ? "border-danger/20 bg-danger/50" : "hover:bg-muted"
+                  onClick={handleWishlistToggle}
+                  disabled={isWishlisting || isUnwishlisting}
+                  className={`border-border flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:scale-110 disabled:cursor-not-allowed disabled:opacity-60 ${isWishlisted ? "border-danger/20 bg-danger/50" : "hover:bg-muted"
                     }`}
                 >
-                  <Heart
-                    className={`h-4 w-4 transition-colors ${isWishlisted ? "fill-danger text-danger" : ""
-                      }`}
-                  />
+                  {isWishlisting || isUnwishlisting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Heart
+                      className={`h-4 w-4 transition-colors ${isWishlisted ? "fill-danger text-danger" : ""
+                        }`}
+                    />
+                  )}
                 </button>
                 <button className="border-border hover:bg-muted flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:scale-110">
                   <Share2 className="h-4 w-4" />
@@ -533,7 +574,7 @@ export default function ProductDetails() {
           </div>
 
           {/* Price Section */}
-          <div className="border-border mb-6 rounded-xl p-4 bg-card-primary border">
+          <div className="border-border bg-card-primary mb-6 rounded-xl border p-4">
             <div className="mb-2 flex flex-wrap items-baseline gap-3">
               <span className="text-2xl font-bold lg:text-4xl">TK. {formattedPrice}</span>
               {cost && parseFloat(cost) > parseFloat(price) && (
@@ -542,7 +583,7 @@ export default function ProductDetails() {
                 </span>
               )}
               {discountPercent && (
-                <span className="rounded bg-button-ternary px-2 py-0.5 text-sm font-bold text-green-700">
+                <span className="bg-button-ternary rounded px-2 py-0.5 text-sm font-bold text-green-700">
                   Save {discountPercent}%
                 </span>
               )}
@@ -555,7 +596,7 @@ export default function ProductDetails() {
                 {stockStatus.label}
               </span>
               {product.warranty && (
-                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                <span className="text-muted-foreground flex items-center gap-1 text-xs">
                   <ShieldCheck className="h-3.5 w-3.5 text-blue-500" />
                   {product.warranty}
                 </span>
@@ -568,13 +609,17 @@ export default function ProductDetails() {
             <div className="mb-6">
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-semibold">
-                  Size:{" "}
-                  <span className="text-muted-foreground font-normal">{selectedSize}</span>
+                  Size: <span className="text-muted-foreground font-normal">{selectedSize}</span>
                 </h3>
                 <button className="flex items-center gap-1 text-xs underline underline-offset-2">
                   Size Chart
                   <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </button>
               </div>
@@ -585,7 +630,7 @@ export default function ProductDetails() {
                     onClick={() => handleSizeSelect(size)}
                     className={`flex h-10 w-14 cursor-pointer items-center justify-center rounded-lg border-2 font-medium transition-all lg:h-14 ${selectedSize === size
                       ? "border-black bg-black text-white"
-                      : "border-border  hover:border-border/80 bg-white text-black"
+                      : "border-border hover:border-border/80 bg-white text-black"
                       }`}
                   >
                     {size}
@@ -599,8 +644,7 @@ export default function ProductDetails() {
           {allColors.length > 0 && (
             <div className="mb-6">
               <h3 className="mb-3 font-semibold">
-                Color:{" "}
-                <span className="text-muted-foreground font-normal">{selectedColor}</span>
+                Color: <span className="text-muted-foreground font-normal">{selectedColor}</span>
               </h3>
               <div className="flex flex-row flex-wrap gap-3">
                 {allColors.map((color) => (
@@ -609,8 +653,8 @@ export default function ProductDetails() {
                     title={color.value}
                     onClick={() => handleColorSelect(color.value)}
                     className={`relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all hover:scale-110 ${selectedColor === color.value
-                      ? "scale-110 border-black  shadow-md"
-                      : "border-border "
+                      ? "scale-110 border-black shadow-md"
+                      : "border-border"
                       }`}
                     style={
                       color.hex ? { backgroundColor: color.hex } : { backgroundColor: "#e5e7eb" }
@@ -644,9 +688,7 @@ export default function ProductDetails() {
             <div className="flex w-full flex-col gap-4 md:flex-row">
               <div className="border-border flex w-full items-center justify-center rounded-lg border md:w-auto">
                 <button
-                  onClick={() =>
-                    setQuantity(Math.max(product.minOrderQty ?? 1, quantity - 1))
-                  }
+                  onClick={() => setQuantity(Math.max(product.minOrderQty ?? 1, quantity - 1))}
                   className="hover:bg-muted bg-card-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-l-lg"
                 >
                   <span className="text-xl">-</span>
@@ -655,9 +697,7 @@ export default function ProductDetails() {
                   {quantity}
                 </span>
                 <button
-                  onClick={() =>
-                    setQuantity(Math.min(product.maxOrderQty ?? 99, quantity + 1))
-                  }
+                  onClick={() => setQuantity(Math.min(product.maxOrderQty ?? 99, quantity + 1))}
                   className="hover:bg-muted bg-card-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-r-lg"
                 >
                   <span className="text-xl">+</span>
@@ -672,7 +712,10 @@ export default function ProductDetails() {
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
                       d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                     />
                   </svg>
@@ -695,14 +738,14 @@ export default function ProductDetails() {
           </div>
 
           {/* Trust Badges */}
-          <div className="border-border  bg-card-primary mb-6 grid grid-cols-3 gap-3 rounded-xl border p-4">
+          <div className="border-border bg-card-primary mb-6 grid grid-cols-3 gap-3 rounded-xl border p-4">
             <div className="flex flex-col items-center gap-1 text-center">
               <Truck className="text-button-ternary h-5 w-5" />
               <span className="text-xs font-medium">Free Delivery</span>
               <span className="text-muted-foreground text-xs">Above TK. 8000</span>
             </div>
             <div className="flex flex-col items-center gap-1 text-center">
-              <RotateCcw className="h-5 w-5 text-button-ternary" />
+              <RotateCcw className="text-button-ternary h-5 w-5" />
               <span className="text-xs font-medium">Easy Returns</span>
               <span className="text-muted-foreground text-xs">15 day policy</span>
             </div>
@@ -729,7 +772,7 @@ export default function ProductDetails() {
 
           {/* Store Availability */}
           <div className="mb-8">
-            <button className="border-border bg-muted flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border py-3 transition-colors hover:bg-muted ">
+            <button className="border-border bg-muted hover:bg-muted flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border py-3 transition-colors">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -756,9 +799,7 @@ export default function ProductDetails() {
                 {faqs.map((faq: any, index: number) => (
                   <div key={faq.id}>
                     <button
-                      onClick={() =>
-                        setOpenFaqIndex(openFaqIndex === index ? null : index)
-                      }
+                      onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
                       className="hover:bg-muted/50 bg-card-primary flex w-full cursor-pointer items-center justify-between gap-4 px-4 py-3 text-left transition-colors"
                     >
                       <span className="text-sm font-medium">{faq.question}</span>
@@ -789,8 +830,10 @@ export default function ProductDetails() {
 
       <div className="mt-12">
         <ProductSugation />
-        <ProductReviews />
+        <ProductReviews productId={id} />
       </div>
     </div>
   );
 }
+
+//  productId={id}

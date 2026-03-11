@@ -94,6 +94,8 @@ export default function ProductContent() {
   };
   const { data, isLoading, isFetching } = useGetAllProductsQuery(buildQueryParams());
 
+  console.log('product', data);
+
   const filteredProducts = useMemo(() => {
     const products = data?.data ?? [];
     const result = [...products];

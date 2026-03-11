@@ -19,7 +19,6 @@ import {
 import { CartSkeleton } from "./CartSkeleton";
 import { EmptyCart } from "./EmptyCart";
 
-
 export default function CartContent({
   isSheet = false,
   onClose,
@@ -30,8 +29,8 @@ export default function CartContent({
   const { data, isLoading } = useGetMyCartQuery([]);
   const [updateCartQuantity] = useUpdateCartQuantityMutation();
   const [deleteCartItem] = useDeleteCartItemMutation();
-  
-  const cart: CartApi | undefined = data?.data;
+
+  const cart = data?.data as unknown as CartApi;
   const cartItems: CartItemApi[] = cart?.items ?? [];
 
   const [selection, setSelection] = useState<LocalSelection>({});
@@ -40,15 +39,12 @@ export default function CartContent({
   // Tracks which items have an in-flight API request
   const [updatingItems, setUpdatingItems] = useState<Set<string>>(new Set());
 
-
-  const getQty = (item: CartItemApi): number =>
-    localQuantity[item.id] ?? item.quantity;
+  const getQty = (item: CartItemApi): number => localQuantity[item.id] ?? item.quantity;
 
   // ---------- Selection ----------
   const isSelected = (id: string) => selection[id] !== false;
 
-  const allSelected =
-    cartItems.length > 0 && cartItems.every((i) => isSelected(i.id));
+  const allSelected = cartItems.length > 0 && cartItems.every((i) => isSelected(i.id));
 
   const toggleSelectAll = () => {
     const next: LocalSelection = {};
@@ -100,7 +96,6 @@ export default function CartContent({
       return next;
     });
   };
-
 
   // ---------- Totals (uses optimistic quantity) ----------
   const totals = (() => {
@@ -154,7 +149,6 @@ export default function CartContent({
                   const finalPrice = Number(item.variant.discountPrice ?? item.variant.price);
                   const qty = getQty(item);
                   const isUpdating = updatingItems.has(item.id);
-
 
                   return (
                     <div key={item.id} className="flex gap-4 border-t p-4">
@@ -239,4 +233,4 @@ export default function CartContent({
       </div>
     </div>
   );
-};
+}
