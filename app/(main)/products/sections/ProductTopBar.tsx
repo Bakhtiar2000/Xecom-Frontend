@@ -40,7 +40,6 @@ export default function ProductTopBar({
   showFilters,
   setShowFilters,
   filterOptions,
-  toggleFilter,
   setFilters,
 }: Props) {
   return (

@@ -1,7 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, ShoppingCart, Navigation, LogIn, LogOut, LayoutDashboard, User, Package, Heart } from "lucide-react";
+import {
+  Menu,
+  ShoppingCart,
+  Navigation,
+  LogIn,
+  LogOut,
+  LayoutDashboard,
+  User,
+  Package,
+  Heart,
+} from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { mainRoutes } from "@/route/main.route";
 import { usePathname, useRouter } from "next/navigation";
@@ -132,8 +142,9 @@ const Navbar = () => {
     <div className="bg-secondary w-full">
       {/* Top Bar */}
       <div
-        className={`bg-primary container mx-auto hidden py-2! text-sm text-white transition-all duration-300 ease-in-out lg:flex ${isSticky ? "h-0 overflow-hidden opacity-0" : "h-auto overflow-visible py-2! opacity-100"
-          }`}
+        className={`bg-primary container mx-auto hidden py-2! text-sm text-white transition-all duration-300 ease-in-out lg:flex ${
+          isSticky ? "h-0 overflow-hidden opacity-0" : "h-auto overflow-visible py-2! opacity-100"
+        }`}
       >
         <div className="flex w-1/2 items-center justify-between">
           <p className="flex items-center gap-2">
@@ -152,8 +163,9 @@ const Navbar = () => {
       </div>
 
       <nav
-        className={`bg-secondary left-0 w-full transition-all duration-300 ${isSticky ? "fixed top-0 z-40 py-3 shadow-md" : "relative py-3 shadow-sm"
-          }`}
+        className={`bg-secondary left-0 w-full transition-all duration-300 ${
+          isSticky ? "fixed top-0 z-40 py-3 shadow-md" : "relative py-3 shadow-sm"
+        }`}
       >
         <div className={`container mx-auto flex items-center justify-between py-0! md:px-4`}>
           <div className="flex items-center justify-center gap-20">
@@ -169,10 +181,11 @@ const Navbar = () => {
                   <Link
                     key={route.href}
                     href={route.href}
-                    className={`relative text-sm font-thin transition-colors ${isActive
-                      ? "text-primary after:bg-primary font-semibold after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full dark:text-white dark:after:bg-white"
-                      : "text-foreground hover:text-foreground"
-                      }`}
+                    className={`relative text-sm font-thin transition-colors ${
+                      isActive
+                        ? "text-primary after:bg-primary font-semibold after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full dark:text-white dark:after:bg-white"
+                        : "text-foreground hover:text-foreground"
+                    }`}
                   >
                     {route.label}
                   </Link>
@@ -278,7 +291,9 @@ const Navbar = () => {
                           {/* User Info Header */}
                           <div className="px-2 py-1.5">
                             <p className="text-sm font-medium">{userData.data.user.name}</p>
-                            <p className="text-muted-foreground text-xs">{userData.data.user.email}</p>
+                            <p className="text-muted-foreground text-xs">
+                              {userData.data.user.email}
+                            </p>
                           </div>
 
                           <div className="border-t border-b py-1">
@@ -312,7 +327,6 @@ const Navbar = () => {
                         </div>
                       </HoverCardContent>
                     </HoverCard>
-
 
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -420,7 +434,9 @@ const Navbar = () => {
                             {/* User Info Header */}
                             <div className="px-2 py-1.5">
                               <p className="text-sm font-medium">{userData.data.user.name}</p>
-                              <p className="text-muted-foreground text-xs">{userData.data.user.email}</p>
+                              <p className="text-muted-foreground text-xs">
+                                {userData.data.user.email}
+                              </p>
                             </div>
 
                             <div className="border-t border-b py-1">
@@ -556,10 +572,11 @@ const Navbar = () => {
                         <Link
                           key={route.href}
                           href={route.href}
-                          className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive
-                            ? "bg-primary/10 text-primary"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                            }`}
+                          className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                            isActive
+                              ? "bg-primary/10 text-primary"
+                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                          }`}
                         >
                           {route.label}
                         </Link>

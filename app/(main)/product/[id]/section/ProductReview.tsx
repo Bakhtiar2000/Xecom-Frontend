@@ -19,7 +19,13 @@ import {
 import { MoreVertical, Edit, Trash2 } from "lucide-react";
 import { StarRating } from "@/components/custom/StarRating";
 import { toast } from "sonner";
-import { useAddReviewMutation, useDeleteReviewMutation, useGetAllReviewsOfProductQuery, useGetMyReviewsQuery, useUpdateReviewMutation } from "@/redux/features/product/review.api";
+import {
+  useAddReviewMutation,
+  useDeleteReviewMutation,
+  useGetAllReviewsOfProductQuery,
+  useGetMyReviewsQuery,
+  useUpdateReviewMutation,
+} from "@/redux/features/product/review.api";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
@@ -46,7 +52,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
     images: [],
   });
 
-
   const { data, isLoading: reviewsLoading } = useGetAllReviewsOfProductQuery({ productId });
   const currentUser = useAppSelector(selectCurrentUser);
   const reviews: TReview[] = data?.data ?? [];
@@ -54,7 +59,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
   const [addReview, { isLoading: adding }] = useAddReviewMutation();
   const [updateReview, { isLoading: updating }] = useUpdateReviewMutation();
   const [deleteReview] = useDeleteReviewMutation();
-
 
   const averageRating =
     reviews.length > 0
@@ -407,13 +411,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 }
 
 // ─── Small helper component ────────────────────────────────────────────────
-function ReviewActions({
-  onEdit,
-  onDelete,
-}: {
-  onEdit: () => void;
-  onDelete: () => void;
-}) {
+function ReviewActions({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => void }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -1,7 +1,7 @@
 "use client";
 
 import { FilterState } from "@/types";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
 import { useSearchParams } from "next/navigation";
 import { useGetAllBrandsQuery } from "@/redux/features/product/brand.api";
@@ -32,8 +32,14 @@ export default function ProductContent() {
   });
 
   // fetch attributes
-  const { data: attributesData } = useGetAllAttributesQuery([]);
-  const { data: brandsData } = useGetAllBrandsQuery([{ name: "fields", value: "name,id" }]);
+  const { data: attributesData } = useGetAllAttributesQuery([
+    { name: "fields", value: "name" },
+    { name: "fields", value: "id" }
+  ]);
+  const { data: brandsData } = useGetAllBrandsQuery([
+    { name: "fields", value: "name" },
+    { name: "fields", value: "id" }
+  ]);
 
   const filterOptions = useMemo(() => {
     const attributes = attributesData?.data ?? [];
@@ -66,6 +72,17 @@ export default function ProductContent() {
     };
   }, [attributesData, brandsData, categoriesData]);
 
+
+  const [debouncedPriceRange, setDebouncedPriceRange] = useState(filters.priceRange);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedPriceRange(filters.priceRange);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [filters.priceRange]);
+
   const buildQueryParams = () => {
     const params: { name: string; value: string }[] = [];
 
@@ -87,14 +104,14 @@ export default function ProductContent() {
     if (filters.sortBy === "newest")
       params.push({ name: "sortBy", value: "createdAt" }, { name: "sortOrder", value: "desc" });
 
-    params.push({ name: "priceStarts", value: String(filters.priceRange[0]) });
-    params.push({ name: "priceEnds", value: String(filters.priceRange[1]) });
+    params.push({ name: "priceStarts", value: String(debouncedPriceRange[0]) });
+    params.push({ name: "priceEnds", value: String(debouncedPriceRange[1]) });
 
     return params;
   };
   const { data, isLoading, isFetching } = useGetAllProductsQuery(buildQueryParams());
 
-  console.log('product', data);
+  console.log("product", data);
 
   const filteredProducts = useMemo(() => {
     const products = data?.data ?? [];
@@ -153,9 +170,10 @@ export default function ProductContent() {
   };
 
   return (
-    <div>
-      <div className="container lg:-mt-8">
-        <div className="flex flex-col gap-8 lg:flex-row">
+    <div className="container lg:-mt-8">
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+
+        <div className="lg:sticky lg:top-20 lg:h-[calc(100vh-80px)] lg:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <FilterSidebar
             filters={filters}
             brands={brandsData?.data || []}
@@ -165,29 +183,29 @@ export default function ProductContent() {
             setFilters={setFilters}
             clearAllFilters={clearAllFilters}
           />
-
-          <div className="flex-1">
-            <ProductTopBar
-              filters={filters}
-              productsLength={data?.meta?.totalCount ?? 0}
-              filteredLength={filteredProducts.length}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-              showFilters={showFilters}
-              setShowFilters={setShowFilters}
-              filterOptions={filterOptions}
-              toggleFilter={toggleFilter}
-              setFilters={setFilters}
-            />
-
-            <ProductGrid
-              products={filteredProducts as any}
-              isLoading={isLoading || isFetching}
-              viewMode={viewMode}
-              getBadgeColor={getBadgeColor}
-            />
-          </div>
         </div>
+
+        <div className="flex-1">
+          <ProductTopBar
+            filters={filters}
+            productsLength={data?.meta?.totalCount ?? 0}
+            filteredLength={filteredProducts.length}
+            viewMode={viewMode}
+            setViewMode={setViewMode}
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
+            filterOptions={filterOptions}
+            toggleFilter={toggleFilter}
+            setFilters={setFilters}
+          />
+          <ProductGrid
+            products={filteredProducts as any}
+            isLoading={isLoading || isFetching}
+            viewMode={viewMode}
+            getBadgeColor={getBadgeColor}
+          />
+        </div>
+
       </div>
     </div>
   );
