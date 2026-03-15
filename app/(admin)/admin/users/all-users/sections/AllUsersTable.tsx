@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useGetAllUsersQuery } from "@/redux/features/user/user.api";
+import { useGetAllUsersQuery,useChangeStatusMutation } from "@/redux/features/user/user.api";
+import { baseApi as api } from "@/redux/api/baseApi";
 import {
   Table,
   TableBody,
@@ -30,6 +31,9 @@ import { Search, X, Loader2 } from "lucide-react";
 import { useTableSort } from "@/hooks/useTableSort";
 import { useTablePagination } from "@/hooks/useTablePagination";
 import { useDebounce } from "@/hooks/useDebounce";
+import { Switch } from "@/components/ui/switch";
+import { UserStatus } from "@/constants/enum";
+import { toast } from "sonner";
 
 type SortableFields = "name" | "email" | "phoneNumber";
 
@@ -38,6 +42,8 @@ export function AllUsersTable() {
   const [gender, setGender] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [role, setRole] = useState<string>("");
+
+  const [changeStatus, { isLoading: isChangingStatus }] = useChangeStatusMutation()
 
   // Debounce search term to avoid excessive API calls
   const debouncedSearchTerm = useDebounce(searchTerm);
@@ -75,6 +81,24 @@ export function AllUsersTable() {
     handleSort(field);
     resetPage();
   };
+
+  //update status
+const handleToggleStatus = async (user: TUser) => {
+  const newStatus = user.status === UserStatus.ACTIVE 
+    ? UserStatus.INACTIVE 
+    : UserStatus.ACTIVE;
+
+  try {
+    await changeStatus({ 
+      id: user.id, 
+      data: { status: newStatus } 
+    }).unwrap();
+    
+    toast.success(`User status changed to ${newStatus}`);
+  } catch (error) {
+    toast.error("Failed to update user status");
+  }
+};
 
   const clearFilters = () => {
     setSearchTerm("");
@@ -231,9 +255,19 @@ export function AllUsersTable() {
                       <Badge variant="outline">{user.role}</Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={user.status === "ACTIVE" ? "default" : "destructive"}>
+                      <div className="flex gap-x-2">
+                       <Badge variant={user.status === "ACTIVE" ? "default" : "destructive"}>
                         {user.status}
-                      </Badge>
+                      </Badge>   
+
+ 
+                      <Switch
+                       checked={user.status === UserStatus.ACTIVE}
+                       onCheckedChange={() => handleToggleStatus(user)}
+                       disabled={isChangingStatus}
+                        />            
+                      </div>
+
                     </TableCell>
                     <TableCell>
                       {user.emailVerified ? (

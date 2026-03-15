@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useDeleteBrandMutation, useGetAllBrandsQuery } from "@/redux/features/product/brand.api";
+import { useDeleteBrandMutation, useGetAllBrandsQuery,useUpdatebrandFieldMutation } from "@/redux/features/product/brand.api";
 import {
   Table,
   TableBody,
@@ -42,6 +42,8 @@ import { useTableSort } from "@/hooks/useTableSort";
 import { useTablePagination } from "@/hooks/useTablePagination";
 import { useDebounce } from "@/hooks/useDebounce";
 import { toast } from "sonner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Switch } from "@/components/ui/switch";
 
 type SortableFields = "name";
 
@@ -54,6 +56,10 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
   const [isActive, setIsActive] = useState<string>("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [brandToDelete, setBrandToDelete] = useState<TBrand | null>(null);
+
+
+    // update status
+    const [updatebrandField] = useUpdatebrandFieldMutation();
 
   const debouncedSearchTerm = useDebounce(searchTerm);
   const [deleteBrand, { isLoading: isDeleting }] = useDeleteBrandMutation();
@@ -98,6 +104,25 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
   const handleDeleteClick = (brand: TBrand) => {
     setBrandToDelete(brand);
     setDeleteDialogOpen(true);
+  };
+
+    // update handler status
+  
+  const handleToggleStatus = async (brand: TBrand) => {
+    try {
+      const newStatus = !brand.isActive;
+  
+      await updatebrandField({
+        id: brand.id,
+        data: {
+          isActive: newStatus, 
+        },
+      }).unwrap();
+  
+      toast.success("Status updated");
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to update status");
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -216,12 +241,20 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
                     </span>
                   </TableCell>
                   <TableCell>
+                    <div className="flex gap-x-2">
                     <Badge
                       variant={brand.isActive ? "default" : "secondary"}
                       className={brand.isActive ? "bg-success" : ""}
                     >
                       {brand.isActive ? "Active" : "Inactive"}
                     </Badge>
+
+                             <Switch
+                               checked={brand.isActive} 
+                               onCheckedChange={() => handleToggleStatus(brand)}
+                             />
+                    </div>
+
                   </TableCell>
                   <TableCell className="text-center">
                     <span className="font-medium">{brand._count?.products ?? 0}</span>
@@ -229,6 +262,8 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
                   {/* <TableCell className="text-center">{brand.sortOrder}</TableCell> */}
                   <TableCell>
                     <div className="flex justify-end gap-2">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -237,6 +272,16 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Edit
+                        </TooltipContent>
+
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+   
+
                       <Button
                         variant="ghost"
                         size="icon"
@@ -244,7 +289,14 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
                         className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
                       >
                         <Trash2 className="h-4 w-4" />
-                      </Button>
+                      </Button>                 
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Delete
+                        </TooltipContent>
+
+                      </Tooltip>
+
                     </div>
                   </TableCell>
                 </TableRow>

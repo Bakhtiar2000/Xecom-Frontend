@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { brandSchema, TBrandFormData } from "@/lib/brand.schema";
 import {
   useAddBrandMutation,
-  useUpdateBrandMutation,
+  useUpdateBrandMutation, 
   useGetAllBrandsQuery,
 } from "@/redux/features/product/brand.api";
 import { TBrand } from "@/types/product.type";

@@ -25,12 +25,16 @@ import { useTablePagination } from "@/hooks/useTablePagination";
 import { useTableSort } from "@/hooks/useTableSort";
 import { API_URL } from "@/redux/api/baseApi";
 import { useGetAllAttributesQuery } from "@/redux/features/product/attribute.api";
-import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
+import { useGetAllProductsQuery, useUpdateProductMutation } from "@/redux/features/product/product.api";
 import { TAttribute, TProduct } from "@/types";
 import { Eye, Loader2, MoreHorizontal, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { AttributeFilter } from "./AttributeFilter";
+import { Switch } from "@/components/ui/switch";
+import { ProductStatus } from "@/constants/enum";
+import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
+import { TooltipContent } from "@radix-ui/react-tooltip";
 
 type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
@@ -40,6 +44,8 @@ const AllProductsTable = () => {
     {}
   );
   const [selectedCategories, setSelectedCategories] = useState<SelectOption[]>([]);
+
+  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
 
   const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
     useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
@@ -107,6 +113,45 @@ const AllProductsTable = () => {
     ...Object.values(selectedAttributeValues).flat(),
     ...selectedCategories.map((c) => c.value),
   ].filter(Boolean).length;
+
+
+  // toggle
+
+const handleStatusToggle = async (product: TProduct) => {
+  const newStatus =
+    product.status === ProductStatus.ACTIVE
+      ? ProductStatus.INACTIVE
+      : ProductStatus.ACTIVE;
+
+  const formData = new FormData();
+  formData.append("status", newStatus);
+
+  try {
+    await updateProduct({
+      id: product.id,
+      data: formData,
+    }).unwrap();
+  } catch (error) {
+    console.error("Status update failed", error);
+  }
+};
+
+
+const handleFeaturedToggle = async (product: TProduct) => {
+  const newFeatured = !product.featured;
+
+  const formData = new FormData();
+  formData.append("featured", String(newFeatured));
+
+  try {
+    await updateProduct({
+      id: product.id,
+      data: formData,
+    }).unwrap();
+  } catch (error) {
+    console.error("Featured update failed", error);
+  }
+};
 
   const clearAllFilters = () => {
     setSelectedAttributeValues({});
@@ -259,15 +304,42 @@ const AllProductsTable = () => {
                             {product.shortDescription}
                           </p>
                         </div>
-                      </div>
+                      </div> 
                     </TableCell>
                     <TableCell>{product?.maxOrderQty}</TableCell>
-                    <TableCell>
+                    {/* <TableCell>
+                      <div className="flex justify-center items-center gap-1">
                       <Badge variant={product.status === "ACTIVE" ? "default" : "secondary"}>
                         {product.status}
-                      </Badge>
-                    </TableCell>
+                      </Badge>    
+
+                      <Switch/>
+
+                      </div>
+
+                    </TableCell> */}
                     <TableCell>
+                       <div className="flex justify-center items-center gap-2">
+
+                          <Badge
+                             className={
+                              product.status === "ACTIVE"
+                               ? "bg-green-500 text-white"
+                                : "bg-red-500 text-white"
+                              }
+                             >
+                          {product.status}
+                        </Badge>
+
+                        <Switch
+                          checked={product.status === "ACTIVE"}
+                           onCheckedChange={() => handleStatusToggle(product)}
+                        />
+
+                           </div>
+                    </TableCell>
+
+                    {/* <TableCell>
                       {product.featured ? (
                         <Badge variant="default" className="bg-rating">
                           Featured
@@ -277,6 +349,26 @@ const AllProductsTable = () => {
                           No
                         </Badge>
                       )}
+                    </TableCell> */}
+                     <TableCell>
+                       <div className="flex items-center justify-center gap-2">
+
+                       <Badge
+                        className={
+                        product.featured
+                        ? "bg-green-500 text-white"
+                      : "bg-red-500 text-white"
+                      }
+                       >
+                         {product.featured ? "Featured" : "No"}
+                     </Badge>
+
+                    <Switch
+                     checked={product.featured}
+                      onCheckedChange={() => handleFeaturedToggle(product)}
+                     />
+
+                    </div>
                     </TableCell>
                     <TableCell>
                       {product.avgRating ? (
@@ -293,7 +385,37 @@ const AllProductsTable = () => {
                     <TableCell>{product.totalSales}</TableCell>
                     <TableCell>{product.viewCount}</TableCell>
                     <TableCell className="text-right">
-                      <DropdownMenu>
+                      <div className="flex gap-x-1">
+                    <Tooltip>
+                    <TooltipTrigger asChild>
+                     <div
+                      onClick={() => handleView(product.id)}
+                     className="cursor-pointer rounded p-1 hover:bg-muted"
+                     >
+                     <Eye className="h-4 w-4" />
+                   </div>
+                 </TooltipTrigger>
+                 <TooltipContent>
+                    View Details
+                 </TooltipContent>
+                  </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                  <div
+                    onClick={() => handleEdit(product.id)}
+                    className="cursor-pointer rounded p-1 hover:bg-muted"
+                 >
+                    <Pencil className="h-4 w-4" />
+                </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Edit
+              </TooltipContent>
+               </Tooltip>
+
+              </div>
+
+                      {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <button className="hover:bg-muted rounded-md p-2">
                             <MoreHorizontal className="h-4 w-4" />
@@ -319,7 +441,7 @@ const AllProductsTable = () => {
                             Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>
-                      </DropdownMenu>
+                      </DropdownMenu> */}
                     </TableCell>
                   </TableRow>
                 ))

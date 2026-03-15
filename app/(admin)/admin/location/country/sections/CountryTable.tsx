@@ -48,6 +48,7 @@ import { useTableSort } from "@/hooks/useTableSort";
 import { useTablePagination } from "@/hooks/useTablePagination";
 import { useDebounce } from "@/hooks/useDebounce";
 import { toast } from "sonner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type SortableFields = "name";
 
@@ -215,6 +216,8 @@ export default function CountryTable({ onEdit }) {
                   {/* <TableCell className="text-center">{brand.sortOrder}</TableCell> */}
                   <TableCell>
                     <div className="flex justify-end gap-2">
+                       <Tooltip>
+                        <TooltipTrigger asChild>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -223,6 +226,17 @@ export default function CountryTable({ onEdit }) {
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
+                
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Edit
+                        </TooltipContent>
+
+                      </Tooltip>
+                     
+
+                       <Tooltip>
+                        <TooltipTrigger asChild>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -231,6 +245,14 @@ export default function CountryTable({ onEdit }) {
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
+                
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Delete
+                        </TooltipContent>
+
+                      </Tooltip>
+                     
                     </div>
                   </TableCell>
                 </TableRow>

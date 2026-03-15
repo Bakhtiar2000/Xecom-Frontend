@@ -81,6 +81,18 @@ const brandApi = baseApi.injectEndpoints({
       invalidatesTags: ["brand"],
     }),
 
+
+       //-----------------Patch brand-----------------
+    updatebrandField: builder.mutation({
+      query: (args: { id: string; data: Partial<TBrand> }) => ({
+        url: `/brand/${args.id}`,
+        method: "PATCH",
+        body: args.data,
+      }),
+      invalidatesTags: ["brand"],
+    }), 
+
+
     //-----------------Delete Brand-----------------
     deleteBrand: builder.mutation({
       query: (id: string) => ({
@@ -99,4 +111,5 @@ export const {
   useUpdateBrandMutation,
   useDeleteBrandMutation,
   useGetBrandMetadataQuery,
+  useUpdatebrandFieldMutation
 } = brandApi;

@@ -40,6 +40,7 @@ import { useTableSort } from "@/hooks/useTableSort";
 import { useTablePagination } from "@/hooks/useTablePagination";
 import { toast } from "sonner";
 import AttributeValueModal from "./AttributeValueModal";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type SortableFields = "name";
 
@@ -207,9 +208,22 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
                   {/* Actions */}
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                       <Button variant="ghost" size="icon" onClick={() => onEdit(attribute)}>
                         <Pencil className="h-4 w-4" />
                       </Button>
+                
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Edit
+                        </TooltipContent>
+
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -217,6 +231,16 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
                       >
                         <Plus className="h-4 w-4" />
                       </Button>
+                
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Add Attribute
+                        </TooltipContent>
+
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -225,6 +249,14 @@ export default function AttributeTable({ onEdit }: AttributeTableProps) {
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
+
+                
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Delete
+                        </TooltipContent>
+
+                      </Tooltip>
                     </div>
                   </TableCell>
                 </TableRow>

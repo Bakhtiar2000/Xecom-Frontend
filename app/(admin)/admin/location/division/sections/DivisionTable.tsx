@@ -47,6 +47,7 @@ import {
 import CustomSelect, { SelectOption } from "@/components/custom/customSelect";
 
 import { API_URL } from "@/redux/api/baseApi";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type SortableFields = "name";
 
@@ -225,6 +226,8 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
 
                   <TableCell>
                     <div className="flex justify-end gap-2">
+                       <Tooltip>
+                        <TooltipTrigger asChild>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -234,6 +237,14 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
                         <Pencil className="h-4 w-4" />
                       </Button>
 
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Edit
+                        </TooltipContent>
+
+                      </Tooltip>  
+                       <Tooltip>
+                        <TooltipTrigger asChild>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -242,6 +253,13 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
+
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Delete
+                        </TooltipContent>
+
+                      </Tooltip>  
                     </div>
                   </TableCell>
                 </TableRow>
