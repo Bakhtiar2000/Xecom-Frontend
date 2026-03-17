@@ -13,6 +13,8 @@ type FilterOptions = {
   }[];
   categories: { id: string; name: string }[];
   targets: string[];
+  isBrandsLoading: boolean;
+  isCategoriesLoading: boolean;
 };
 
 type Brand = {
@@ -31,7 +33,26 @@ type Props = {
   toggleFilter: (type: keyof FilterState, value: string) => void;
   setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
   clearAllFilters: () => void;
+  isBrandsLoading: boolean;
+  isCategoriesLoading: boolean;
 };
+
+const MAX_PRICE = 10000;
+
+// Skeleton component
+const FilterSkeletonList = ({ count = 5 }: { count?: number }) => (
+  <div className="flex flex-col gap-3">
+    {Array.from({ length: count }).map((_, i) => (
+      <div key={i} className="flex items-center gap-2">
+        <div className="h-4 w-4 animate-pulse rounded bg-muted" />
+        <div
+          className="h-4 animate-pulse rounded bg-muted"
+          style={{ width: `${60 + (i % 3) * 20}px` }}
+        />
+      </div>
+    ))}
+  </div>
+);
 
 export default function FilterSidebar({
   filters,
@@ -41,6 +62,8 @@ export default function FilterSidebar({
   toggleFilter,
   setFilters,
   clearAllFilters,
+  isBrandsLoading,
+  isCategoriesLoading,
 }: Props) {
   return (
     <div className={`lg:w-64 ${showFilters ? "block" : "hidden lg:block"}`}>
@@ -55,7 +78,7 @@ export default function FilterSidebar({
             Clear All
           </button>
         </div>
-        {/* Price Range */}
+
         {/* Price Range */}
         <div className="mb-8">
           <h3 className="mb-4 font-semibold">Price Range</h3>
@@ -64,14 +87,14 @@ export default function FilterSidebar({
             {/* Dual Range Track */}
             <div className="relative h-2 w-full">
               {/* Gray background track */}
-              <div className="absolute top-0 left-0 h-2 w-full rounded-full bg-muted" />
+              <div className="bg-muted absolute top-0 left-0 h-2 w-full rounded-full" />
 
               {/* Active range highlight */}
               <div
                 className="bg-button-primary absolute top-0 h-2 rounded-full"
                 style={{
-                  left: `${(filters.priceRange[0] / 2500) * 100}%`,
-                  right: `${100 - (filters.priceRange[1] / 2500) * 100}%`,
+                  left: `${(filters.priceRange[0] / MAX_PRICE) * 100}%`,
+                  right: `${100 - (filters.priceRange[1] / MAX_PRICE) * 100}%`,
                 }}
               />
 
@@ -79,26 +102,26 @@ export default function FilterSidebar({
               <input
                 type="range"
                 min="0"
-                max="2500"
+                max={MAX_PRICE}
                 value={filters.priceRange[0]}
                 onChange={(e) => {
                   const val = Math.min(Number(e.target.value), filters.priceRange[1] - 1);
                   setFilters((prev) => ({ ...prev, priceRange: [val, prev.priceRange[1]] }));
                 }}
-                className="pointer-events-none absolute top-0 left-0 h-2 w-full cursor-pointer appearance-none bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:ring-2 [&::-webkit-slider-thumb]:ring-button-primary"
+                className="[&::-webkit-slider-thumb]:ring-button-primary pointer-events-none absolute top-0 left-0 h-2 w-full cursor-pointer appearance-none bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:ring-2"
               />
 
               {/* Max thumb */}
               <input
                 type="range"
                 min="0"
-                max="2500"
+                max={MAX_PRICE}
                 value={filters.priceRange[1]}
                 onChange={(e) => {
                   const val = Math.max(Number(e.target.value), filters.priceRange[0] + 1);
                   setFilters((prev) => ({ ...prev, priceRange: [prev.priceRange[0], val] }));
                 }}
-                className="pointer-events-none absolute top-0 left-0 h-2 w-full cursor-pointer appearance-none bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:ring-2 [&::-webkit-slider-thumb]:ring-button-primary"
+                className="[&::-webkit-slider-thumb]:ring-button-primary pointer-events-none absolute top-0 left-0 h-2 w-full cursor-pointer appearance-none bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:ring-2"
               />
             </div>
 
@@ -131,7 +154,7 @@ export default function FilterSidebar({
                   <input
                     type="number"
                     min={filters.priceRange[0] + 1}
-                    max="2500"
+                    max={MAX_PRICE}
                     value={filters.priceRange[1]}
                     onChange={(e) => {
                       const val = Math.max(Number(e.target.value), filters.priceRange[0] + 1);
@@ -144,20 +167,24 @@ export default function FilterSidebar({
             </div>
           </div>
         </div>
-        
+
         {/* Brands */}
         <div className="mb-8">
           <h3 className="mb-4 font-semibold">Brands</h3>
           <div className="space-y-3">
-            {brands.map((brand) => (
-              <label key={brand.id} className="flex cursor-pointer items-center gap-3">
-                <Checkbox
-                  checked={filters.brands.includes(brand.id)}
-                  onCheckedChange={() => toggleFilter("brands", brand.id)}
-                />
-                <span>{brand.name}</span>
-              </label>
-            ))}
+            {isBrandsLoading ? (
+              <FilterSkeletonList count={5} />
+            ) : (
+              brands.map((brand) => (
+                <label key={brand.id} className="flex cursor-pointer items-center gap-3">
+                  <Checkbox
+                    checked={filters.brands.includes(brand.id)}
+                    onCheckedChange={() => toggleFilter("brands", brand.id)}
+                  />
+                  <span>{brand.name}</span>
+                </label>
+              ))
+            )}
           </div>
         </div>
 
@@ -224,15 +251,19 @@ export default function FilterSidebar({
         <div>
           <h3 className="mb-4 font-semibold">Categories</h3>
           <div className="space-y-3">
-            {filterOptions.categories.map((category) => (
-              <label key={category.id} className="flex cursor-pointer items-center gap-3">
-                <Checkbox
-                  checked={filters.categories.includes(category.id)}
-                  onCheckedChange={() => toggleFilter("categories", category.id)}
-                />
-                <span className="capitalize">{category.name}</span>
-              </label>
-            ))}
+            {isCategoriesLoading ? (
+              <FilterSkeletonList count={6} />
+            ) : (
+              filterOptions.categories.map((category) => (
+                <label key={category.id} className="flex cursor-pointer items-center gap-3">
+                  <Checkbox
+                    checked={filters.categories.includes(category.id)}
+                    onCheckedChange={() => toggleFilter("categories", category.id)}
+                  />
+                  <span className="capitalize">{category.name}</span>
+                </label>
+              ))
+            )}
           </div>
         </div>
       </div>

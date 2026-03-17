@@ -23,7 +23,6 @@ import {
   useAddReviewMutation,
   useDeleteReviewMutation,
   useGetAllReviewsOfProductQuery,
-  useGetMyReviewsQuery,
   useUpdateReviewMutation,
 } from "@/redux/features/product/review.api";
 import { useAppSelector } from "@/redux/hooks";

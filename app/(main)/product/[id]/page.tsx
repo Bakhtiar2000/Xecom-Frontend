@@ -15,8 +15,8 @@ import {
   Eye,
   Loader2,
 } from "lucide-react";
-import ProductSugation from "./section/ProductSugation";
-import ProductReviews from "./section/ProductReview";
+import ProductSugation from "./sections/ProductSuggestion";
+import ProductReviews from "./sections/ProductReview";
 import { useParams } from "next/navigation";
 import { useGetSingleProductQuery } from "@/redux/features/product/product.api";
 import { useAddToCartMutation } from "@/redux/features/order/cart.api";

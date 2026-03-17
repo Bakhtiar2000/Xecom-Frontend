@@ -16,13 +16,13 @@ export default function ProductContent() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(false);
 
-  const { data: categoriesData } = useGetAllCategoriesQuery([]);
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery([]);
 
   const urlCategories = searchParams.get("categories");
 
   const [filters, setFilters] = useState<FilterState>({
     brands: [],
-    priceRange: [0, 2500],
+    priceRange: [0, 10000],
     sizes: [],
     colors: [],
     categories: urlCategories ? urlCategories.split(",").filter(Boolean) : [],
@@ -34,11 +34,11 @@ export default function ProductContent() {
   // fetch attributes
   const { data: attributesData } = useGetAllAttributesQuery([
     { name: "fields", value: "name" },
-    { name: "fields", value: "id" }
+    { name: "fields", value: "id" },
   ]);
-  const { data: brandsData } = useGetAllBrandsQuery([
+  const { data: brandsData, isLoading: isBrandsLoading } = useGetAllBrandsQuery([
     { name: "fields", value: "name" },
-    { name: "fields", value: "id" }
+    { name: "fields", value: "id" },
   ]);
 
   const filterOptions = useMemo(() => {
@@ -69,9 +69,10 @@ export default function ProductContent() {
         { label: "Most Popular", value: "popular" },
       ],
       brands: brandsData?.data || [],
+      isBrandsLoading,
+      isCategoriesLoading,
     };
-  }, [attributesData, brandsData, categoriesData]);
-
+  }, [attributesData, brandsData, categoriesData, isBrandsLoading, isCategoriesLoading]);
 
   const [debouncedPriceRange, setDebouncedPriceRange] = useState(filters.priceRange);
 
@@ -144,7 +145,7 @@ export default function ProductContent() {
   const clearAllFilters = () => {
     setFilters({
       brands: [],
-      priceRange: [0, 500],
+      priceRange: [0, 10000],
       sizes: [],
       colors: [],
       categories: [],
@@ -172,8 +173,7 @@ export default function ProductContent() {
   return (
     <div className="container lg:-mt-8">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
-
-        <div className="lg:sticky lg:top-20 lg:h-[calc(100vh-80px)] lg:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="[-ms-overflow-style:none] [scrollbar-width:none] lg:sticky lg:top-20 lg:h-[calc(100vh-80px)] lg:overflow-y-auto [&::-webkit-scrollbar]:hidden">
           <FilterSidebar
             filters={filters}
             brands={brandsData?.data || []}
@@ -182,6 +182,8 @@ export default function ProductContent() {
             toggleFilter={toggleFilter}
             setFilters={setFilters}
             clearAllFilters={clearAllFilters}
+            isBrandsLoading={isBrandsLoading}
+            isCategoriesLoading={isCategoriesLoading}
           />
         </div>
 
@@ -205,7 +207,6 @@ export default function ProductContent() {
             getBadgeColor={getBadgeColor}
           />
         </div>
-
       </div>
     </div>
   );
