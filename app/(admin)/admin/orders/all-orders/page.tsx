@@ -1,9 +1,5 @@
-import Title from "@/components/sections/shared/Title";
+import { redirect } from "next/navigation";
 
 export default function AllOrdersPage() {
-  return (
-    <div>
-      <Title mainTitle="All Orders" />
-    </div>
-  );
+  redirect("/admin/orders/all-orders/pending");
 }
