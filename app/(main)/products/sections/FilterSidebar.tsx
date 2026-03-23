@@ -44,9 +44,9 @@ const FilterSkeletonList = ({ count = 5 }: { count?: number }) => (
   <div className="flex flex-col gap-3">
     {Array.from({ length: count }).map((_, i) => (
       <div key={i} className="flex items-center gap-2">
-        <div className="h-4 w-4 animate-pulse rounded bg-muted" />
+        <div className="bg-muted h-4 w-4 animate-pulse rounded" />
         <div
-          className="h-4 animate-pulse rounded bg-muted"
+          className="bg-muted h-4 animate-pulse rounded"
           style={{ width: `${60 + (i % 3) * 20}px` }}
         />
       </div>
@@ -199,8 +199,9 @@ export default function FilterSidebar({
                   <button
                     key={v.id}
                     onClick={() => toggleFilter("colors", v.id)}
-                    className={`relative h-8 w-8 rounded-full border-2 ${filters.colors.includes(v.id) ? "border-button-secondary" : "border-muted"
-                      }`}
+                    className={`relative h-8 w-8 rounded-full border-2 ${
+                      filters.colors.includes(v.id) ? "border-button-secondary" : "border-muted"
+                    }`}
                   >
                     <div
                       className="h-full w-full rounded-full"
@@ -220,10 +221,11 @@ export default function FilterSidebar({
                   <button
                     key={v.id}
                     onClick={() => toggleFilter("sizes", v.id)}
-                    className={`rounded py-2 text-sm ${filters.sizes.includes(v.id)
+                    className={`rounded py-2 text-sm ${
+                      filters.sizes.includes(v.id)
                         ? "bg-button-primary text-white"
                         : "bg-muted text-black dark:text-white"
-                      }`}
+                    }`}
                   >
                     {v.label}
                   </button>
