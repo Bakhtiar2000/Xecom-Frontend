@@ -55,6 +55,46 @@ const orderApi = baseApi.injectEndpoints({
       invalidatesTags: ["order"],
     }),
 
+    //-----------------My Orders-----------------
+    getMyOrders: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/order/my-orders",
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["order"],
+      transformResponse: (response: TResponseRedux<TOrder[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+    }),
+
+    //-----------------My Single Order-----------------
+    getMySingleOrder: builder.query({
+      query: (id: string) => ({
+        url: `/order/my-orders/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["order"],
+      transformResponse: (response: TResponseRedux<TOrder>) => {
+        return {
+          data: response.data,
+        };
+      },
+    }),
+
     //-----------------Update Order Status-----------------
     updateOrderStatus: builder.mutation({
       query: (args: { id: string; data: TUpdateOrderStatusDto }) => ({
@@ -90,6 +130,8 @@ export const {
   useGetAllOrdersQuery,
   useGetSingleOrderQuery,
   useCreateOrderMutation,
+  useGetMyOrdersQuery,
+  useGetMySingleOrderQuery,
   useUpdateOrderStatusMutation,
   useCancelOrderMutation,
   useCancelOrderAdminMutation,

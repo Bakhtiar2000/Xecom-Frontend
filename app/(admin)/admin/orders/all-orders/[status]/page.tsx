@@ -8,24 +8,26 @@ import {
 import { notFound } from "next/navigation";
 
 type TStatusPageProps = {
-  params: {
+  params: Promise<{
     status: string;
-  };
+  }>;
 };
 
-export default function OrderStatusPage({ params }: TStatusPageProps) {
-  if (!isValidOrderStatusSegment(params.status)) {
+export default async function OrderStatusPage({ params }: TStatusPageProps) {
+  const { status } = await params;
+
+  if (!isValidOrderStatusSegment(status)) {
     notFound();
   }
 
-  const statusConfig = getOrderStatusRouteConfig(params.status);
+  const statusConfig = getOrderStatusRouteConfig(status);
 
   return (
     <div>
       <Title mainTitle="All Orders" subTitle="Track and manage order lifecycle by status" />
 
       <div className="mt-4 lg:mt-6">
-        <OrderStatusNav currentStatus={params.status} />
+        <OrderStatusNav currentStatus={status} />
       </div>
 
       <div className="mt-4 lg:mt-6">
