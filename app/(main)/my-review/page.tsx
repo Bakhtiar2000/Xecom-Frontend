@@ -5,8 +5,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
-  Star, Trash2, PenLine, PackageSearch,
-  Loader2, ChevronDown, ChevronUp, Pencil,
+  Star,
+  Trash2,
+  PenLine,
+  PackageSearch,
+  Loader2,
+  ChevronDown,
+  ChevronUp,
+  Pencil,
 } from "lucide-react";
 
 import Image from "next/image";
@@ -46,12 +52,21 @@ const getId = (item: any): string => item?._id ?? item?.id ?? "";
 
 // ── Star Row ──────────────────────────────────────────────────────────────────
 function StarRow({
-  rating, interactive = false, onRate,
-  hoverRating = 0, onHover, onLeave, size = "md",
+  rating,
+  interactive = false,
+  onRate,
+  hoverRating = 0,
+  onHover,
+  onLeave,
+  size = "md",
 }: {
-  rating: number; interactive?: boolean; onRate?: (n: number) => void;
-  hoverRating?: number; onHover?: (n: number) => void;
-  onLeave?: () => void; size?: "sm" | "md";
+  rating: number;
+  interactive?: boolean;
+  onRate?: (n: number) => void;
+  hoverRating?: number;
+  onHover?: (n: number) => void;
+  onLeave?: () => void;
+  size?: "sm" | "md";
 }) {
   return (
     <div className="flex gap-1">
@@ -61,8 +76,9 @@ function StarRow({
         return (
           <Star
             key={i}
-            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${filled ? "fill-amber-400 text-amber-400" : "fill-muted text-muted-foreground/30"
-              } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
+            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${
+              filled ? "fill-amber-400 text-amber-400" : "fill-muted text-muted-foreground/30"
+            } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
             onClick={() => interactive && onRate?.(val)}
             onMouseEnter={() => interactive && onHover?.(val)}
             onMouseLeave={() => interactive && onLeave?.()}
@@ -80,7 +96,7 @@ function ReviewForm({
   onClose,
 }: {
   productId: string;
-  existingReview?: any; 
+  existingReview?: any;
   onClose: () => void;
 }) {
   const isUpdateMode = !!existingReview;
@@ -91,7 +107,11 @@ function ReviewForm({
   const isLoading = adding || updating;
 
   const {
-    register, handleSubmit, setValue, watch, reset,
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
     formState: { errors },
   } = useForm<ReviewFormData>({
     resolver: zodResolver(reviewSchema),
@@ -107,7 +127,10 @@ function ReviewForm({
   const onSubmit = async (data: ReviewFormData) => {
     try {
       if (isUpdateMode) {
-        await updateReview({ id: getId(existingReview), data: { rating: data.rating, comment: data.comment } }).unwrap();
+        await updateReview({
+          id: getId(existingReview),
+          data: { rating: data.rating, comment: data.comment },
+        }).unwrap();
       } else {
         await addReview(data).unwrap();
       }
@@ -119,12 +142,16 @@ function ReviewForm({
   };
 
   return (
-    <div className="mt-4 rounded-xl border bg-muted/30 p-4 space-y-3">
-      <h4 className="font-medium text-sm flex items-center gap-2">
+    <div className="bg-muted/30 mt-4 space-y-3 rounded-xl border p-4">
+      <h4 className="flex items-center gap-2 text-sm font-medium">
         {isUpdateMode ? (
-          <><Pencil className="h-4 w-4 text-primary" /> Update Your Review</>
+          <>
+            <Pencil className="text-primary h-4 w-4" /> Update Your Review
+          </>
         ) : (
-          <><PenLine className="h-4 w-4 text-primary" /> Write a Review</>
+          <>
+            <PenLine className="text-primary h-4 w-4" /> Write a Review
+          </>
         )}
       </h4>
 
@@ -133,7 +160,7 @@ function ReviewForm({
 
         {/* Star Rating */}
         <div>
-          <p className="text-muted-foreground text-xs mb-1.5">Your rating</p>
+          <p className="text-muted-foreground mb-1.5 text-xs">Your rating</p>
           <StarRow
             rating={selectedRating}
             interactive
@@ -142,7 +169,9 @@ function ReviewForm({
             onHover={setHoverRating}
             onLeave={() => setHoverRating(0)}
           />
-          {errors.rating && <p className="text-destructive text-xs mt-1">{errors.rating.message}</p>}
+          {errors.rating && (
+            <p className="text-destructive mt-1 text-xs">{errors.rating.message}</p>
+          )}
         </div>
 
         {/* Comment */}
@@ -153,18 +182,25 @@ function ReviewForm({
             className="text-sm"
             {...register("comment")}
           />
-          {errors.comment && <p className="text-destructive text-xs mt-1">{errors.comment.message}</p>}
+          {errors.comment && (
+            <p className="text-destructive mt-1 text-xs">{errors.comment.message}</p>
+          )}
         </div>
 
-        <div className="flex gap-2 justify-end">
+        <div className="flex justify-end gap-2">
           <Button type="button" variant="ghost" size="sm" onClick={onClose} disabled={isLoading}>
             Cancel
           </Button>
           <Button type="submit" size="sm" className="rounded-full px-5" disabled={isLoading}>
             {isLoading ? (
-              <><Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />{isUpdateMode ? "Updating…" : "Submitting…"}</>
+              <>
+                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                {isUpdateMode ? "Updating…" : "Submitting…"}
+              </>
+            ) : isUpdateMode ? (
+              "Update Review"
             ) : (
-              isUpdateMode ? "Update Review" : "Submit Review"
+              "Submit Review"
             )}
           </Button>
         </div>
@@ -184,25 +220,23 @@ function ReviewItem({
   onEdit: (review: any) => void;
 }) {
   return (
-    <div className="flex items-start gap-3 rounded-xl border bg-background p-3">
-      <div className="flex-1 min-w-0 space-y-1">
-        <div className="flex items-center justify-between gap-2 flex-wrap">
+    <div className="bg-background flex items-start gap-3 rounded-xl border p-3">
+      <div className="min-w-0 flex-1 space-y-1">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <StarRow rating={review.rating} size="sm" />
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="text-muted-foreground text-xs">
-              {review.createdAt?.slice(0, 10)}
-            </span>
+          <div className="flex shrink-0 items-center gap-2">
+            <span className="text-muted-foreground text-xs">{review.createdAt?.slice(0, 10)}</span>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground leading-relaxed">{review.comment}</p>
+        <p className="text-muted-foreground text-sm leading-relaxed">{review.comment}</p>
       </div>
 
       {/* Edit + Delete buttons */}
-      <div className="flex gap-1 shrink-0">
+      <div className="flex shrink-0 gap-1">
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
+          className="text-muted-foreground hover:text-primary hover:bg-primary/10 h-8 w-8"
           onClick={() => onEdit(review)}
         >
           <Pencil className="h-3.5 w-3.5" />
@@ -210,7 +244,7 @@ function ReviewItem({
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+          className="text-destructive hover:bg-destructive/10 hover:text-destructive h-8 w-8"
           onClick={() => onDelete(getId(review))}
         >
           <Trash2 className="h-4 w-4" />
@@ -266,9 +300,8 @@ function ProductReviewCard({
       {/* ── Product Card ── */}
       <Card className="bg-card-primary p-4">
         <div className="flex items-start gap-4">
-
           {/* Thumbnail */}
-          <div className="relative h-20 w-20 shrink-0 rounded-xl overflow-hidden border bg-muted">
+          <div className="bg-muted relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border">
             {imgSrc ? (
               <Image
                 src={imgSrc}
@@ -278,41 +311,47 @@ function ProductReviewCard({
                 className="object-cover"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-muted-foreground">
+              <div className="text-muted-foreground flex h-full w-full items-center justify-center text-2xl font-bold">
                 {(product?.name ?? "P")[0].toUpperCase()}
               </div>
             )}
           </div>
 
           {/* Info */}
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-base truncate">{product?.name ?? "Product"}</h3>
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate text-base font-semibold">{product?.name ?? "Product"}</h3>
             {product?.brand && <p className="text-muted-foreground text-sm">{product.brand}</p>}
             {product?.price != null && (
-              <p className="text-primary font-medium text-sm">৳{product.price.toLocaleString()}</p>
+              <p className="text-primary text-sm font-medium">৳{product.price.toLocaleString()}</p>
             )}
             {product?.description && (
-              <p className="text-muted-foreground text-xs mt-1 line-clamp-2 leading-relaxed">
+              <p className="text-muted-foreground mt-1 line-clamp-2 text-xs leading-relaxed">
                 {product.description}
               </p>
             )}
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col items-end gap-2 shrink-0">
+          <div className="flex shrink-0 flex-col items-end gap-2">
             <Badge variant="outline" className="text-xs">
               {reviews.length} {reviews.length === 1 ? "review" : "reviews"}
             </Badge>
             <Button
               variant="outline"
               size="sm"
-              className="rounded-full text-xs gap-1.5"
+              className="gap-1.5 rounded-full text-xs"
               onClick={handleToggleForm}
             >
               {existingReview ? (
-                <><Pencil className="h-3.5 w-3.5" />{showForm ? "Close" : "Edit Review"}</>
+                <>
+                  <Pencil className="h-3.5 w-3.5" />
+                  {showForm ? "Close" : "Edit Review"}
+                </>
               ) : (
-                <><PenLine className="h-3.5 w-3.5" />{showForm ? "Close" : "Add Review"}</>
+                <>
+                  <PenLine className="h-3.5 w-3.5" />
+                  {showForm ? "Close" : "Add Review"}
+                </>
               )}
               {showForm ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
             </Button>
@@ -331,7 +370,7 @@ function ProductReviewCard({
 
       {/* ── Reviews below the card ── */}
       {reviews.length > 0 && (
-        <div className="pl-4 ml-2 border-l-2 border-primary/20 space-y-2">
+        <div className="border-primary/20 ml-2 space-y-2 border-l-2 pl-4">
           {reviews.map((review: any) => (
             <ReviewItem
               key={getId(review)}
@@ -387,10 +426,10 @@ export default function MyReviewsPage() {
   };
 
   return (
-    <section className="container py-10 space-y-8">
+    <section className="container space-y-8 py-10">
       {/* Header */}
       <div>
-        <h1 className="merriweather-font text-3xl lg:text-4xl font-bold">My Reviews</h1>
+        <h1 className="merriweather-font text-3xl font-bold lg:text-4xl">My Reviews</h1>
         <p className="text-muted-foreground mt-1 text-sm">
           Manage all your product reviews in one place.
         </p>
@@ -398,7 +437,7 @@ export default function MyReviewsPage() {
 
       {/* Loading */}
       {isLoading && (
-        <div className="flex items-center justify-center gap-2 text-muted-foreground py-20">
+        <div className="text-muted-foreground flex items-center justify-center gap-2 py-20">
           <Loader2 className="h-5 w-5 animate-spin" />
           Loading your reviews…
         </div>
@@ -407,10 +446,10 @@ export default function MyReviewsPage() {
       {/* Empty state */}
       {!isLoading && myReviews.length === 0 && (
         <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed py-20 text-center">
-          <PackageSearch className="h-14 w-14 text-muted-foreground/30" />
+          <PackageSearch className="text-muted-foreground/30 h-14 w-14" />
           <div>
-            <p className="font-semibold text-lg">No reviews yet</p>
-            <p className="text-muted-foreground text-sm mt-1">
+            <p className="text-lg font-semibold">No reviews yet</p>
+            <p className="text-muted-foreground mt-1 text-sm">
               Go to a product page and share your experience!
             </p>
           </div>
@@ -434,7 +473,9 @@ export default function MyReviewsPage() {
       {/* ── Delete Confirmation Dialog ── */}
       <AlertDialog
         open={deleteTarget !== null}
-        onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -451,7 +492,10 @@ export default function MyReviewsPage() {
               className="bg-destructive hover:bg-destructive/90"
             >
               {deleting ? (
-                <><Loader2 className="h-4 w-4 animate-spin mr-2" />Deleting…</>
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting…
+                </>
               ) : (
                 "Yes, Delete"
               )}
