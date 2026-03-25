@@ -19,9 +19,10 @@ export default function ProductContent() {
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery([]);
 
   const urlCategories = searchParams.get("categories");
+  const urlBrandIds = searchParams.get("brandIds");
 
   const [filters, setFilters] = useState<FilterState>({
-    brands: [],
+    brands: urlBrandIds ? urlBrandIds.split(",").filter(Boolean) : [],
     priceRange: [0, 10000],
     sizes: [],
     colors: [],
