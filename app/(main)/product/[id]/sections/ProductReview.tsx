@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Plus, ChevronDown, FastForward, Loader2 } from "lucide-react";
-import { Review, TReview } from "@/types";
+import { TReview } from "@/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,7 +34,7 @@ interface ProductReviewsProps {
 
 export default function ProductReviews({ productId }: ProductReviewsProps) {
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<Review | null>(null);
+  const [editing, setEditing] = useState<TReview | null>(null);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [activeImages, setActiveImages] = useState<string[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -104,6 +104,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         await updateReview({
           id: editing.id,
           data: {
+            id: editing.id,
             rating: form.rating,
             comment: form.comment,
           },
@@ -113,7 +114,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         // ── ADD ──
         await addReview({
           productId,
-          userName: form.userName || "Anonymous",
           rating: form.rating,
           comment: form.comment,
         }).unwrap();
@@ -125,15 +125,26 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
     }
   };
 
-  const handleEdit = (review: Review) => {
+  const handleEdit = (review: TReview) => {
     setEditing(review);
     setForm({
-      userName: review.userName,
+      userName: review.customer?.user?.name || "",
       rating: review.rating,
-      comment: review.comment,
-      images: review.images || [],
+      comment: review.comment || "",
+      images: [],
     });
     setOpen(true);
+  };
+
+  const formatDate = (value: string) => {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    }).format(date);
   };
 
   const handleDelete = async (id: string) => {
@@ -283,11 +294,11 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                     <div className="flex space-y-4 space-x-2">
                       <div className="flex justify-between">
                         <div className="flex gap-3">
-                          {r.userImage ? (
+                          {r.customer?.user?.profilePicture ? (
                             <Avatar>
                               <Image
-                                src={r.userImage}
-                                alt={r.userName}
+                                src={r.customer.user.profilePicture}
+                                alt={r.customer?.user?.name || "Reviewer"}
                                 width={40}
                                 height={40}
                                 className="h-10 w-10 rounded-full"
@@ -306,12 +317,12 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
                           <div>
                             <h4 className="flex gap-6 font-semibold">
-                              {r.userName}
+                              {r.customer?.user?.name || "Anonymous"}
                               <span>
                                 <StarRating rating={r.rating} />
                               </span>
                             </h4>
-                            <p className="text-muted-foreground text-xs">{r.date}</p>
+                            <p className="text-muted-foreground text-xs">{formatDate(r.createdAt)}</p>
                             <p>{r.comment}</p>
                           </div>
                         </div>
@@ -319,7 +330,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
                       {/* Mobile dropdown */}
                       <div className="items-start gap-2 md:hidden">
-                        {r.userEmail === currentUser && (
+                        {r.customer?.user?.email && r.customer.user.email === currentUser?.email && (
                           <ReviewActions
                             onEdit={() => handleEdit(r)}
                             onDelete={() => handleDelete(r.id)}
@@ -328,65 +339,9 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                       </div>
                     </div>
 
-                    <div>
-                      {r.images && r.images.length > 0 && (
-                        <div className="flex gap-2">
-                          {r.images.map((img, i) => (
-                            <Image
-                              key={i}
-                              src={img}
-                              alt={`Review image ${i}`}
-                              width={80}
-                              height={80}
-                              onClick={() => openImageModal(r.images as string[], i)}
-                              className="bg-muted h-20 w-20 cursor-pointer rounded-lg object-cover transition hover:opacity-90"
-                            />
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Image lightbox modal */}
-                      <Dialog open={imageModalOpen} onOpenChange={setImageModalOpen}>
-                        <DialogHeader>
-                          <DialogTitle />
-                        </DialogHeader>
-                        <DialogContent className="bg-card-primary max-w-7xl border-none p-0">
-                          <div className="relative flex h-[80vh] items-center justify-center">
-                            {activeImages[activeIndex] && (
-                              <Image
-                                src={activeImages[activeIndex]}
-                                alt="Review preview"
-                                fill
-                                className="object-contain"
-                              />
-                            )}
-                            {activeImages.length > 1 && (
-                              <>
-                                <button
-                                  onClick={prevImage}
-                                  className="absolute left-4 cursor-pointer rounded-full bg-black/50 p-2 text-xl text-white hover:bg-black/70"
-                                >
-                                  ‹
-                                </button>
-                                <button
-                                  onClick={nextImage}
-                                  className="absolute right-4 cursor-pointer rounded-full bg-black/50 p-2 text-xl text-white hover:bg-black/70"
-                                >
-                                  ›
-                                </button>
-                                <div className="absolute bottom-4 rounded-full bg-black/50 px-3 py-1 text-sm text-white">
-                                  {activeIndex + 1} / {activeImages.length}
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-
                     {/* Desktop dropdown — only for current user's reviews */}
                     <div className="hidden items-start gap-2 md:flex">
-                      {r.userEmail === currentUser && (
+                      {r.customer?.user?.email && r.customer.user.email === currentUser?.email && (
                         <ReviewActions
                           onEdit={() => handleEdit(r)}
                           onDelete={() => handleDelete(r.id)}
