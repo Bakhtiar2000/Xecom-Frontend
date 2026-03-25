@@ -322,7 +322,9 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                                 <StarRating rating={r.rating} />
                               </span>
                             </h4>
-                            <p className="text-muted-foreground text-xs">{formatDate(r.createdAt)}</p>
+                            <p className="text-muted-foreground text-xs">
+                              {formatDate(r.createdAt)}
+                            </p>
                             <p>{r.comment}</p>
                           </div>
                         </div>
@@ -330,12 +332,13 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
                       {/* Mobile dropdown */}
                       <div className="items-start gap-2 md:hidden">
-                        {r.customer?.user?.email && r.customer.user.email === currentUser?.email && (
-                          <ReviewActions
-                            onEdit={() => handleEdit(r)}
-                            onDelete={() => handleDelete(r.id)}
-                          />
-                        )}
+                        {r.customer?.user?.email &&
+                          r.customer.user.email === currentUser?.email && (
+                            <ReviewActions
+                              onEdit={() => handleEdit(r)}
+                              onDelete={() => handleDelete(r.id)}
+                            />
+                          )}
                       </div>
                     </div>
 
