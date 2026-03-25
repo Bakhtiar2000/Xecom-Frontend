@@ -72,7 +72,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
           </div>
         </CardHeader>
         <CardContent className="space-y-4 px-4 lg:px-6">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2 lg:grid-cols-4">
             {/* Weight with inline unit */}
             <FormField
               control={form.control}
@@ -85,7 +85,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                       <Input
                         type="number"
                         step="0.01"
-                        placeholder="0.9"
+                        placeholder={`Weight in ${form.watch("weightUnit")}`}
                         {...field}
                         onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                         className="pr-16"
@@ -125,7 +125,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
             />
 
             {/* Dimensions with shared inline unit */}
-            <div className="md:col-span-3">
+            <div className="col-span-1 md:col-span-2 lg:col-span-3">
               <div className="grid grid-cols-3 gap-4">
                 {(["length", "width", "height"] as const).map((dim) => (
                   <FormField
@@ -140,7 +140,11 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                             <Input
                               type="number"
                               step="0.01"
-                              placeholder={dim.charAt(0).toUpperCase() + dim.slice(1)}
+                              placeholder={
+                                dim.charAt(0).toUpperCase() +
+                                dim.slice(1) +
+                                ` in ${form.watch("dimensions.unit")}`
+                              }
                               {...field}
                               onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                               className="pr-20"
@@ -191,7 +195,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                 <FormItem>
                   <FormLabel>Warranty *</FormLabel>
                   <FormControl>
-                    <Input placeholder="6 Months Manufacturing Warranty" {...field} />
+                    <Input placeholder="e.g: 6 Months Manufacturing Warranty" {...field} />
                   </FormControl>
                   <FormMessage className="text-danger" />
                 </FormItem>
@@ -233,54 +237,17 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                 </FormItem>
               )}
             />
-
-            {/* Tags */}
-            <div className="space-y-2">
-              <FormLabel>Tags *</FormLabel>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Add a tag"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      addTag();
-                    }
-                  }}
-                />
-                <Button type="button" onClick={addTag}>
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-              {form.formState.errors.tags && (
-                <p className="text-danger text-sm">{form.formState.errors.tags.message}</p>
-              )}
-              <div className="mt-2 flex flex-wrap gap-2">
-                {form.watch("tags").map((tag, index) => (
-                  <Badge key={index} variant="secondary">
-                    {tag}
-                    <button type="button" onClick={() => removeTag(index)} className="ml-2">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-            </div>
+            {/* <div className="hidden md:block md:col-span-1"></div> */}
 
             <FormField
               control={form.control}
               name="seoTitle"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="items-start gap-0">
                   <FormLabel>SEO Title *</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="AirFlex Pro Running Sneakers - Lightweight Sports Shoes"
-                      {...field}
-                    />
+                    <Input placeholder="Recommended: 50-60 characters" {...field} />
                   </FormControl>
-                  <FormDescription>Recommended: 50-60 characters</FormDescription>
                   <FormMessage className="text-danger" />
                 </FormItem>
               )}
@@ -293,21 +260,16 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                 <FormItem>
                   <FormLabel>SEO Description *</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Buy premium quality AirFlex Pro running sneakers..."
-                      rows={3}
-                      {...field}
-                    />
+                    <Textarea placeholder="Recommended: 150-160 characters" rows={3} {...field} />
                   </FormControl>
-                  <FormDescription>Recommended: 150-160 characters</FormDescription>
                   <FormMessage className="text-danger" />
                 </FormItem>
               )}
             />
 
             {/* Meta Keywords */}
-            <div className="space-y-2">
-              <FormLabel>Meta Keywords *</FormLabel>
+            <div>
+              <FormLabel className="mb-3">Meta Keywords *</FormLabel>
               <div className="flex gap-2">
                 <Input
                   placeholder="Add a keyword"
@@ -329,9 +291,51 @@ export default function DetailsTab({ form }: DetailsTabProps) {
               )}
               <div className="mt-2 flex flex-wrap gap-2">
                 {form.watch("metaKeywords").map((keyword, index) => (
-                  <Badge key={index} variant="secondary">
+                  <Badge key={index} variant="secondary" className="bg-batch text-batch-foreground">
                     {keyword}
-                    <button type="button" onClick={() => removeKeyword(index)} className="ml-2">
+                    <button
+                      type="button"
+                      onClick={() => removeKeyword(index)}
+                      className="hover:text-danger ml-2 cursor-pointer duration-300"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* Tags */}
+            <div>
+              <FormLabel className="mb-3">Tags *</FormLabel>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Add a tag"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addTag();
+                    }
+                  }}
+                />
+                <Button type="button" onClick={addTag}>
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+              {form.formState.errors.tags && (
+                <p className="text-danger text-sm">{form.formState.errors.tags.message}</p>
+              )}
+              <div className="mt-2 flex flex-wrap gap-2">
+                {form.watch("tags").map((tag, index) => (
+                  <Badge key={index} variant="secondary" className="bg-batch text-batch-foreground">
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => removeTag(index)}
+                      className="hover:text-danger ml-2 cursor-pointer duration-300"
+                    >
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>

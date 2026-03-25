@@ -16,6 +16,10 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 import { Plus, X } from "lucide-react";
+import { AttributeValueFilter } from "../components/AttributeValueFilter";
+import { useState, useEffect } from "react";
+import { API_URL } from "@/redux/api/baseApi";
+import { TAttribute } from "@/types";
 
 interface VariantsTabProps {
   form: UseFormReturn<ProductFormData>;
@@ -27,6 +31,41 @@ export default function VariantsTab({ form, fieldRefs }: VariantsTabProps) {
     control: form.control,
     name: "variants",
   });
+
+  const [attributes, setAttributes] = useState<TAttribute[]>([]);
+
+  // Fetch attributes for SKU generation
+  useEffect(() => {
+    const fetchAttributes = async () => {
+      try {
+        const response = await fetch(`${API_URL}/attribute`);
+        const data = await response.json();
+        if (data.success && data.data) {
+          setAttributes(data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch attributes:", error);
+      }
+    };
+    fetchAttributes();
+  }, []);
+
+  // Generate SKU from attribute values
+  const generateSKU = (attributeValueIds: string[]) => {
+    if (!attributeValueIds.length || !attributes.length) return "";
+
+    const selectedValues: string[] = [];
+
+    // For each attribute, find the selected value
+    attributes.forEach((attribute) => {
+      const selectedValue = attribute.values?.find((v) => attributeValueIds.includes(v.id));
+      if (selectedValue) {
+        selectedValues.push(selectedValue.value.toUpperCase().replace(/\s+/g, "-"));
+      }
+    });
+
+    return selectedValues.length > 0 ? `PRD-${selectedValues.join("-")}` : "";
+  };
 
   return (
     <TabsContent value="variants" className="space-y-4">
@@ -57,7 +96,31 @@ export default function VariantsTab({ form, fieldRefs }: VariantsTabProps) {
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <FormField
+                  control={form.control}
+                  name={`variants.${index}.attributeValueIds`}
+                  render={({ field }) => (
+                    <FormItem className="col-span-full">
+                      <FormLabel>Attribute Values *</FormLabel>
+                      <FormControl>
+                        <AttributeValueFilter
+                          selectedValueIds={field.value || []}
+                          onValueIdsChange={(valueIds) => {
+                            field.onChange(valueIds);
+                            // Auto-generate SKU when attribute values change
+                            const generatedSKU = generateSKU(valueIds);
+                            if (generatedSKU) {
+                              form.setValue(`variants.${index}.sku`, generatedSKU);
+                            }
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-danger" />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name={`variants.${index}.sku`}
@@ -166,33 +229,6 @@ export default function VariantsTab({ form, fieldRefs }: VariantsTabProps) {
                   )}
                 />
               </div>
-
-              <FormField
-                control={form.control}
-                name={`variants.${index}.attributeValueIds`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Attribute Value IDs *</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="uuid-1, uuid-2"
-                        value={field.value?.join(", ") || ""}
-                        onChange={(e) => {
-                          const ids = e.target.value
-                            .split(",")
-                            .map((s) => s.trim())
-                            .filter(Boolean);
-                          field.onChange(ids);
-                        }}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Enter attribute value UUIDs separated by commas
-                    </FormDescription>
-                    <FormMessage className="text-danger" />
-                  </FormItem>
-                )}
-              />
             </div>
           ))}
 

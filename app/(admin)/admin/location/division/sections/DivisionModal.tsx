@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -13,7 +13,7 @@ import {
 import { useGetAllCountriesQuery } from "@/redux/features/location/country.api";
 
 import { TDivision } from "@/types/location.type";
-
+import { API_URL } from "@/redux/api/baseApi";
 import {
   Dialog,
   DialogContent,
@@ -22,18 +22,10 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+import CustomSelect, { SelectOption } from "@/components/custom/customSelect";
 
 interface Props {
   open: boolean;
@@ -54,7 +46,6 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
   } = useForm<TDivisionFormData>({
     resolver: zodResolver(divisionSchema),
     defaultValues: {
-      //   id:"",
       name: "",
       countryId: "",
     },
@@ -66,19 +57,27 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
   ]);
   const countries = countryData?.data || [];
 
+  const [selectedCountry, setSelectedCountry] = useState<SelectOption[]>([]);
+
   const [addDivision, { isLoading: isAdding }] = useAddDivisionMutation();
   const [updateDivision, { isLoading: isUpdating }] = useUpdateDivisionMutation();
 
   // Prefill form on edit
   useEffect(() => {
     if (division && open) {
-      //   setValue("id",division.id);
       setValue("name", division.name);
       setValue("countryId", division.countryId);
+
+      const countryOption = countries
+        .map((c) => ({ value: c.id, label: c.name }))
+        .find((c) => c.value === division.countryId);
+
+      setSelectedCountry(countryOption ? [countryOption] : []);
     } else {
       reset();
+      setSelectedCountry([]);
     }
-  }, [division, open, setValue, reset]);
+  }, [division, open, countries, setValue, reset]);
 
   const onSubmit = async (data: TDivisionFormData) => {
     try {
@@ -99,6 +98,7 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
       }
 
       reset();
+      setSelectedCountry([]);
       onOpenChange(false);
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to save division");
@@ -121,18 +121,19 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
               name="countryId"
               control={control}
               render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select Country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {countries.map((country) => (
-                      <SelectItem key={country.id} value={country.id}>
-                        {country.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <CustomSelect
+                  endpoint={`${API_URL}/country`}
+                  fields={["id", "name"]}
+                  mapToOption={(item) => ({ value: item.id, label: item.name })}
+                  value={selectedCountry}
+                  onChange={(vals) => {
+                    setSelectedCountry(vals as SelectOption[]);
+                    field.onChange(vals[0]?.value ?? "");
+                  }}
+                  searchable
+                  paginated
+                  placeholder="Select Country"
+                />
               )}
             />
             {errors.countryId && (
@@ -151,16 +152,7 @@ export default function DivisionModal({ open, onOpenChange, division }: Props) {
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit">
-              {isAdding || isUpdating ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                "Save"
-              )}
-            </Button>
+            <Button type="submit">{isAdding || isUpdating ? "Saving..." : "Save"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

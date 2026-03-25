@@ -80,9 +80,7 @@ const Login = () => {
         toast.success(response.message || "Logged in successfully");
 
         // Redirect based on role
-        if (decodedUser.role === UserRole.CUSTOMER) {
-          router.push("/customer");
-        } else if (
+        if (
           decodedUser.role === UserRole.SUPER_ADMIN ||
           decodedUser.role === UserRole.ADMIN ||
           decodedUser.role === UserRole.STAFF

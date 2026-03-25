@@ -108,12 +108,21 @@ const AllProductsTable = () => {
     const params = [...getPaginationParams(), ...getSortParams()];
 
     if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
-    Object.entries(selectedAttributeValues).forEach(([attrName, values]) => {
-      if (values.length) params.push({ name: attrName, value: values.join(",") });
+
+    // Flatten all attribute values and send each as attributeValueIds
+    const allAttributeValueIds = Object.values(selectedAttributeValues).flat();
+    allAttributeValueIds.forEach((valueId) => {
+      params.push({ name: "attributeValueIds", value: valueId });
+    });
+
+    // Add category IDs
+    selectedCategories.forEach((category) => {
+      params.push({ name: "categoryIds", value: category.value.toString() });
     });
 
     return params;
   };
+
   const { data, isLoading, isFetching, isError } = useGetAllProductsQuery(buildQueryParams());
   const products = data?.data || [];
   const hasNoData = products.length === 0 && !isLoading;
@@ -123,12 +132,14 @@ const AllProductsTable = () => {
   const attributes: TAttribute[] = attributesData?.data || [];
   console.log("attribute data", attributesData);
 
-  const totalActiveFilters = [...Object.values(selectedAttributeValues).flat()].filter(
-    Boolean
-  ).length;
+  const totalActiveFilters = [
+    ...Object.values(selectedAttributeValues).flat(),
+    ...selectedCategories.map((c) => c.value),
+  ].filter(Boolean).length;
 
   const clearAllFilters = () => {
     setSelectedAttributeValues({});
+    setSelectedCategories([]);
     resetPage();
   };
   return (
@@ -189,7 +200,7 @@ const AllProductsTable = () => {
           {totalActiveFilters > 0 && (
             <button
               onClick={clearAllFilters}
-              className="text-destructive hover:text-destructive/80 border-destructive/30 flex items-center gap-1 rounded-md border px-2 py-1.5 text-xs transition-colors"
+              className="text-destructive hover:text-destructive/80 border-destructive/30 flex cursor-pointer items-center gap-1 rounded-md border px-2 py-1.5 text-xs transition-colors"
             >
               <X className="h-3 w-3" />
               Clear ({totalActiveFilters})

@@ -35,7 +35,6 @@ import CartSheet from "@/components/sections/shared/CartSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TargetAudience } from "@/constants/enum";
 import { useGetAllCategoriesQuery } from "@/redux/features/product/category.api";
-import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
 import { useGetMyCartQuery } from "@/redux/features/order/cart.api";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -68,7 +67,6 @@ const Navbar = () => {
   // Get dashboard route based on user role
   const getDashboardRoute = (): string => {
     if (!user) return "/";
-    if (user.role === UserRole.CUSTOMER) return "/customer";
     if (
       user.role === UserRole.SUPER_ADMIN ||
       user.role === UserRole.ADMIN ||
@@ -335,19 +333,23 @@ const Navbar = () => {
                       </HoverCardContent>
                     </HoverCard>
 
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Link
-                          href={getDashboardRoute()}
-                          className="hover-button flex items-center gap-1 transition"
-                        >
-                          <LayoutDashboard size={22} />
-                        </Link>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Dashboard</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    {user.role === UserRole.SUPER_ADMIN ||
+                    user.role === UserRole.ADMIN ||
+                    user.role === UserRole.STAFF ? (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link
+                            href={getDashboardRoute()}
+                            className="hover-button flex items-center gap-1 transition"
+                          >
+                            <LayoutDashboard size={22} />
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Dashboard</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : null}
                   </>
                 )}
                 <Tooltip>

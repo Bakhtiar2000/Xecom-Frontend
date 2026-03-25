@@ -1,4 +1,4 @@
-import { OrderStatus, PaymentStatus } from "@/constants/enum";
+import { OrderStatus } from "@/constants/enum";
 
 export type TCreateOrderDto = {
   customerId: string;
@@ -15,9 +15,7 @@ export type TCreateOrderDto = {
   shippingMethod?: string;
 };
 
-export type TUpdateOrderDto = {
-  status?: OrderStatus;
-  paymentStatus?: PaymentStatus;
-  notes?: string;
+export type TUpdateOrderStatusDto = {
+  status: OrderStatus;
   internalNotes?: string;
 };

@@ -35,6 +35,30 @@ export type TOrder = {
   deliveredAt?: string | null;
   placedAt: string;
   updatedAt: string;
+  customer?: {
+    user?: {
+      name?: string;
+      email?: string;
+      phoneNumber?: string;
+    };
+  };
+  address?: {
+    street?: string;
+    postalCode?: string;
+    thana?: {
+      name?: string;
+      district?: {
+        name?: string;
+        division?: {
+          name?: string;
+          country?: {
+            name?: string;
+          };
+        };
+      };
+    };
+  };
+  orderItems?: TOrderItem[];
 };
 
 export type TOrderItem = {
@@ -45,6 +69,16 @@ export type TOrderItem = {
   quantity: number;
   unitPrice: string;
   totalPrice: string;
+  product?: {
+    name?: string;
+    images?: {
+      imageUrl: string;
+      isFeatured: boolean;
+    }[];
+  };
+  variant?: {
+    sku?: string;
+  };
 };
 
 export type TPayment = {

@@ -45,7 +45,7 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
           </div>
         </CardHeader>
         <CardContent className="space-y-4 px-4 lg:px-6">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2 lg:grid-cols-4">
             <FormField
               control={form.control}
               name="name"
@@ -57,7 +57,7 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
                       ref={(el) => {
                         fieldRefs.current["name"] = el;
                       }}
-                      placeholder="Men's Casual Sneakers – Urban Flex"
+                      placeholder="Name of the Product"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -81,7 +81,7 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
                       ref={(el) => {
                         fieldRefs.current["slug"] = el;
                       }}
-                      placeholder="mens-casual-sneakers-urban-flex"
+                      placeholder="name-of-the-product"
                       {...field}
                     />
                   </FormControl>
@@ -173,7 +173,7 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
                       ref={(el) => {
                         fieldRefs.current["shortDescription"] = el;
                       }}
-                      placeholder="Stylish everyday sneakers built for comfort and versatility."
+                      placeholder="Brief summary of the product."
                       rows={2}
                       {...field}
                     />
@@ -194,7 +194,7 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
                       ref={(el) => {
                         fieldRefs.current["fullDescription"] = el;
                       }}
-                      placeholder="Urban Flex casual sneakers are designed for all-day wear..."
+                      placeholder="Detailed description of the product."
                       rows={4}
                       {...field}
                     />
@@ -220,7 +220,7 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
                       <SelectItem value="INACTIVE">Inactive</SelectItem>
                       <SelectItem value="DRAFT">Draft</SelectItem>
                       <SelectItem value="OUT_OF_STOCK">Out of Stock</SelectItem>
-                      <SelectItem value="DISCONTINUED">Distontinued</SelectItem>
+                      <SelectItem value="DISCONTINUED">Discontinued</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage className="text-danger" />
@@ -232,9 +232,9 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
               control={form.control}
               name="featured"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Featured Product</FormLabel>
+                <FormItem className="mt-4 flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div>
+                    <FormLabel className="text-base">Featured Product?</FormLabel>
                     <FormDescription>Display this product as featured</FormDescription>
                   </div>
                   <FormControl>

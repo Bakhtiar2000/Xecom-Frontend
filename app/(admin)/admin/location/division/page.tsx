@@ -25,7 +25,7 @@ export default function Divisions() {
   return (
     <>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <Title mainTitle="Divisions" subTitle="Manage Divisions and their organization" />
+        <Title mainTitle="All Divisions" subTitle="Manage Divisions and their organization" />
         <Button onClick={handleAddClick} className="w-fit gap-2">
           <Plus className="h-4 w-4" />
           Add Division

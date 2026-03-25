@@ -97,7 +97,7 @@ export default function AddProductPage() {
       metaKeywords: [],
       faqs: [],
       minOrderQty: 1,
-      maxOrderQty: 20,
+      maxOrderQty: 100,
       seoTitle: "",
       seoDescription: "",
       dimensions: { unit: "CM", width: null, height: null, length: null },
@@ -248,7 +248,7 @@ export default function AddProductPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <Title mainTitle="Add New Product" />
+        <Title mainTitle="Add New Product" subTitle="Add another product to the inventory" />
         <Button variant="outline" onClick={() => window.history.back()}>
           Cancel
         </Button>

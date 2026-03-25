@@ -45,6 +45,7 @@ export default function AttributeValueModal({
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     reset,
     setValue,
   } = useForm<TAttributeValueFormData>({
@@ -88,7 +89,7 @@ export default function AttributeValueModal({
       if (isEditMode && attributeValue) {
         await updateAttributeValue({
           id: attributeValue.id,
-          data: { ...payload },
+          data: { id: attributeValue.id, ...payload },
         }).unwrap();
 
         toast.success("Attribute value updated successfully");
@@ -130,17 +131,28 @@ export default function AttributeValueModal({
               {errors.value && <p className="text-destructive text-sm">{errors.value.message}</p>}
             </div>
 
-            <div>
-              {isColorAttribute && (
-                <div>
-                  <Label htmlFor="hexCode">Hex Code</Label>
-                  <Input id="hexCode" placeholder="#ffffff" {...register("hexCode")} />
-                  {errors.hexCode && (
-                    <p className="text-destructive text-sm">{errors.hexCode.message}</p>
-                  )}
+            {isColorAttribute && (
+              <div>
+                <Label htmlFor="hexCode">Hex Code</Label>
+                <div className="relative">
+                  <Input
+                    id="hexCode"
+                    placeholder="#ffffff"
+                    className="pl-14"
+                    {...register("hexCode")}
+                  />
+                  <Input
+                    type="color"
+                    className="absolute top-0 left-0 h-full w-12 cursor-pointer border-r"
+                    value={watch("hexCode") || "#000000"}
+                    onChange={(e) => setValue("hexCode", e.target.value)}
+                  />
                 </div>
-              )}
-            </div>
+                {errors.hexCode && (
+                  <p className="text-destructive mt-1 text-sm">{errors.hexCode.message}</p>
+                )}
+              </div>
+            )}
           </div>
 
           <DialogFooter>
