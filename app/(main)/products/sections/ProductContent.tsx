@@ -87,17 +87,24 @@ export default function ProductContent() {
 
   const buildQueryParams = () => {
     const params: { name: string; value: string }[] = [];
-
-    // Categories handles everything now (both audience-wide and specific)
-    if (filters.categories.length > 0)
-      params.push({ name: "categoryIds", value: filters.categories.join(",") });
-
-    if (filters.brands.length > 0)
-      params.push({ name: "brandIds", value: filters.brands.join(",") });
+    
+    if (filters.categories.length > 0) {
+      filters.categories.forEach((id) => {
+        params.push({ name: "categoryIds", value: id });
+      });
+    }
+    if (filters.brands.length > 0) {
+      filters.brands.forEach((id) => {
+        params.push({ name: "brandIds", value: id });
+      });
+    }
 
     const attributeValueIds = [...filters.sizes, ...filters.colors, ...filters.attributes];
-    if (attributeValueIds.length > 0)
-      params.push({ name: "attributeValueIds", value: attributeValueIds.join(",") });
+    if (attributeValueIds.length > 0) {
+      attributeValueIds.forEach((id) => {
+        params.push({ name: "attributeValueIds", value: id });
+      });
+    }
 
     if (filters.sortBy === "price-low")
       params.push({ name: "sortBy", value: "price" }, { name: "sortOrder", value: "asc" });

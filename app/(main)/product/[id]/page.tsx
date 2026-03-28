@@ -258,11 +258,10 @@ export default function ProductDetails() {
                 <button
                   key={image.id}
                   onClick={() => setSelectedImage(index)}
-                  className={`bg-card-primary relative h-20 w-20 cursor-pointer overflow-hidden rounded-md border-2 transition-all ${
-                    selectedImage === index
+                  className={`bg-card-primary relative h-20 w-20 cursor-pointer overflow-hidden rounded-md border-2 transition-all ${selectedImage === index
                       ? "border-black shadow-md"
                       : "border-border hover:border-gray-400"
-                  }`}
+                    }`}
                 >
                   <Image
                     src={image.imageUrl}
@@ -373,11 +372,10 @@ export default function ProductDetails() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${
-                    activeTab === tab
+                  className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab
                       ? "border-b-2 border-black dark:border-white"
                       : "text-muted-foreground hover:text-foreground"
-                  }`}
+                    }`}
                 >
                   {tab === "specs" ? "Specifications" : tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
@@ -527,21 +525,19 @@ export default function ProductDetails() {
                 <button
                   onClick={handleWishlistToggle}
                   disabled={isWishlisting || isUnwishlisting}
-                  className={`border-border flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:scale-110 disabled:cursor-not-allowed disabled:opacity-60 ${
-                    isWishlisted ? "border-danger/20 bg-danger/50" : "hover:bg-muted"
-                  }`}
+                  className={`border-border flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-all hover:scale-110 disabled:cursor-not-allowed disabled:opacity-60 ${isWishlisted ? "border-danger/20 bg-danger/50" : "hover:bg-muted"
+                    }`}
                 >
                   {isWishlisting || isUnwishlisting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Heart
-                      className={`h-4 w-4 transition-colors ${
-                        isWishlisted ? "fill-danger text-danger" : ""
-                      }`}
+                      className={`h-4 w-4 transition-colors ${isWishlisted ? "fill-danger text-danger" : ""
+                        }`}
                     />
                   )}
                 </button>
-                <button className="border-border hover:bg-muted flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:scale-110">
+                <button className="border-border cursor-pointer hover:bg-muted flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:scale-110">
                   <Share2 className="h-4 w-4" />
                 </button>
               </div>
@@ -550,9 +546,6 @@ export default function ProductDetails() {
             {/* SKU + Rating row */}
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="text-muted-foreground flex items-center gap-3 text-sm">
-                <span>
-                  SKU: <span className="font-mono font-medium">{sku}</span>
-                </span>
                 {product.totalSales > 0 && (
                   <>
                     <span>•</span>
@@ -565,16 +558,15 @@ export default function ProductDetails() {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-4 w-4 ${
-                        product.avgRating && i < Math.floor(product.avgRating)
+                      className={`h-4 w-4 ${product.avgRating && i < Math.floor(product.avgRating)
                           ? "fill-rating text-rating"
                           : "fill-muted text-muted-foreground"
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
                 <span className="text-muted-foreground text-sm">
-                  {product.avgRating ? product.avgRating.toFixed(1) : "No rating"}{" "}
+                {product.avgRating ? Number(product.avgRating).toFixed(1) : "No rating"}{" "}
                   <span className="text-xs">({product.reviewCount ?? 0} reviews)</span>
                 </span>
               </div>
@@ -611,7 +603,9 @@ export default function ProductDetails() {
               )}
             </div>
           </div>
-
+          <p className="text-muted-foreground mt-2 mb-4 text-sm">
+            SKU: <span className="font-mono font-semibold">{sku}</span>
+          </p>
           {/* Size Selection */}
           {allSizes.length > 0 && (
             <div className="mb-6">
@@ -619,7 +613,7 @@ export default function ProductDetails() {
                 <h3 className="font-semibold">
                   Size: <span className="text-muted-foreground font-normal">{selectedSize}</span>
                 </h3>
-                <button className="flex items-center gap-1 text-xs underline underline-offset-2">
+                <button className="flex cursor-pointer items-center gap-1 text-xs underline underline-offset-2">
                   Size Chart
                   <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -636,11 +630,10 @@ export default function ProductDetails() {
                   <button
                     key={size}
                     onClick={() => handleSizeSelect(size)}
-                    className={`flex h-10 w-14 cursor-pointer items-center justify-center rounded-lg border-2 font-medium transition-all lg:h-14 ${
-                      selectedSize === size
+                    className={`flex h-10 w-14 cursor-pointer items-center justify-center rounded-lg border-2 font-medium transition-all lg:h-14 ${selectedSize === size
                         ? "border-black bg-black text-white"
                         : "border-border hover:border-border/80 bg-white text-black"
-                    }`}
+                      }`}
                   >
                     {size}
                   </button>
@@ -661,22 +654,20 @@ export default function ProductDetails() {
                     key={color.value}
                     title={color.value}
                     onClick={() => handleColorSelect(color.value)}
-                    className={`relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all hover:scale-110 ${
-                      selectedColor === color.value
+                    className={`relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all hover:scale-110 ${selectedColor === color.value
                         ? "scale-110 border-black shadow-md"
                         : "border-border"
-                    }`}
+                      }`}
                     style={
                       color.hex ? { backgroundColor: color.hex } : { backgroundColor: "#e5e7eb" }
                     }
                   >
                     {selectedColor === color.value && (
                       <span
-                        className={`absolute inset-0 flex items-center justify-center rounded-full text-xs font-bold ${
-                          color.hex === "#ffffff" || color.hex === "#fff"
+                        className={`absolute inset-0 flex items-center justify-center rounded-full text-xs font-bold ${color.hex === "#ffffff" || color.hex === "#fff"
                             ? "text-black"
                             : "text-white"
-                        }`}
+                          }`}
                       >
                         ✓
                       </span>
@@ -687,17 +678,13 @@ export default function ProductDetails() {
                   </button>
                 ))}
               </div>
-              {/* Live SKU update indicator */}
-              <p className="text-muted-foreground mt-2 text-xs">
-                SKU: <span className="font-mono font-semibold">{sku}</span>
-              </p>
             </div>
           )}
 
-          {/* Quantity and Actions */}
+          {/* Actions */}
           <div className="mb-6">
             <div className="flex w-full flex-col gap-4 md:flex-row">
-              <div className="border-border flex w-full items-center justify-center rounded-lg border md:w-auto">
+              {/* <div className="border-border flex w-full items-center justify-center rounded-lg border md:w-auto">
                 <button
                   onClick={() => setQuantity(Math.max(product.minOrderQty ?? 1, quantity - 1))}
                   className="hover:bg-muted bg-card-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-l-lg"
@@ -713,7 +700,7 @@ export default function ProductDetails() {
                 >
                   <span className="text-xl">+</span>
                 </button>
-              </div>
+              </div> */}
               <button
                 onClick={handleAddToCart}
                 disabled={isAddingToCart || stockQty === 0}

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import SectionTitle from "@/components/sections/shared/SectionTitle";
 import { useGetAllBrandsQuery } from "@/redux/features/product/brand.api";
@@ -25,8 +25,9 @@ export default function SneakerShoesPage() {
             <Link
               key={brand.id}
               href={`/products?brandIds=${brand.id ?? brand.id}`}
-              className={`bg-card-primary relative flex h-40 w-full items-center justify-center overflow-hidden rounded-2xl border transition hover:shadow-md lg:h-70 ${activeBrand === brand.name ? "ring-primary ring-2" : ""
-                }`}
+              className={`bg-card-primary relative flex h-40 w-full items-center justify-center overflow-hidden rounded-2xl border transition hover:shadow-md lg:h-70 ${
+                activeBrand === brand.name ? "ring-primary ring-2" : ""
+              }`}
             >
               <Image
                 src={brand.logoUrl}

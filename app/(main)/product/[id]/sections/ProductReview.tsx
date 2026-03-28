@@ -76,20 +76,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
   const prevImage = () =>
     setActiveIndex((prev) => (prev === 0 ? activeImages.length - 1 : prev - 1));
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-    const urls = Array.from(files).map((file) => URL.createObjectURL(file));
-    setForm((prev) => ({ ...prev, images: [...prev.images, ...urls] }));
-  };
-
-  const removeImage = (index: number) => {
-    setForm((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-  };
-
   const resetForm = () => {
     setForm({ userName: "", rating: 5, comment: "", images: [] });
     setEditing(null);
@@ -113,7 +99,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         // ── ADD ──
         await addReview({
           productId,
-          userName: form.userName || "Anonymous",
           rating: form.rating,
           comment: form.comment,
         }).unwrap();
@@ -210,12 +195,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
             </DialogHeader>
 
             <div className="space-y-4">
-              <Input
-                placeholder="Your name (optional)"
-                value={form.userName}
-                onChange={(e) => setForm({ ...form, userName: e.target.value })}
-              />
-
               <StarRating
                 rating={form.rating}
                 editable
@@ -228,30 +207,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                 onChange={(e) => setForm({ ...form, comment: e.target.value })}
               />
 
-              <Input type="file" multiple accept="image/*" onChange={handleImageUpload} />
-
-              {form.images.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {form.images.map((img, i) => (
-                    <div key={i} className="group relative">
-                      <Image
-                        src={img}
-                        alt={`Upload preview ${i}`}
-                        width={80}
-                        height={80}
-                        className="h-20 w-20 rounded-lg border object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(i)}
-                        className="bg-destructive absolute top-0 right-0 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold text-white opacity-0 transition group-hover:opacity-100"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
 
               <Button
                 className="bg-button-primary hover:bg-button-primary/80 w-full cursor-pointer"
@@ -306,12 +261,12 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
                           <div>
                             <h4 className="flex gap-6 font-semibold">
-                              {r.userName}
+                              {r?.userName}
                               <span>
                                 <StarRating rating={r.rating} />
                               </span>
                             </h4>
-                            <p className="text-muted-foreground text-xs">{r.date}</p>
+                            <p className="text-muted-foreground text-xs">{r?.date}</p>
                             <p>{r.comment}</p>
                           </div>
                         </div>
