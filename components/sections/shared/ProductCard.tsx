@@ -45,7 +45,7 @@ type Props = {
 
 export default function ProductCard({ product, viewMode, getBadgeColor }: Props) {
   const router = useRouter();
-  console.log('product', product);
+  console.log("product", product);
 
   // ─── Mutations ───
   const [addToCart, { isLoading: isAddingToCart }] = useAddToCartMutation();
@@ -128,12 +128,13 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
 
   return (
     <div
-      className={`group bg-card-primary relative transform overflow-hidden rounded-sm shadow-sm transition-all duration-500 hover:shadow-lg ${viewMode === "list" ? "flex flex-col md:flex-row" : ""
-        }`}
+      className={`group bg-card-primary relative transform overflow-hidden rounded-sm shadow-sm transition-all duration-500 hover:shadow-lg ${
+        viewMode === "list" ? "flex flex-col md:flex-row" : ""
+      }`}
     >
       {/* Badge */}
       <div
-        className={`absolute top-4 left-4 z-10 rounded-full text-black px-3 py-1 text-xs font-bold ${getBadgeColor(badge)}`}
+        className={`absolute top-4 left-4 z-10 rounded-full px-3 py-1 text-xs font-bold text-black ${getBadgeColor(badge)}`}
       >
         {product.tags?.[0] ?? "—"}
       </div>
@@ -142,17 +143,19 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
       <button
         onClick={handleWishlistToggle}
         disabled={isWishlisting || isUnwishlisting}
-        className={`absolute top-4 right-4 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border shadow-sm transition-all hover:scale-110 disabled:opacity-60 ${isWishlisted
-          ? "border-danger/20 bg-danger/50"
-          : "border-border bg-white/80 backdrop-blur-sm"
-          }`}
+        className={`absolute top-4 right-4 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border shadow-sm transition-all hover:scale-110 disabled:opacity-60 ${
+          isWishlisted
+            ? "border-danger/20 bg-danger/50"
+            : "border-border bg-white/80 backdrop-blur-sm"
+        }`}
       >
         {isWishlisting || isUnwishlisting ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
           <Heart
-            className={`h-4 w-4 transition-colors ${isWishlisted ? "fill-danger text-danger" : "text-gray-600"
-              }`}
+            className={`h-4 w-4 transition-colors ${
+              isWishlisted ? "fill-danger text-danger" : "text-gray-600"
+            }`}
           />
         )}
       </button>
@@ -169,7 +172,6 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
           className="object-contain transition-transform duration-500 hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-
       </Link>
 
       {/* Info */}
@@ -197,7 +199,7 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
         </Link>
 
         {/* Short description */}
-        <p className="text-muted-foreground h-5 mb-3 line-clamp-2 text-xs">
+        <p className="text-muted-foreground mb-3 line-clamp-2 h-5 text-xs">
           {product.shortDescription}
         </p>
 

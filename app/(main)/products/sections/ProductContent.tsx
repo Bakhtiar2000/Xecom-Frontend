@@ -87,7 +87,7 @@ export default function ProductContent() {
 
   const buildQueryParams = () => {
     const params: { name: string; value: string }[] = [];
-    
+
     if (filters.categories.length > 0) {
       filters.categories.forEach((id) => {
         params.push({ name: "categoryIds", value: id });

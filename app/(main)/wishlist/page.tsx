@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Heart, PackageOpen, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
 
 const Wishlist = () => {
   const { data, isLoading } = useGetAllWishlistsQuery([]);
@@ -56,11 +57,12 @@ const Wishlist = () => {
 
   return (
     <div className="container py-10">
+      <SectionTitle title="My Wishlist"></SectionTitle>
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex text-center items-center gap-3">
           <Heart className="h-6 w-6 fill-red-500 text-red-500" />
-          <h1 className="text-2xl font-bold">My Wishlist</h1>
+          <h1 className="text-2xl font-bold">My Wishlists</h1>
           <span className="bg-muted text-muted-foreground rounded-full px-3 py-0.5 text-sm font-medium">
             {wishlists.length} {wishlists.length === 1 ? "item" : "items"}
           </span>

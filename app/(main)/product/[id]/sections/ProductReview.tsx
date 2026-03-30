@@ -207,7 +207,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                 onChange={(e) => setForm({ ...form, comment: e.target.value })}
               />
 
-
               <Button
                 className="bg-button-primary hover:bg-button-primary/80 w-full cursor-pointer"
                 onClick={handleSubmit}

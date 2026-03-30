@@ -7,20 +7,24 @@ import * as z from "zod";
 import {
   Star,
   Trash2,
-  PenLine,
   PackageSearch,
   Loader2,
-  ChevronDown,
-  ChevronUp,
   Pencil,
+  PenLine,
 } from "lucide-react";
-
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,6 +35,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 import {
   useAddReviewMutation,
@@ -38,16 +48,18 @@ import {
   useGetMyReviewsQuery,
   useUpdateReviewMutation,
 } from "@/redux/features/product/review.api";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
+import { toast } from "sonner";
 
 // ── Zod Schema ────────────────────────────────────────────────────────────────
 const reviewSchema = z.object({
   productId: z.string().min(1, "Product ID is required"),
-  rating: z.number("Rating is required").min(1, "Please select a rating").max(5),
+  rating: z.number().min(1, "Please select a rating").max(5),
   comment: z.string().min(10, "Review must be at least 10 characters"),
 });
 type ReviewFormData = z.infer<typeof reviewSchema>;
 
-// ── helper: get review id safely (handles _id or id) ─────────────────────────
+// ── Helper ────────────────────────────────────────────────────────────────────
 const getId = (item: any): string => item?._id ?? item?.id ?? "";
 
 // ── Star Row ──────────────────────────────────────────────────────────────────
@@ -69,16 +81,17 @@ function StarRow({
   size?: "sm" | "md";
 }) {
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => {
         const val = i + 1;
         const filled = val <= (interactive ? hoverRating || rating : rating);
         return (
           <Star
             key={i}
-            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${
-              filled ? "fill-amber-400 text-amber-400" : "fill-muted text-muted-foreground/30"
-            } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
+            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${filled
+              ? "fill-amber-400 text-amber-400"
+              : "fill-muted text-muted-foreground/30"
+              } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
             onClick={() => interactive && onRate?.(val)}
             onMouseEnter={() => interactive && onHover?.(val)}
             onMouseLeave={() => interactive && onLeave?.()}
@@ -89,7 +102,7 @@ function StarRow({
   );
 }
 
-// ── Add / Update Review Form ──────────────────────────────────────────────────
+// ── Review Form (inside Dialog) ───────────────────────────────────────────────
 function ReviewForm({
   productId,
   existingReview,
@@ -131,289 +144,108 @@ function ReviewForm({
           id: getId(existingReview),
           data: { rating: data.rating, comment: data.comment },
         }).unwrap();
+        toast.success("Review updated successfully!"); 
       } else {
         await addReview(data).unwrap();
+        toast.success("Review submitted successfully!");
       }
       reset();
       onClose();
-    } catch (err) {
-      console.log("Failed to submit review:", err);
+    } catch (err: any) {
+      toast.error(err?.data?.message ?? "Failed to submit review.");
     }
   };
 
   return (
-    <div className="bg-muted/30 mt-4 space-y-3 rounded-xl border p-4">
-      <h4 className="flex items-center gap-2 text-sm font-medium">
-        {isUpdateMode ? (
-          <>
-            <Pencil className="text-primary h-4 w-4" /> Update Your Review
-          </>
-        ) : (
-          <>
-            <PenLine className="text-primary h-4 w-4" /> Write a Review
-          </>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <input type="hidden" {...register("productId")} />
+
+      {/* Star Rating */}
+      <div>
+        <p className="text-muted-foreground mb-1.5 text-xs font-medium">
+          Your rating
+        </p>
+        <StarRow
+          rating={selectedRating}
+          interactive
+          hoverRating={hoverRating}
+          onRate={(v) => setValue("rating", v, { shouldValidate: true })}
+          onHover={setHoverRating}
+          onLeave={() => setHoverRating(0)}
+        />
+        {errors.rating && (
+          <p className="text-destructive mt-1 text-xs">{errors.rating.message}</p>
         )}
-      </h4>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-        <input type="hidden" {...register("productId")} />
-
-        {/* Star Rating */}
-        <div>
-          <p className="text-muted-foreground mb-1.5 text-xs">Your rating</p>
-          <StarRow
-            rating={selectedRating}
-            interactive
-            hoverRating={hoverRating}
-            onRate={(v) => setValue("rating", v, { shouldValidate: true })}
-            onHover={setHoverRating}
-            onLeave={() => setHoverRating(0)}
-          />
-          {errors.rating && (
-            <p className="text-destructive mt-1 text-xs">{errors.rating.message}</p>
-          )}
-        </div>
-
-        {/* Comment */}
-        <div>
-          <Textarea
-            placeholder="Share your experience with this product…"
-            rows={3}
-            className="text-sm"
-            {...register("comment")}
-          />
-          {errors.comment && (
-            <p className="text-destructive mt-1 text-xs">{errors.comment.message}</p>
-          )}
-        </div>
-
-        <div className="flex justify-end gap-2">
-          <Button type="button" variant="ghost" size="sm" onClick={onClose} disabled={isLoading}>
-            Cancel
-          </Button>
-          <Button type="submit" size="sm" className="rounded-full px-5" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-                {isUpdateMode ? "Updating…" : "Submitting…"}
-              </>
-            ) : isUpdateMode ? (
-              "Update Review"
-            ) : (
-              "Submit Review"
-            )}
-          </Button>
-        </div>
-      </form>
-    </div>
-  );
-}
-
-// ── Single Review Row ─────────────────────────────────────────────────────────
-function ReviewItem({
-  review,
-  onDelete,
-  onEdit,
-}: {
-  review: any;
-  onDelete: (id: string) => void;
-  onEdit: (review: any) => void;
-}) {
-  return (
-    <div className="bg-background flex items-start gap-3 rounded-xl border p-3">
-      <div className="min-w-0 flex-1 space-y-1">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <StarRow rating={review.rating} size="sm" />
-          <div className="flex shrink-0 items-center gap-2">
-            <span className="text-muted-foreground text-xs">{review.createdAt?.slice(0, 10)}</span>
-          </div>
-        </div>
-        <p className="text-muted-foreground text-sm leading-relaxed">{review.comment}</p>
       </div>
 
-      {/* Edit + Delete buttons */}
-      <div className="flex shrink-0 gap-1">
+      {/* Comment */}
+      <div>
+        <Textarea
+          placeholder="Share your experience with this product…"
+          rows={4}
+          className="text-sm"
+          {...register("comment")}
+        />
+        {errors.comment && (
+          <p className="text-destructive mt-1 text-xs">{errors.comment.message}</p>
+        )}
+      </div>
+
+      <div className="flex justify-end gap-2 pt-1">
         <Button
+          type="button"
           variant="ghost"
-          size="icon"
-          className="text-muted-foreground hover:text-primary hover:bg-primary/10 h-8 w-8"
-          onClick={() => onEdit(review)}
+          size="sm"
+          onClick={onClose}
+          disabled={isLoading}
         >
-          <Pencil className="h-3.5 w-3.5" />
+          Cancel
         </Button>
         <Button
-          variant="ghost"
-          size="icon"
-          className="text-destructive hover:bg-destructive/10 hover:text-destructive h-8 w-8"
-          onClick={() => onDelete(getId(review))}
+          type="submit"
+          size="sm"
+          className="rounded-full px-5"
+          disabled={isLoading}
         >
-          <Trash2 className="h-4 w-4" />
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+              {isUpdateMode ? "Updating…" : "Submitting…"}
+            </>
+          ) : isUpdateMode ? (
+            "Update Review"
+          ) : (
+            "Submit Review"
+          )}
         </Button>
       </div>
-    </div>
-  );
-}
-
-// ── Product Card + reviews below ──────────────────────────────────────────────
-function ProductReviewCard({
-  product,
-  reviews,
-  onDeleteReview,
-}: {
-  product: any;
-  reviews: any[];
-  onDeleteReview: (id: string) => void;
-}) {
-  const [showForm, setShowForm] = useState(false);
-  const [editingReview, setEditingReview] = useState<any>(null);
-
-  // Only 1 review per product allowed → if reviews exist, show update form
-  const existingReview = reviews[0] ?? null;
-
-  const handleEditClick = (review: any) => {
-    setEditingReview(review);
-    setShowForm(true);
-  };
-
-  const handleFormClose = () => {
-    setShowForm(false);
-    setEditingReview(null);
-  };
-
-  const handleToggleForm = () => {
-    if (showForm) {
-      handleFormClose();
-    } else {
-      // If a review exists, pre-fill with the first one for update
-      setEditingReview(existingReview);
-      setShowForm(true);
-    }
-  };
-
-  const imgSrc =
-    product?.images?.find((img: any) => img.isFeatured)?.imageUrl ||
-    product?.images?.[0]?.imageUrl ||
-    null;
-
-  return (
-    <div className="space-y-2">
-      {/* ── Product Card ── */}
-      <Card className="bg-card-primary p-4">
-        <div className="flex items-start gap-4">
-          {/* Thumbnail */}
-          <div className="bg-muted relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border">
-            {imgSrc ? (
-              <Image
-                src={imgSrc}
-                alt={product?.name ?? "Product image"}
-                fill
-                sizes="80px"
-                className="object-cover"
-              />
-            ) : (
-              <div className="text-muted-foreground flex h-full w-full items-center justify-center text-2xl font-bold">
-                {(product?.name ?? "P")[0].toUpperCase()}
-              </div>
-            )}
-          </div>
-
-          {/* Info */}
-          <div className="min-w-0 flex-1">
-            <h3 className="truncate text-base font-semibold">{product?.name ?? "Product"}</h3>
-            {product?.brand && <p className="text-muted-foreground text-sm">{product.brand}</p>}
-            {product?.price != null && (
-              <p className="text-primary text-sm font-medium">৳{product.price.toLocaleString()}</p>
-            )}
-            {product?.description && (
-              <p className="text-muted-foreground mt-1 line-clamp-2 text-xs leading-relaxed">
-                {product.description}
-              </p>
-            )}
-          </div>
-
-          {/* Actions */}
-          <div className="flex shrink-0 flex-col items-end gap-2">
-            <Badge variant="outline" className="text-xs">
-              {reviews.length} {reviews.length === 1 ? "review" : "reviews"}
-            </Badge>
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-1.5 rounded-full text-xs"
-              onClick={handleToggleForm}
-            >
-              {existingReview ? (
-                <>
-                  <Pencil className="h-3.5 w-3.5" />
-                  {showForm ? "Close" : "Edit Review"}
-                </>
-              ) : (
-                <>
-                  <PenLine className="h-3.5 w-3.5" />
-                  {showForm ? "Close" : "Add Review"}
-                </>
-              )}
-              {showForm ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
-            </Button>
-          </div>
-        </div>
-
-        {/* Inline Add/Update form */}
-        {showForm && (
-          <ReviewForm
-            productId={getId(product)}
-            existingReview={editingReview}
-            onClose={handleFormClose}
-          />
-        )}
-      </Card>
-
-      {/* ── Reviews below the card ── */}
-      {reviews.length > 0 && (
-        <div className="border-primary/20 ml-2 space-y-2 border-l-2 pl-4">
-          {reviews.map((review: any) => (
-            <ReviewItem
-              key={getId(review)}
-              review={review}
-              onDelete={onDeleteReview}
-              onEdit={handleEditClick}
-            />
-          ))}
-        </div>
-      )}
-    </div>
+    </form>
   );
 }
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 export default function MyReviewsPage() {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [formDialog, setFormDialog] = useState<{
+    productId: string;
+    productName: string;
+    existingReview?: any;
+  } | null>(null);
 
   const { data: reviewsData, isLoading } = useGetMyReviewsQuery(undefined);
   const [deleteReview, { isLoading: deleting }] = useDeleteReviewMutation();
 
   const myReviews: any[] = reviewsData?.data ?? [];
 
-  // ── Group reviews by product ──
-  const grouped = myReviews.reduce(
-    (acc: Record<string, { product: any; reviews: any[] }>, review: any) => {
-      const isPopulated = review.product && typeof review.product === "object";
-      const productObj = isPopulated
-        ? review.product
-        : { id: review.productId ?? review.product, name: "Unknown Product" };
+  // ── Flatten reviews with product info ──
+  const rows = myReviews.map((review: any) => {
+    const isPopulated = review.product && typeof review.product === "object";
+    const product = isPopulated
+      ? review.product
+      : { id: review.productId ?? review.product, name: "Unknown Product" };
+    return { review, product };
+  });
 
-      const key = getId(productObj) || "unknown";
-
-      if (!acc[key]) acc[key] = { product: productObj, reviews: [] };
-      acc[key].reviews.push(review);
-      return acc;
-    },
-    {}
-  );
-
-  const productEntries = Object.values(grouped);
-
-  // ── Delete handler ──
   const handleDelete = async () => {
     if (!deleteTarget) return;
     try {
@@ -428,12 +260,10 @@ export default function MyReviewsPage() {
   return (
     <section className="container space-y-8 py-10">
       {/* Header */}
-      <div>
-        <h1 className="merriweather-font text-3xl font-bold lg:text-4xl">My Reviews</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          Manage all your product reviews in one place.
-        </p>
-      </div>
+      <SectionTitle
+        title="My Reviews"
+        description="Manage all your product reviews in one place."
+      />
 
       {/* Loading */}
       {isLoading && (
@@ -456,19 +286,164 @@ export default function MyReviewsPage() {
         </div>
       )}
 
-      {/* Product cards */}
-      {!isLoading && productEntries.length > 0 && (
-        <div className="space-y-6">
-          {productEntries.map(({ product, reviews }) => (
-            <ProductReviewCard
-              key={getId(product)}
-              product={product}
-              reviews={reviews}
-              onDeleteReview={(id) => setDeleteTarget(id)}
-            />
-          ))}
+      {/* ── shadcn Table ── */}
+      {!isLoading && rows.length > 0 && (
+        <div className="rounded-xl border overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead className="w-15">Image</TableHead>
+                <TableHead>Product</TableHead>
+                <TableHead className="w-32.5">Rating</TableHead>
+                <TableHead>Comment</TableHead>
+                <TableHead className="w-25">Date</TableHead>
+                <TableHead className="w-20 text-center">Status</TableHead>
+                <TableHead className="w-25 text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {rows.map(({ review, product }) => {
+                const imgSrc =
+                  product?.images?.find((img: any) => img.isFeatured)?.imageUrl ||
+                  product?.images?.[0]?.imageUrl ||
+                  null;
+
+                return (
+                  <TableRow key={getId(review)} className="align-middle">
+                    {/* Thumbnail */}
+                    <TableCell>
+                      <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-lg border bg-muted">
+                        {imgSrc ? (
+                          <Image
+                            src={imgSrc}
+                            alt={product?.name ?? "Product"}
+                            fill
+                            sizes="44px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="text-muted-foreground flex h-full w-full items-center justify-center text-sm font-bold">
+                            {(product?.name ?? "P")[0].toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
+
+                    {/* Product info */}
+                    <TableCell>
+                      <p className="font-medium leading-snug truncate max-w-40">
+                        {product?.name ?? "Unknown Product"}
+                      </p>
+                      {product?.brand && (
+                        <p className="text-muted-foreground text-xs">
+                          {product.brand}
+                        </p>
+                      )}
+                      {product?.price != null && (
+                        <p className="text-primary text-xs font-medium">
+                          ৳{product.price.toLocaleString()}
+                        </p>
+                      )}
+                    </TableCell>
+
+                    {/* Rating */}
+                    <TableCell>
+                      <StarRow rating={review.rating} size="sm" />
+                      <span className="text-muted-foreground text-xs mt-0.5 block">
+                        {review.rating}/5
+                      </span>
+                    </TableCell>
+
+                    {/* Comment */}
+                    <TableCell>
+                      <p className="text-muted-foreground text-sm line-clamp-2 max-w-65">
+                        {review.comment}
+                      </p>
+                    </TableCell>
+
+                    {/* Date */}
+                    <TableCell className="text-muted-foreground text-xs whitespace-nowrap">
+                      {review.createdAt?.slice(0, 10) ?? "—"}
+                    </TableCell>
+
+                    {/* Status badge */}
+                    <TableCell className="text-center">
+                      <Badge
+                        variant="outline"
+                        className="text-xs text-emerald-600 border-emerald-300 bg-emerald-50 dark:bg-emerald-950/30"
+                      >
+                        Published
+                      </Badge>
+                    </TableCell>
+
+                    {/* Actions */}
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                          onClick={() =>
+                            setFormDialog({
+                              productId: getId(product),
+                              productName: product?.name ?? "Product",
+                              existingReview: review,
+                            })
+                          }
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => setDeleteTarget(getId(review))}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
         </div>
       )}
+
+      {/* ── Edit / Add Review Dialog ── */}
+      <Dialog
+        open={!!formDialog}
+        onOpenChange={(open) => {
+          if (!open) setFormDialog(null);
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-base">
+              {formDialog?.existingReview ? (
+                <>
+                  <Pencil className="h-4 w-4 text-primary" />
+                  Edit Review — {formDialog.productName}
+                </>
+              ) : (
+                <>
+                  <PenLine className="h-4 w-4 text-primary" />
+                  Add Review — {formDialog?.productName}
+                </>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+
+          {formDialog && (
+            <ReviewForm
+              productId={formDialog.productId}
+              existingReview={formDialog.existingReview}
+              onClose={() => setFormDialog(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* ── Delete Confirmation Dialog ── */}
       <AlertDialog
@@ -481,7 +456,8 @@ export default function MyReviewsPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this review?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. Your review will be permanently removed.
+              This action cannot be undone. Your review will be permanently
+              removed.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
