@@ -29,7 +29,7 @@ export default function CartContent({
   const { data, isLoading } = useGetMyCartQuery([]);
   const [updateCartQuantity] = useUpdateCartQuantityMutation();
   const [deleteCartItem] = useDeleteCartItemMutation();
-
+  const [editingItem, setEditingItem] = useState<string | null>(null);
   const cart = data?.data as unknown as CartApi;
   const cartItems: CartItemApi[] = cart?.items ?? [];
 
@@ -62,18 +62,14 @@ export default function CartContent({
     const newQty = inc ? current + 1 : Math.max(1, current - 1);
     if (newQty === current) return;
 
-    // 1. Update UI immediately
     setLocalQuantity((prev) => ({ ...prev, [item.id]: newQty }));
-    // 2. Disable buttons while request is in-flight
     setUpdatingItems((prev) => new Set(prev).add(item.id));
 
     try {
       await updateCartQuantity({ id: item.id, data: { quantity: newQty } }).unwrap();
     } catch {
-      // 3. Revert on API failure
       setLocalQuantity((prev) => ({ ...prev, [item.id]: current }));
     } finally {
-      // 4. Re-enable buttons
       setUpdatingItems((prev) => {
         const next = new Set(prev);
         next.delete(item.id);
@@ -82,6 +78,31 @@ export default function CartContent({
     }
   };
 
+  const updateQuantityManual = async (item: CartItemApi, value: number) => {
+    const current = getQty(item);
+    const newQty = Math.max(1, Math.min(value, item.variant.stockQuantity));
+
+    if (newQty === current) {
+      setEditingItem(null);
+      return;
+    }
+
+    setLocalQuantity((prev) => ({ ...prev, [item.id]: newQty }));
+    setUpdatingItems((prev) => new Set(prev).add(item.id));
+
+    try {
+      await updateCartQuantity({ id: item.id, data: { quantity: newQty } }).unwrap();
+    } catch {
+      setLocalQuantity((prev) => ({ ...prev, [item.id]: current }));
+    } finally {
+      setUpdatingItems((prev) => {
+        const next = new Set(prev);
+        next.delete(item.id);
+        return next;
+      });
+      setEditingItem(null);
+    }
+  };
   // ---------- Delete ----------
   const removeItem = async (cartItemId: string) => {
     await deleteCartItem(cartItemId);
@@ -195,7 +216,47 @@ export default function CartContent({
                             <span
                               className={`w-4 text-center transition-opacity ${isUpdating ? "opacity-40" : "opacity-100"}`}
                             >
-                              {qty}
+                              {editingItem === item.id ? (
+                                <input
+                                  type="number"
+                                  autoFocus
+                                  min={1}
+                                  max={item.variant.stockQuantity}
+                                  value={qty}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+
+                                    if (value === "") {
+                                      setLocalQuantity((prev) => ({
+                                        ...prev,
+                                        [item.id]: "" as any,
+                                      }));
+                                      return;
+                                    }
+
+                                    const num = Number(value);
+
+                                    if (!isNaN(num)) {
+                                      setLocalQuantity((prev) => ({
+                                        ...prev,
+                                        [item.id]: num,
+                                      }));
+                                    }
+                                  }}
+                                  onBlur={() => updateQuantityManual(item, qty)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") updateQuantityManual(item, qty);
+                                  }}
+                                  className="w-12 rounded border text-center text-sm outline-none"
+                                />
+                              ) : (
+                                <span
+                                  onClick={() => setEditingItem(item.id)}
+                                  className="w-6 cursor-pointer text-center"
+                                >
+                                  {qty}
+                                </span>
+                              )}
                             </span>
 
                             {/* Increment */}
@@ -234,3 +295,4 @@ export default function CartContent({
     </div>
   );
 }
+

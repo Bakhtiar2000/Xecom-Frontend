@@ -232,7 +232,7 @@ const Navbar = () => {
               <div className="flex items-center gap-6">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button className="flex gap-1" onClick={() => setCartOpen(true)}>
+                    <button className="flex gap-1 cursor-pointer" onClick={() => setCartOpen(true)}>
                       <ShoppingCart /> ({cartData?.data?.items?.length ?? 0})
                     </button>
                   </TooltipTrigger>
@@ -473,20 +473,7 @@ const Navbar = () => {
                       </Tooltip>
                     </>
                   )}
-                  {/* Dashboard Icon */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link
-                        href={getDashboardRoute()}
-                        className="hover-button flex items-center gap-1 transition"
-                      >
-                        <LayoutDashboard size={20} />
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Dashboard</p>
-                    </TooltipContent>
-                  </Tooltip>
+                 
                 </>
               )}
 

@@ -288,7 +288,7 @@ export default function ProductDetails() {
                   src={currentImage}
                   alt={product.name}
                   fill
-                  className="object-contain p-8 transition-transform duration-300 group-hover:scale-105"
+                  className="object-contain aspect-square transition-transform duration-300 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw"
                 />
               ) : (
@@ -342,7 +342,7 @@ export default function ProductDetails() {
             {isHovering && currentImage && (
               <div
                 ref={zoomBoxRef}
-                className="absolute top-70 left-[calc(80%+2rem)] z-30 hidden h-100 w-120 -translate-y-1/2 overflow-hidden rounded-lg border-2 border-white bg-white shadow-2xl lg:block"
+                className="absolute top-70 left-[calc(95%+2rem)] z-30 hidden h-140 w-full -translate-y-1/2 overflow-hidden rounded-lg border-2 border-white bg-white shadow-2xl lg:block"
                 style={{ marginLeft: "1rem" }}
               >
                 <div className="relative h-full w-full">
@@ -692,23 +692,6 @@ export default function ProductDetails() {
           {/* Actions */}
           <div className="mb-6">
             <div className="flex w-full flex-col gap-4 md:flex-row">
-              {/* <div className="border-border flex w-full items-center justify-center rounded-lg border md:w-auto">
-                <button
-                  onClick={() => setQuantity(Math.max(product.minOrderQty ?? 1, quantity - 1))}
-                  className="hover:bg-muted bg-card-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-l-lg"
-                >
-                  <span className="text-xl">-</span>
-                </button>
-                <span className="flex h-12 w-12 items-center justify-center border-x font-medium">
-                  {quantity}
-                </span>
-                <button
-                  onClick={() => setQuantity(Math.min(product.maxOrderQty ?? 99, quantity + 1))}
-                  className="hover:bg-muted bg-card-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-r-lg"
-                >
-                  <span className="text-xl">+</span>
-                </button>
-              </div> */}
               <button
                 onClick={handleAddToCart}
                 disabled={isAddingToCart || stockQty === 0}

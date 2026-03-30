@@ -60,7 +60,7 @@ const Wishlist = () => {
       <SectionTitle title="My Wishlist"></SectionTitle>
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
-        <div className="flex text-center items-center gap-3">
+        <div className="flex items-center gap-3 text-center">
           <Heart className="h-6 w-6 fill-red-500 text-red-500" />
           <h1 className="text-2xl font-bold">My Wishlists</h1>
           <span className="bg-muted text-muted-foreground rounded-full px-3 py-0.5 text-sm font-medium">

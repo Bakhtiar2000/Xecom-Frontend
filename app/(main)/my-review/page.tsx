@@ -4,14 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {
-  Star,
-  Trash2,
-  PackageSearch,
-  Loader2,
-  Pencil,
-  PenLine,
-} from "lucide-react";
+import { Star, Trash2, PackageSearch, Loader2, Pencil, PenLine } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -35,12 +28,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import {
   useAddReviewMutation,
@@ -88,10 +76,9 @@ function StarRow({
         return (
           <Star
             key={i}
-            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${filled
-              ? "fill-amber-400 text-amber-400"
-              : "fill-muted text-muted-foreground/30"
-              } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
+            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${
+              filled ? "fill-amber-400 text-amber-400" : "fill-muted text-muted-foreground/30"
+            } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
             onClick={() => interactive && onRate?.(val)}
             onMouseEnter={() => interactive && onHover?.(val)}
             onMouseLeave={() => interactive && onLeave?.()}
@@ -144,7 +131,7 @@ function ReviewForm({
           id: getId(existingReview),
           data: { rating: data.rating, comment: data.comment },
         }).unwrap();
-        toast.success("Review updated successfully!"); 
+        toast.success("Review updated successfully!");
       } else {
         await addReview(data).unwrap();
         toast.success("Review submitted successfully!");
@@ -162,9 +149,7 @@ function ReviewForm({
 
       {/* Star Rating */}
       <div>
-        <p className="text-muted-foreground mb-1.5 text-xs font-medium">
-          Your rating
-        </p>
+        <p className="text-muted-foreground mb-1.5 text-xs font-medium">Your rating</p>
         <StarRow
           rating={selectedRating}
           interactive
@@ -173,9 +158,7 @@ function ReviewForm({
           onHover={setHoverRating}
           onLeave={() => setHoverRating(0)}
         />
-        {errors.rating && (
-          <p className="text-destructive mt-1 text-xs">{errors.rating.message}</p>
-        )}
+        {errors.rating && <p className="text-destructive mt-1 text-xs">{errors.rating.message}</p>}
       </div>
 
       {/* Comment */}
@@ -192,21 +175,10 @@ function ReviewForm({
       </div>
 
       <div className="flex justify-end gap-2 pt-1">
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={onClose}
-          disabled={isLoading}
-        >
+        <Button type="button" variant="ghost" size="sm" onClick={onClose} disabled={isLoading}>
           Cancel
         </Button>
-        <Button
-          type="submit"
-          size="sm"
-          className="rounded-full px-5"
-          disabled={isLoading}
-        >
+        <Button type="submit" size="sm" className="rounded-full px-5" disabled={isLoading}>
           {isLoading ? (
             <>
               <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
@@ -288,7 +260,7 @@ export default function MyReviewsPage() {
 
       {/* ── shadcn Table ── */}
       {!isLoading && rows.length > 0 && (
-        <div className="rounded-xl border overflow-hidden">
+        <div className="overflow-hidden rounded-xl border">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
@@ -312,7 +284,7 @@ export default function MyReviewsPage() {
                   <TableRow key={getId(review)} className="align-middle">
                     {/* Thumbnail */}
                     <TableCell>
-                      <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-lg border bg-muted">
+                      <div className="bg-muted relative h-11 w-11 shrink-0 overflow-hidden rounded-lg border">
                         {imgSrc ? (
                           <Image
                             src={imgSrc}
@@ -331,13 +303,11 @@ export default function MyReviewsPage() {
 
                     {/* Product info */}
                     <TableCell>
-                      <p className="font-medium leading-snug truncate max-w-40">
+                      <p className="max-w-40 truncate leading-snug font-medium">
                         {product?.name ?? "Unknown Product"}
                       </p>
                       {product?.brand && (
-                        <p className="text-muted-foreground text-xs">
-                          {product.brand}
-                        </p>
+                        <p className="text-muted-foreground text-xs">{product.brand}</p>
                       )}
                       {product?.price != null && (
                         <p className="text-primary text-xs font-medium">
@@ -349,14 +319,14 @@ export default function MyReviewsPage() {
                     {/* Rating */}
                     <TableCell>
                       <StarRow rating={review.rating} size="sm" />
-                      <span className="text-muted-foreground text-xs mt-0.5 block">
+                      <span className="text-muted-foreground mt-0.5 block text-xs">
                         {review.rating}/5
                       </span>
                     </TableCell>
 
                     {/* Comment */}
                     <TableCell>
-                      <p className="text-muted-foreground text-sm line-clamp-2 max-w-65">
+                      <p className="text-muted-foreground line-clamp-2 max-w-65 text-sm">
                         {review.comment}
                       </p>
                     </TableCell>
@@ -370,7 +340,7 @@ export default function MyReviewsPage() {
                     <TableCell className="text-center">
                       <Badge
                         variant="outline"
-                        className="text-xs text-emerald-600 border-emerald-300 bg-emerald-50 dark:bg-emerald-950/30"
+                        className="border-emerald-300 bg-emerald-50 text-xs text-emerald-600 dark:bg-emerald-950/30"
                       >
                         Published
                       </Badge>
@@ -382,7 +352,7 @@ export default function MyReviewsPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                          className="text-muted-foreground hover:text-primary hover:bg-primary/10 h-8 w-8"
                           onClick={() =>
                             setFormDialog({
                               productId: getId(product),
@@ -396,7 +366,7 @@ export default function MyReviewsPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          className="text-destructive hover:bg-destructive/10 hover:text-destructive h-8 w-8"
                           onClick={() => setDeleteTarget(getId(review))}
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -423,12 +393,12 @@ export default function MyReviewsPage() {
             <DialogTitle className="flex items-center gap-2 text-base">
               {formDialog?.existingReview ? (
                 <>
-                  <Pencil className="h-4 w-4 text-primary" />
+                  <Pencil className="text-primary h-4 w-4" />
                   Edit Review — {formDialog.productName}
                 </>
               ) : (
                 <>
-                  <PenLine className="h-4 w-4 text-primary" />
+                  <PenLine className="text-primary h-4 w-4" />
                   Add Review — {formDialog?.productName}
                 </>
               )}
@@ -456,8 +426,7 @@ export default function MyReviewsPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this review?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. Your review will be permanently
-              removed.
+              This action cannot be undone. Your review will be permanently removed.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
