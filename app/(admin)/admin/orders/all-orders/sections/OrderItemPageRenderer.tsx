@@ -163,13 +163,12 @@ export default function OrderItemPageRenderer({
           <div
             key={order.id}
             onClick={() => setSelectedOrderId(order.id)}
-            className={`cursor-pointer border-b p-3 transition-colors ${selectedOrder?.id === order.id ? "bg-primary/10 border-primary" : "hover:bg-muted/70"
-              }`}
+            className={`cursor-pointer border-b p-3 transition-colors ${
+              selectedOrder?.id === order.id ? "bg-primary/10 border-primary" : "hover:bg-muted/70"
+            }`}
           >
             <p className="text-sm font-semibold">Order #{order.orderNumber}</p>
-            <p className="text-muted-foreground mt-1 text-xs">
-              {formatOrderDate(order.placedAt)}
-            </p>
+            <p className="text-muted-foreground mt-1 text-xs">{formatOrderDate(order.placedAt)}</p>
 
             <div className="mt-2 flex items-center justify-between gap-2">
               <Badge className={paymentColorClass[order.paymentStatus] || "bg-zinc-600"}>
