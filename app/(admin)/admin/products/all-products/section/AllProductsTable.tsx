@@ -310,7 +310,9 @@ const AllProductsTable = () => {
                     <TableCell>
                       {product.avgRating ? (
                         <div className="flex items-center gap-1">
-                          <span className="font-medium">{Number(product.avgRating).toFixed(1)}</span>
+                          <span className="font-medium">
+                            {Number(product.avgRating).toFixed(1)}
+                          </span>
                           <span className="text-muted-foreground text-xs">
                             ({product.reviewCount})
                           </span>

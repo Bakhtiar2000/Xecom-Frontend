@@ -31,6 +31,10 @@ export const adminRoutes: RouteGroup[] = [
         href: "/admin/products/all-products",
       },
       {
+        label: "All Reviews",
+        href: "/admin/products/all-reviews",
+      },
+      {
         label: "Add Product",
         href: "/admin/products/add-product",
       },

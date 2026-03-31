@@ -193,10 +193,11 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                         setSelectedRating(stars);
                         resetPage();
                       }}
-                      className={`mb-1 flex cursor-pointer items-center gap-2 text-sm hover:opacity-80 ${selectedRating === null || selectedRating === stars
+                      className={`mb-1 flex cursor-pointer items-center gap-2 text-sm hover:opacity-80 ${
+                        selectedRating === null || selectedRating === stars
                           ? "font-semibold"
                           : "opacity-50"
-                        }`}
+                      }`}
                     >
                       <span className="text-muted-foreground w-8">{stars}</span>
                       <FastForward className="text-rating h-3 w-3" />
@@ -325,8 +326,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                           )}
                         </div>
                       </div>
-
-
                     </div>
                     <div>
                       <p className="text-muted-foreground text-xs">{timeAgo(r.createdAt)}</p>

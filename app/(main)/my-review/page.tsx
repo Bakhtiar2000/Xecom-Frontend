@@ -220,10 +220,7 @@ export default function MyReviewsPage() {
     resetPage();
   };
 
-  const buildQueryParams = (): TQueryParam[] => [
-    ...getPaginationParams(),
-    ...getSortParams(),
-  ];
+  const buildQueryParams = (): TQueryParam[] => [...getPaginationParams(), ...getSortParams()];
 
   const { data: reviewsData, isLoading } = useGetMyReviewsQuery(buildQueryParams());
   const [deleteReview, { isLoading: deleting }] = useDeleteReviewMutation();
@@ -249,6 +246,9 @@ export default function MyReviewsPage() {
       setDeleteTarget(null);
     }
   };
+  
+
+  console.log('m,y re' ,myReviews);
 
   return (
     <section className="container space-y-8 py-10">
@@ -334,9 +334,11 @@ export default function MyReviewsPage() {
 
                     {/* Product info */}
                     <TableCell>
-                      <p className="max-w-40 truncate leading-snug font-medium">
-                        {product?.name ?? "Unknown Product"}
-                      </p>
+                      <div className="max-w-40 truncate leading-snug font-medium">
+                        <p className="line-clamp-2">
+                          {product?.name ?? "Unknown Product"}
+                        </p>
+                      </div>
                       {product?.brand && (
                         <p className="text-muted-foreground text-xs">{product.brand}</p>
                       )}
@@ -421,7 +423,6 @@ export default function MyReviewsPage() {
           )}
         </div>
       )}
-
 
       {/* ── Edit / Add Review Dialog ── */}
       <Dialog
