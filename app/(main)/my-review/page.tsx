@@ -38,6 +38,11 @@ import {
 } from "@/redux/features/product/review.api";
 import SectionTitle from "@/components/sections/shared/SectionTitle";
 import { toast } from "sonner";
+import { useTablePagination } from "@/hooks/useTablePagination";
+import { useTableSort } from "@/hooks/useTableSort";
+import { TQueryParam } from "@/types";
+import { SortableTableHead } from "@/components/custom/SortableTableHead";
+import { TablePagination } from "@/components/custom/TablePagination";
 
 // ── Zod Schema ────────────────────────────────────────────────────────────────
 const reviewSchema = z.object({
@@ -76,9 +81,8 @@ function StarRow({
         return (
           <Star
             key={i}
-            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${
-              filled ? "fill-amber-400 text-amber-400" : "fill-muted text-muted-foreground/30"
-            } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
+            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${filled ? "fill-amber-400 text-amber-400" : "fill-muted text-muted-foreground/30"
+              } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
             onClick={() => interactive && onRate?.(val)}
             onMouseEnter={() => interactive && onHover?.(val)}
             onMouseLeave={() => interactive && onLeave?.()}
@@ -204,7 +208,24 @@ export default function MyReviewsPage() {
     existingReview?: any;
   } | null>(null);
 
-  const { data: reviewsData, isLoading } = useGetMyReviewsQuery(undefined);
+  type SortableFields = "rating" | "createdAt";
+
+  const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
+    useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
+
+  const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
+
+  const handleSortClick = (field: SortableFields) => {
+    handleSort(field);
+    resetPage();
+  };
+
+  const buildQueryParams = (): TQueryParam[] => [
+    ...getPaginationParams(),
+    ...getSortParams(),
+  ];
+
+  const { data: reviewsData, isLoading } = useGetMyReviewsQuery(buildQueryParams());
   const [deleteReview, { isLoading: deleting }] = useDeleteReviewMutation();
 
   const myReviews: any[] = reviewsData?.data ?? [];
@@ -266,9 +287,19 @@ export default function MyReviewsPage() {
               <TableRow className="bg-muted/50">
                 <TableHead className="w-15">Image</TableHead>
                 <TableHead>Product</TableHead>
-                <TableHead className="w-32.5">Rating</TableHead>
+                <SortableTableHead
+                  field="rating"
+                  label="Rating"
+                  onSort={handleSortClick}
+                  getSortIcon={getSortIcon}
+                />
                 <TableHead>Comment</TableHead>
-                <TableHead className="w-25">Date</TableHead>
+                <SortableTableHead
+                  field="createdAt"
+                  label="Date"
+                  onSort={handleSortClick}
+                  getSortIcon={getSortIcon}
+                />
                 <TableHead className="w-20 text-center">Status</TableHead>
                 <TableHead className="w-25 text-right">Actions</TableHead>
               </TableRow>
@@ -378,8 +409,19 @@ export default function MyReviewsPage() {
               })}
             </TableBody>
           </Table>
+          {reviewsData?.meta && (
+            <TablePagination
+              meta={reviewsData.meta}
+              onPageChange={handlePageChange}
+              onPageSizeChange={(size) => {
+                handlePageSizeChange(size);
+                resetPage();
+              }}
+            />
+          )}
         </div>
       )}
+
 
       {/* ── Edit / Add Review Dialog ── */}
       <Dialog

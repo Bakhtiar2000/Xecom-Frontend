@@ -194,8 +194,8 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                         resetPage();
                       }}
                       className={`mb-1 flex cursor-pointer items-center gap-2 text-sm hover:opacity-80 ${selectedRating === null || selectedRating === stars
-                        ? "font-semibold"
-                        : "opacity-50"
+                          ? "font-semibold"
+                          : "opacity-50"
                         }`}
                     >
                       <span className="text-muted-foreground w-8">{stars}</span>
@@ -283,7 +283,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
           ) : (
             reviews.map((r) => {
               const name = r.customer?.user?.name ?? "Anonymous";
-              const reviewCustomerId = r.customerId;
+              const reviewCustomerId = r.customer?.user?.id;
               const profilePicture = r.customer?.user?.profilePicture ?? "";
               const initials = name
                 .split(" ")
@@ -326,6 +326,10 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                         </div>
                       </div>
 
+
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">{timeAgo(r.createdAt)}</p>
                       {/* Desktop dropdown */}
                       <div className="hidden items-start gap-2 md:flex">
                         {reviewCustomerId === currentUser?.id && (
@@ -335,9 +339,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                           />
                         )}
                       </div>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground text-xs">{timeAgo(r.createdAt)}</p>
                     </div>
                   </div>
                 </div>
