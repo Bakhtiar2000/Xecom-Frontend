@@ -6,7 +6,7 @@ export default function AddStaffPage() {
     <div>
       <Title mainTitle="Add Staff" subTitle="Create a new staff user for your business" />
 
-      <AddStaffForm/>
+      <AddStaffForm />
     </div>
   );
 }

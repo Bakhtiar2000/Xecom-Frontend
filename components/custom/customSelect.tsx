@@ -66,11 +66,7 @@ export const CustomSelect = ({
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const selectedArray: SelectOption[] = value
-    ? Array.isArray(value)
-      ? value
-      : [value]
-    : [];
+  const selectedArray: SelectOption[] = value ? (Array.isArray(value) ? value : [value]) : [];
 
   // ── Fetch ──────────────────────────────────────────────────────────────────
 
@@ -212,8 +208,7 @@ export const CustomSelect = ({
 
   // ── Selection ──────────────────────────────────────────────────────────────
 
-  const isSelected = (opt: SelectOption) =>
-    selectedArray.some((s) => s.value === opt.value);
+  const isSelected = (opt: SelectOption) => selectedArray.some((s) => s.value === opt.value);
 
   const toggleOption = (opt: SelectOption) => {
     if (!multiSelect) {
@@ -250,11 +245,7 @@ export const CustomSelect = ({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   const triggerLabel =
-    selectedArray.length === 0
-      ? placeholder
-      : !multiSelect
-      ? selectedArray[0].label
-      : null;
+    selectedArray.length === 0 ? placeholder : !multiSelect ? selectedArray[0].label : null;
 
   return (
     <div ref={containerRef} className={`relative w-full ${className}`}>
@@ -302,11 +293,7 @@ export const CustomSelect = ({
         ) : null}
 
         {triggerLabel && (
-          <span
-            className={
-              selectedArray.length === 0 ? "text-muted-foreground flex-1" : "flex-1"
-            }
-          >
+          <span className={selectedArray.length === 0 ? "text-muted-foreground flex-1" : "flex-1"}>
             {triggerLabel}
           </span>
         )}
@@ -346,9 +333,7 @@ export const CustomSelect = ({
                 placeholder="Search..."
                 className="placeholder:text-muted-foreground flex-1 bg-transparent text-sm outline-none"
               />
-              {loading && (
-                <Loader2 className="text-muted-foreground h-3.5 w-3.5 animate-spin" />
-              )}
+              {loading && <Loader2 className="text-muted-foreground h-3.5 w-3.5 animate-spin" />}
             </div>
           )}
 
@@ -363,9 +348,7 @@ export const CustomSelect = ({
                 Loading...
               </div>
             ) : options.length === 0 ? (
-              <div className="text-muted-foreground py-8 text-center text-sm">
-                No results found
-              </div>
+              <div className="text-muted-foreground py-8 text-center text-sm">No results found</div>
             ) : (
               <>
                 {options.map((opt) => {
@@ -388,14 +371,12 @@ export const CustomSelect = ({
                           selected && multiSelect
                             ? "bg-primary border-primary text-primary-foreground"
                             : multiSelect
-                            ? "border-input"
-                            : "",
+                              ? "border-input"
+                              : "",
                         ].join(" ")}
                       >
                         {selected && multiSelect && <Check className="h-3 w-3" />}
-                        {selected && !multiSelect && (
-                          <Check className="text-primary h-4 w-4" />
-                        )}
+                        {selected && !multiSelect && <Check className="text-primary h-4 w-4" />}
                       </span>
                       <span className="flex-1 truncate">{opt.label}</span>
                     </button>

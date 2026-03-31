@@ -40,14 +40,7 @@ const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["admin", "user"],
     }),
-
-
   }),
-
-  
-
-
-
 });
 
-export const { useGetAllAdminsQuery, useRegisterAdminMutation} = adminApi;
+export const { useGetAllAdminsQuery, useRegisterAdminMutation } = adminApi;

@@ -35,7 +35,7 @@ export enum UserRole {
 }
 
 export enum UserStatus {
-  ACTIVE = "ACTIVE", 
+  ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
   SUSPENDED = "SUSPENDED",
   BLOCKED = "BLOCKED",
@@ -55,11 +55,11 @@ export enum AddressType {
   OTHER = "OTHER",
 }
 
-// Product Enums 
+// Product Enums
 export enum ProductStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
-  DRAFT = "DRAFT", 
+  DRAFT = "DRAFT",
   OUT_OF_STOCK = "OUT_OF_STOCK",
   DISCONTINUED = "DISCONTINUED",
 }

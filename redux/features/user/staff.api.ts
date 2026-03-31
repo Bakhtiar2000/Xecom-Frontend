@@ -40,10 +40,7 @@ const staffApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["staff", "user"],
     }),
-
-
-
   }),
 });
 
-export const { useGetAllStaffsQuery, useRegisterStaffMutation} = staffApi;
+export const { useGetAllStaffsQuery, useRegisterStaffMutation } = staffApi;

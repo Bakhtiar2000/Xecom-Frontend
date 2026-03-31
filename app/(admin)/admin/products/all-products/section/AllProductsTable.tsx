@@ -25,7 +25,10 @@ import { useTablePagination } from "@/hooks/useTablePagination";
 import { useTableSort } from "@/hooks/useTableSort";
 import { API_URL } from "@/redux/api/baseApi";
 import { useGetAllAttributesQuery } from "@/redux/features/product/attribute.api";
-import { useGetAllProductsQuery, useUpdateProductMutation } from "@/redux/features/product/product.api";
+import {
+  useGetAllProductsQuery,
+  useUpdateProductMutation,
+} from "@/redux/features/product/product.api";
 import { TAttribute, TProduct } from "@/types";
 import { Eye, Loader2, MoreHorizontal, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
@@ -114,44 +117,40 @@ const AllProductsTable = () => {
     ...selectedCategories.map((c) => c.value),
   ].filter(Boolean).length;
 
-
   // toggle
 
-const handleStatusToggle = async (product: TProduct) => {
-  const newStatus =
-    product.status === ProductStatus.ACTIVE
-      ? ProductStatus.INACTIVE
-      : ProductStatus.ACTIVE;
+  const handleStatusToggle = async (product: TProduct) => {
+    const newStatus =
+      product.status === ProductStatus.ACTIVE ? ProductStatus.INACTIVE : ProductStatus.ACTIVE;
 
-  const formData = new FormData();
-  formData.append("status", newStatus);
+    const formData = new FormData();
+    formData.append("status", newStatus);
 
-  try {
-    await updateProduct({
-      id: product.id,
-      data: formData,
-    }).unwrap();
-  } catch (error) {
-    console.error("Status update failed", error);
-  }
-};
+    try {
+      await updateProduct({
+        id: product.id,
+        data: formData,
+      }).unwrap();
+    } catch (error) {
+      console.error("Status update failed", error);
+    }
+  };
 
+  const handleFeaturedToggle = async (product: TProduct) => {
+    const newFeatured = !product.featured;
 
-const handleFeaturedToggle = async (product: TProduct) => {
-  const newFeatured = !product.featured;
+    const formData = new FormData();
+    formData.append("featured", String(newFeatured));
 
-  const formData = new FormData();
-  formData.append("featured", String(newFeatured));
-
-  try {
-    await updateProduct({
-      id: product.id,
-      data: formData,
-    }).unwrap();
-  } catch (error) {
-    console.error("Featured update failed", error);
-  }
-};
+    try {
+      await updateProduct({
+        id: product.id,
+        data: formData,
+      }).unwrap();
+    } catch (error) {
+      console.error("Featured update failed", error);
+    }
+  };
 
   const clearAllFilters = () => {
     setSelectedAttributeValues({});
@@ -304,7 +303,7 @@ const handleFeaturedToggle = async (product: TProduct) => {
                             {product.shortDescription}
                           </p>
                         </div>
-                      </div> 
+                      </div>
                     </TableCell>
                     <TableCell>{product?.maxOrderQty}</TableCell>
                     {/* <TableCell>
@@ -319,24 +318,22 @@ const handleFeaturedToggle = async (product: TProduct) => {
 
                     </TableCell> */}
                     <TableCell>
-                       <div className="flex justify-center items-center gap-2">
-
-                          <Badge
-                             className={
-                              product.status === "ACTIVE"
-                               ? "bg-green-500 text-white"
-                                : "bg-red-500 text-white"
-                              }
-                             >
+                      <div className="flex items-center justify-center gap-2">
+                        <Badge
+                          className={
+                            product.status === "ACTIVE"
+                              ? "bg-green-500 text-white"
+                              : "bg-red-500 text-white"
+                          }
+                        >
                           {product.status}
                         </Badge>
 
                         <Switch
                           checked={product.status === "ACTIVE"}
-                           onCheckedChange={() => handleStatusToggle(product)}
+                          onCheckedChange={() => handleStatusToggle(product)}
                         />
-
-                           </div>
+                      </div>
                     </TableCell>
 
                     {/* <TableCell>
@@ -350,25 +347,21 @@ const handleFeaturedToggle = async (product: TProduct) => {
                         </Badge>
                       )}
                     </TableCell> */}
-                     <TableCell>
-                       <div className="flex items-center justify-center gap-2">
+                    <TableCell>
+                      <div className="flex items-center justify-center gap-2">
+                        <Badge
+                          className={
+                            product.featured ? "bg-green-500 text-white" : "bg-red-500 text-white"
+                          }
+                        >
+                          {product.featured ? "Featured" : "No"}
+                        </Badge>
 
-                       <Badge
-                        className={
-                        product.featured
-                        ? "bg-green-500 text-white"
-                      : "bg-red-500 text-white"
-                      }
-                       >
-                         {product.featured ? "Featured" : "No"}
-                     </Badge>
-
-                    <Switch
-                     checked={product.featured}
-                      onCheckedChange={() => handleFeaturedToggle(product)}
-                     />
-
-                    </div>
+                        <Switch
+                          checked={product.featured}
+                          onCheckedChange={() => handleFeaturedToggle(product)}
+                        />
+                      </div>
                     </TableCell>
                     <TableCell>
                       {product.avgRating ? (
@@ -386,34 +379,29 @@ const handleFeaturedToggle = async (product: TProduct) => {
                     <TableCell>{product.viewCount}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-x-1">
-                    <Tooltip>
-                    <TooltipTrigger asChild>
-                     <div
-                      onClick={() => handleView(product.id)}
-                     className="cursor-pointer rounded p-1 hover:bg-muted"
-                     >
-                     <Eye className="h-4 w-4" />
-                   </div>
-                 </TooltipTrigger>
-                 <TooltipContent>
-                    View Details
-                 </TooltipContent>
-                  </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                  <div
-                    onClick={() => handleEdit(product.id)}
-                    className="cursor-pointer rounded p-1 hover:bg-muted"
-                 >
-                    <Pencil className="h-4 w-4" />
-                </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  Edit
-              </TooltipContent>
-               </Tooltip>
-
-              </div>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div
+                              onClick={() => handleView(product.id)}
+                              className="hover:bg-muted cursor-pointer rounded p-1"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>View Details</TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div
+                              onClick={() => handleEdit(product.id)}
+                              className="hover:bg-muted cursor-pointer rounded p-1"
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>Edit</TooltipContent>
+                        </Tooltip>
+                      </div>
 
                       {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>

@@ -41,8 +41,6 @@ const customerApi = baseApi.injectEndpoints({
       invalidatesTags: ["customer", "user"],
     }),
 
-
-
     //-----------------Add Staff Address-----------------
     addUserAddress: builder.mutation({
       query: (data: TAddAddressDto) => ({
@@ -52,8 +50,6 @@ const customerApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["customer", "address"],
     }),
-
-
   }),
 });
 

@@ -226,40 +226,32 @@ export default function DivisionTable({ onEdit }: DivisionTableProps) {
 
                   <TableCell>
                     <div className="flex justify-end gap-2">
-                       <Tooltip>
+                      <Tooltip>
                         <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onEdit(division)}
-                        className="hover:bg-primary/10 hover:text-primary h-8 w-8"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => onEdit(division)}
+                            className="hover:bg-primary/10 hover:text-primary h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          Edit
-                        </TooltipContent>
-
-                      </Tooltip>  
-                       <Tooltip>
+                        <TooltipContent>Edit</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
                         <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteClick(division)}
-                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteClick(division)}
+                            className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          Delete
-                        </TooltipContent>
-
-                      </Tooltip>  
+                        <TooltipContent>Delete</TooltipContent>
+                      </Tooltip>
                     </div>
                   </TableCell>
                 </TableRow>

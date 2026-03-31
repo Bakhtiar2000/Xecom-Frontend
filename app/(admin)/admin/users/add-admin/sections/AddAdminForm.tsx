@@ -22,9 +22,8 @@ import {
 
 import { Loader2, Eye, EyeOff } from "lucide-react";
 
-import { useRegisterAdminMutation} from "@/redux/features/user/admin.api";
+import { useRegisterAdminMutation } from "@/redux/features/user/admin.api";
 import { TRegisterAdminDto } from "@/redux/features/user/dto/admin.dto";
-
 
 import CustomSelect, { SelectOption } from "@/components/custom/customSelect";
 import { API_URL } from "@/redux/api/baseApi";
@@ -42,8 +41,7 @@ export default function AddAdminForm() {
 
   const [registerAdmin, { isLoading }] = useRegisterAdminMutation();
 
-  const { register, handleSubmit, setValue, watch, reset } =
-    useForm<TRegisterAdminDto>();
+  const { register, handleSubmit, setValue, watch, reset } = useForm<TRegisterAdminDto>();
 
   const genderValue = watch("gender");
 
@@ -82,7 +80,7 @@ export default function AddAdminForm() {
         notes: data.notes,
         thanaId: selectedThana?.value || undefined,
         street: street || undefined,
-        postalCode: postalCode || undefined,        
+        postalCode: postalCode || undefined,
       };
 
       formData.append("text", JSON.stringify(payload));
@@ -106,11 +104,10 @@ export default function AddAdminForm() {
 
   return (
     <div className="w-full p-6">
-      <div className="w-full border rounded-2xl shadow p-8 bg-white">
-        <h2 className="text-2xl font-semibold mb-8">Register Admin</h2>
+      <div className="w-full rounded-2xl border bg-white p-8 shadow">
+        <h2 className="mb-8 text-2xl font-semibold">Register Admin</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
           <div className="flex justify-center">
             <ImageUpload value={imagePreview} onChange={handleImageChange} size="lg" />
           </div>
@@ -145,7 +142,7 @@ export default function AddAdminForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2 top-7 text-gray-500"
+                className="absolute top-7 right-2 text-gray-500"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -179,8 +176,8 @@ export default function AddAdminForm() {
           </div>
 
           {/* Address */}
-          <div className="border rounded-xl p-5 space-y-4 bg-muted/30">
-            <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          <div className="bg-muted/30 space-y-4 rounded-xl border p-5">
+            <p className="text-muted-foreground text-sm font-semibold tracking-wide uppercase">
               Address Information
             </p>
 
@@ -193,7 +190,7 @@ export default function AddAdminForm() {
                   mapToOption={(item) => ({ value: String(item.id), label: item.name })}
                   value={selectedCountry ? [selectedCountry] : []}
                   onChange={(vals) => {
-                    const v = Array.isArray(vals) ? vals[0] ?? null : vals;
+                    const v = Array.isArray(vals) ? (vals[0] ?? null) : vals;
                     setSelectedCountry(v);
                     setSelectedDivision(null);
                     setSelectedDistrict(null);
@@ -209,15 +206,13 @@ export default function AddAdminForm() {
                 <Label>Division</Label>
                 <CustomSelect
                   endpoint={
-                    countryId
-                      ? `${API_URL}/division?countryId=${countryId}`
-                      : `${API_URL}/division`
+                    countryId ? `${API_URL}/division?countryId=${countryId}` : `${API_URL}/division`
                   }
                   fields={["id", "name"]}
                   mapToOption={(item) => ({ value: String(item.id), label: item.name })}
                   value={selectedDivision ? [selectedDivision] : []}
                   onChange={(vals) => {
-                    const v = Array.isArray(vals) ? vals[0] ?? null : vals;
+                    const v = Array.isArray(vals) ? (vals[0] ?? null) : vals;
                     setSelectedDivision(v);
                     setSelectedDistrict(null);
                     setSelectedThana(null);
@@ -240,7 +235,7 @@ export default function AddAdminForm() {
                   mapToOption={(item) => ({ value: String(item.id), label: item.name })}
                   value={selectedDistrict ? [selectedDistrict] : []}
                   onChange={(vals) => {
-                    const v = Array.isArray(vals) ? vals[0] ?? null : vals;
+                    const v = Array.isArray(vals) ? (vals[0] ?? null) : vals;
                     setSelectedDistrict(v);
                     setSelectedThana(null);
                   }}
@@ -254,15 +249,13 @@ export default function AddAdminForm() {
                 <Label>Thana</Label>
                 <CustomSelect
                   endpoint={
-                    districtId
-                      ? `${API_URL}/thana?districtId=${districtId}`
-                      : `${API_URL}/thana`
+                    districtId ? `${API_URL}/thana?districtId=${districtId}` : `${API_URL}/thana`
                   }
                   fields={["id", "name"]}
                   mapToOption={(item) => ({ value: String(item.id), label: item.name })}
                   value={selectedThana ? [selectedThana] : []}
                   onChange={(vals) => {
-                    const v = Array.isArray(vals) ? vals[0] ?? null : vals;
+                    const v = Array.isArray(vals) ? (vals[0] ?? null) : vals;
                     setSelectedThana(v);
                   }}
                   searchable
@@ -293,10 +286,10 @@ export default function AddAdminForm() {
 
           {/* Submit */}
           <div className="flex justify-end">
-            <Button type="submit" disabled={isLoading }>
+            <Button type="submit" disabled={isLoading}>
               {isLoading ? (
                 <>
-                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Creating...
                 </>
               ) : (
@@ -304,7 +297,6 @@ export default function AddAdminForm() {
               )}
             </Button>
           </div>
-
         </form>
       </div>
     </div>
