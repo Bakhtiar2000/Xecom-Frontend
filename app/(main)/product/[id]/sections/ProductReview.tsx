@@ -75,9 +75,8 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
   const reviews: TReview[] = data?.data ?? [];
 
   const currentUser = useAppSelector(selectCurrentUser);
-  console.log('curUs', currentUser);
-  console.log('r if', reviews);
-
+  console.log("curUs", currentUser);
+  console.log("r if", reviews);
 
   const [addReview, { isLoading: adding }] = useAddReviewMutation();
   const [updateReview, { isLoading: updating }] = useUpdateReviewMutation();
@@ -94,7 +93,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
     setEditing(null);
     setOpen(false);
   };
-
 
   function timeAgo(dateString: string): string {
     const now = new Date();
@@ -123,8 +121,11 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
       if (editing) {
         await updateReview({
           id: editing.id,
-          rating: form.rating,
-          comment: form.comment,
+          data: {
+            id: editing.id,
+            rating: form.rating,
+            comment: form.comment,
+          },
         }).unwrap();
         toast.success("Review updated successfully");
       } else {
@@ -181,7 +182,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                   <span className="text-3xl font-bold">{averageRating}</span>
                   <StarRating rating={Number(averageRating)} />
                   <span className="text-muted-foreground text-sm">
-
                     ({allReviewsData?.meta?.totalCount ?? 0} reviews)
                   </span>
                 </div>
@@ -193,7 +193,9 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                         setSelectedRating(stars);
                         resetPage();
                       }}
-                      className={`mb-1 flex cursor-pointer items-center gap-2 text-sm hover:opacity-80 ${selectedRating === null || selectedRating === stars ? "font-semibold" : "opacity-50"
+                      className={`mb-1 flex cursor-pointer items-center gap-2 text-sm hover:opacity-80 ${selectedRating === null || selectedRating === stars
+                        ? "font-semibold"
+                        : "opacity-50"
                         }`}
                     >
                       <span className="text-muted-foreground w-8">{stars}</span>
@@ -290,7 +292,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
 
               return (
                 <div className="border-b" key={r.id}>
-                  <div className="space-y-4 flex justify-between px-6 py-4">
+                  <div className="flex justify-between space-y-4 px-6 py-4">
                     <div className="gap-5 space-y-4 md:flex">
                       <div className="flex space-x-2">
                         <div className="flex gap-3">
@@ -309,9 +311,6 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                                 <StarRating rating={r.rating} />
                               </span>
                             </h4>
-                            <p className="text-muted-foreground text-xs">
-                              {timeAgo(r.createdAt)}
-                            </p>
                             <p>{r.comment}</p>
                           </div>
                         </div>
@@ -338,9 +337,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                       </div>
                     </div>
                     <div>
-                      <p className="text-muted-foreground text-xs">
-                        {timeAgo(r.createdAt)}
-                      </p>
+                      <p className="text-muted-foreground text-xs">{timeAgo(r.createdAt)}</p>
                     </div>
                   </div>
                 </div>

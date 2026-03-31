@@ -130,7 +130,6 @@ export default function ProductDetails() {
     }
   };
 
-
   // Derived data from API response
   const productImages = product.images ?? [];
   const currentImage = productImages[selectedImage]?.imageUrl ?? "";
@@ -281,10 +280,11 @@ export default function ProductDetails() {
                 <button
                   key={image.id}
                   onClick={() => setSelectedImage(index)}
-                  className={`bg-card-primary relative h-20 w-20 cursor-pointer overflow-hidden rounded-md border-2 transition-all ${selectedImage === index
-                    ? "border-black shadow-md"
-                    : "border-border hover:border-gray-400"
-                    }`}
+                  className={`bg-card-primary relative h-20 w-20 cursor-pointer overflow-hidden rounded-md border-2 transition-all ${
+                    selectedImage === index
+                      ? "border-black shadow-md"
+                      : "border-border hover:border-gray-400"
+                  }`}
                 >
                   <Image
                     src={image.imageUrl}
@@ -395,10 +395,11 @@ export default function ProductDetails() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab
-                    ? "border-b-2 border-black dark:border-white"
-                    : "text-muted-foreground hover:text-foreground"
-                    }`}
+                  className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${
+                    activeTab === tab
+                      ? "border-b-2 border-black dark:border-white"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   {tab === "specs" ? "Specifications" : tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
@@ -548,15 +549,17 @@ export default function ProductDetails() {
                 <button
                   onClick={handleWishlistToggle}
                   disabled={isWishlisting || isUnwishlisting}
-                  className={`border-border flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-all hover:scale-110 disabled:cursor-not-allowed disabled:opacity-60 ${isWishlisted ? "border-danger/20 bg-danger/50" : "hover:bg-muted"
-                    }`}
+                  className={`border-border flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-all hover:scale-110 disabled:cursor-not-allowed disabled:opacity-60 ${
+                    isWishlisted ? "border-danger/20 bg-danger/50" : "hover:bg-muted"
+                  }`}
                 >
                   {isWishlisting || isUnwishlisting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Heart
-                      className={`h-4 w-4 transition-colors ${isWishlisted ? "fill-danger text-danger" : ""
-                        }`}
+                      className={`h-4 w-4 transition-colors ${
+                        isWishlisted ? "fill-danger text-danger" : ""
+                      }`}
                     />
                   )}
                 </button>
@@ -581,10 +584,11 @@ export default function ProductDetails() {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-4 w-4 ${product.avgRating && i < Math.floor(product.avgRating)
-                        ? "fill-rating text-rating"
-                        : "fill-muted text-muted-foreground"
-                        }`}
+                      className={`h-4 w-4 ${
+                        product.avgRating && i < Math.floor(product.avgRating)
+                          ? "fill-rating text-rating"
+                          : "fill-muted text-muted-foreground"
+                      }`}
                     />
                   ))}
                 </div>
@@ -710,7 +714,6 @@ export default function ProductDetails() {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
           </div>
           {/* all attributes */}
           {Object.entries(attributeGroups).map(([attrName, values]) => (
@@ -730,13 +733,13 @@ export default function ProductDetails() {
                     <button
                       key={item.value}
                       onClick={() => handleAttributeSelect(attrName, item.value)}
-                      className={`cursor-pointer transition-all ${selectedAttributes[attrName] === item.value
-                        ? "border-black bg-card-primary"
-                        : "border-border"
-                        } ${isColor
-                          ? "h-10 w-10 rounded-full border-2"
-                          : "rounded-lg border px-4 py-2"
-                        }`}
+                      className={`cursor-pointer transition-all ${
+                        selectedAttributes[attrName] === item.value
+                          ? "bg-card-primary border-black"
+                          : "border-border"
+                      } ${
+                        isColor ? "h-10 w-10 rounded-full border-2" : "rounded-lg border px-4 py-2"
+                      }`}
                       style={isColor && item.hex ? { backgroundColor: item.hex } : {}}
                     >
                       {!isColor && item.value}
@@ -758,20 +761,22 @@ export default function ProductDetails() {
                     key={color.value}
                     title={color.value}
                     onClick={() => handleColorSelect(color.value)}
-                    className={`relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all hover:scale-110 ${selectedColor === color.value
-                      ? "scale-110 border-black shadow-md"
-                      : "border-border"
-                      }`}
+                    className={`relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all hover:scale-110 ${
+                      selectedColor === color.value
+                        ? "scale-110 border-black shadow-md"
+                        : "border-border"
+                    }`}
                     style={
                       color.hex ? { backgroundColor: color.hex } : { backgroundColor: "#e5e7eb" }
                     }
                   >
                     {selectedColor === color.value && (
                       <span
-                        className={`absolute inset-0 flex items-center justify-center rounded-full text-xs font-bold ${color.hex === "#ffffff" || color.hex === "#fff"
-                          ? "text-black"
-                          : "text-white"
-                          }`}
+                        className={`absolute inset-0 flex items-center justify-center rounded-full text-xs font-bold ${
+                          color.hex === "#ffffff" || color.hex === "#fff"
+                            ? "text-black"
+                            : "text-white"
+                        }`}
                       >
                         ✓
                       </span>
