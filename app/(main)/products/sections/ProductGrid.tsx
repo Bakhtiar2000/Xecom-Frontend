@@ -10,6 +10,18 @@ type Props = {
 };
 
 export default function ProductGrid({ products, isLoading, viewMode, getBadgeColor }: Props) {
+  if (!isLoading && products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <div className="mb-4 text-6xl">👟</div>
+        <h3 className="mb-2 text-xl font-semibold">No Products Found</h3>
+        <p className="text-muted-foreground text-sm">
+          Try adjusting your filters or search to find what you&apos;re looking for.
+        </p>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div
@@ -72,13 +84,17 @@ export default function ProductGrid({ products, isLoading, viewMode, getBadgeCol
   return (
     <div
       className={
-        viewMode === "grid" ? "grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3" : "space-y-6"
+        viewMode === "grid" ? "grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4" : "space-y-6"
       }
     >
-      {products.map((product) => (
+      {products.map((product: any) => (
         <ProductCard
           key={product.id}
-          product={product}
+          product={{
+            ...product,
+            rating: product.avgRating ?? 0,
+            reviews: product.reviewCount ?? 0,
+          }}
           viewMode={viewMode}
           getBadgeColor={getBadgeColor}
         />

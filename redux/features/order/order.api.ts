@@ -1,6 +1,6 @@
 import { TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "@/redux/api/baseApi";
-import { TCreateOrderDto, TUpdateOrderDto } from "./dto/order.dto";
+import { TCreateOrderDto, TUpdateOrderStatusDto } from "./dto/order.dto";
 import { TOrder } from "@/types/order.type";
 
 const orderApi = baseApi.injectEndpoints({
@@ -55,10 +55,50 @@ const orderApi = baseApi.injectEndpoints({
       invalidatesTags: ["order"],
     }),
 
-    //-----------------Update Order-----------------
-    updateOrder: builder.mutation({
-      query: (args: { id: string; data: TUpdateOrderDto }) => ({
-        url: `/order/${args.id}`,
+    //-----------------My Orders-----------------
+    getMyOrders: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/order/my-orders",
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["order"],
+      transformResponse: (response: TResponseRedux<TOrder[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+    }),
+
+    //-----------------My Single Order-----------------
+    getMySingleOrder: builder.query({
+      query: (id: string) => ({
+        url: `/order/my-orders/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["order"],
+      transformResponse: (response: TResponseRedux<TOrder>) => {
+        return {
+          data: response.data,
+        };
+      },
+    }),
+
+    //-----------------Update Order Status-----------------
+    updateOrderStatus: builder.mutation({
+      query: (args: { id: string; data: TUpdateOrderStatusDto }) => ({
+        url: `/order/${args.id}/status`,
         method: "PUT",
         body: args.data,
       }),
@@ -68,8 +108,18 @@ const orderApi = baseApi.injectEndpoints({
     //-----------------Cancel Order-----------------
     cancelOrder: builder.mutation({
       query: (id: string) => ({
-        url: `/order/${id}/cancel`,
-        method: "POST",
+        url: `/order/my-orders/${id}/cancel`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["order"],
+    }),
+
+    //-----------------Cancel Order (Admin)-----------------
+    cancelOrderAdmin: builder.mutation({
+      query: (args: { id: string; internalNotes?: string }) => ({
+        url: `/order/${args.id}/cancel`,
+        method: "PUT",
+        body: { internalNotes: args.internalNotes },
       }),
       invalidatesTags: ["order"],
     }),
@@ -80,6 +130,9 @@ export const {
   useGetAllOrdersQuery,
   useGetSingleOrderQuery,
   useCreateOrderMutation,
-  useUpdateOrderMutation,
+  useGetMyOrdersQuery,
+  useGetMySingleOrderQuery,
+  useUpdateOrderStatusMutation,
   useCancelOrderMutation,
+  useCancelOrderAdminMutation,
 } = orderApi;

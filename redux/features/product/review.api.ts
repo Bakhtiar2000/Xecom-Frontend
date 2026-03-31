@@ -31,6 +31,31 @@ const reviewApi = baseApi.injectEndpoints({
       },
     }),
 
+    getAllReviews: builder.query({
+      query: (args?: TQueryParam[]) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/review",
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["review"],
+      transformResponse: (response: TResponseRedux<TReview[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+    }),
+
     //-----------------Get My Reviews-----------------
     getMyReviews: builder.query({
       query: (args) => {
@@ -102,6 +127,7 @@ export const {
   useGetAllReviewsOfProductQuery,
   useGetMyReviewsQuery,
   useAddReviewMutation,
+  useGetAllReviewsQuery,
   useUpdateReviewMutation,
   useDeleteReviewMutation,
   useApproveReviewMutation,

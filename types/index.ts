@@ -27,6 +27,7 @@ export interface Product {
 export interface FilterState {
   brands: string[];
   priceRange: [number, number];
+  attributes: string[];
   sizes: string[];
   colors: string[];
   categories: string[];

@@ -1,7 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, ShoppingCart, Navigation, User, LogIn, LogOut, LayoutDashboard } from "lucide-react";
+import {
+  Menu,
+  ShoppingCart,
+  Navigation,
+  LogIn,
+  LogOut,
+  LayoutDashboard,
+  User,
+  Package,
+  Heart,
+  MessageCircle,
+} from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { mainRoutes } from "@/route/main.route";
 import { usePathname, useRouter } from "next/navigation";
@@ -20,23 +31,29 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { CartData } from "@/data/cart";
 import CartSheet from "@/components/sections/shared/CartSheet";
-import { navbarConfig } from "@/constants/navbar.config";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TargetAudience } from "@/constants/enum";
+import { useGetAllCategoriesQuery } from "@/redux/features/product/category.api";
+import { useGetMyCartQuery } from "@/redux/features/order/cart.api";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [cartItems, setCartItems] = useState(CartData);
+
+  const { data: cartData } = useGetMyCartQuery([]);
+
   const [lastScrollY, setLastScrollY] = useState(0);
   const [cartOpen, setCartOpen] = useState(false);
 
   // Auth state
   const user = useAppSelector(selectCurrentUser);
-  const { data: userData, isLoading: isLoadingUser } = useGetMeQuery(undefined, {
-    skip: !user, // Only fetch when user is logged in
+  const { data: userData } = useGetMeQuery(undefined, {
+    skip: !user,
   });
 
   // Get user initials from name
@@ -66,38 +83,34 @@ const Navbar = () => {
     toast.success("Logged out successfully");
     router.push("/login");
   };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > 20) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
-      }
-      setLastScrollY(currentScrollY);
-    };
-
-    let timeoutId: NodeJS.Timeout;
-    const throttledScroll = () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(handleScroll, 10);
-    };
-
-    window.addEventListener("scroll", throttledScroll);
-    return () => {
-      window.removeEventListener("scroll", throttledScroll);
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [lastScrollY]);
-
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 20);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  //  Add inside Navbar component body
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery([]);
+
+  const getCategoriesForAudience = (audience: TargetAudience) => {
+    if (!categoriesData?.data) return [];
+    return categoriesData.data.filter((cat: any) => {
+      const t = cat.targetAudience;
+      if (!t) return false;
+      if (Array.isArray(t)) {
+        return t.some((v: string) => v?.toString().toUpperCase() === audience.toUpperCase());
+      }
+      return t.toString().toUpperCase() === audience.toUpperCase();
+    });
+  };
+
+  const AUDIENCE_LABELS: Record<TargetAudience, string> = {
+    [TargetAudience.MEN]: "Men",
+    [TargetAudience.WOMEN]: "Women",
+    [TargetAudience.KIDS]: "Children",
+  };
 
   return (
     <div className="bg-secondary w-full">
@@ -122,15 +135,13 @@ const Navbar = () => {
           </a>
         </div>
       </div>
-
+      {isSticky && <div className="h-15" />}
       <nav
-        className={`bg-secondary left-0 w-full transition-all duration-300 ${
+        className={`bg-secondary left-0 w-full transition-all duration-300 ease-in-out ${
           isSticky ? "fixed top-0 z-40 py-3 shadow-md" : "relative py-3 shadow-sm"
         }`}
       >
-        <div
-          className={`container mx-auto flex max-w-11/12 items-center justify-between py-0! md:px-4`}
-        >
+        <div className={`container mx-auto flex items-center justify-between py-0! md:px-4`}>
           <div className="flex items-center justify-center gap-20">
             <div className="merriweather-font text-3xl font-extrabold tracking-widest">STEPS</div>
 
@@ -154,30 +165,61 @@ const Navbar = () => {
                   </Link>
                 );
               })}
-
               <NavigationMenu>
                 <NavigationMenuList className="-mt-0.5 hidden gap-6 lg:flex">
-                  {navbarConfig.categories.map((category) => (
-                    <NavigationMenuItem key={category.label}>
-                      <NavigationMenuTrigger className="font-thin">
-                        {category.trigger}
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        <ul className="grid w-48">
-                          {category.items.map((item) => (
-                            <li key={item.href}>
-                              <Link
-                                href={item.href}
-                                className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
-                              >
-                                {item.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </NavigationMenuContent>
-                    </NavigationMenuItem>
-                  ))}
+                  {Object.values(TargetAudience).map((audience) => {
+                    const cats = getCategoriesForAudience(audience);
+                    return (
+                      <NavigationMenuItem key={audience}>
+                        <NavigationMenuTrigger className="font-thin">
+                          {AUDIENCE_LABELS[audience]}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <ul className="grid w-48">
+                            {/* All link */}
+                            <Link
+                              href={`/products?categories=${getCategoriesForAudience(audience)
+                                .map((cat: any) => cat._id ?? cat.id)
+                                .join(",")}`}
+                              className="hover:bg-muted block rounded-md px-3 py-2 text-sm font-medium transition-colors"
+                            >
+                              All {AUDIENCE_LABELS[audience]}
+                            </Link>
+
+                            {/* Loading skeleton */}
+                            {isCategoriesLoading ? (
+                              <>
+                                <li className="px-3 py-2">
+                                  <Skeleton className="h-4 w-28" />
+                                </li>
+                                <li className="px-3 py-2">
+                                  <Skeleton className="h-4 w-24" />
+                                </li>
+                                <li className="px-3 py-2">
+                                  <Skeleton className="h-4 w-20" />
+                                </li>
+                              </>
+                            ) : cats.length > 0 ? (
+                              cats.map((cat: any) => (
+                                <li key={cat._id ?? cat.id}>
+                                  <Link
+                                    href={`/products?categories=${cat._id ?? cat.id}`}
+                                    className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
+                                  >
+                                    {cat.name}
+                                  </Link>
+                                </li>
+                              ))
+                            ) : (
+                              <li className="text-muted-foreground px-3 py-2 text-xs">
+                                No categories
+                              </li>
+                            )}
+                          </ul>
+                        </NavigationMenuContent>
+                      </NavigationMenuItem>
+                    );
+                  })}
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
@@ -190,11 +232,8 @@ const Navbar = () => {
               <div className="flex items-center gap-6">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button
-                      className="flex cursor-pointer items-center gap-1"
-                      onClick={() => setCartOpen(true)}
-                    >
-                      <ShoppingCart /> ({cartItems.length})
+                    <button className="flex cursor-pointer gap-1" onClick={() => setCartOpen(true)}>
+                      <ShoppingCart /> ({cartData?.data?.items?.length ?? 0})
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -202,14 +241,12 @@ const Navbar = () => {
                   </TooltipContent>
                 </Tooltip>
                 <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
-
                 {user && userData?.data && (
                   <>
-                    {/* Profile Picture/Avatar */}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div>
-                          <Avatar className="h-8 w-8 cursor-default">
+                    <HoverCard openDelay={200} closeDelay={100}>
+                      <HoverCardTrigger asChild>
+                        <div className="cursor-pointer">
+                          <Avatar className="h-8 w-8">
                             {userData.data.user.profilePicture && (
                               <AvatarImage
                                 src={userData.data.user.profilePicture}
@@ -221,29 +258,75 @@ const Navbar = () => {
                             </AvatarFallback>
                           </Avatar>
                         </div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>{userData.data.user.name}</p>
-                      </TooltipContent>
-                    </Tooltip>
+                      </HoverCardTrigger>
 
-                    {/* Dashboard Icon */}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Link
-                          href={getDashboardRoute()}
-                          className="hover-button flex items-center gap-1 transition"
-                        >
-                          <LayoutDashboard size={22} />
-                        </Link>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Dashboard</p>
-                      </TooltipContent>
-                    </Tooltip>
+                      <HoverCardContent className="w-56 p-2" align="end">
+                        <div className="flex flex-col space-y-1">
+                          {/* User Info Header */}
+                          <div className="px-2 py-1.5">
+                            <p className="text-sm font-medium">{userData.data.user.name}</p>
+                            <p className="text-muted-foreground text-xs">
+                              {userData.data.user.email}
+                            </p>
+                          </div>
+
+                          <div className="border-t border-b py-1">
+                            {/* My Profile Link */}
+                            <Link
+                              href="/profile"
+                              className="hover:bg-muted flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors"
+                            >
+                              <User size={16} />
+                              <span>My Profile</span>
+                            </Link>
+
+                            <Link
+                              href="/orders"
+                              className="hover:bg-muted flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors"
+                            >
+                              <Package size={16} />
+                              <span>My Orders</span>
+                            </Link>
+                            <Link
+                              href="/my-review"
+                              className="hover:bg-muted flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors"
+                            >
+                              <MessageCircle size={16} />
+                              <span>My Reviews</span>
+                            </Link>
+
+                            {/* My Wishlist Link */}
+                            <Link
+                              href="/wishlist"
+                              className="hover:bg-muted flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors"
+                            >
+                              <Heart size={16} />
+                              <span>My Wishlist</span>
+                            </Link>
+                          </div>
+                        </div>
+                      </HoverCardContent>
+                    </HoverCard>
+
+                    {user.role === UserRole.SUPER_ADMIN ||
+                    user.role === UserRole.ADMIN ||
+                    user.role === UserRole.STAFF ? (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link
+                            href={getDashboardRoute()}
+                            className="hover-button flex items-center gap-1 transition"
+                          >
+                            <LayoutDashboard size={22} />
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Dashboard</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : null}
                   </>
                 )}
-
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div>
@@ -297,7 +380,7 @@ const Navbar = () => {
                     className="flex cursor-pointer items-center gap-1"
                     onClick={() => setCartOpen(true)}
                   >
-                    <ShoppingCart /> ({cartItems.length})
+                    <ShoppingCart />({cartData?.data?.items?.length ?? 0})
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -309,41 +392,87 @@ const Navbar = () => {
               {user && userData?.data && (
                 <>
                   {/* Profile Picture/Avatar */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <Avatar className="h-7 w-7 cursor-default">
-                          {userData.data.user.profilePicture && (
-                            <AvatarImage
-                              src={userData.data.user.profilePicture}
-                              alt={userData.data.user.name}
-                            />
-                          )}
-                          <AvatarFallback className="text-xs">
-                            {getUserInitials(userData.data.user.name)}
-                          </AvatarFallback>
-                        </Avatar>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{userData.data.user.name}</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  {/* Mobile Actions - এখানেও Popover ব্যবহার করুন */}
+                  {user && userData?.data && (
+                    <>
+                      {/* Profile Picture/Avatar with Popover - Mobile */}
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <div className="cursor-pointer">
+                            <Avatar className="h-7 w-7">
+                              {userData.data.user.profilePicture && (
+                                <AvatarImage
+                                  src={userData.data.user.profilePicture}
+                                  alt={userData.data.user.name}
+                                />
+                              )}
+                              <AvatarFallback className="text-xs">
+                                {getUserInitials(userData.data.user.name)}
+                              </AvatarFallback>
+                            </Avatar>
+                          </div>
+                        </PopoverTrigger>
 
-                  {/* Dashboard Icon */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link
-                        href={getDashboardRoute()}
-                        className="hover-button flex items-center gap-1 transition"
-                      >
-                        <LayoutDashboard size={20} />
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Dashboard</p>
-                    </TooltipContent>
-                  </Tooltip>
+                        <PopoverContent className="w-56 p-2" align="end" sideOffset={8}>
+                          <div className="flex flex-col space-y-1">
+                            {/* User Info Header */}
+                            <div className="px-2 py-1.5">
+                              <p className="text-sm font-medium">{userData.data.user.name}</p>
+                              <p className="text-muted-foreground text-xs">
+                                {userData.data.user.email}
+                              </p>
+                            </div>
+
+                            <div className="border-t border-b py-1">
+                              {/* My Profile Link */}
+                              <Link
+                                href="/profile"
+                                className="hover:bg-muted flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors"
+                                onClick={() => document.body.click()}
+                              >
+                                <User size={16} />
+                                <span>My Profile</span>
+                              </Link>
+
+                              <Link
+                                href="/orders"
+                                className="hover:bg-muted flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors"
+                                onClick={() => document.body.click()}
+                              >
+                                <Package size={16} />
+                                <span>My Orders</span>
+                              </Link>
+
+                              {/* My Wishlist Link */}
+                              <Link
+                                href="/wishlist"
+                                className="hover:bg-muted flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors"
+                                onClick={() => document.body.click()}
+                              >
+                                <Heart size={16} />
+                                <span>My Wishlist</span>
+                              </Link>
+                            </div>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+
+                      {/* Dashboard Icon */}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link
+                            href={getDashboardRoute()}
+                            className="hover-button flex items-center gap-1 transition"
+                          >
+                            <LayoutDashboard size={20} />
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Dashboard</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </>
+                  )}
                 </>
               )}
 
@@ -423,34 +552,61 @@ const Navbar = () => {
                       );
                     })}
                   </nav>
-
-                  {/* Products Section */}
                   <div className="mt-5 ml-3">
-                    <p className="mb-2 text-xs font-bold tracking-widest uppercase">Products</p>
-
+                    <p className="mb-2 text-xs font-bold tracking-widest uppercase">Shop By</p>
                     <NavigationMenu>
                       <NavigationMenuList className="flex gap-6">
-                        {navbarConfig.categories.map((category) => (
-                          <NavigationMenuItem key={category.label}>
-                            <NavigationMenuTrigger className="">
-                              {category.trigger}
-                            </NavigationMenuTrigger>
-                            <NavigationMenuContent>
-                              <ul className="grid w-48">
-                                {category.items.map((item) => (
-                                  <li key={item.href}>
+                        {Object.values(TargetAudience).map((audience) => {
+                          const cats = getCategoriesForAudience(audience);
+                          return (
+                            <NavigationMenuItem key={audience}>
+                              <NavigationMenuTrigger>
+                                {AUDIENCE_LABELS[audience]}
+                              </NavigationMenuTrigger>
+                              <NavigationMenuContent>
+                                <ul className="grid w-48">
+                                  <li>
                                     <Link
-                                      href={item.href}
-                                      className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
+                                      href={`/products?audience=${audience}`}
+                                      className="hover:bg-muted block rounded-md px-3 py-2 text-sm font-medium transition-colors"
                                     >
-                                      {item.label}
+                                      All {AUDIENCE_LABELS[audience]}
                                     </Link>
                                   </li>
-                                ))}
-                              </ul>
-                            </NavigationMenuContent>
-                          </NavigationMenuItem>
-                        ))}
+
+                                  {isCategoriesLoading ? (
+                                    <>
+                                      <li className="px-3 py-2">
+                                        <Skeleton className="h-4 w-28" />
+                                      </li>
+                                      <li className="px-3 py-2">
+                                        <Skeleton className="h-4 w-24" />
+                                      </li>
+                                      <li className="px-3 py-2">
+                                        <Skeleton className="h-4 w-20" />
+                                      </li>
+                                    </>
+                                  ) : cats.length > 0 ? (
+                                    cats.map((cat: any) => (
+                                      <li key={cat._id ?? cat.id}>
+                                        <Link
+                                          href={`/products?audience=${audience}&category=${cat._id ?? cat.id}`}
+                                          className="hover:bg-muted block rounded-md px-3 py-2 text-sm transition-colors"
+                                        >
+                                          {cat.name}
+                                        </Link>
+                                      </li>
+                                    ))
+                                  ) : (
+                                    <li className="text-muted-foreground px-3 py-2 text-xs">
+                                      No categories
+                                    </li>
+                                  )}
+                                </ul>
+                              </NavigationMenuContent>
+                            </NavigationMenuItem>
+                          );
+                        })}
                       </NavigationMenuList>
                     </NavigationMenu>
                   </div>

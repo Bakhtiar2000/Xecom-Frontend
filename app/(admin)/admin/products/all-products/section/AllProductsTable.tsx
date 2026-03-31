@@ -287,7 +287,7 @@ const handleFeaturedToggle = async (product: TProduct) => {
                       <div className="flex items-center gap-3">
                         {product.images && product.images.length > 0 ? (
                           <Image
-                            src={product.images[0].url}
+                            src={product.images[0].imageUrl}
                             alt={product.name}
                             width={40}
                             height={40}
