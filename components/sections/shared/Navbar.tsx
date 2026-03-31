@@ -232,7 +232,7 @@ const Navbar = () => {
               <div className="flex items-center gap-6">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button className="flex gap-1 cursor-pointer" onClick={() => setCartOpen(true)}>
+                    <button className="flex cursor-pointer gap-1" onClick={() => setCartOpen(true)}>
                       <ShoppingCart /> ({cartData?.data?.items?.length ?? 0})
                     </button>
                   </TooltipTrigger>
@@ -473,7 +473,6 @@ const Navbar = () => {
                       </Tooltip>
                     </>
                   )}
-                 
                 </>
               )}
 

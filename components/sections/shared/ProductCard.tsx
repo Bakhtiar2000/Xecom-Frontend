@@ -8,12 +8,7 @@ import {
   useRemoveFromWishlistMutation,
 } from "@/redux/features/product/wishlist.api";
 import { toast } from "sonner";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type ApiProduct = {
   id: string;
@@ -48,8 +43,6 @@ type Props = {
 };
 
 export default function ProductCard({ product, viewMode, getBadgeColor }: Props) {
-
-
   // ─── Mutations ───
   const { data: wishlistData } = useGetAllWishlistsQuery(undefined);
   const [addToWishlist, { isLoading: isWishlisting }] = useAddToWishlistMutation();
@@ -85,8 +78,6 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
         : null;
 
   const rating = product.avgRating ?? 0;
-
-
 
   const handleWishlistToggle = async () => {
     try {
@@ -142,8 +133,7 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
             </button>
 
             {/* Image */}
-            <Link
-              href={`/product/${product.id}`}
+            <div
               className={`relative block ${viewMode === "list" ? "md:w-64" : "h-64"} img-primary-bg overflow-hidden`}
             >
               <Image
@@ -153,7 +143,7 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
                 className="object-contain transition-transform duration-500 hover:scale-105"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
-            </Link>
+            </div>
 
             {/* Info */}
             <div className={`p-4 ${viewMode === "list" ? "flex-1" : ""}`}>
@@ -173,11 +163,11 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
               </div>
 
               {/* Name */}
-              <Link href={`/product/${product.id}`}>
+              <div>
                 <h3 className="tranding-secondry-text mb-1 line-clamp-2 font-semibold hover:underline">
                   {product.name}
                 </h3>
-              </Link>
+              </div>
 
               {/* Short description */}
               <p className="text-muted-foreground mb-2 line-clamp-2 h-5 text-xs">

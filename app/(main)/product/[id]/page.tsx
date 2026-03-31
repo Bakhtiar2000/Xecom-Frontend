@@ -22,10 +22,18 @@ import { useGetSingleProductQuery } from "@/redux/features/product/product.api";
 import { useAddToCartMutation } from "@/redux/features/order/cart.api";
 import { toast } from "sonner";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   useAddToWishlistMutation,
   useGetAllWishlistsQuery,
   useRemoveFromWishlistMutation,
 } from "@/redux/features/product/wishlist.api";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function ProductDetails() {
   const params = useParams();
@@ -38,6 +46,7 @@ export default function ProductDetails() {
   const { data: wishlistData } = useGetAllWishlistsQuery(undefined);
   const [addToWishlist, { isLoading: isWishlisting }] = useAddToWishlistMutation();
   const [removeFromWishlist, { isLoading: isUnwishlisting }] = useRemoveFromWishlistMutation();
+  const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>({});
 
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -120,25 +129,7 @@ export default function ProductDetails() {
       // console.error("Cart error full:", error);
     }
   };
-  // const handleBuyNow = async () => {
-  //   if (!selectedVariant?.id) {
-  //     toast.error("Please select a variant");
-  //     return;
-  //   }
-  //   if (stockQty === 0) {
-  //     toast.error("This item is out of stock");
-  //     return;
-  //   }
-  //   try {
-  //     await addToCart({
-  //       variantId: selectedVariant.id,
-  //       quantity,
-  //     }).unwrap();
-  //     window.location.href = "/checkout";
-  //   } catch (error: any) {
-  //     toast.error(error?.data?.message ?? "Failed to proceed to checkout");
-  //   }
-  // };
+
 
   // Derived data from API response
   const productImages = product.images ?? [];
@@ -155,20 +146,52 @@ export default function ProductDetails() {
   const allSizes: string[] = [];
   const allColors: { value: string; hex: string | null }[] = [];
 
+  // Build dynamic attribute groups
+  const attributeGroups: Record<string, any[]> = {};
+
   variants.forEach((variant: any) => {
     variant.attributes?.forEach((attr: any) => {
-      const attrName = attr.attributeValue?.attribute?.name?.toLowerCase();
+      const name = attr.attributeValue?.attribute?.name;
       const value = attr.attributeValue?.value;
       const hex = attr.attributeValue?.hexCode ?? null;
 
-      if (attrName === "size" && value && !allSizes.includes(value)) {
-        allSizes.push(value);
+      if (!attributeGroups[name]) {
+        attributeGroups[name] = [];
       }
-      if (attrName === "color" && value && !allColors.find((c) => c.value === value)) {
-        allColors.push({ value, hex });
+
+      const exists = attributeGroups[name].find((v) => v.value === value);
+
+      if (!exists) {
+        attributeGroups[name].push({
+          value,
+          hex,
+        });
       }
     });
   });
+
+  const handleAttributeSelect = (attrName: string, value: string) => {
+    const updated = {
+      ...selectedAttributes,
+      [attrName]: value,
+    };
+
+    setSelectedAttributes(updated);
+
+    const idx = variants.findIndex((variant: any) =>
+      variant.attributes?.every((attr: any) => {
+        const name = attr.attributeValue?.attribute?.name;
+        const val = attr.attributeValue?.value;
+
+        if (!updated[name]) return true;
+        return updated[name] === val;
+      })
+    );
+
+    if (idx !== -1) {
+      setSelectedVariantIndex(idx);
+    }
+  };
 
   const selectedSize =
     selectedVariant?.attributes?.find(
@@ -258,11 +281,10 @@ export default function ProductDetails() {
                 <button
                   key={image.id}
                   onClick={() => setSelectedImage(index)}
-                  className={`bg-card-primary relative h-20 w-20 cursor-pointer overflow-hidden rounded-md border-2 transition-all ${
-                    selectedImage === index
-                      ? "border-black shadow-md"
-                      : "border-border hover:border-gray-400"
-                  }`}
+                  className={`bg-card-primary relative h-20 w-20 cursor-pointer overflow-hidden rounded-md border-2 transition-all ${selectedImage === index
+                    ? "border-black shadow-md"
+                    : "border-border hover:border-gray-400"
+                    }`}
                 >
                   <Image
                     src={image.imageUrl}
@@ -288,7 +310,7 @@ export default function ProductDetails() {
                   src={currentImage}
                   alt={product.name}
                   fill
-                  className="object-contain aspect-square transition-transform duration-300 group-hover:scale-105"
+                  className="aspect-square object-contain transition-transform duration-300 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw"
                 />
               ) : (
@@ -373,11 +395,10 @@ export default function ProductDetails() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${
-                    activeTab === tab
-                      ? "border-b-2 border-black dark:border-white"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab
+                    ? "border-b-2 border-black dark:border-white"
+                    : "text-muted-foreground hover:text-foreground"
+                    }`}
                 >
                   {tab === "specs" ? "Specifications" : tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
@@ -527,17 +548,15 @@ export default function ProductDetails() {
                 <button
                   onClick={handleWishlistToggle}
                   disabled={isWishlisting || isUnwishlisting}
-                  className={`border-border flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-all hover:scale-110 disabled:cursor-not-allowed disabled:opacity-60 ${
-                    isWishlisted ? "border-danger/20 bg-danger/50" : "hover:bg-muted"
-                  }`}
+                  className={`border-border flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-all hover:scale-110 disabled:cursor-not-allowed disabled:opacity-60 ${isWishlisted ? "border-danger/20 bg-danger/50" : "hover:bg-muted"
+                    }`}
                 >
                   {isWishlisting || isUnwishlisting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Heart
-                      className={`h-4 w-4 transition-colors ${
-                        isWishlisted ? "fill-danger text-danger" : ""
-                      }`}
+                      className={`h-4 w-4 transition-colors ${isWishlisted ? "fill-danger text-danger" : ""
+                        }`}
                     />
                   )}
                 </button>
@@ -562,11 +581,10 @@ export default function ProductDetails() {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-4 w-4 ${
-                        product.avgRating && i < Math.floor(product.avgRating)
-                          ? "fill-rating text-rating"
-                          : "fill-muted text-muted-foreground"
-                      }`}
+                      className={`h-4 w-4 ${product.avgRating && i < Math.floor(product.avgRating)
+                        ? "fill-rating text-rating"
+                        : "fill-muted text-muted-foreground"
+                        }`}
                     />
                   ))}
                 </div>
@@ -608,46 +626,126 @@ export default function ProductDetails() {
               )}
             </div>
           </div>
-          <p className="text-muted-foreground mt-2 mb-4 text-sm">
-            SKU: <span className="font-mono font-semibold">{sku}</span>
-          </p>
-          {/* Size Selection */}
-          {allSizes.length > 0 && (
-            <div className="mb-6">
-              <div className="mb-3 flex items-center justify-between">
-                <h3 className="font-semibold">
-                  Size: <span className="text-muted-foreground font-normal">{selectedSize}</span>
-                </h3>
-                <button className="flex cursor-pointer items-center gap-1 text-xs underline underline-offset-2">
-                  Size Chart
-                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </button>
-              </div>
+          <div className="flex justify-between">
+            <p className="text-muted-foreground mt-2 mb-4 text-sm">
+              SKU: <span className="font-mono font-semibold">{sku}</span>
+            </p>
+            <TooltipProvider>
+              <Tooltip>
+                <Dialog>
+                  <TooltipTrigger asChild>
+                    <DialogTrigger asChild>
+                      <button className="flex cursor-pointer items-center gap-1 text-xs underline underline-offset-2">
+                        Size Chart
+                      </button>
+                    </DialogTrigger>
+                  </TooltipTrigger>
+
+                  <DialogContent className="max-w-lg">
+                    <DialogHeader>
+                      <DialogTitle>Size Chart</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full border text-sm">
+                        <thead>
+                          <tr className="bg-muted">
+                            <th className="border p-2">Size</th>
+                            <th className="border p-2">Foot Length (cm)</th>
+                            <th className="border p-2">Foot Width (cm)</th>
+                            <th className="border p-2">US Equivalent</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <tr>
+                            <td className="border p-2 text-center">XS</td>
+                            <td className="border p-2 text-center">22 - 23</td>
+                            <td className="border p-2 text-center">8.5 - 9</td>
+                            <td className="border p-2 text-center">4 - 5</td>
+                          </tr>
+
+                          <tr>
+                            <td className="border p-2 text-center">S</td>
+                            <td className="border p-2 text-center">23 - 24</td>
+                            <td className="border p-2 text-center">9 - 9.2</td>
+                            <td className="border p-2 text-center">6 - 7</td>
+                          </tr>
+
+                          <tr>
+                            <td className="border p-2 text-center">M</td>
+                            <td className="border p-2 text-center">24 - 26</td>
+                            <td className="border p-2 text-center">9.2 - 9.6</td>
+                            <td className="border p-2 text-center">8 - 9</td>
+                          </tr>
+
+                          <tr>
+                            <td className="border p-2 text-center">L</td>
+                            <td className="border p-2 text-center">26 - 28</td>
+                            <td className="border p-2 text-center">9.6 - 10</td>
+                            <td className="border p-2 text-center">10 - 11</td>
+                          </tr>
+
+                          <tr>
+                            <td className="border p-2 text-center">XL</td>
+                            <td className="border p-2 text-center">28 - 30</td>
+                            <td className="border p-2 text-center">10 - 10.5</td>
+                            <td className="border p-2 text-center">12 - 13</td>
+                          </tr>
+
+                          <tr>
+                            <td className="border p-2 text-center">XXL</td>
+                            <td className="border p-2 text-center">30 - 31</td>
+                            <td className="border p-2 text-center">10.5 - 11</td>
+                            <td className="border p-2 text-center">14</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+                <TooltipContent side="top">
+                  <p>Click to view size chart</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+          </div>
+          {/* all attributes */}
+          {Object.entries(attributeGroups).map(([attrName, values]) => (
+            <div key={attrName} className="mb-6">
+              <h3 className="mb-3 font-semibold">
+                {attrName}:{" "}
+                <span className="text-muted-foreground font-normal">
+                  {selectedAttributes[attrName]}
+                </span>
+              </h3>
+
               <div className="flex flex-wrap gap-3">
-                {allSizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => handleSizeSelect(size)}
-                    className={`flex h-10 w-14 cursor-pointer items-center justify-center rounded-lg border-2 font-medium transition-all lg:h-14 ${
-                      selectedSize === size
-                        ? "border-black bg-black text-white"
-                        : "border-border hover:border-border/80 bg-white text-black"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
+                {values.map((item) => {
+                  const isColor = attrName.toLowerCase() === "color";
+
+                  return (
+                    <button
+                      key={item.value}
+                      onClick={() => handleAttributeSelect(attrName, item.value)}
+                      className={`cursor-pointer transition-all ${selectedAttributes[attrName] === item.value
+                        ? "border-black bg-card-primary"
+                        : "border-border"
+                        } ${isColor
+                          ? "h-10 w-10 rounded-full border-2"
+                          : "rounded-lg border px-4 py-2"
+                        }`}
+                      style={isColor && item.hex ? { backgroundColor: item.hex } : {}}
+                    >
+                      {!isColor && item.value}
+                    </button>
+                  );
+                })}
               </div>
             </div>
-          )}
-
+          ))}
           {/* Color Selection — clicking updates variant (SKU / price / stock) */}
           {allColors.length > 0 && (
             <div className="mb-6">
@@ -660,22 +758,20 @@ export default function ProductDetails() {
                     key={color.value}
                     title={color.value}
                     onClick={() => handleColorSelect(color.value)}
-                    className={`relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all hover:scale-110 ${
-                      selectedColor === color.value
-                        ? "scale-110 border-black shadow-md"
-                        : "border-border"
-                    }`}
+                    className={`relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all hover:scale-110 ${selectedColor === color.value
+                      ? "scale-110 border-black shadow-md"
+                      : "border-border"
+                      }`}
                     style={
                       color.hex ? { backgroundColor: color.hex } : { backgroundColor: "#e5e7eb" }
                     }
                   >
                     {selectedColor === color.value && (
                       <span
-                        className={`absolute inset-0 flex items-center justify-center rounded-full text-xs font-bold ${
-                          color.hex === "#ffffff" || color.hex === "#fff"
-                            ? "text-black"
-                            : "text-white"
-                        }`}
+                        className={`absolute inset-0 flex items-center justify-center rounded-full text-xs font-bold ${color.hex === "#ffffff" || color.hex === "#fff"
+                          ? "text-black"
+                          : "text-white"
+                          }`}
                       >
                         ✓
                       </span>

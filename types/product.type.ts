@@ -245,6 +245,7 @@ export type TReview = {
   id: string;
   productId: string;
   customerId: string;
+  userId: string;
   rating: number;
   comment?: string | null;
   isApproved: boolean;

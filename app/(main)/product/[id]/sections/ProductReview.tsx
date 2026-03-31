@@ -1,15 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Image, { StaticImageData } from "next/image";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, ChevronDown, FastForward, Loader2 } from "lucide-react";
-import { Review, TReview } from "@/types";
+import { Plus, FastForward, Loader2 } from "lucide-react";
+import { TQueryParam, TReview } from "@/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,60 +25,96 @@ import {
 } from "@/redux/features/product/review.api";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useTablePagination } from "@/hooks/useTablePagination";
+import { TablePagination } from "@/components/custom/TablePagination";
 
 interface ProductReviewsProps {
   productId: string;
 }
 
+// Form state type
+type ReviewForm = {
+  rating: number;
+  comment: string;
+};
+
 export default function ProductReviews({ productId }: ProductReviewsProps) {
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<Review | null>(null);
-  const [imageModalOpen, setImageModalOpen] = useState(false);
-  const [activeImages, setActiveImages] = useState<string[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [editing, setEditing] = useState<TReview | null>(null);
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
 
-  const [form, setForm] = useState<{
-    userName: string;
-    rating: number;
-    comment: string;
-    images: (string | StaticImageData)[];
-  }>({
-    userName: "",
+  const [form, setForm] = useState<ReviewForm>({
     rating: 5,
     comment: "",
-    images: [],
   });
 
-  const { data, isLoading: reviewsLoading } = useGetAllReviewsOfProductQuery({ productId });
-  const currentUser = useAppSelector(selectCurrentUser);
+  const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
+    useTablePagination({
+      initialPageNumber: 1,
+      initialPageSize: 5,
+    });
+
+  const buildQueryParams = () => {
+    const queryParams: TQueryParam[] = [...getPaginationParams()];
+    if (selectedRating) {
+      queryParams.push({ name: "ratingValue", value: String(selectedRating) });
+    }
+    return { productId, queryParams };
+  };
+
+  // Paginated/filtered query (for the list)
+  const { data, isLoading: reviewsLoading } = useGetAllReviewsOfProductQuery(buildQueryParams());
+
+  // All reviews query (for header stats)
+  const { data: allReviewsData } = useGetAllReviewsOfProductQuery({
+    productId,
+    queryParams: [],
+  });
+
+  const allReviews: TReview[] = allReviewsData?.data ?? [];
   const reviews: TReview[] = data?.data ?? [];
+
+  const currentUser = useAppSelector(selectCurrentUser);
+  console.log('curUs', currentUser);
+  console.log('r if', reviews);
+
 
   const [addReview, { isLoading: adding }] = useAddReviewMutation();
   const [updateReview, { isLoading: updating }] = useUpdateReviewMutation();
   const [deleteReview] = useDeleteReviewMutation();
 
+  // ADD
   const averageRating =
-    reviews.length > 0
-      ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
+    allReviews.length > 0
+      ? (allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length).toFixed(1)
       : "0.0";
 
-  const openImageModal = (images: string[] = [], index: number) => {
-    setActiveImages(images);
-    setActiveIndex(index);
-    setImageModalOpen(true);
-  };
-
-  const nextImage = () =>
-    setActiveIndex((prev) => (prev === activeImages.length - 1 ? 0 : prev + 1));
-
-  const prevImage = () =>
-    setActiveIndex((prev) => (prev === 0 ? activeImages.length - 1 : prev - 1));
-
   const resetForm = () => {
-    setForm({ userName: "", rating: 5, comment: "", images: [] });
+    setForm({ rating: 5, comment: "" });
     setEditing(null);
     setOpen(false);
   };
+
+
+  function timeAgo(dateString: string): string {
+    const now = new Date();
+    const date = new Date(dateString);
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (seconds < 60) return "Just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
+    const weeks = Math.floor(days / 7);
+    if (weeks < 4) return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+    const months = Math.floor(days / 30);
+    if (months < 12) return `${months} month${months > 1 ? "s" : ""} ago`;
+    const years = Math.floor(days / 365);
+    return `${years} year${years > 1 ? "s" : ""} ago`;
+  }
 
   const handleSubmit = async () => {
     if (!form.comment.trim()) return;
@@ -89,14 +123,11 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
       if (editing) {
         await updateReview({
           id: editing.id,
-          data: {
-            rating: form.rating,
-            comment: form.comment,
-          },
+          rating: form.rating,
+          comment: form.comment,
         }).unwrap();
         toast.success("Review updated successfully");
       } else {
-        // ── ADD ──
         await addReview({
           productId,
           rating: form.rating,
@@ -105,18 +136,16 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         toast.success("Review added successfully");
       }
       resetForm();
-    } catch (err) {
+    } catch {
       toast.error("Something went wrong. Please try again.");
     }
   };
 
-  const handleEdit = (review: Review) => {
+  const handleEdit = (review: TReview) => {
     setEditing(review);
     setForm({
-      userName: review.userName,
       rating: review.rating,
-      comment: review.comment,
-      images: review.images || [],
+      comment: review.comment ?? "",
     });
     setOpen(true);
   };
@@ -125,15 +154,15 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
     try {
       await deleteReview(id).unwrap();
       toast.success("Review deleted");
-    } catch (err) {
+    } catch {
       toast.error("Failed to delete review");
-      console.error(err);
     }
   };
 
+  // ADD
   const ratingDistribution = [5, 4, 3, 2, 1].map((stars) => {
-    const count = reviews.filter((r) => r.rating === stars).length;
-    const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
+    const count = allReviews.filter((r) => r.rating === stars).length;
+    const percentage = allReviews.length > 0 ? (count / allReviews.length) * 100 : 0;
     return { stars, count, percentage };
   });
 
@@ -151,11 +180,22 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                 <div className="mt-2 gap-3 space-y-2">
                   <span className="text-3xl font-bold">{averageRating}</span>
                   <StarRating rating={Number(averageRating)} />
-                  <span className="text-muted-foreground text-sm">({reviews.length} reviews)</span>
+                  <span className="text-muted-foreground text-sm">
+
+                    ({allReviewsData?.meta?.totalCount ?? 0} reviews)
+                  </span>
                 </div>
                 <div className="w-full min-w-50 flex-1 sm:w-auto">
                   {ratingDistribution.map(({ stars, count, percentage }) => (
-                    <div key={stars} className="mb-1 flex items-center gap-2 text-sm">
+                    <div
+                      key={stars}
+                      onClick={() => {
+                        setSelectedRating(stars);
+                        resetPage();
+                      }}
+                      className={`mb-1 flex cursor-pointer items-center gap-2 text-sm hover:opacity-80 ${selectedRating === null || selectedRating === stars ? "font-semibold" : "opacity-50"
+                        }`}
+                    >
                       <span className="text-muted-foreground w-8">{stars}</span>
                       <FastForward className="text-rating h-3 w-3" />
                       <div className="bg-card-primary h-2 flex-1 rounded-full">
@@ -168,6 +208,17 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                     </div>
                   ))}
                 </div>
+                {selectedRating && (
+                  <button
+                    onClick={() => {
+                      setSelectedRating(null);
+                      resetPage();
+                    }}
+                    className="text-primary text-xs underline"
+                  >
+                    Clear filter
+                  </button>
+                )}
               </div>
             </div>
 
@@ -200,13 +251,11 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                 editable
                 onChange={(rating) => setForm({ ...form, rating })}
               />
-
               <Textarea
                 placeholder="Write your review..."
                 value={form.comment}
                 onChange={(e) => setForm({ ...form, comment: e.target.value })}
               />
-
               <Button
                 className="bg-button-primary hover:bg-button-primary/80 w-full cursor-pointer"
                 onClick={handleSubmit}
@@ -230,50 +279,57 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
               No reviews yet. Be the first to review!
             </p>
           ) : (
-            reviews.map((r) => (
-              <div className="border-b" key={r.id}>
-                <CardContent className="space-y-4 py-6">
-                  <div className="gap-5 space-y-4 md:flex">
-                    <div className="flex space-y-4 space-x-2">
-                      <div className="flex justify-between">
+            reviews.map((r) => {
+              const name = r.customer?.user?.name ?? "Anonymous";
+              const reviewCustomerId = r.customerId;
+              const profilePicture = r.customer?.user?.profilePicture ?? "";
+              const initials = name
+                .split(" ")
+                .map((n) => n[0])
+                .join("");
+
+              return (
+                <div className="border-b" key={r.id}>
+                  <div className="space-y-4 flex justify-between px-6 py-4">
+                    <div className="gap-5 space-y-4 md:flex">
+                      <div className="flex space-x-2">
                         <div className="flex gap-3">
-                          {r.userImage ? (
-                            <Avatar>
-                              <Image
-                                src={r.userImage}
-                                alt={r.userName}
-                                width={40}
-                                height={40}
-                                className="h-10 w-10 rounded-full"
-                              />
-                            </Avatar>
-                          ) : (
-                            <Avatar>
-                              <AvatarFallback>
-                                {(r.customer?.user?.name ?? "A")
-                                  .split(" ")
-                                  .map((n: string) => n[0])
-                                  .join("")}
-                              </AvatarFallback>
-                            </Avatar>
-                          )}
+                          <Avatar>
+                            {profilePicture ? (
+                              <AvatarImage src={profilePicture} alt={name} />
+                            ) : (
+                              <AvatarFallback>{initials}</AvatarFallback>
+                            )}
+                          </Avatar>
 
                           <div>
                             <h4 className="flex gap-6 font-semibold">
-                              {r?.userName}
+                              {name}
                               <span>
                                 <StarRating rating={r.rating} />
                               </span>
                             </h4>
-                            <p className="text-muted-foreground text-xs">{r?.date}</p>
+                            <p className="text-muted-foreground text-xs">
+                              {timeAgo(r.createdAt)}
+                            </p>
                             <p>{r.comment}</p>
                           </div>
                         </div>
+
+                        {/* Mobile dropdown */}
+                        <div className="items-start gap-2 md:hidden">
+                          {reviewCustomerId === currentUser?.id && (
+                            <ReviewActions
+                              onEdit={() => handleEdit(r)}
+                              onDelete={() => handleDelete(r.id)}
+                            />
+                          )}
+                        </div>
                       </div>
 
-                      {/* Mobile dropdown */}
-                      <div className="items-start gap-2 md:hidden">
-                        {r.userEmail === currentUser && (
+                      {/* Desktop dropdown */}
+                      <div className="hidden items-start gap-2 md:flex">
+                        {reviewCustomerId === currentUser?.id && (
                           <ReviewActions
                             onEdit={() => handleEdit(r)}
                             onDelete={() => handleDelete(r.id)}
@@ -281,89 +337,33 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                         )}
                       </div>
                     </div>
-
                     <div>
-                      {r.images && r.images.length > 0 && (
-                        <div className="flex gap-2">
-                          {r.images.map((img, i) => (
-                            <Image
-                              key={i}
-                              src={img}
-                              alt={`Review image ${i}`}
-                              width={80}
-                              height={80}
-                              onClick={() => openImageModal(r.images as string[], i)}
-                              className="bg-muted h-20 w-20 cursor-pointer rounded-lg object-cover transition hover:opacity-90"
-                            />
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Image lightbox modal */}
-                      <Dialog open={imageModalOpen} onOpenChange={setImageModalOpen}>
-                        <DialogHeader>
-                          <DialogTitle />
-                        </DialogHeader>
-                        <DialogContent className="bg-card-primary max-w-7xl border-none p-0">
-                          <div className="relative flex h-[80vh] items-center justify-center">
-                            {activeImages[activeIndex] && (
-                              <Image
-                                src={activeImages[activeIndex]}
-                                alt="Review preview"
-                                fill
-                                className="object-contain"
-                              />
-                            )}
-                            {activeImages.length > 1 && (
-                              <>
-                                <button
-                                  onClick={prevImage}
-                                  className="absolute left-4 cursor-pointer rounded-full bg-black/50 p-2 text-xl text-white hover:bg-black/70"
-                                >
-                                  ‹
-                                </button>
-                                <button
-                                  onClick={nextImage}
-                                  className="absolute right-4 cursor-pointer rounded-full bg-black/50 p-2 text-xl text-white hover:bg-black/70"
-                                >
-                                  ›
-                                </button>
-                                <div className="absolute bottom-4 rounded-full bg-black/50 px-3 py-1 text-sm text-white">
-                                  {activeIndex + 1} / {activeImages.length}
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-
-                    {/* Desktop dropdown — only for current user's reviews */}
-                    <div className="hidden items-start gap-2 md:flex">
-                      {r.userEmail === currentUser && (
-                        <ReviewActions
-                          onEdit={() => handleEdit(r)}
-                          onDelete={() => handleDelete(r.id)}
-                        />
-                      )}
+                      <p className="text-muted-foreground text-xs">
+                        {timeAgo(r.createdAt)}
+                      </p>
                     </div>
                   </div>
-                </CardContent>
-              </div>
-            ))
+                </div>
+              );
+            })
           )}
         </div>
       </div>
 
-      <button className="text-primary flex cursor-pointer items-center gap-1">
-        Read all reviews
-        <ChevronDown className="h-4 w-4" />
-      </button>
+      {data?.meta && (
+        <TablePagination
+          meta={data.meta}
+          onPageChange={handlePageChange}
+          onPageSizeChange={(size) => {
+            handlePageSizeChange(size);
+            resetPage();
+          }}
+        />
+      )}
     </section>
   );
 }
 
-// ─── Small helper component ────────────────────────────────────────────────
 function ReviewActions({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => void }) {
   return (
     <DropdownMenu>
