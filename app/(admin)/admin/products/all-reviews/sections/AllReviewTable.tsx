@@ -42,10 +42,7 @@ const AllReviewTable = () => {
         resetPage();
     };
 
-    const buildQueryParams = (): TQueryParam[] => [
-        ...getPaginationParams(),
-        ...getSortParams(),
-    ];
+    const buildQueryParams = (): TQueryParam[] => [...getPaginationParams(), ...getSortParams()];
 
     const { data, isLoading } = useGetAllReviewsQuery(buildQueryParams());
 
@@ -55,10 +52,7 @@ const AllReviewTable = () => {
     const reviews = data?.data ?? [];
 
     const rows = reviews.map((review: any) => {
-        const product =
-            review.product && typeof review.product === "object"
-                ? review.product
-                : null;
+        const product = review.product && typeof review.product === "object" ? review.product : null;
 
         // fallback: product info might be nested under review directly
         const resolvedProduct = product ?? {
@@ -93,20 +87,20 @@ const AllReviewTable = () => {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center py-20 gap-2 text-muted-foreground">
-                <Loader2 className="animate-spin h-5 w-5" />
+            <div className="text-muted-foreground flex items-center justify-center gap-2 py-20">
+                <Loader2 className="h-5 w-5 animate-spin" />
                 Loading reviews...
             </div>
         );
     }
-    console.log("reviews", data)
+    console.log("reviews", data);
     return (
-        <div className="rounded-xl border overflow-hidden">
+        <div className="overflow-hidden rounded-xl border">
             <Table>
                 <TableHeader>
                     <TableRow className="bg-muted/50">
-                        <TableHead className="w-15">Image</TableHead>
-                        <TableHead>Product</TableHead>
+                        <TableHead className="w-15">Images</TableHead>
+                        <TableHead>Products</TableHead>
 
                         <SortableTableHead
                             field="rating"
@@ -115,7 +109,7 @@ const AllReviewTable = () => {
                             getSortIcon={getSortIcon}
                         />
 
-                        <TableHead>Comment</TableHead>
+                        <TableHead>Comments</TableHead>
 
                         <SortableTableHead
                             field="createdAt"
@@ -137,32 +131,22 @@ const AllReviewTable = () => {
                             review?.product?.images?.[0]?.imageUrl ||
                             null;
 
-
                         return (
                             <TableRow key={getId(review)}>
                                 {/* Image */}
                                 <TableCell>
-                                    <div className="h-11 w-11 rounded-lg overflow-hidden border bg-muted relative">
+                                    <div className="bg-muted relative h-11 w-11 overflow-hidden rounded-lg border">
                                         {imgSrc ? (
-                                            <Image
-                                                src={imgSrc}
-                                                alt="product"
-                                                fill
-                                                className="object-cover"
-                                            />
+                                            <Image src={imgSrc} alt="product" fill className="object-cover" />
                                         ) : (
-                                            <div className="flex items-center justify-center h-full text-xs">
-                                                N/A
-                                            </div>
+                                            <div className="flex h-full items-center justify-center text-xs">N/A</div>
                                         )}
                                     </div>
                                 </TableCell>
 
                                 {/* Product */}
                                 <TableCell>
-                                    <p className="line-clamp-2 max-w-45 font-medium">
-                                        {product?.name}
-                                    </p>
+                                    <p className="line-clamp-2 max-w-45 font-medium">{product?.name}</p>
                                 </TableCell>
 
                                 {/* Rating */}
@@ -170,22 +154,18 @@ const AllReviewTable = () => {
 
                                 {/* Comment */}
                                 <TableCell>
-                                    <p className="line-clamp-2 max-w-45 text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground line-clamp-2 max-w-45 text-sm">
                                         {review.comment}
                                     </p>
                                 </TableCell>
 
                                 {/* Date */}
-                                <TableCell className="text-xs">
-                                    {review.createdAt?.slice(0, 10)}
-                                </TableCell>
+                                <TableCell className="text-xs">{review.createdAt?.slice(0, 10)}</TableCell>
 
                                 {/* Status */}
                                 <TableCell>
                                     {review.isApproved ? (
-                                        <Badge className="bg-green-100 text-green-600">
-                                            Approved
-                                        </Badge>
+                                        <Badge className="bg-green-100 text-green-600">Approved</Badge>
                                     ) : (
                                         <Badge variant="outline">Pending</Badge>
                                     )}

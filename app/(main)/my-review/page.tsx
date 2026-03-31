@@ -81,8 +81,9 @@ function StarRow({
         return (
           <Star
             key={i}
-            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${filled ? "fill-amber-400 text-amber-400" : "fill-muted text-muted-foreground/30"
-              } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
+            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${
+              filled ? "fill-amber-400 text-amber-400" : "fill-muted text-muted-foreground/30"
+            } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
             onClick={() => interactive && onRate?.(val)}
             onMouseEnter={() => interactive && onHover?.(val)}
             onMouseLeave={() => interactive && onLeave?.()}
@@ -246,9 +247,8 @@ export default function MyReviewsPage() {
       setDeleteTarget(null);
     }
   };
-  
 
-  console.log('m,y re' ,myReviews);
+  console.log("m,y re", myReviews);
 
   return (
     <section className="container space-y-8 py-10">
@@ -335,9 +335,7 @@ export default function MyReviewsPage() {
                     {/* Product info */}
                     <TableCell>
                       <div className="max-w-40 truncate leading-snug font-medium">
-                        <p className="line-clamp-2">
-                          {product?.name ?? "Unknown Product"}
-                        </p>
+                        <p className="line-clamp-2">{product?.name ?? "Unknown Product"}</p>
                       </div>
                       {product?.brand && (
                         <p className="text-muted-foreground text-xs">{product.brand}</p>
