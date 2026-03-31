@@ -252,6 +252,7 @@ export type TReview = {
   createdAt: string;
   customer?: {
     user?: {
+      id: string;
       name?: string | null;
       email?: string | null;
       profilePicture?: string | null;

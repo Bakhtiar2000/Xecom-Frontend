@@ -134,7 +134,7 @@ function ReviewForm({
       if (isUpdateMode) {
         await updateReview({
           id: getId(existingReview),
-          data: { rating: data.rating, comment: data.comment },
+          data: { id: getId(existingReview), rating: data.rating, comment: data.comment },
         }).unwrap();
         toast.success("Review updated successfully!");
       } else {
