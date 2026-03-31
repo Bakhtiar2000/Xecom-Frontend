@@ -62,7 +62,7 @@ export const adminRoutes: RouteGroup[] = [
       },
       {
         label: "Pending Orders",
-        href: "/admin/orders/pending",
+        href: "/admin/orders/all-orders/pending",
       },
     ],
   },

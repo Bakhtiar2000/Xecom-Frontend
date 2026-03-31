@@ -3,6 +3,22 @@ import { baseApi } from "@/redux/api/baseApi";
 import { TProduct } from "@/types/product.type";
 import { TProductMetadata } from "./dto/product.dto";
 
+const toNumberOr = (value: unknown, fallback = 0): number => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
+const normalizeProduct = (product: TProduct): TProduct => ({
+  ...product,
+  avgRating:
+    product.avgRating === null || product.avgRating === undefined
+      ? null
+      : toNumberOr(product.avgRating, 0),
+  reviewCount: toNumberOr(product.reviewCount, 0),
+  totalSales: toNumberOr(product.totalSales, 0),
+  viewCount: toNumberOr(product.viewCount, 0),
+});
+
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     //-----------------Get All Products-----------------
@@ -25,7 +41,7 @@ const productApi = baseApi.injectEndpoints({
       providesTags: ["product"],
       transformResponse: (response: TResponseRedux<TProduct[]>) => {
         return {
-          data: response.data,
+          data: response.data.map(normalizeProduct),
           meta: response.meta,
         };
       },
@@ -40,7 +56,7 @@ const productApi = baseApi.injectEndpoints({
       providesTags: ["product"],
       transformResponse: (response: TResponseRedux<TProduct>) => {
         return {
-          data: response.data,
+          data: normalizeProduct(response.data),
         };
       },
     }),

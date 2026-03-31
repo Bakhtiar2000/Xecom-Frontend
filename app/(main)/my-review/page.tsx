@@ -81,9 +81,8 @@ function StarRow({
         return (
           <Star
             key={i}
-            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${
-              filled ? "fill-amber-400 text-amber-400" : "fill-muted text-muted-foreground/30"
-            } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
+            className={`transition-all ${size === "sm" ? "h-3.5 w-3.5" : "h-5 w-5"} ${filled ? "fill-amber-400 text-amber-400" : "fill-muted text-muted-foreground/30"
+              } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
             onClick={() => interactive && onRate?.(val)}
             onMouseEnter={() => interactive && onHover?.(val)}
             onMouseLeave={() => interactive && onLeave?.()}

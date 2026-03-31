@@ -64,6 +64,18 @@ const FINAL_STATUSES = new Set<OrderStatus>([
   OrderStatus.RETURNED,
 ]);
 
+const formatOrderDate = (value: string) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "N/A";
+
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    timeZone: "UTC",
+  }).format(date);
+};
+
 export default function OrderItemPageRenderer({
   currentStatus,
   nextStatus,
@@ -151,13 +163,12 @@ export default function OrderItemPageRenderer({
           <div
             key={order.id}
             onClick={() => setSelectedOrderId(order.id)}
-            className={`cursor-pointer border-b p-3 transition-colors ${
-              selectedOrder?.id === order.id ? "bg-primary/10 border-primary" : "hover:bg-muted/70"
-            }`}
+            className={`cursor-pointer border-b p-3 transition-colors ${selectedOrder?.id === order.id ? "bg-primary/10 border-primary" : "hover:bg-muted/70"
+              }`}
           >
             <p className="text-sm font-semibold">Order #{order.orderNumber}</p>
             <p className="text-muted-foreground mt-1 text-xs">
-              {new Date(order.placedAt).toLocaleDateString()}
+              {formatOrderDate(order.placedAt)}
             </p>
 
             <div className="mt-2 flex items-center justify-between gap-2">
@@ -217,7 +228,7 @@ export default function OrderItemPageRenderer({
               <div>
                 <p>
                   <span className="font-semibold">Order Date:</span>{" "}
-                  {new Date(selectedOrder.placedAt).toLocaleDateString()}
+                  {formatOrderDate(selectedOrder.placedAt)}
                 </p>
                 <p>
                   <span className="font-semibold">Total:</span> $
