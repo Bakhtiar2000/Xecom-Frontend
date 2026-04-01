@@ -43,6 +43,7 @@ import { useTableSort } from "@/hooks/useTableSort";
 import { TQueryParam } from "@/types";
 import { SortableTableHead } from "@/components/custom/SortableTableHead";
 import { TablePagination } from "@/components/custom/TablePagination";
+import Link from "next/link";
 
 // ── Zod Schema ────────────────────────────────────────────────────────────────
 const reviewSchema = z.object({
@@ -325,7 +326,7 @@ export default function MyReviewsPage() {
                             className="object-cover"
                           />
                         ) : (
-                          <div className="text-muted-foreground flex h-full w-full items-center justify-center text-sm font-bold">
+                          <div  className="text-muted-foreground flex h-full w-full items-center justify-center text-sm font-bold">
                             {(product?.name ?? "P")[0].toUpperCase()}
                           </div>
                         )}
@@ -334,9 +335,9 @@ export default function MyReviewsPage() {
 
                     {/* Product info */}
                     <TableCell>
-                      <div className="max-w-40 truncate leading-snug font-medium">
+                      <Link href={`/product/${getId(product)}`} className="max-w-40  truncate leading-snug font-medium">
                         <p className="line-clamp-2">{product?.name ?? "Unknown Product"}</p>
-                      </div>
+                      </Link>
                       {product?.brand && (
                         <p className="text-muted-foreground text-xs">{product.brand}</p>
                       )}

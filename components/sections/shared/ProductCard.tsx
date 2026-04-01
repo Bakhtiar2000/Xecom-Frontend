@@ -90,8 +90,9 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
         <TooltipTrigger asChild>
           <Link
             href={`/product/${product.id}`}
-            className={`group bg-card-primary relative block transform overflow-hidden rounded-sm shadow-sm transition-all duration-500 hover:shadow-lg ${viewMode === "list" ? "flex flex-col  md:flex-row" : ""
-              }`}
+            className={`group bg-card-primary relative block transform overflow-hidden rounded-sm shadow-sm transition-all duration-500 hover:shadow-lg ${
+              viewMode === "list" ? "flex flex-col md:flex-row" : ""
+            }`}
           >
             {/* Badge */}
             <div
@@ -108,18 +109,21 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
                 handleWishlistToggle();
               }}
               disabled={isWishlisting || isUnwishlisting}
-              className={`absolute right-4 top-4 ${viewMode === "list" ? "top-10" : "top-4"
-                } right-4 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border shadow-sm transition-all hover:scale-110 disabled:opacity-60 ${isWishlisted
+              className={`absolute top-4 right-4 ${
+                viewMode === "list" ? "top-10" : "top-4"
+              } right-4 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border shadow-sm transition-all hover:scale-110 disabled:opacity-60 ${
+                isWishlisted
                   ? "border-danger/20 bg-danger/50"
                   : "border-border bg-white/80 backdrop-blur-sm"
-                }`}
+              }`}
             >
               {isWishlisting || isUnwishlisting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <Heart
-                  className={`h-4 w-4 transition-colors ${isWishlisted ? "fill-danger text-danger" : "text-gray-600"
-                    }`}
+                  className={`h-4 w-4 transition-colors ${
+                    isWishlisted ? "fill-danger text-danger" : "text-gray-600"
+                  }`}
                 />
               )}
             </button>
