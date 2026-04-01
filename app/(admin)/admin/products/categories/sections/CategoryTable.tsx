@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useGetAllCategoriesQuery } from "@/redux/features/product/category.api";
+import {
+  useGetAllCategoriesQuery,
+  useDeleteCategoryMutation,
+  useUpdateCategoryFieldMutation,
+} from "@/redux/features/product/category.api";
 import {
   Table,
   TableBody,
@@ -14,6 +18,7 @@ import {
   TableLoading,
   TableError,
 } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,14 +28,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { TCategory } from "@/types/product.type";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { SortableTableHead } from "@/components/custom/SortableTableHead";
-import { Search, X, Folder, Pencil, Loader2 } from "lucide-react";
+import { Search, X, Folder, Pencil, Trash2, Loader2 } from "lucide-react";
 import { useTableSort } from "@/hooks/useTableSort";
 import { useTablePagination } from "@/hooks/useTablePagination";
 import { useDebounce } from "@/hooks/useDebounce";
-import StatusToggle from "./StatusToggle";
+import { toast } from "sonner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Switch } from "@/components/ui/switch";
 
 type SortableFields = "name";
 
@@ -41,9 +58,16 @@ interface CategoryTableProps {
 export function CategoryTable({ onEdit }: CategoryTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isActive, setIsActive] = useState<string>("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<TCategory | null>(null);
+
+  // update status
+  const [updateCategoryField] = useUpdateCategoryFieldMutation();
 
   // Debounce search term to avoid excessive API calls
   const debouncedSearchTerm = useDebounce(searchTerm);
+
+  const [deleteCategory, { isLoading: isDeleting }] = useDeleteCategoryMutation();
 
   const { handleSort, getSortIcon, getSortParams } = useTableSort<SortableFields>();
   const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
@@ -60,7 +84,6 @@ export function CategoryTable({ onEdit }: CategoryTableProps) {
   const { data, isLoading, isFetching, isError } = useGetAllCategoriesQuery(buildQueryParams());
 
   const categories = data?.data || [];
-  console.log("categoryu ", categories);
   const hasNoData = categories.length === 0 && !isLoading;
   const isRefetching = isFetching && !isLoading;
 
@@ -83,6 +106,45 @@ export function CategoryTable({ onEdit }: CategoryTableProps) {
     setIsActive("");
     resetPage();
   };
+
+  const handleDeleteClick = (category: TCategory) => {
+    setCategoryToDelete(category);
+    setDeleteDialogOpen(true);
+  };
+
+  // update handler status
+
+  const handleToggleStatus = async (category: TCategory) => {
+    try {
+      const newStatus = !category.isActive;
+
+      await updateCategoryField({
+        id: category.id,
+        data: {
+          isActive: newStatus,
+        },
+      }).unwrap();
+
+      toast.success("Status updated");
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to update status");
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!categoryToDelete) return;
+
+    try {
+      const result = await deleteCategory(categoryToDelete.id).unwrap();
+      toast.success(result?.message || "Category deleted successfully");
+      setDeleteDialogOpen(false);
+      setCategoryToDelete(null);
+    } catch (error: any) {
+      const errorMessage = error?.data?.message || error?.message || "Failed to delete category";
+      toast.error(errorMessage);
+    }
+  };
+
   const hasActiveFilters = debouncedSearchTerm || isActive;
 
   return (
@@ -198,21 +260,54 @@ export function CategoryTable({ onEdit }: CategoryTableProps) {
                       </span>
                     </TableCell>
                     <TableCell>
-                      <StatusToggle id={category.id} isActive={category.isActive} />
+                      <div className="flex gap-x-2">
+                        <Badge
+                          variant={category.isActive ? "default" : "secondary"}
+                          className={category.isActive ? "bg-success" : ""}
+                        >
+                          {category.isActive ? "Active" : "Inactive"}
+                        </Badge>
+
+                        <Switch
+                          checked={category.isActive}
+                          onCheckedChange={() => handleToggleStatus(category)}
+                        />
+                      </div>
                     </TableCell>
                     <TableCell className="text-center">
                       <span className="font-medium">{category._count?.products ?? 0}</span>
                     </TableCell>
                     <TableCell className="text-center">{category.sortOrder}</TableCell>
-                    <TableCell className="text-center">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onEdit(category)}
-                        className="hover:bg-primary/10 hover:text-primary h-8 w-8"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
+                    <TableCell>
+                      <div className="flex justify-end gap-2">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => onEdit(category)}
+                              className="hover:bg-primary/10 hover:text-primary h-8 w-8"
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Edit</TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleDeleteClick(category)}
+                              className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Delete</TooltipContent>
+                        </Tooltip>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -229,6 +324,29 @@ export function CategoryTable({ onEdit }: CategoryTableProps) {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the category &quot;
+              {categoryToDelete?.name}&quot;. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              disabled={isDeleting}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

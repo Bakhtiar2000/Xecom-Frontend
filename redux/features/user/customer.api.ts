@@ -1,6 +1,7 @@
 import { TCustomer, TQueryParam, TResponseRedux } from "@/types";
 import { baseApi } from "@/redux/api/baseApi";
 import { TRegisterCustomerDto } from "./dto/customer.dto";
+import { TAddAddressDto } from "./dto/user.dto";
 
 const customerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -38,6 +39,16 @@ const customerApi = baseApi.injectEndpoints({
         body: data,
       }),
       invalidatesTags: ["customer", "user"],
+    }),
+
+    //-----------------Add Staff Address-----------------
+    addUserAddress: builder.mutation({
+      query: (data: TAddAddressDto) => ({
+        url: "/customer/address",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["customer", "address"],
     }),
   }),
 });

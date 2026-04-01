@@ -63,10 +63,19 @@ const userApi = baseApi.injectEndpoints({
     }),
 
     //-----------------Change Status-----------------
+    // changeStatus: builder.mutation({
+    //   query: (args: { id: string; data: TChangeStatusDto }) => ({
+    //     url: `/user/change-status/${args.id}`,
+    //     method: "POST",
+    //     body: args.data,
+    //   }),
+    //   invalidatesTags: ["user"],
+    // }),
+
     changeStatus: builder.mutation({
       query: (args: { id: string; data: TChangeStatusDto }) => ({
         url: `/user/change-status/${args.id}`,
-        method: "POST",
+        method: "PATCH",
         body: args.data,
       }),
       invalidatesTags: ["user"],

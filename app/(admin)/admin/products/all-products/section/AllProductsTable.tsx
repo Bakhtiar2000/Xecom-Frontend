@@ -26,25 +26,18 @@ import { useTableSort } from "@/hooks/useTableSort";
 import { API_URL } from "@/redux/api/baseApi";
 import { useGetAllAttributesQuery } from "@/redux/features/product/attribute.api";
 import {
-  useDeleteProductMutation,
   useGetAllProductsQuery,
+  useUpdateProductMutation,
 } from "@/redux/features/product/product.api";
 import { TAttribute, TProduct } from "@/types";
 import { Eye, Loader2, MoreHorizontal, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { AttributeFilter } from "./AttributeFilter";
-import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { Switch } from "@/components/ui/switch";
+import { ProductStatus } from "@/constants/enum";
+import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
+import { TooltipContent } from "@radix-ui/react-tooltip";
 
 type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
@@ -53,8 +46,9 @@ const AllProductsTable = () => {
   const [selectedAttributeValues, setSelectedAttributeValues] = useState<Record<string, string[]>>(
     {}
   );
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<SelectOption[]>([]);
+
+  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
 
   const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
     useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
@@ -82,22 +76,8 @@ const AllProductsTable = () => {
     console.log("edit ", id);
   };
 
-  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
-
-  const openDeleteModal = (id: string) => {
-    setDeleteTargetId(id);
-  };
-
-  const handleDelete = async () => {
-    if (!deleteTargetId) return;
-    try {
-      await deleteProduct(deleteTargetId).unwrap();
-      toast.success("Product deleted successfully");
-    } catch (error) {
-      toast.error("Failed to delete product", error);
-    } finally {
-      setDeleteTargetId(null);
-    }
+  const handleDelete = (id: string) => {
+    console.log("Delete product:", id);
   };
 
   // Debounce search term to avoid excessive API calls
@@ -136,6 +116,41 @@ const AllProductsTable = () => {
     ...Object.values(selectedAttributeValues).flat(),
     ...selectedCategories.map((c) => c.value),
   ].filter(Boolean).length;
+
+  // toggle
+
+  const handleStatusToggle = async (product: TProduct) => {
+    const newStatus =
+      product.status === ProductStatus.ACTIVE ? ProductStatus.INACTIVE : ProductStatus.ACTIVE;
+
+    const formData = new FormData();
+    formData.append("status", newStatus);
+
+    try {
+      await updateProduct({
+        id: product.id,
+        data: formData,
+      }).unwrap();
+    } catch (error) {
+      console.error("Status update failed", error);
+    }
+  };
+
+  const handleFeaturedToggle = async (product: TProduct) => {
+    const newFeatured = !product.featured;
+
+    const formData = new FormData();
+    formData.append("featured", String(newFeatured));
+
+    try {
+      await updateProduct({
+        id: product.id,
+        data: formData,
+      }).unwrap();
+    } catch (error) {
+      console.error("Featured update failed", error);
+    }
+  };
 
   const clearAllFilters = () => {
     setSelectedAttributeValues({});
@@ -271,7 +286,7 @@ const AllProductsTable = () => {
                       <div className="flex items-center gap-3">
                         {product.images && product.images.length > 0 ? (
                           <Image
-                            src={product.images[0].imageUrl || "/placeholder-product.png"}
+                            src={product.images[0].imageUrl}
                             alt={product.name}
                             width={40}
                             height={40}
@@ -291,12 +306,37 @@ const AllProductsTable = () => {
                       </div>
                     </TableCell>
                     <TableCell>{product?.maxOrderQty}</TableCell>
-                    <TableCell>
+                    {/* <TableCell>
+                      <div className="flex justify-center items-center gap-1">
                       <Badge variant={product.status === "ACTIVE" ? "default" : "secondary"}>
                         {product.status}
-                      </Badge>
-                    </TableCell>
+                      </Badge>    
+
+                      <Switch/>
+
+                      </div>
+
+                    </TableCell> */}
                     <TableCell>
+                      <div className="flex items-center justify-center gap-2">
+                        <Badge
+                          className={
+                            product.status === "ACTIVE"
+                              ? "bg-green-500 text-white"
+                              : "bg-red-500 text-white"
+                          }
+                        >
+                          {product.status}
+                        </Badge>
+
+                        <Switch
+                          checked={product.status === "ACTIVE"}
+                          onCheckedChange={() => handleStatusToggle(product)}
+                        />
+                      </div>
+                    </TableCell>
+
+                    {/* <TableCell>
                       {product.featured ? (
                         <Badge variant="default" className="bg-rating">
                           Featured
@@ -306,13 +346,27 @@ const AllProductsTable = () => {
                           No
                         </Badge>
                       )}
+                    </TableCell> */}
+                    <TableCell>
+                      <div className="flex items-center justify-center gap-2">
+                        <Badge
+                          className={
+                            product.featured ? "bg-green-500 text-white" : "bg-red-500 text-white"
+                          }
+                        >
+                          {product.featured ? "Featured" : "No"}
+                        </Badge>
+
+                        <Switch
+                          checked={product.featured}
+                          onCheckedChange={() => handleFeaturedToggle(product)}
+                        />
+                      </div>
                     </TableCell>
                     <TableCell>
                       {product.avgRating ? (
                         <div className="flex items-center gap-1">
-                          <span className="font-medium">
-                            {Number(product.avgRating).toFixed(1)}
-                          </span>
+                          <span className="font-medium">{product.avgRating.toFixed(1)}</span>
                           <span className="text-muted-foreground text-xs">
                             ({product.reviewCount})
                           </span>
@@ -324,7 +378,32 @@ const AllProductsTable = () => {
                     <TableCell>{product.totalSales}</TableCell>
                     <TableCell>{product.viewCount}</TableCell>
                     <TableCell className="text-right">
-                      <DropdownMenu>
+                      <div className="flex gap-x-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div
+                              onClick={() => handleView(product.id)}
+                              className="hover:bg-muted cursor-pointer rounded p-1"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>View Details</TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div
+                              onClick={() => handleEdit(product.id)}
+                              className="hover:bg-muted cursor-pointer rounded p-1"
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>Edit</TooltipContent>
+                        </Tooltip>
+                      </div>
+
+                      {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <button className="hover:bg-muted rounded-md p-2">
                             <MoreHorizontal className="h-4 w-4" />
@@ -343,14 +422,14 @@ const AllProductsTable = () => {
                           </DropdownMenuItem>
 
                           <DropdownMenuItem
-                            onClick={() => openDeleteModal(product.id)}
+                            onClick={() => handleDelete(product.id)}
                             className="text-destructive focus:text-destructive"
                           >
                             <Trash2 className="mr-2 h-4 w-4" />
                             Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>
-                      </DropdownMenu>
+                      </DropdownMenu> */}
                     </TableCell>
                   </TableRow>
                 ))
@@ -366,32 +445,6 @@ const AllProductsTable = () => {
             disabled={hasNoData}
           />
         )}
-
-        <AlertDialog
-          open={!!deleteTargetId}
-          onOpenChange={(open) => !open && setDeleteTargetId(null)}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete Product?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the product and remove it
-                from our servers.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={handleDelete}
-                disabled={isDeleting}
-                className="bg-destructive hover:bg-destructive/90"
-              >
-                {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
     </div>
   );

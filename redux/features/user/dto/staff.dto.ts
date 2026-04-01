@@ -9,4 +9,7 @@ export type TRegisterStaffDto = {
   hireDate?: string;
   notes?: string;
   profilePicture?: File;
+  thanaId: string;
+  postCode: number;
+  state: string;
 };

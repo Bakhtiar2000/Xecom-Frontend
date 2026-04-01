@@ -49,6 +49,7 @@ import { Input } from "@/components/ui/input";
 import CustomSelect, { SelectOption } from "@/components/custom/CustomSelect";
 import { API_URL } from "@/redux/api/baseApi";
 import { useDebounce } from "@/hooks/useDebounce";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type SortableFields = "name";
 
@@ -292,22 +293,33 @@ export default function ThanaTable({ onEdit }: ThanaTableProps) {
                   <TableCell>{getDistrictName(thana.districtId)}</TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onEdit(thana)}
-                        className="hover:bg-primary/10 hover:text-primary h-8 w-8"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteClick(thana)}
-                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => onEdit(thana)}
+                            className="hover:bg-primary/10 hover:text-primary h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Edit</TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteClick(thana)}
+                            className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Delete</TooltipContent>
+                      </Tooltip>
                     </div>
                   </TableCell>
                 </TableRow>

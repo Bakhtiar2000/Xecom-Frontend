@@ -8,39 +8,24 @@ import { Check, ChevronDown, X, Search, Loader2 } from "lucide-react";
 export interface SelectOption {
   value: string | number;
   label: string;
-  /** Optional extra data you can attach */
   [key: string]: unknown;
 }
 
 export interface CustomSelectProps {
-  /** API endpoint to fetch options from (e.g., "End of results/brands") */
   endpoint?: string;
-
-  /** Custom async function that fetches options. Return { data, hasMore, meta } */
   fetchOptions?: (params: {
     searchTerm: string;
     pageNumber: number;
     pageSize: number;
     fields?: string[];
   }) => Promise<{ data: SelectOption[]; hasMore: boolean; meta?: any }>;
-
-  /** Fields to request from the API (e.g., ["name", "id"]) */
   fields?: string[];
-
-  /** Map response data to SelectOption format */
   mapToOption?: (item: any) => SelectOption;
-
-  /** Controlled value(s) */
   value?: SelectOption | SelectOption[] | null;
   onChange?: (value: SelectOption | SelectOption[] | null) => void;
-
-  /** Allow selecting multiple items */
   multiSelect?: boolean;
-  /** Show the search bar inside the dropdown */
   searchable?: boolean;
-  /** Enable infinite scrolling pagination */
   paginated?: boolean;
-
   placeholder?: string;
   disabled?: boolean;
   className?: string;
@@ -81,14 +66,12 @@ export const CustomSelect = ({
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Normalise value to array internally
   const selectedArray: SelectOption[] = value ? (Array.isArray(value) ? value : [value]) : [];
 
   // ── Fetch ──────────────────────────────────────────────────────────────────
 
   const load = useCallback(
     async (q: string, p: number, replace: boolean) => {
-      // Prevent duplicate calls
       if (loadingRef.current) return;
 
       loadingRef.current = true;
@@ -99,7 +82,6 @@ export const CustomSelect = ({
         let res: { data: SelectOption[]; hasMore: boolean };
 
         if (fetchOptions) {
-          // Use custom fetch function
           res = await fetchOptions({
             searchTerm: q,
             pageNumber: p,
@@ -107,7 +89,6 @@ export const CustomSelect = ({
             fields,
           });
         } else if (endpoint) {
-          // Build query params for API endpoint
           const params = new URLSearchParams();
           if (paginated) {
             params.append("pageNumber", p.toString());
@@ -118,13 +99,17 @@ export const CustomSelect = ({
             fields.forEach((field) => params.append("fields", field));
           }
 
-          const url = `${endpoint}?${params.toString()}`;
+          // ✅ Append extra params from endpoint URL if any (e.g. ?countryId=xxx)
+          const [baseUrl, existingQuery] = endpoint.split("?");
+          const existingParams = new URLSearchParams(existingQuery || "");
+          existingParams.forEach((v, k) => params.set(k, v));
+
+          const url = `${baseUrl}?${params.toString()}`;
           const response = await fetch(url);
           if (!response.ok) throw new Error("Failed to fetch options");
 
           const json = await response.json();
 
-          // Map response data to SelectOption format
           const mappedData = mapToOption
             ? json.data.map(mapToOption)
             : json.data.map((item: any) => ({
@@ -133,7 +118,6 @@ export const CustomSelect = ({
                 ...item,
               }));
 
-          // Determine if there are more pages
           const hasMorePages =
             json.meta?.hasNextPage ??
             (json.meta?.pageNumber && json.meta?.totalPages
@@ -162,16 +146,46 @@ export const CustomSelect = ({
     [endpoint, fetchOptions, fields, mapToOption, paginated]
   );
 
-  // Initial load when opened
+  // Always keep latest load fn in a ref so effects don't stale-close over it
+  const loadRef = useRef(load);
+  useEffect(() => {
+    loadRef.current = load;
+  }, [load]);
+
+  // Re-fetch when dropdown opens
   useEffect(() => {
     if (open) {
-      load(searchTerm, 1, true);
+      setSearchTerm("");
+      loadRef.current("", 1, true);
       if (searchable) setTimeout(() => searchRef.current?.focus(), 50);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, searchable]);
 
-  // Debounced search (300ms)
+  // KEY FIX: endpoint change → reset options + re-fetch immediately (don't wait for open)
+  const prevEndpointRef = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    // Skip very first render
+    if (prevEndpointRef.current === undefined) {
+      prevEndpointRef.current = endpoint;
+      return;
+    }
+    // Only act when endpoint actually changed
+    if (prevEndpointRef.current === endpoint) return;
+    prevEndpointRef.current = endpoint;
+
+    // Reset stale options immediately so dropdown doesn't flash old data
+    setOptions([]);
+    setPageNumber(1);
+    setHasMore(true);
+    setSearchTerm("");
+    loadingRef.current = false; // release any in-flight lock
+
+    // Always pre-fetch so data is ready when user opens dropdown
+    loadRef.current("", 1, true);
+  }, [endpoint]);
+
+  // ── Debounced search ───────────────────────────────────────────────────────
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const q = e.target.value;
     setSearchTerm(q);
@@ -185,20 +199,14 @@ export const CustomSelect = ({
     if (!paginated || !listRef.current || loadingRef.current || !hasMore) return;
 
     const el = listRef.current;
-    const scrollTop = el.scrollTop;
-    const scrollHeight = el.scrollHeight;
-    const clientHeight = el.clientHeight;
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
 
-    // Calculate how far from the bottom we are
-    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-
-    // Trigger load when within 100px of the bottom (approximately 2-3 items)
     if (distanceFromBottom < 100) {
       load(searchTerm, pageNumber + 1, false);
     }
   }, [paginated, hasMore, load, searchTerm, pageNumber]);
 
-  // ── Selection logic ────────────────────────────────────────────────────────
+  // ── Selection ──────────────────────────────────────────────────────────────
 
   const isSelected = (opt: SelectOption) => selectedArray.some((s) => s.value === opt.value);
 
@@ -241,7 +249,6 @@ export const CustomSelect = ({
 
   return (
     <div ref={containerRef} className={`relative w-full ${className}`}>
-      {/* Label */}
       {label && (
         <label htmlFor={uid} className="text-foreground mb-1.5 block text-sm font-medium">
           {label}
@@ -263,10 +270,8 @@ export const CustomSelect = ({
           error ? "border-destructive" : "",
         ].join(" ")}
       >
-        {/* Multi-select: show chips for few items, count for many */}
         {multiSelect && selectedArray.length > 0 ? (
           selectedArray.length <= 2 ? (
-            // Show chips for 1-2 items
             <>
               {selectedArray.map((s) => (
                 <span
@@ -283,19 +288,16 @@ export const CustomSelect = ({
               <span className="flex-1" />
             </>
           ) : (
-            // Show count for 3+ items
             <span className="flex-1">{selectedArray.length} items selected</span>
           )
         ) : null}
 
-        {/* Single / empty placeholder */}
         {triggerLabel && (
           <span className={selectedArray.length === 0 ? "text-muted-foreground flex-1" : "flex-1"}>
             {triggerLabel}
           </span>
         )}
 
-        {/* Clear all (single) */}
         {!multiSelect && selectedArray.length > 0 && (
           <X
             className="text-muted-foreground hover:text-destructive h-4 w-4 shrink-0"
@@ -310,7 +312,6 @@ export const CustomSelect = ({
         />
       </button>
 
-      {/* Error */}
       {error && <p className="text-destructive mt-1 text-xs">{error}</p>}
 
       {/* Dropdown */}
@@ -321,7 +322,6 @@ export const CustomSelect = ({
             "animate-in fade-in-0 zoom-in-95 slide-in-from-top-1",
           ].join(" ")}
         >
-          {/* Search bar */}
           {searchable && (
             <div className="flex items-center gap-2 border-b px-3 py-2">
               <Search className="text-muted-foreground h-4 w-4 shrink-0" />
@@ -337,7 +337,6 @@ export const CustomSelect = ({
             </div>
           )}
 
-          {/* Options list */}
           <div
             ref={listRef}
             onScroll={handleScroll}
@@ -365,7 +364,6 @@ export const CustomSelect = ({
                         selected ? "bg-primary/8 text-primary font-medium" : "",
                       ].join(" ")}
                     >
-                      {/* Checkbox-style tick for multi, dot for single */}
                       <span
                         className={[
                           "flex shrink-0 items-center justify-center rounded transition-colors",
@@ -385,7 +383,6 @@ export const CustomSelect = ({
                   );
                 })}
 
-                {/* Loading more indicator */}
                 {loadingMore && (
                   <div className="text-muted-foreground flex items-center justify-center gap-2 py-3 text-xs">
                     <Loader2 className="h-3 w-3 animate-spin" />
@@ -393,7 +390,6 @@ export const CustomSelect = ({
                   </div>
                 )}
 
-                {/* End of results */}
                 {!hasMore && options.length > 0 && (
                   <div className="text-muted-foreground/60 py-2 text-center text-xs">
                     — End of results —
@@ -403,7 +399,6 @@ export const CustomSelect = ({
             )}
           </div>
 
-          {/* Footer: selected count for multi */}
           {multiSelect && selectedArray.length > 0 && (
             <div className="text-muted-foreground flex items-center justify-between border-t px-3 py-2 text-xs">
               <span>{selectedArray.length} selected</span>
