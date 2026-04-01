@@ -56,6 +56,24 @@ const reviewApi = baseApi.injectEndpoints({
       },
     }),
 
+    //-----------------Get Reviews Metadata-----------------
+    getReviewsMetadata: builder.query({
+      query: () => ({
+        url: "/review/metadata",
+        method: "GET",
+      }),
+      providesTags: ["review"],
+      transformResponse: (
+        response: TResponseRedux<{
+          totalReviews: number;
+          totalProductWithReview: number;
+          totalApproved: number;
+          averageRating: number;
+        }>
+      ) => response.data,
+    }),
+
+
     //-----------------Get My Reviews-----------------
     getMyReviews: builder.query({
       query: (args) => {
@@ -131,4 +149,6 @@ export const {
   useUpdateReviewMutation,
   useDeleteReviewMutation,
   useApproveReviewMutation,
+  useGetReviewsMetadataQuery
+  
 } = reviewApi;
