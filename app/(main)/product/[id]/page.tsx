@@ -169,28 +169,6 @@ export default function ProductDetails() {
     });
   });
 
-  const handleAttributeSelect = (attrName: string, value: string) => {
-    const updated = {
-      ...selectedAttributes,
-      [attrName]: value,
-    };
-
-    setSelectedAttributes(updated);
-
-    const idx = variants.findIndex((variant: any) =>
-      variant.attributes?.every((attr: any) => {
-        const name = attr.attributeValue?.attribute?.name;
-        const val = attr.attributeValue?.value;
-
-        if (!updated[name]) return true;
-        return updated[name] === val;
-      })
-    );
-
-    if (idx !== -1) {
-      setSelectedVariantIndex(idx);
-    }
-  };
 
   const selectedSize =
     selectedVariant?.attributes?.find(

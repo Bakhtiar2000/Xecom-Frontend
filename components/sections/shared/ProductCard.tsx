@@ -60,14 +60,6 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
     product.images?.[0]?.imageUrl ||
     "/placeholder-product.png";
 
-  const firstVariant = product?.variants?.length ? product.variants[0] : null;
-  const basePrice = firstVariant?.price;
-  const comparePrice = firstVariant?.comparePrice;
-
-  const discount =
-    basePrice && comparePrice && comparePrice > basePrice
-      ? Math.round(((comparePrice - basePrice) / comparePrice) * 100)
-      : null;
 
   const badge = product.featured
     ? "FEATURED"
@@ -149,9 +141,9 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
             </div>
 
             {/* Info */}
-            <div className={`p-4 ${viewMode === "list" ? "flex-1" : ""}`}>
+            <div className={`p-2 ${viewMode === "list" ? "flex-1" : ""}`}>
               {/* Rating row */}
-              <div className="mb-2 flex items-center justify-between">
+              <div className="my-2 flex items-center justify-between">
                 <span></span>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (

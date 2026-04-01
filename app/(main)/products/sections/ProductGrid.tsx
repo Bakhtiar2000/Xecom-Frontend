@@ -26,7 +26,7 @@ export default function ProductGrid({ products, isLoading, viewMode, getBadgeCol
     return (
       <div
         className={
-          viewMode === "grid" ? "grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3" : "space-y-6"
+          viewMode === "grid" ? "grid grid-cols-1 gap-5 sm:grid-cols-3 lg:grid-cols-5" : "space-y-6"
         }
       >
         {[...Array(6)].map((_, index) => (
@@ -42,7 +42,7 @@ export default function ProductGrid({ products, isLoading, viewMode, getBadgeCol
 
             <div
               className={`relative ${
-                viewMode === "list" ? "md:w-64" : "h-64"
+                viewMode === "list" ? "md:w-64" : "h-34"
               } img-primary-bg overflow-hidden`}
             >
               <Skeleton className="absolute inset-0 h-full w-full" />
@@ -84,7 +84,7 @@ export default function ProductGrid({ products, isLoading, viewMode, getBadgeCol
   return (
     <div
       className={
-        viewMode === "grid" ? "grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4" : "space-y-6"
+        viewMode === "grid" ? "grid grid-cols-1 gap-2 sm:grid-cols-3 lg:grid-cols-5" : "space-y-6"
       }
     >
       {products.map((product: any) => (

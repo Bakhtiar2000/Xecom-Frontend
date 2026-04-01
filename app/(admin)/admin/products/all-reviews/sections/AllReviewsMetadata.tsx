@@ -1,35 +1,40 @@
 import { StatsCard } from "@/components/custom/StatsCard";
 import { useGetReviewsMetadataQuery } from "@/redux/features/product/review.api";
-import { BadgeCheck, Eye, MarsStrokeIcon, MessageSquare, Pen, ShoppingBag, Star } from "lucide-react";
+import {
+  BadgeCheck,
+  MessageSquare,
+  ShoppingBag,
+  Star,
+} from "lucide-react";
 
 const AllReviewsMetadata = () => {
   const { data: metadataData, isLoading, isError } = useGetReviewsMetadataQuery(undefined);
 
   const metadata = metadataData;
-  console.log('rv meta data', metadata);
+  console.log("rv meta data", metadata);
   const statsCards = [
     {
       title: "Total Reviews",
       value: metadata?.totalReviews,
-      icon: MessageSquare,    
+      icon: MessageSquare,
       colorVariant: "blue" as const,
     },
     {
       title: "Total Product With Reviews",
       value: metadata?.totalProductWithReview,
-      icon: ShoppingBag,      
+      icon: ShoppingBag,
       colorVariant: "purple" as const,
     },
     {
       title: "Total Approved Reviews",
       value: metadata?.totalApproved,
-      icon: BadgeCheck,      
+      icon: BadgeCheck,
       colorVariant: "orange" as const,
     },
     {
       title: "Average Rating",
       value: metadata?.averageRating,
-      icon: Star,               
+      icon: Star,
       colorVariant: "yellow" as const,
     },
   ];

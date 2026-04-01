@@ -73,7 +73,6 @@ const reviewApi = baseApi.injectEndpoints({
       ) => response.data,
     }),
 
-
     //-----------------Get My Reviews-----------------
     getMyReviews: builder.query({
       query: (args) => {
@@ -149,6 +148,5 @@ export const {
   useUpdateReviewMutation,
   useDeleteReviewMutation,
   useApproveReviewMutation,
-  useGetReviewsMetadataQuery
-  
+  useGetReviewsMetadataQuery,
 } = reviewApi;

@@ -16,7 +16,7 @@ const AllReviews = () => {
         subTitle="The All Reviews page provides a complete overview of reviews available in the system."
       />
       <div className="mt-4 lg:mt-6">
-        <AllReviewsMetadata/>
+        <AllReviewsMetadata />
       </div>
       <div className="mt-4 lg:mt-6">
         <AllReviewTable />

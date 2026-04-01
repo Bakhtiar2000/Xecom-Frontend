@@ -179,8 +179,8 @@ export default function ProductContent() {
   };
 
   return (
-    <div className="container lg:-mt-8">
-      <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+    <div className="container lg:-mt-12">
+      <div className="flex flex-col gap-2 lg:flex-row lg:items-start">
         <div className="[-ms-overflow-style:none] [scrollbar-width:none] lg:sticky lg:top-20 lg:h-[calc(100vh-80px)] lg:overflow-y-auto [&::-webkit-scrollbar]:hidden">
           <FilterSidebar
             filters={filters}
