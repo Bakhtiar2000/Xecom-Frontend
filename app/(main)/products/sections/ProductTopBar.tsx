@@ -42,7 +42,7 @@ export default function ProductTopBar({
   setFilters,
 }: Props) {
   return (
-    <div className="bg-card-primary mb-2 rounded-lg p-4">
+    <div className="bg-card-primary mb-2 rounded-lg py-2 px-4">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         {/* Left Info */}
         <div>

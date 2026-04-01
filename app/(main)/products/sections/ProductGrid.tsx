@@ -84,7 +84,7 @@ export default function ProductGrid({ products, isLoading, viewMode, getBadgeCol
   return (
     <div
       className={
-        viewMode === "grid" ? "grid grid-cols-1 gap-2 sm:grid-cols-3 lg:grid-cols-5" : "space-y-6"
+        viewMode === "grid" ? "grid grid-cols-1 gap-2 sm:grid-cols-3 lg:grid-cols-5" : "space-y-2"
       }
     >
       {products.map((product: any) => (

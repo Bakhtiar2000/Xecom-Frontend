@@ -90,10 +90,7 @@ export default function ProductContent() {
   }, [filters.priceRange]);
 
   const buildQueryParams = () => {
-    const params: { name: string; value: string }[] = [
-      ...getPaginationParams(),
-    ];
-
+    const params: { name: string; value: string }[] = [...getPaginationParams()];
 
     if (filters.categories.length > 0) {
       filters.categories.forEach((id) => {
@@ -151,13 +148,18 @@ export default function ProductContent() {
       }
     });
     resetPage();
-
   };
 
   const clearAllFilters = () => {
     setFilters({
-      brands: [], priceRange: [0, 10000], sizes: [],
-      colors: [], categories: [], targets: [], sortBy: "none", attributes: [],
+      brands: [],
+      priceRange: [0, 10000],
+      sizes: [],
+      colors: [],
+      categories: [],
+      targets: [],
+      sortBy: "none",
+      attributes: [],
     });
     resetPage();
   };
@@ -219,7 +221,7 @@ export default function ProductContent() {
               onPageChange={handlePageChange}
               onPageSizeChange={handlePageSizeChange}
               disabled={filteredProducts.length === 0}
-              className="bg-card-primary border rounded-lg px-4 py-2 mt-2"
+              className="bg-card-primary mt-2 rounded-lg border px-4 py-2"
             />
           )}
         </div>

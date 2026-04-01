@@ -82,8 +82,7 @@ export function TablePagination({
 
   return (
     <div
-      className={`bg-accent text-accent-foreground flex flex-col items-center 
-  justify-between gap-4 px-2 py-1 sm:flex-row ${className || ""}`}
+      className={`bg-accent text-accent-foreground flex flex-col items-center justify-between gap-4 px-2 py-1 sm:flex-row ${className || ""}`}
     >
       <div className="flex items-center gap-2">
         <p className="text-muted-foreground text-sm">
