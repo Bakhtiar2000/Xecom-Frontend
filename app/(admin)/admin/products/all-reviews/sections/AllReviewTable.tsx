@@ -26,6 +26,7 @@ import { TQueryParam } from "@/types";
 import { SortableTableHead } from "@/components/custom/SortableTableHead";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
 
 const getId = (item: any): string => item?.id ?? "";
 
@@ -42,6 +43,20 @@ const AllReviewTable = () => {
     resetPage();
   };
 
+  const handleToggleStatus = async (review: any) => {
+    try {
+      await approveReview({
+        id: getId(review),
+        data: {
+          isApproved: !review.isApproved,
+        },
+      }).unwrap();
+
+      toast.success("Review status updated");
+    } catch (err) {
+      toast.error("Failed to update status");
+    }
+  };
   const buildQueryParams = (): TQueryParam[] => [...getPaginationParams(), ...getSortParams()];
 
   const { data, isLoading } = useGetAllReviewsQuery(buildQueryParams());
@@ -163,28 +178,26 @@ const AllReviewTable = () => {
                 <TableCell className="text-xs">{review.createdAt?.slice(0, 10)}</TableCell>
 
                 {/* Status */}
-                <TableCell>
-                  {review.isApproved ? (
-                    <Badge className="bg-green-100 text-green-600">Approved</Badge>
-                  ) : (
-                    <Badge variant="outline">Pending</Badge>
-                  )}
-                </TableCell>
+                <TableCell className="text-center">
+                  <div className="flex items-center  justify-center gap-2">
+                    <Switch
+                      className="cursor-pointer"
+                      checked={review.isApproved}
+                      disabled={approving}
+                      onCheckedChange={() => handleToggleStatus(review)}
+                    />
 
+                    <span
+                      className={`text-xs font-medium ${review.isApproved ? "text-emerald-600" : "text-muted-foreground"
+                        }`}
+                    >
+                      {review.isApproved ? "Approved" : "Pending"}
+                    </span>
+                  </div>
+                </TableCell>
                 {/* Actions */}
                 <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    {!review.isApproved && (
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => handleApprove(getId(review))}
-                        disabled={approving}
-                      >
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                      </Button>
-                    )}
-
+                  <div className=" text-center">
                     <Button
                       size="icon"
                       variant="ghost"

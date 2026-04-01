@@ -326,7 +326,7 @@ export default function MyReviewsPage() {
                             className="object-cover"
                           />
                         ) : (
-                          <div  className="text-muted-foreground flex h-full w-full items-center justify-center text-sm font-bold">
+                          <div className="text-muted-foreground flex h-full w-full items-center justify-center text-sm font-bold">
                             {(product?.name ?? "P")[0].toUpperCase()}
                           </div>
                         )}
