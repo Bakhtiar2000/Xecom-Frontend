@@ -60,7 +60,6 @@ export default function ProductCard({ product, viewMode, getBadgeColor }: Props)
     product.images?.[0]?.imageUrl ||
     "/placeholder-product.png";
 
-
   const badge = product.featured
     ? "FEATURED"
     : product.tags?.includes("new")

@@ -169,7 +169,6 @@ export default function ProductDetails() {
     });
   });
 
-
   const selectedSize =
     selectedVariant?.attributes?.find(
       (a: any) => a.attributeValue?.attribute?.name?.toLowerCase() === "size"

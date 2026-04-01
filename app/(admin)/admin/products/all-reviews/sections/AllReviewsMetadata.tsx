@@ -1,11 +1,6 @@
 import { StatsCard } from "@/components/custom/StatsCard";
 import { useGetReviewsMetadataQuery } from "@/redux/features/product/review.api";
-import {
-  BadgeCheck,
-  MessageSquare,
-  ShoppingBag,
-  Star,
-} from "lucide-react";
+import { BadgeCheck, MessageSquare, ShoppingBag, Star } from "lucide-react";
 
 const AllReviewsMetadata = () => {
   const { data: metadataData, isLoading, isError } = useGetReviewsMetadataQuery(undefined);

@@ -42,16 +42,15 @@ export default function ProductTopBar({
   setFilters,
 }: Props) {
   return (
-    <div className="bg-card-primary p-4 rounded-lg mb-2">
+    <div className="bg-card-primary mb-2 rounded-lg p-4">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         {/* Left Info */}
         <div>
           {/* Price Range */}
           <div className="">
-
-            <div className="space-y-4 flex gap-5 justify-center items-center">
+            <div className="flex items-center justify-center gap-5 space-y-4">
               {/* Dual Range Track */}
-              <div className="relative h-2 min-w-60 ">
+              <div className="relative h-2 min-w-60">
                 <h3 className="mt-4 text-center font-semibold">Price Range</h3>
 
                 {/* Gray background track */}
@@ -78,7 +77,6 @@ export default function ProductTopBar({
                   }}
                   className="[&::-webkit-slider-thumb]:ring-button-primary pointer-events-none absolute top-0 left-0 h-2 w-full cursor-pointer appearance-none bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:ring-2"
                 />
-
 
                 {/* Max thumb */}
                 <input
@@ -144,13 +142,13 @@ export default function ProductTopBar({
           <div className="bg-background hidden items-center rounded-lg p-1 md:flex">
             <button
               onClick={() => setViewMode("grid")}
-              className={`rounded cursor-pointer p-2 ${viewMode === "grid" ? "bg-card-primary shadow" : ""}`}
+              className={`cursor-pointer rounded p-2 ${viewMode === "grid" ? "bg-card-primary shadow" : ""}`}
             >
               <Grid className="h-5 w-5" />
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`rounded cursor-pointer p-2 ${viewMode === "list" ? "bg-card-primary shadow" : ""}`}
+              className={`cursor-pointer rounded p-2 ${viewMode === "list" ? "bg-card-primary shadow" : ""}`}
             >
               <List className="h-5 w-5" />
             </button>
