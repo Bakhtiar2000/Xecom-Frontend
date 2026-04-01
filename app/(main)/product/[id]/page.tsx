@@ -259,11 +259,10 @@ export default function ProductDetails() {
                 <button
                   key={image.id}
                   onClick={() => setSelectedImage(index)}
-                  className={`bg-card-primary relative h-20 w-20 cursor-pointer overflow-hidden rounded-md border-2 transition-all ${
-                    selectedImage === index
+                  className={`bg-card-primary relative h-20 w-20 cursor-pointer overflow-hidden rounded-md border-2 transition-all ${selectedImage === index
                       ? "border-black shadow-md"
                       : "border-border hover:border-gray-400"
-                  }`}
+                    }`}
                 >
                   <Image
                     src={image.imageUrl}
@@ -374,11 +373,10 @@ export default function ProductDetails() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${
-                    activeTab === tab
+                  className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab
                       ? "border-b-2 border-black dark:border-white"
                       : "text-muted-foreground hover:text-foreground"
-                  }`}
+                    }`}
                 >
                   {tab === "specs" ? "Specifications" : tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
@@ -528,17 +526,15 @@ export default function ProductDetails() {
                 <button
                   onClick={handleWishlistToggle}
                   disabled={isWishlisting || isUnwishlisting}
-                  className={`border-border flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:scale-110 disabled:cursor-not-allowed disabled:opacity-60 ${
-                    isWishlisted ? "border-danger/20 bg-danger/50" : "hover:bg-muted"
-                  }`}
+                  className={`border-border flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:scale-110 disabled:cursor-not-allowed disabled:opacity-60 ${isWishlisted ? "border-danger/20 bg-danger/50" : "hover:bg-muted"
+                    }`}
                 >
                   {isWishlisting || isUnwishlisting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Heart
-                      className={`h-4 w-4 transition-colors ${
-                        isWishlisted ? "fill-danger text-danger" : ""
-                      }`}
+                      className={`h-4 w-4 transition-colors ${isWishlisted ? "fill-danger text-danger" : ""
+                        }`}
                     />
                   )}
                 </button>
@@ -563,11 +559,10 @@ export default function ProductDetails() {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-4 w-4 ${
-                        hasAverageRating && i < Math.floor(averageRating)
+                      className={`h-4 w-4 ${hasAverageRating && i < Math.floor(averageRating)
                           ? "fill-rating text-rating"
                           : "fill-muted text-muted-foreground"
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
@@ -694,73 +689,99 @@ export default function ProductDetails() {
               </Tooltip>
             </TooltipProvider>
           </div>
+    
           {/* all attributes */}
-          {Object.entries(attributeGroups).map(([attrName, values]) => (
-            <div key={attrName} className="mb-6">
-              <h3 className="mb-3 font-semibold">
-                {attrName}:{" "}
-                <span className="text-muted-foreground font-normal">
-                  {selectedAttributes[attrName]}
-                </span>
-              </h3>
+          {Object.entries(attributeGroups).map(([attrName, values]) => {
+            const isColor = attrName.toLowerCase() === "color";
+            const isSize = attrName.toLowerCase() === "size";
 
-              <div className="flex flex-wrap gap-3">
-                {allSizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => handleSizeSelect(size)}
-                    className={`flex h-10 w-14 cursor-pointer items-center justify-center rounded-lg border-2 font-medium transition-all lg:h-14 ${
-                      selectedSize === size
-                        ? "border-black bg-black text-white"
-                        : "border-border hover:border-border/80 bg-white text-black"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-          {/* Color Selection — clicking updates variant (SKU / price / stock) */}
-          {allColors.length > 0 && (
-            <div className="mb-6">
-              <h3 className="mb-3 font-semibold">
-                Color: <span className="text-muted-foreground font-normal">{selectedColor}</span>
-              </h3>
-              <div className="flex flex-row flex-wrap gap-3">
-                {allColors.map((color) => (
-                  <button
-                    key={color.value}
-                    title={color.value}
-                    onClick={() => handleColorSelect(color.value)}
-                    className={`relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all hover:scale-110 ${
-                      selectedColor === color.value
-                        ? "scale-110 border-black shadow-md"
-                        : "border-border"
-                    }`}
-                    style={
-                      color.hex ? { backgroundColor: color.hex } : { backgroundColor: "#e5e7eb" }
-                    }
-                  >
-                    {selectedColor === color.value && (
-                      <span
-                        className={`absolute inset-0 flex items-center justify-center rounded-full text-xs font-bold ${
-                          color.hex === "#ffffff" || color.hex === "#fff"
-                            ? "text-black"
-                            : "text-white"
-                        }`}
+            // Get currently selected value for this attribute from selected variant
+            const selectedValue = selectedVariant?.attributes?.find(
+              (a: any) => a.attributeValue?.attribute?.name?.toLowerCase() === attrName.toLowerCase()
+            )?.attributeValue?.value ?? "";
+
+            const handleSelect = (value: string) => {
+              // Find variant that matches ALL currently selected attributes + this new one
+              const idx = variants.findIndex((v: any) =>
+                v.attributes?.some(
+                  (a: any) =>
+                    a.attributeValue?.attribute?.name?.toLowerCase() === attrName.toLowerCase() &&
+                    a.attributeValue?.value === value
+                )
+              );
+              if (idx !== -1) setSelectedVariantIndex(idx);
+            };
+
+            return (
+              <div key={attrName} className="mb-6">
+                <h3 className="mb-3 font-semibold">
+                  {attrName}:{" "}
+                  <span className="text-muted-foreground font-normal">{selectedValue}</span>
+                </h3>
+
+                {/* Color swatches */}
+                {isColor && (
+                  <div className="flex flex-wrap gap-3">
+                    {values.map((v) => (
+                      <button
+                        key={v.value}
+                        title={v.value}
+                        onClick={() => handleSelect(v.value)}
+                        className={`relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all hover:scale-110 ${selectedValue === v.value
+                            ? "scale-110 border-black shadow-md"
+                            : "border-border"
+                          }`}
+                        style={{ backgroundColor: v.hex ?? "#e5e7eb" }}
                       >
-                        ✓
-                      </span>
-                    )}
-                    {!color.hex && (
-                      <span className="text-xs font-medium">{color.value.charAt(0)}</span>
-                    )}
-                  </button>
-                ))}
+                        {selectedValue === v.value && (
+                          <span className="text-xs font-bold text-white">✓</span>
+                        )}
+                        {!v.hex && (
+                          <span className="text-xs font-medium">{v.value.charAt(0)}</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Size buttons */}
+                {isSize && (
+                  <div className="flex flex-wrap gap-3">
+                    {values.map((v) => (
+                      <button
+                        key={v.value}
+                        onClick={() => handleSelect(v.value)}
+                        className={`flex h-10 w-14 cursor-pointer items-center justify-center rounded-lg border-2 font-medium transition-all lg:h-14 ${selectedValue === v.value
+                            ? "border-black bg-black text-white"
+                            : "border-border bg-white text-black hover:border-gray-400"
+                          }`}
+                      >
+                        {v.value}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Other attributes (material, etc.) */}
+                {!isColor && !isSize && (
+                  <div className="flex flex-wrap gap-2">
+                    {values.map((v) => (
+                      <button
+                        key={v.value}
+                        onClick={() => handleSelect(v.value)}
+                        className={`rounded-lg border-2 px-4 py-2 text-sm font-medium transition-all ${selectedValue === v.value
+                            ? "border-black bg-black text-white"
+                            : "border-border bg-white text-black hover:border-gray-400 dark:bg-transparent dark:text-white"
+                          }`}
+                      >
+                        {v.value}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            );
+          })}
 
           {/* Actions */}
           <div className="mb-6">

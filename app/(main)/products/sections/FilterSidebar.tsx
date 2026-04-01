@@ -64,7 +64,6 @@ export default function FilterSidebar({
 }: Props) {
   return (
     <div className={`lg:w-64 ${showFilters ? "block" : "hidden lg:block"}`}>
-
       {/* Scoped scrollbar style */}
       <style>{`
         .filter-sidebar-scroll::-webkit-scrollbar {
@@ -82,7 +81,8 @@ export default function FilterSidebar({
         }
       `}</style>
 
-      <div className="filter-sidebar-scroll bg-card-primary sticky top-24 rounded-lg p-6 shadow-sm max-h-[calc(100vh-6rem)] overflow-y-auto"
+      <div
+        className="filter-sidebar-scroll bg-card-primary sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-lg p-6 shadow-sm"
         style={{ scrollbarWidth: "thin", scrollbarColor: "#d1d5db transparent" }}
       >
         {/* Header */}
@@ -126,8 +126,9 @@ export default function FilterSidebar({
                   <button
                     key={v.id}
                     onClick={() => toggleFilter("colors", v.id)}
-                    className={`relative h-8 w-8 rounded-full border-2 ${filters.colors.includes(v.id) ? "border-button-secondary" : "border-muted"
-                      }`}
+                    className={`relative h-8 w-8 rounded-full border-2 ${
+                      filters.colors.includes(v.id) ? "border-button-secondary" : "border-muted"
+                    }`}
                   >
                     <div
                       className="h-full w-full rounded-full"
@@ -147,10 +148,11 @@ export default function FilterSidebar({
                   <button
                     key={v.id}
                     onClick={() => toggleFilter("sizes", v.id)}
-                    className={`rounded py-2 text-sm ${filters.sizes.includes(v.id)
-                      ? "bg-button-primary text-white"
-                      : "bg-muted text-black dark:text-white"
-                      }`}
+                    className={`rounded py-2 text-sm ${
+                      filters.sizes.includes(v.id)
+                        ? "bg-button-primary text-white"
+                        : "bg-muted text-black dark:text-white"
+                    }`}
                   >
                     {v.label}
                   </button>

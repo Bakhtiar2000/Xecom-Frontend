@@ -176,7 +176,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         <div className="border-b py-10">
           <CardHeader className="flex flex-col gap-4 md:flex-row md:justify-between">
             <div>
-              <h2 className="mb-5 text-2xl font-bold">Guest Reviews</h2>
+              <h2 className="mb-5 text-2xl font-bold">Reviews</h2>
               <div className="flex justify-start gap-5">
                 <div className="mt-2 gap-3 space-y-2">
                   <span className="text-3xl font-bold">{averageRating}</span>

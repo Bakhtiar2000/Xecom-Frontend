@@ -24,6 +24,8 @@ interface TablePaginationProps {
   onPageSizeChange: (pageSize: number) => void;
   pageSizeOptions?: number[];
   disabled?: boolean;
+
+  className?: string;
 }
 
 export function TablePagination({
@@ -32,6 +34,7 @@ export function TablePagination({
   onPageSizeChange,
   pageSizeOptions = [1, 2, 5, 10, 20, 30, 50, 100],
   disabled = false,
+  className,
 }: TablePaginationProps) {
   const { pageNumber, pageSize, totalPages, totalCount } = meta;
 
@@ -78,7 +81,10 @@ export function TablePagination({
   const endItem = Math.min(pageNumber * pageSize, totalCount);
 
   return (
-    <div className="bg-accent text-accent-foreground flex flex-col items-center justify-between gap-4 px-2 py-1 sm:flex-row">
+    <div
+      className={`bg-accent text-accent-foreground flex flex-col items-center 
+  justify-between gap-4 px-2 py-1 sm:flex-row ${className || ""}`}
+    >
       <div className="flex items-center gap-2">
         <p className="text-muted-foreground text-sm">
           Showing {startItem} to {endItem} of {totalCount} results

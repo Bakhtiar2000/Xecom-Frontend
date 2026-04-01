@@ -10,6 +10,8 @@ import { useGetAllCategoriesQuery } from "@/redux/features/product/category.api"
 import FilterSidebar from "./FilterSidebar";
 import ProductTopBar from "./ProductTopBar";
 import ProductGrid from "./ProductGrid";
+import { useTablePagination } from "@/hooks/useTablePagination";
+import { TablePagination } from "@/components/custom/TablePagination";
 
 export default function ProductContent() {
   const searchParams = useSearchParams();
@@ -77,6 +79,8 @@ export default function ProductContent() {
 
   const [debouncedPriceRange, setDebouncedPriceRange] = useState(filters.priceRange);
 
+  const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
+    useTablePagination({ initialPageNumber: 1, initialPageSize: 12 });
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedPriceRange(filters.priceRange);
@@ -86,7 +90,10 @@ export default function ProductContent() {
   }, [filters.priceRange]);
 
   const buildQueryParams = () => {
-    const params: { name: string; value: string }[] = [];
+    const params: { name: string; value: string }[] = [
+      ...getPaginationParams(),
+    ];
+
 
     if (filters.categories.length > 0) {
       filters.categories.forEach((id) => {
@@ -138,29 +145,21 @@ export default function ProductContent() {
     setFilters((prev) => {
       const currentValues = prev[type] as string[];
       if (currentValues.includes(value)) {
-        return {
-          ...prev,
-          [type]: currentValues.filter((v) => v !== value),
-        };
+        return { ...prev, [type]: currentValues.filter((v) => v !== value) };
       } else {
-        return {
-          ...prev,
-          [type]: [...currentValues, value],
-        };
+        return { ...prev, [type]: [...currentValues, value] };
       }
     });
+    resetPage();
+
   };
+
   const clearAllFilters = () => {
     setFilters({
-      brands: [],
-      priceRange: [0, 10000],
-      sizes: [],
-      colors: [],
-      categories: [],
-      targets: [],
-      sortBy: "none",
-      attributes: [],
+      brands: [], priceRange: [0, 10000], sizes: [],
+      colors: [], categories: [], targets: [], sortBy: "none", attributes: [],
     });
+    resetPage();
   };
 
   const getBadgeColor = (badge?: string) => {
@@ -214,6 +213,15 @@ export default function ProductContent() {
             viewMode={viewMode}
             getBadgeColor={getBadgeColor}
           />
+          {data?.meta && (
+            <TablePagination
+              meta={data.meta}
+              onPageChange={handlePageChange}
+              onPageSizeChange={handlePageSizeChange}
+              disabled={filteredProducts.length === 0}
+              className="bg-card-primary border rounded-lg px-4 py-2 mt-2"
+            />
+          )}
         </div>
       </div>
     </div>
