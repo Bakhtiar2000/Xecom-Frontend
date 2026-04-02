@@ -70,6 +70,7 @@ export default function AddProductPage() {
   const [imageFiles, setImageFiles] = useState<{ file: File; url: string }[]>([]);
   const [showSummary, setShowSummary] = useState(false);
   const [addProduct, { isLoading: isAdding }] = useAddProductMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fieldRefs = useRef<Record<string, HTMLElement | null>>({});
 
@@ -156,6 +157,7 @@ export default function AddProductPage() {
 
   // ── Final submit (API call) ─
   const onSubmit = async (data: ProductFormData) => {
+    setIsSubmitting(true);
     try {
       const formData = new FormData();
       if (data.images && data.images.length > 0) {
@@ -210,6 +212,8 @@ export default function AddProductPage() {
       const errorMessage = error?.data?.message || error?.message || "Failed to create product";
 
       toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   // ── Tab navigation helpers ──
@@ -235,6 +239,7 @@ export default function AddProductPage() {
         imageFiles={imageFiles}
         onEdit={handleEditFromSummary}
         onConfirm={() => form.handleSubmit(onSubmit)()}
+        isSubmitting={isSubmitting}
       />
     );
   }

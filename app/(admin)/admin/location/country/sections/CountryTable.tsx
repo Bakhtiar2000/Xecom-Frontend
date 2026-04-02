@@ -216,43 +216,33 @@ export default function CountryTable({ onEdit }) {
                   {/* <TableCell className="text-center">{brand.sortOrder}</TableCell> */}
                   <TableCell>
                     <div className="flex justify-end gap-2">
-                       <Tooltip>
+                      <Tooltip>
                         <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onEdit(country)}
-                        className="hover:bg-primary/10 hover:text-primary h-8 w-8"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => onEdit(country)}
+                            className="hover:bg-primary/10 hover:text-primary h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          Edit
-                        </TooltipContent>
-
+                        <TooltipContent>Edit</TooltipContent>
                       </Tooltip>
-                     
 
-                       <Tooltip>
+                      <Tooltip>
                         <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteClick(country)}
-                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteClick(country)}
+                            className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          Delete
-                        </TooltipContent>
-
+                        <TooltipContent>Delete</TooltipContent>
                       </Tooltip>
-                     
                     </div>
                   </TableCell>
                 </TableRow>

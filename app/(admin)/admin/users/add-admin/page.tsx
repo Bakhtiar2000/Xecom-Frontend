@@ -7,10 +7,8 @@ export default function AddAdminPage() {
       <Title mainTitle="Add Admin" subTitle="Create a new admin user for your business" />
 
       <div>
-        <AddAdminForm/>
+        <AddAdminForm />
       </div>
-
     </div>
-   
   );
 }

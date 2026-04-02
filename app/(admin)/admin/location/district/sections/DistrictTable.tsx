@@ -259,43 +259,33 @@ export default function DistrictTable({ onEdit }: DistrictTableProps) {
                     <TableCell>{district._count?.thanas ?? 0}</TableCell>
                     <TableCell>
                       <div className="flex justify-end gap-2">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => onEdit(district)}
+                              className="hover:bg-primary/10 hover:text-primary h-8 w-8"
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Edit</TooltipContent>
+                        </Tooltip>
 
-                       <Tooltip>
-                        <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => onEdit(district)}
-                          className="hover:bg-primary/10 hover:text-primary h-8 w-8"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          Edit
-                        </TooltipContent>
-
-                      </Tooltip>  
-
- 
-                       <Tooltip>
-                        <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteClick(district)}
-                          className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          Delete
-                        </TooltipContent>
-
-                      </Tooltip>                                           
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleDeleteClick(district)}
+                              className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Delete</TooltipContent>
+                        </Tooltip>
                       </div>
                     </TableCell>
                   </TableRow>

@@ -30,8 +30,6 @@ const userApi = baseApi.injectEndpoints({
       },
     }),
 
-
-
     //-----------------Get Me-----------------
     getMe: builder.query({
       query: () => {
@@ -74,7 +72,7 @@ const userApi = baseApi.injectEndpoints({
     //   invalidatesTags: ["user"],
     // }),
 
-      changeStatus: builder.mutation({
+    changeStatus: builder.mutation({
       query: (args: { id: string; data: TChangeStatusDto }) => ({
         url: `/user/change-status/${args.id}`,
         method: "PATCH",
@@ -82,7 +80,6 @@ const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
-
 
     //-----------------Add User Address-----------------
     addUserAddress: builder.mutation({

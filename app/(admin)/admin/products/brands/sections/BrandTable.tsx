@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useDeleteBrandMutation, useGetAllBrandsQuery,useUpdatebrandFieldMutation } from "@/redux/features/product/brand.api";
+import {
+  useDeleteBrandMutation,
+  useGetAllBrandsQuery,
+  useUpdatebrandFieldMutation,
+} from "@/redux/features/product/brand.api";
 import {
   Table,
   TableBody,
@@ -57,9 +61,8 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [brandToDelete, setBrandToDelete] = useState<TBrand | null>(null);
 
-
-    // update status
-    const [updatebrandField] = useUpdatebrandFieldMutation();
+  // update status
+  const [updatebrandField] = useUpdatebrandFieldMutation();
 
   const debouncedSearchTerm = useDebounce(searchTerm);
   const [deleteBrand, { isLoading: isDeleting }] = useDeleteBrandMutation();
@@ -106,19 +109,19 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
     setDeleteDialogOpen(true);
   };
 
-    // update handler status
-  
+  // update handler status
+
   const handleToggleStatus = async (brand: TBrand) => {
     try {
       const newStatus = !brand.isActive;
-  
+
       await updatebrandField({
         id: brand.id,
         data: {
-          isActive: newStatus, 
+          isActive: newStatus,
         },
       }).unwrap();
-  
+
       toast.success("Status updated");
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to update status");
@@ -242,19 +245,18 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-x-2">
-                    <Badge
-                      variant={brand.isActive ? "default" : "secondary"}
-                      className={brand.isActive ? "bg-success" : ""}
-                    >
-                      {brand.isActive ? "Active" : "Inactive"}
-                    </Badge>
+                      <Badge
+                        variant={brand.isActive ? "default" : "secondary"}
+                        className={brand.isActive ? "bg-success" : ""}
+                      >
+                        {brand.isActive ? "Active" : "Inactive"}
+                      </Badge>
 
-                             <Switch
-                               checked={brand.isActive} 
-                               onCheckedChange={() => handleToggleStatus(brand)}
-                             />
+                      <Switch
+                        checked={brand.isActive}
+                        onCheckedChange={() => handleToggleStatus(brand)}
+                      />
                     </div>
-
                   </TableCell>
                   <TableCell className="text-center">
                     <span className="font-medium">{brand._count?.products ?? 0}</span>
@@ -264,39 +266,30 @@ export default function BrandTable({ onEdit }: BrandTableProps) {
                     <div className="flex justify-end gap-2">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onEdit(brand)}
-                        className="hover:bg-primary/10 hover:text-primary h-8 w-8"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => onEdit(brand)}
+                            className="hover:bg-primary/10 hover:text-primary h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          Edit
-                        </TooltipContent>
-
+                        <TooltipContent>Edit</TooltipContent>
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-   
-
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteClick(brand)}
-                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>                 
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteClick(brand)}
+                            className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          Delete
-                        </TooltipContent>
-
+                        <TooltipContent>Delete</TooltipContent>
                       </Tooltip>
-
                     </div>
                   </TableCell>
                 </TableRow>

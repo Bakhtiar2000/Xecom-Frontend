@@ -81,15 +81,15 @@ const categoryApi = baseApi.injectEndpoints({
       invalidatesTags: ["category"],
     }),
 
-   //-----------------Patch Category-----------------
-updateCategoryField: builder.mutation({
-  query: (args: { id: string; data: Partial<TCategory> }) => ({
-    url: `/category/${args.id}`,
-    method: "PATCH",
-    body: args.data,
-  }),
-  invalidatesTags: ["category"],
-}), 
+    //-----------------Patch Category-----------------
+    updateCategoryField: builder.mutation({
+      query: (args: { id: string; data: Partial<TCategory> }) => ({
+        url: `/category/${args.id}`,
+        method: "PATCH",
+        body: args.data,
+      }),
+      invalidatesTags: ["category"],
+    }),
 
     //-----------------Delete Category-----------------
     deleteCategory: builder.mutation({

@@ -1,3 +1,4 @@
+import { TargetAudience } from "@/constants/enum";
 import { z } from "zod";
 
 export const categorySchema = z.object({
@@ -14,6 +15,7 @@ export const categorySchema = z.object({
   parentId: z.string().nullable().optional(),
   sortOrder: z.number().int().min(0).optional(),
   file: z.any().optional(),
+  targetAudience: z.array(z.string()).optional(),
 });
 
 export type TCategoryFormData = z.infer<typeof categorySchema>;

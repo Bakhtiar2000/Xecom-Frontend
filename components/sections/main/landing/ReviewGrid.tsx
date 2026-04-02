@@ -88,7 +88,7 @@ const ReviewsGrid: React.FC = () => {
           className="mt-4 text-center md:mt-12"
         >
           <Link
-            href={"/all-review"}
+            href={"/my-review"}
             className="group tranding-secondry-text relative cursor-pointer rounded-lg px-8 py-4 text-lg font-bold transition-all duration-300 hover:scale-105"
           >
             <span className="relative z-10 border-b-2 pb-2">{"< Read All Reviews >"}</span>

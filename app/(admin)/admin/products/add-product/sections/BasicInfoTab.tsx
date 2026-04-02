@@ -229,7 +229,7 @@ export default function BasicInfoTab({ form, fieldRefs, onNameChange }: BasicInf
             />
 
             <FormField
-              control={form.control} 
+              control={form.control}
               name="featured"
               render={({ field }) => (
                 <FormItem className="mt-4 flex flex-row items-center justify-between rounded-lg border p-4">

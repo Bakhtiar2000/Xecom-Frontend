@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -42,8 +41,7 @@ export default function AddStaffForm() {
 
   const [registerStaff, { isLoading }] = useRegisterStaffMutation();
 
-  const { register, handleSubmit, setValue, watch, reset } =
-    useForm<TRegisterStaffDto>();
+  const { register, handleSubmit, setValue, watch, reset } = useForm<TRegisterStaffDto>();
 
   const genderValue = watch("gender");
 
@@ -78,7 +76,7 @@ export default function AddStaffForm() {
         phoneNumber: data.phoneNumber,
         gender: data.gender,
         hireDate: data.hireDate ? new Date(data.hireDate).toISOString() : undefined,
-        notes: data.notes, 
+        notes: data.notes,
         thanaId: selectedThana?.value || undefined,
         street: street || undefined,
         postalCode: postalCode || undefined,
@@ -105,8 +103,8 @@ export default function AddStaffForm() {
 
   return (
     <div className="w-full p-6">
-      <div className="w-full border rounded-2xl shadow p-8 bg-white">
-        <h2 className="text-2xl font-semibold mb-8">Register Staff</h2>
+      <div className="w-full rounded-2xl border bg-white p-8 shadow">
+        <h2 className="mb-8 text-2xl font-semibold">Register Staff</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex justify-center">
@@ -120,20 +118,11 @@ export default function AddStaffForm() {
             </div>
             <div>
               <Label>Email *</Label>
-              <Input 
-                type="email" 
-                {...register("email")} 
-                placeholder="Staff email" 
-                required 
-              />
+              <Input type="email" {...register("email")} placeholder="Staff email" required />
             </div>
             <div>
               <Label>Phone Number *</Label>
-              <Input 
-                {...register("phoneNumber")} 
-                placeholder="Phone number" 
-                required 
-              />
+              <Input {...register("phoneNumber")} placeholder="Phone number" required />
             </div>
             <div>
               <Label>Hire Date *</Label>
@@ -153,7 +142,7 @@ export default function AddStaffForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2 top-7 text-gray-500"
+                className="absolute top-7 right-2 text-gray-500"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -186,8 +175,8 @@ export default function AddStaffForm() {
             </div>
           </div>
 
-          <div className="border rounded-xl p-5 space-y-4 bg-muted/30">
-            <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          <div className="bg-muted/30 space-y-4 rounded-xl border p-5">
+            <p className="text-muted-foreground text-sm font-semibold tracking-wide uppercase">
               Address Information
             </p>
 
@@ -200,7 +189,7 @@ export default function AddStaffForm() {
                   mapToOption={(item) => ({ value: String(item.id), label: item.name })}
                   value={selectedCountry ? [selectedCountry] : []}
                   onChange={(vals) => {
-                    const v = Array.isArray(vals) ? vals[0] ?? null : vals;
+                    const v = Array.isArray(vals) ? (vals[0] ?? null) : vals;
                     setSelectedCountry(v);
                     setSelectedDivision(null);
                     setSelectedDistrict(null);
@@ -216,15 +205,13 @@ export default function AddStaffForm() {
                 <Label>Division</Label>
                 <CustomSelect
                   endpoint={
-                    countryId
-                      ? `${API_URL}/division?countryId=${countryId}`
-                      : `${API_URL}/division`
+                    countryId ? `${API_URL}/division?countryId=${countryId}` : `${API_URL}/division`
                   }
                   fields={["id", "name"]}
                   mapToOption={(item) => ({ value: String(item.id), label: item.name })}
                   value={selectedDivision ? [selectedDivision] : []}
                   onChange={(vals) => {
-                    const v = Array.isArray(vals) ? vals[0] ?? null : vals;
+                    const v = Array.isArray(vals) ? (vals[0] ?? null) : vals;
                     setSelectedDivision(v);
                     setSelectedDistrict(null);
                     setSelectedThana(null);
@@ -247,7 +234,7 @@ export default function AddStaffForm() {
                   mapToOption={(item) => ({ value: String(item.id), label: item.name })}
                   value={selectedDistrict ? [selectedDistrict] : []}
                   onChange={(vals) => {
-                    const v = Array.isArray(vals) ? vals[0] ?? null : vals;
+                    const v = Array.isArray(vals) ? (vals[0] ?? null) : vals;
                     setSelectedDistrict(v);
                     setSelectedThana(null);
                   }}
@@ -261,15 +248,13 @@ export default function AddStaffForm() {
                 <Label>Thana</Label>
                 <CustomSelect
                   endpoint={
-                    districtId
-                      ? `${API_URL}/thana?districtId=${districtId}`
-                      : `${API_URL}/thana`
+                    districtId ? `${API_URL}/thana?districtId=${districtId}` : `${API_URL}/thana`
                   }
                   fields={["id", "name"]}
                   mapToOption={(item) => ({ value: String(item.id), label: item.name })}
                   value={selectedThana ? [selectedThana] : []}
                   onChange={(vals) => {
-                    const v = Array.isArray(vals) ? vals[0] ?? null : vals;
+                    const v = Array.isArray(vals) ? (vals[0] ?? null) : vals;
                     setSelectedThana(v);
                   }}
                   searchable
@@ -304,7 +289,7 @@ export default function AddStaffForm() {
             <Button type="submit" disabled={isLoading}>
               {isLoading ? (
                 <>
-                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Creating...
                 </>
               ) : (

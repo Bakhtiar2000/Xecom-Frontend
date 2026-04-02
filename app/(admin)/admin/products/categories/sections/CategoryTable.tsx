@@ -5,7 +5,7 @@ import Image from "next/image";
 import {
   useGetAllCategoriesQuery,
   useDeleteCategoryMutation,
-  useUpdateCategoryFieldMutation
+  useUpdateCategoryFieldMutation,
 } from "@/redux/features/product/category.api";
 import {
   Table,
@@ -114,22 +114,22 @@ export function CategoryTable({ onEdit }: CategoryTableProps) {
 
   // update handler status
 
-const handleToggleStatus = async (category: TCategory) => {
-  try {
-    const newStatus = !category.isActive;
+  const handleToggleStatus = async (category: TCategory) => {
+    try {
+      const newStatus = !category.isActive;
 
-    await updateCategoryField({
-      id: category.id,
-      data: {
-        isActive: newStatus, 
-      },
-    }).unwrap();
+      await updateCategoryField({
+        id: category.id,
+        data: {
+          isActive: newStatus,
+        },
+      }).unwrap();
 
-    toast.success("Status updated");
-  } catch (error: any) {
-    toast.error(error?.data?.message || "Failed to update status");
-  }
-};
+      toast.success("Status updated");
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to update status");
+    }
+  };
 
   const handleConfirmDelete = async () => {
     if (!categoryToDelete) return;
@@ -262,19 +262,17 @@ const handleToggleStatus = async (category: TCategory) => {
                     <TableCell>
                       <div className="flex gap-x-2">
                         <Badge
-                        variant={category.isActive ? "default" : "secondary"}
-                        className={category.isActive ? "bg-success" : ""}
-                      >
-                        {category.isActive ? "Active" : "Inactive"}
-                      </Badge>
+                          variant={category.isActive ? "default" : "secondary"}
+                          className={category.isActive ? "bg-success" : ""}
+                        >
+                          {category.isActive ? "Active" : "Inactive"}
+                        </Badge>
 
-                             <Switch
-                               checked={category.isActive} 
-                               onCheckedChange={() => handleToggleStatus(category)}
-                             />
-
+                        <Switch
+                          checked={category.isActive}
+                          onCheckedChange={() => handleToggleStatus(category)}
+                        />
                       </div>
-
                     </TableCell>
                     <TableCell className="text-center">
                       <span className="font-medium">{category._count?.products ?? 0}</span>
@@ -282,45 +280,33 @@ const handleToggleStatus = async (category: TCategory) => {
                     <TableCell className="text-center">{category.sortOrder}</TableCell>
                     <TableCell>
                       <div className="flex justify-end gap-2">
-
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => onEdit(category)}
-                          className="hover:bg-primary/10 hover:text-primary h-8 w-8"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-
-                
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          Edit
-                        </TooltipContent>
-
-                      </Tooltip>
-
-                      <Tooltip>
-                        <TooltipTrigger asChild>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
                             <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteClick(category)}
-                          className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
-                        > 
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => onEdit(category)}
+                              className="hover:bg-primary/10 hover:text-primary h-8 w-8"
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Edit</TooltipContent>
+                        </Tooltip>
 
-                
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          Delete
-                        </TooltipContent>
-
-                      </Tooltip>
-
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleDeleteClick(category)}
+                              className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Delete</TooltipContent>
+                        </Tooltip>
                       </div>
                     </TableCell>
                   </TableRow>
