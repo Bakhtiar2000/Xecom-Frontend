@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -15,6 +15,8 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 import { TUser } from "@/redux/features/auth/authSlice";
 import { UserRole } from "@/redux/features/auth/dto/auth.dto";
+
+import {signIn} from "next-auth/react"
 
 // Define form types
 interface LoginFormData {
@@ -100,6 +102,29 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
     console.log("google login");
   };
+
+
+const handleCredentialLogin = (response: any) => {
+  const token = response.credential;
+
+  if (token) {
+    const decodedUser = jwtDecode<TUser>(token);
+
+    dispatch(setUser({ user: decodedUser, token }));
+
+    toast.success("Google login successful");
+
+    if (
+      decodedUser.role === UserRole.SUPER_ADMIN ||
+      decodedUser.role === UserRole.ADMIN ||
+      decodedUser.role === UserRole.STAFF
+    ) {
+      router.push("/admin");
+    } else {
+      router.push("/");
+    }
+  }
+};
 
   return (
     <div className="container grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
@@ -194,9 +219,9 @@ const Login = () => {
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-center">
+              <div className="mt-4 flex justify-center flex-col space-y-3">
                 <button
-                  onClick={() => handleGoogleSignIn()}
+                 onClick={() => signIn("google")}
                   className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-white py-3 font-medium shadow-sm transition-all dark:bg-white/10"
                 >
                   <svg
@@ -222,8 +247,20 @@ const Login = () => {
                     />
                   </svg>
 
-                  <span>Sign up with Google</span>
+                  <span >Sign up with Google</span>
                 </button>
+                <button
+                onClick={() => signIn("facebook")}
+                className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-[#1877F2] py-3 font-medium text-white shadow-sm transition-all"
+                >
+                <svg className="h-6 w-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.273h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"
+                  fill="white"
+                 />
+               </svg>
+               <span>Sign in with Facebook</span>
+              </button>
               </div>
             </CardContent>
           </Card>
