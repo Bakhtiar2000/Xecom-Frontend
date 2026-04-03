@@ -71,11 +71,30 @@ const productApi = baseApi.injectEndpoints({
       invalidatesTags: ["product"],
     }),
 
-    //-----------------Update Product-----------------
+    // product.api.ts
+
+    updateProductStatus: builder.mutation({
+      query: (args: { id: string; status: string }) => ({
+        url: `/product/${args.id}/status`,
+        method: "PATCH",
+        body: { status: args.status },
+      }),
+      invalidatesTags: ["product"],
+    }),
+
+    updateProductFeatured: builder.mutation({
+      query: (args: { id: string; featured: boolean }) => ({
+        url: `/product/${args.id}/featured`,
+        method: "PATCH",
+        body: { featured: args.featured },
+      }),
+      invalidatesTags: ["product"],
+    }),
+
     updateProduct: builder.mutation({
-      query: (args: { id: string; data: FormData }) => ({
+      query: (args: { id: string; data: FormData | Record<string, unknown> }) => ({
         url: `/product/${args.id}`,
-        method: "PUT",
+        method: "PATCH",
         body: args.data,
       }),
       invalidatesTags: ["product"],
@@ -112,4 +131,6 @@ export const {
   useUpdateProductMutation,
   useGetProductMetadataQuery,
   useDeleteProductMutation,
+  useUpdateProductStatusMutation,  
+  useUpdateProductFeaturedMutation,
 } = productApi;

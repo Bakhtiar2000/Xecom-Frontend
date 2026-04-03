@@ -335,7 +335,10 @@ export default function MyReviewsPage() {
 
                     {/* Product info */}
                     <TableCell>
-                      <Link href={`/product/${getId(product)}`} className="max-w-40  truncate leading-snug font-medium">
+                      <Link
+                        href={`/product/${getId(product)}`}
+                        className="max-w-40 truncate leading-snug font-medium"
+                      >
                         <p className="line-clamp-2">{product?.name ?? "Unknown Product"}</p>
                       </Link>
                       {product?.brand && (

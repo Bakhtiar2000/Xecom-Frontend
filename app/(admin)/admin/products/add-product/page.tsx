@@ -160,20 +160,21 @@ export default function AddProductPage() {
     setIsSubmitting(true);
     try {
       const formData = new FormData();
+
       if (data.images && data.images.length > 0) {
         data.images.forEach((file: File) => {
           formData.append("images", file);
         });
       }
+
       if (data.video) {
-        formData.append("videoUrl", data.video);
+        formData.append("videoUrl", data.video as File);
       }
 
       if (data.manualFile) {
-        formData.append("manualUrl", data.manualFile);
+        formData.append("manualUrl", data.manualFile as File);
       }
 
-      // Prepare all other data as JSON
       const payload = {
         name: data.name,
         slug: data.slug,
@@ -200,17 +201,14 @@ export default function AddProductPage() {
 
       formData.append("text", JSON.stringify(payload));
 
-      // POST API CALL
       const result = await addProduct(formData).unwrap();
-
       toast.success(result?.message || "Product created successfully 🎉");
-
       form.reset();
       setImageFiles([]);
       setShowSummary(false);
     } catch (error: any) {
+      console.error("Full error:", JSON.stringify(error?.data, null, 2));
       const errorMessage = error?.data?.message || error?.message || "Failed to create product";
-
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
