@@ -94,10 +94,9 @@ const productApi = baseApi.injectEndpoints({
     updateProduct: builder.mutation({
       query: (args: { id: string; data: FormData | Record<string, unknown> }) => ({
         url: `/product/${args.id}`,
-        method: "PATCH",
+        method: "PUT", 
         body: args.data,
       }),
-      invalidatesTags: ["product"],
     }),
     // -------------product Metadata............
     getProductMetadata: builder.query({
@@ -131,6 +130,6 @@ export const {
   useUpdateProductMutation,
   useGetProductMetadataQuery,
   useDeleteProductMutation,
-  useUpdateProductStatusMutation,  
+  useUpdateProductStatusMutation,
   useUpdateProductFeaturedMutation,
 } = productApi;

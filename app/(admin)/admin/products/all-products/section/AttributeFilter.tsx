@@ -37,6 +37,8 @@ export const AttributeFilter = ({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  
+
   // Focus search input when opened
   useEffect(() => {
     if (open && searchRef.current) {

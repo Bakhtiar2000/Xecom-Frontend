@@ -29,11 +29,10 @@ import {
   useDeleteProductMutation,
   useGetAllProductsQuery,
   useUpdateProductFeaturedMutation,
-  useUpdateProductMutation,
   useUpdateProductStatusMutation,
 } from "@/redux/features/product/product.api";
 import { TAttribute, TProduct } from "@/types";
-import { Eye, Loader2, MoreHorizontal, Package, Pencil, Search, Trash2, X } from "lucide-react";
+import { Eye, Loader2, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { AttributeFilter } from "./AttributeFilter";
@@ -51,23 +50,29 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
 import ProductViewModal from "./ProductViewModal";
+import { useRouter } from "next/navigation";
 
 type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
 const AllProductsTable = () => {
+  const router = useRouter();
+  const handleEdit = (id: string) => {
+    router.push(`/admin/products/all-products/edit-product/${id}`);
+  };
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAttributeValues, setSelectedAttributeValues] = useState<Record<string, string[]>>(
     {}
   );
 
   const [updateProductStatus, { isLoading: isUpdatingStatus }] = useUpdateProductStatusMutation();
-  const [updateProductFeatured, { isLoading: isUpdatingFeatured }] = useUpdateProductFeaturedMutation();
+  const [updateProductFeatured, { isLoading: isUpdatingFeatured }] =
+    useUpdateProductFeaturedMutation();
 
   const handleToggleStatus = async (product: TProduct, checked: boolean) => {
     try {
       await updateProductStatus({
         id: product.id,
-        status: checked ? "ACTIVE" : "INACTIVE"
+        status: checked ? "ACTIVE" : "INACTIVE",
       }).unwrap();
       toast.success("Product status updated");
     } catch {
@@ -79,7 +84,7 @@ const AllProductsTable = () => {
     try {
       await updateProductFeatured({
         id: product.id,
-        featured: checked
+        featured: checked,
       }).unwrap();
       toast.success("Featured status updated");
     } catch {
@@ -110,10 +115,6 @@ const AllProductsTable = () => {
     setViewProduct(product);
   };
 
-  const handleEdit = (id: string) => {
-    console.log("edit ", id);
-  };
-
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
   const openDeleteModal = (id: string) => {
@@ -139,7 +140,12 @@ const AllProductsTable = () => {
   const buildQueryParams = () => {
     const params = [...getPaginationParams(), ...getSortParams()];
 
+
     if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
+    if (status) {
+      params.push({ name: "isActive", value: status });
+    }
+
 
     // Flatten all attribute values and send each as attributeValueIds
     const allAttributeValueIds = Object.values(selectedAttributeValues).flat();
@@ -155,7 +161,15 @@ const AllProductsTable = () => {
     return params;
   };
   const isUpdating = isUpdatingStatus || isUpdatingFeatured;
-
+  const [status, setStatus] = useState<string | null>(null);
+  const statusAttribute: TAttribute = {
+    id: "isActive",
+    name: "Active Products",
+    values: [
+      { id: "true", value: "ACTIVE" },
+      { id: "false", value: "INACTIVE" },
+    ],
+  };
 
   const { data, isLoading, isFetching, isError } = useGetAllProductsQuery(buildQueryParams());
   const products = data?.data || [];
@@ -167,11 +181,13 @@ const AllProductsTable = () => {
   console.log("attribute data", attributesData);
 
   const totalActiveFilters = [
+    status,
     ...Object.values(selectedAttributeValues).flat(),
     ...selectedCategories.map((c) => c.value),
   ].filter(Boolean).length;
 
   const clearAllFilters = () => {
+    setStatus(null);
     setSelectedAttributeValues({});
     setSelectedCategories([]);
     resetPage();
@@ -209,6 +225,14 @@ const AllProductsTable = () => {
               />
             );
           })}
+          <AttributeFilter
+            attribute={statusAttribute}
+            selectedValues={status ? [status] : []}
+            onValuesChange={(vals) => {
+              setStatus(vals[0] || null);
+              handleFilterChange();
+            }}
+          />
 
           <div
             className={`max-w-64 min-w-44 ${selectedCategories.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""}`}
@@ -346,9 +370,7 @@ const AllProductsTable = () => {
                           disabled={isUpdating}
                           onCheckedChange={(checked) => handleToggleFeatured(product, checked)}
                         />
-                        <span className="text-sm">
-                          {product.featured ? "Featured" : "No"}
-                        </span>
+                        <span className="text-sm">{product.featured ? "Featured" : "No"}</span>
                       </div>
                     </TableCell>
                     <TableCell>
@@ -368,12 +390,13 @@ const AllProductsTable = () => {
                     <TableCell>{product.totalSales}</TableCell>
                     <TableCell>{product.viewCount}</TableCell>
                     <TableCell className="text-right">
-                      <div className="flex items-center text-center justify-center gap-2">
+                      <div className="flex items-center justify-center gap-2 text-center">
                         <TooltipProvider>
-
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <button onClick={() => handleView(product)}>  {/* pass whole product */}
+                              <button onClick={() => handleView(product)}>
+                                {" "}
+                                {/* pass whole product */}
                                 <Eye className="h-4 w-4" />
                               </button>
                             </TooltipTrigger>
@@ -406,10 +429,8 @@ const AllProductsTable = () => {
                               <p>Delete</p>
                             </TooltipContent>
                           </Tooltip>
-
                         </TooltipProvider>
                       </div>
-
                     </TableCell>
                   </TableRow>
                 ))
@@ -457,7 +478,7 @@ const AllProductsTable = () => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </div >
+    </div>
   );
 };
 

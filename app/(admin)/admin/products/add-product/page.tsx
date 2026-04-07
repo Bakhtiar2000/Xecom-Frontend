@@ -19,6 +19,7 @@ import VariantsTab from "./sections/VariantsTab";
 import { useAddProductMutation } from "@/redux/features/product/product.api";
 import { toast } from "sonner";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 // ─── Tab config ─────
 const TAB_ORDER = ["basic", "details", "specifications", "media", "faq", "variants"] as const;
@@ -66,6 +67,7 @@ for (const [tab, fields] of Object.entries(TAB_FIELDS)) {
 
 // ─── Page ───────────
 export default function AddProductPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabName>("basic");
   const [imageFiles, setImageFiles] = useState<{ file: File; url: string }[]>([]);
   const [showSummary, setShowSummary] = useState(false);
@@ -203,6 +205,7 @@ export default function AddProductPage() {
 
       const result = await addProduct(formData).unwrap();
       toast.success(result?.message || "Product created successfully 🎉");
+      router.push("/admin/products/all-products");
       form.reset();
       setImageFiles([]);
       setShowSummary(false);
