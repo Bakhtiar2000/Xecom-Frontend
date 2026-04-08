@@ -71,10 +71,9 @@ export type TAttributeValueId = {
   values: TAttributeValues[];
 };
 
-
 export type TAttributeValueFull = {
   id: string;
-  attributeId: { id: string, value: string };
+  attributeId: { id: string; value: string };
   value: string;
   hexCode?: string | null;
   attribute: TAttributeInfo;
