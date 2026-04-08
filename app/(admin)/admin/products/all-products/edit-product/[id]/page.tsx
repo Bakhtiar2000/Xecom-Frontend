@@ -22,11 +22,13 @@ import SpecificationsTab from "../../../add-product/sections/SpecificationsTab";
 import MediaTab from "../../../add-product/sections/MediaTab";
 import FaqTab from "../../../add-product/sections/FaqTab";
 import VariantsTab from "../../../add-product/sections/VariantsTab";
-import { editProductSchema, type EditProductFormData } from "@/lib/editproduct.schema";
+import { editProductSchema } from "@/lib/editproduct.schema";
+import type { ProductFormData } from "@/lib/productSchema";
 
 // ─── Tab config ─────────────────────────────────────────────────────────────
 const TAB_ORDER = ["basic", "details", "specifications", "media", "faq", "variants"] as const;
 type TabName = (typeof TAB_ORDER)[number];
+type EditableProductStatus = ProductFormData["status"];
 
 const TAB_FIELDS: Record<TabName, string[]> = {
   basic: [
@@ -67,6 +69,25 @@ for (const [tab, fields] of Object.entries(TAB_FIELDS)) {
   }
 }
 
+const EDITABLE_PRODUCT_STATUSES: ReadonlySet<EditableProductStatus> = new Set([
+  "ACTIVE",
+  "INACTIVE",
+  "DRAFT",
+]);
+
+const normalizeProductStatus = (status?: string | null): EditableProductStatus => {
+  if (status && EDITABLE_PRODUCT_STATUSES.has(status as EditableProductStatus)) {
+    return status as EditableProductStatus;
+  }
+  return "INACTIVE";
+};
+
+const toOptionalNumber = (value: unknown): number | undefined => {
+  if (value == null || value === "") return undefined;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+};
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function EditProductPage() {
   const router = useRouter();
@@ -88,7 +109,7 @@ export default function EditProductPage() {
   const [updateProduct] = useUpdateProductMutation();
 
   // ── Form setup ────────────────────────────────────────────────────────────
-  const form = useForm<EditProductFormData>({
+  const form = useForm<ProductFormData>({
     resolver: zodResolver(editProductSchema) as any,
     mode: "onChange",
     defaultValues: {
@@ -131,14 +152,14 @@ export default function EditProductPage() {
       fullDescription: product.fullDescription ?? "",
       brandId: product.brandId ?? "",
       categoryId: product.categoryId ?? "",
-      status: product.status ?? "DRAFT",
+      status: normalizeProductStatus(product.status),
       featured: product.featured ?? false,
       // Images: keep existing URLs in a separate state; form gets empty array
       // (new files the user picks will be appended in onSubmit)
       images: [],
       video: null,
       manualFile: null,
-      weight: product.weight ?? null,
+      weight: toOptionalNumber(product.weight),
       weightUnit: product.weightUnit ?? "KG",
       warranty: product.warranty ?? "",
       tags: product.tags ?? [],
@@ -150,9 +171,9 @@ export default function EditProductPage() {
       seoDescription: product.seoDescription ?? "",
       dimensions: {
         unit: product.dimension?.unit ?? "CM",
-        width: product.dimension?.width ?? null,
-        height: product.dimension?.height ?? null,
-        length: product.dimension?.length ?? null,
+        width: toOptionalNumber(product.dimension?.width),
+        height: toOptionalNumber(product.dimension?.height),
+        length: toOptionalNumber(product.dimension?.length),
       },
       specifications: product.specifications ?? {},
       variants:
@@ -250,7 +271,7 @@ export default function EditProductPage() {
   };
 
   // ── Final submit (PATCH) ──────────────────────────────────────────────────
-  const onSubmit = async (data: EditProductFormData) => {
+  const onSubmit = async (data: ProductFormData) => {
     setIsSubmitting(true);
     try {
       const formData = new FormData();
