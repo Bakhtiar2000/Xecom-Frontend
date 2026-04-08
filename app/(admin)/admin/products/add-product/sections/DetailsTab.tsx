@@ -87,6 +87,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                         step="0.01"
                         placeholder={`Weight in ${form.watch("weightUnit")}`}
                         {...field}
+                        value={field.value ?? ""}
                         onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                         className="pr-16"
                       />
@@ -146,6 +147,7 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                                 ` in ${form.watch("dimensions.unit")}`
                               }
                               {...field}
+                              value={field.value ?? ""}
                               onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                               className="pr-20"
                             />

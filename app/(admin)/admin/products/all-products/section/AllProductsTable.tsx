@@ -1,13 +1,6 @@
 import CustomSelect, { SelectOption } from "@/components/custom/CustomSelect";
 import { SortableTableHead } from "@/components/custom/SortableTableHead";
 import { TablePagination } from "@/components/custom/TablePagination";
-import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -26,29 +19,70 @@ import { useTableSort } from "@/hooks/useTableSort";
 import { API_URL } from "@/redux/api/baseApi";
 import { useGetAllAttributesQuery } from "@/redux/features/product/attribute.api";
 import {
+  useDeleteProductMutation,
   useGetAllProductsQuery,
   useUpdateProductMutation,
 } from "@/redux/features/product/product.api";
-import { TAttribute, TProduct } from "@/types";
-import { Eye, Loader2, MoreHorizontal, Package, Pencil, Search, Trash2, X } from "lucide-react";
+import { TAttribute, TAttributeValueId, TFilterAttribute, TProduct } from "@/types";
+import { Eye, Loader2, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { AttributeFilter } from "./AttributeFilter";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
-import { ProductStatus } from "@/constants/enum";
-import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
-import { TooltipContent } from "@radix-ui/react-tooltip";
+import ProductViewModal from "./ProductViewModal";
+import { useRouter } from "next/navigation";
 
 type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
 const AllProductsTable = () => {
+  const router = useRouter();
+  const handleEdit = (id: string) => {
+    router.push(`/admin/products/all-products/edit-product/${id}`);
+  };
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAttributeValues, setSelectedAttributeValues] = useState<Record<string, string[]>>(
     {}
   );
-  const [selectedCategories, setSelectedCategories] = useState<SelectOption[]>([]);
 
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+
+  const handleToggleStatus = async (product: TProduct, checked: boolean) => {
+    try {
+      await updateProduct({
+        id: product.id,
+        data: { status: checked ? "ACTIVE" : "INACTIVE" },
+      }).unwrap();
+      toast.success("Product status updated");
+    } catch {
+      toast.error("Failed to update status");
+    }
+  };
+
+  const handleToggleFeatured = async (product: TProduct, checked: boolean) => {
+    try {
+      await updateProduct({
+        id: product.id,
+        data: { featured: checked },
+      }).unwrap();
+      toast.success("Featured status updated");
+    } catch {
+      toast.error("Failed to update featured");
+    }
+  };
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<SelectOption[]>([]);
 
   const { handlePageChange, handlePageSizeChange, getPaginationParams, resetPage } =
     useTablePagination({ initialPageNumber: 1, initialPageSize: 10 });
@@ -67,17 +101,26 @@ const AllProductsTable = () => {
     setSearchTerm(value);
     resetPage();
   };
-
-  const handleView = (id: string) => {
-    console.log("view", id);
+  const handleView = (product: TProduct) => {
+    setViewProduct(product);
   };
 
-  const handleEdit = (id: string) => {
-    console.log("edit ", id);
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
+
+  const openDeleteModal = (id: string) => {
+    setDeleteTargetId(id);
   };
 
-  const handleDelete = (id: string) => {
-    console.log("Delete product:", id);
+  const handleDelete = async () => {
+    if (!deleteTargetId) return;
+    try {
+      await deleteProduct(deleteTargetId).unwrap();
+      toast.success("Product deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete product", error);
+    } finally {
+      setDeleteTargetId(null);
+    }
   };
 
   // Debounce search term to avoid excessive API calls
@@ -88,6 +131,9 @@ const AllProductsTable = () => {
     const params = [...getPaginationParams(), ...getSortParams()];
 
     if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
+    if (status) {
+      params.push({ name: "isActive", value: status });
+    }
 
     // Flatten all attribute values and send each as attributeValueIds
     const allAttributeValueIds = Object.values(selectedAttributeValues).flat();
@@ -103,6 +149,15 @@ const AllProductsTable = () => {
     return params;
   };
 
+  const [status, setStatus] = useState<string | null>(null);
+  const statusAttribute: TAttribute = {
+    id: "isActive",
+    name: "Active Products",
+    values: [
+      { id: "true", attributeId: "isActive", value: "ACTIVE" },
+      { id: "false", attributeId: "isActive", value: "INACTIVE" },
+    ],
+  };
   const { data, isLoading, isFetching, isError } = useGetAllProductsQuery(buildQueryParams());
   const products = data?.data || [];
   const hasNoData = products.length === 0 && !isLoading;
@@ -113,50 +168,19 @@ const AllProductsTable = () => {
   console.log("attribute data", attributesData);
 
   const totalActiveFilters = [
+    status,
     ...Object.values(selectedAttributeValues).flat(),
     ...selectedCategories.map((c) => c.value),
   ].filter(Boolean).length;
 
-  // toggle
-
-  const handleStatusToggle = async (product: TProduct) => {
-    const newStatus =
-      product.status === ProductStatus.ACTIVE ? ProductStatus.INACTIVE : ProductStatus.ACTIVE;
-
-    const formData = new FormData();
-    formData.append("status", newStatus);
-
-    try {
-      await updateProduct({
-        id: product.id,
-        data: formData,
-      }).unwrap();
-    } catch (error) {
-      console.error("Status update failed", error);
-    }
-  };
-
-  const handleFeaturedToggle = async (product: TProduct) => {
-    const newFeatured = !product.featured;
-
-    const formData = new FormData();
-    formData.append("featured", String(newFeatured));
-
-    try {
-      await updateProduct({
-        id: product.id,
-        data: formData,
-      }).unwrap();
-    } catch (error) {
-      console.error("Featured update failed", error);
-    }
-  };
-
   const clearAllFilters = () => {
+    setStatus(null);
     setSelectedAttributeValues({});
     setSelectedCategories([]);
     resetPage();
   };
+
+  const [viewProduct, setViewProduct] = useState<TProduct | null>(null);
   return (
     <div>
       {/* Filters (unchanged) */}
@@ -188,6 +212,14 @@ const AllProductsTable = () => {
               />
             );
           })}
+          <AttributeFilter
+            attribute={statusAttribute}
+            selectedValues={status ? [status] : []}
+            onValuesChange={(vals) => {
+              setStatus(vals[0] || null);
+              handleFilterChange();
+            }}
+          />
 
           <div
             className={`max-w-64 min-w-44 ${selectedCategories.length ? "[&_button]:border-primary [&_button]:bg-primary/5" : ""}`}
@@ -286,7 +318,7 @@ const AllProductsTable = () => {
                       <div className="flex items-center gap-3">
                         {product.images && product.images.length > 0 ? (
                           <Image
-                            src={product.images[0].imageUrl}
+                            src={product.images[0].imageUrl || "/placeholder-product.png"}
                             alt={product.name}
                             width={40}
                             height={40}
@@ -306,67 +338,34 @@ const AllProductsTable = () => {
                       </div>
                     </TableCell>
                     <TableCell>{product?.maxOrderQty}</TableCell>
-                    {/* <TableCell>
-                      <div className="flex justify-center items-center gap-1">
-                      <Badge variant={product.status === "ACTIVE" ? "default" : "secondary"}>
-                        {product.status}
-                      </Badge>    
-
-                      <Switch/>
-
-                      </div>
-
-                    </TableCell> */}
                     <TableCell>
-                      <div className="flex items-center justify-center gap-2">
-                        <Badge
-                          className={
-                            product.status === "ACTIVE"
-                              ? "bg-green-500 text-white"
-                              : "bg-red-500 text-white"
-                          }
-                        >
-                          {product.status}
-                        </Badge>
-
+                      <div className="flex items-center gap-2">
                         <Switch
                           checked={product.status === "ACTIVE"}
-                          onCheckedChange={() => handleStatusToggle(product)}
+                          disabled={isUpdating}
+                          onCheckedChange={(checked) => handleToggleStatus(product, checked)}
                         />
+                        <span className="text-sm">
+                          {product.status === "ACTIVE" ? "Active" : "Inactive"}
+                        </span>
                       </div>
                     </TableCell>
-
-                    {/* <TableCell>
-                      {product.featured ? (
-                        <Badge variant="default" className="bg-rating">
-                          Featured
-                        </Badge>
-                      ) : (
-                        <Badge variant="outline" className="bg-card-primary">
-                          No
-                        </Badge>
-                      )}
-                    </TableCell> */}
                     <TableCell>
-                      <div className="flex items-center justify-center gap-2">
-                        <Badge
-                          className={
-                            product.featured ? "bg-green-500 text-white" : "bg-red-500 text-white"
-                          }
-                        >
-                          {product.featured ? "Featured" : "No"}
-                        </Badge>
-
+                      <div className="flex items-center gap-2">
                         <Switch
                           checked={product.featured}
-                          onCheckedChange={() => handleFeaturedToggle(product)}
+                          disabled={isUpdating}
+                          onCheckedChange={(checked) => handleToggleFeatured(product, checked)}
                         />
+                        <span className="text-sm">{product.featured ? "Featured" : "No"}</span>
                       </div>
                     </TableCell>
                     <TableCell>
                       {product.avgRating ? (
                         <div className="flex items-center gap-1">
-                          <span className="font-medium">{product.avgRating.toFixed(1)}</span>
+                          <span className="font-medium">
+                            {Number(product.avgRating).toFixed(1)}
+                          </span>
                           <span className="text-muted-foreground text-xs">
                             ({product.reviewCount})
                           </span>
@@ -378,58 +377,47 @@ const AllProductsTable = () => {
                     <TableCell>{product.totalSales}</TableCell>
                     <TableCell>{product.viewCount}</TableCell>
                     <TableCell className="text-right">
-                      <div className="flex gap-x-1">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div
-                              onClick={() => handleView(product.id)}
-                              className="hover:bg-muted cursor-pointer rounded p-1"
-                            >
-                              <Eye className="h-4 w-4" />
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>View Details</TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div
-                              onClick={() => handleEdit(product.id)}
-                              className="hover:bg-muted cursor-pointer rounded p-1"
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>Edit</TooltipContent>
-                        </Tooltip>
+                      <div className="flex items-center justify-center gap-2 text-center">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button onClick={() => handleView(product)}>
+                                {" "}
+                                {/* pass whole product */}
+                                <Eye className="h-4 w-4" />
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>View</p>
+                            </TooltipContent>
+                          </Tooltip>
+
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button onClick={() => handleEdit(product.id)}>
+                                <Pencil className="h-4 w-4" />
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Edit</p>
+                            </TooltipContent>
+                          </Tooltip>
+
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button
+                                onClick={() => openDeleteModal(product.id)}
+                                className="text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Delete</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       </div>
-
-                      {/* <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <button className="hover:bg-muted rounded-md p-2">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </button>
-                        </DropdownMenuTrigger>
-
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleView(product.id)}>
-                            <Eye className="mr-2 h-4 w-4" />
-                            View Details
-                          </DropdownMenuItem>
-
-                          <DropdownMenuItem onClick={() => handleEdit(product.id)}>
-                            <Pencil className="mr-2 h-4 w-4" />
-                            Edit
-                          </DropdownMenuItem>
-
-                          <DropdownMenuItem
-                            onClick={() => handleDelete(product.id)}
-                            className="text-destructive focus:text-destructive"
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu> */}
                     </TableCell>
                   </TableRow>
                 ))
@@ -445,6 +433,37 @@ const AllProductsTable = () => {
             disabled={hasNoData}
           />
         )}
+        <ProductViewModal
+          product={viewProduct}
+          open={!!viewProduct}
+          onClose={() => setViewProduct(null)}
+        />
+
+        <AlertDialog
+          open={!!deleteTargetId}
+          onOpenChange={(open) => !open && setDeleteTargetId(null)}
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Product?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete the product and remove it
+                from our servers.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="bg-destructive hover:bg-destructive/90"
+              >
+                {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

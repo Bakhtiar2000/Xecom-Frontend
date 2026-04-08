@@ -179,7 +179,7 @@ const AllReviewTable = () => {
 
                 {/* Status */}
                 <TableCell className="text-center">
-                  <div className="flex items-center  justify-center gap-2">
+                  <div className="flex items-center justify-center gap-2">
                     <Switch
                       className="cursor-pointer"
                       checked={review.isApproved}
@@ -188,8 +188,9 @@ const AllReviewTable = () => {
                     />
 
                     <span
-                      className={`text-xs font-medium ${review.isApproved ? "text-emerald-600" : "text-muted-foreground"
-                        }`}
+                      className={`text-xs font-medium ${
+                        review.isApproved ? "text-emerald-600" : "text-muted-foreground"
+                      }`}
                     >
                       {review.isApproved ? "Approved" : "Pending"}
                     </span>
@@ -197,7 +198,7 @@ const AllReviewTable = () => {
                 </TableCell>
                 {/* Actions */}
                 <TableCell className="text-right">
-                  <div className=" text-center">
+                  <div className="text-center">
                     <Button
                       size="icon"
                       variant="ghost"

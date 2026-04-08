@@ -19,6 +19,7 @@ import VariantsTab from "./sections/VariantsTab";
 import { useAddProductMutation } from "@/redux/features/product/product.api";
 import { toast } from "sonner";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 // ─── Tab config ─────
 const TAB_ORDER = ["basic", "details", "specifications", "media", "faq", "variants"] as const;
@@ -66,6 +67,7 @@ for (const [tab, fields] of Object.entries(TAB_FIELDS)) {
 
 // ─── Page ───────────
 export default function AddProductPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabName>("basic");
   const [imageFiles, setImageFiles] = useState<{ file: File; url: string }[]>([]);
   const [showSummary, setShowSummary] = useState(false);
@@ -160,20 +162,21 @@ export default function AddProductPage() {
     setIsSubmitting(true);
     try {
       const formData = new FormData();
+
       if (data.images && data.images.length > 0) {
         data.images.forEach((file: File) => {
           formData.append("images", file);
         });
       }
+
       if (data.video) {
-        formData.append("videoUrl", data.video);
+        formData.append("videoUrl", data.video as File);
       }
 
       if (data.manualFile) {
-        formData.append("manualUrl", data.manualFile);
+        formData.append("manualUrl", data.manualFile as File);
       }
 
-      // Prepare all other data as JSON
       const payload = {
         name: data.name,
         slug: data.slug,
@@ -200,17 +203,15 @@ export default function AddProductPage() {
 
       formData.append("text", JSON.stringify(payload));
 
-      // POST API CALL
       const result = await addProduct(formData).unwrap();
-
       toast.success(result?.message || "Product created successfully 🎉");
-
+      router.push("/admin/products/all-products");
       form.reset();
       setImageFiles([]);
       setShowSummary(false);
     } catch (error: any) {
+      console.error("Full error:", JSON.stringify(error?.data, null, 2));
       const errorMessage = error?.data?.message || error?.message || "Failed to create product";
-
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
