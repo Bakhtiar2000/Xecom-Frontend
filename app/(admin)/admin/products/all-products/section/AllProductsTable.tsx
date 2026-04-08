@@ -1,13 +1,6 @@
 import CustomSelect, { SelectOption } from "@/components/custom/CustomSelect";
 import { SortableTableHead } from "@/components/custom/SortableTableHead";
 import { TablePagination } from "@/components/custom/TablePagination";
-import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -28,10 +21,10 @@ import { useGetAllAttributesQuery } from "@/redux/features/product/attribute.api
 import {
   useDeleteProductMutation,
   useGetAllProductsQuery,
-  useUpdateProductFeaturedMutation,
-  useUpdateProductStatusMutation,
+  useUpdateProductMutation,
+
 } from "@/redux/features/product/product.api";
-import { TAttribute, TProduct } from "@/types";
+import { TAttribute, TAttributeValueId, TFilterAttribute, TProduct } from "@/types";
 import { Eye, Loader2, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -64,15 +57,13 @@ const AllProductsTable = () => {
     {}
   );
 
-  const [updateProductStatus, { isLoading: isUpdatingStatus }] = useUpdateProductStatusMutation();
-  const [updateProductFeatured, { isLoading: isUpdatingFeatured }] =
-    useUpdateProductFeaturedMutation();
+  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
 
   const handleToggleStatus = async (product: TProduct, checked: boolean) => {
     try {
-      await updateProductStatus({
+      await updateProduct({
         id: product.id,
-        status: checked ? "ACTIVE" : "INACTIVE",
+        data: { status: checked ? "ACTIVE" : "INACTIVE" },
       }).unwrap();
       toast.success("Product status updated");
     } catch {
@@ -82,9 +73,9 @@ const AllProductsTable = () => {
 
   const handleToggleFeatured = async (product: TProduct, checked: boolean) => {
     try {
-      await updateProductFeatured({
+      await updateProduct({
         id: product.id,
-        featured: checked,
+        data: { featured: checked },
       }).unwrap();
       toast.success("Featured status updated");
     } catch {
@@ -140,12 +131,10 @@ const AllProductsTable = () => {
   const buildQueryParams = () => {
     const params = [...getPaginationParams(), ...getSortParams()];
 
-
     if (debouncedSearchTerm) params.push({ name: "searchTerm", value: debouncedSearchTerm });
     if (status) {
       params.push({ name: "isActive", value: status });
     }
-
 
     // Flatten all attribute values and send each as attributeValueIds
     const allAttributeValueIds = Object.values(selectedAttributeValues).flat();
@@ -160,17 +149,16 @@ const AllProductsTable = () => {
 
     return params;
   };
-  const isUpdating = isUpdatingStatus || isUpdatingFeatured;
+
   const [status, setStatus] = useState<string | null>(null);
   const statusAttribute: TAttribute = {
     id: "isActive",
     name: "Active Products",
     values: [
-      { id: "true", value: "ACTIVE" },
-      { id: "false", value: "INACTIVE" },
+      { id: "true", attributeId: "isActive", value: "ACTIVE" },
+      { id: "false", attributeId: "isActive", value: "INACTIVE" },
     ],
   };
-
   const { data, isLoading, isFetching, isError } = useGetAllProductsQuery(buildQueryParams());
   const products = data?.data || [];
   const hasNoData = products.length === 0 && !isLoading;

@@ -94,7 +94,7 @@ const productApi = baseApi.injectEndpoints({
     updateProduct: builder.mutation({
       query: (args: { id: string; data: FormData | Record<string, unknown> }) => ({
         url: `/product/${args.id}`,
-        method: "PUT", 
+        method: "PUT",
         body: args.data,
       }),
     }),

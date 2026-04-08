@@ -108,8 +108,9 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                                 key={unit}
                                 type="button"
                                 onClick={() => form.setValue("weightUnit", unit)}
-                                className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${form.watch("weightUnit") === unit ? "bg-accent font-medium" : ""
-                                  }`}
+                                className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${
+                                  form.watch("weightUnit") === unit ? "bg-accent font-medium" : ""
+                                }`}
                               >
                                 {unit}
                               </button>
@@ -167,10 +168,11 @@ export default function DetailsTab({ form }: DetailsTabProps) {
                                       key={unit}
                                       type="button"
                                       onClick={() => form.setValue("dimensions.unit", unit)}
-                                      className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${form.watch("dimensions.unit") === unit
-                                        ? "bg-accent font-medium"
-                                        : ""
-                                        }`}
+                                      className={`hover:bg-accent rounded px-2 py-1.5 text-left text-sm transition-colors ${
+                                        form.watch("dimensions.unit") === unit
+                                          ? "bg-accent font-medium"
+                                          : ""
+                                      }`}
                                     >
                                       {unit}
                                     </button>

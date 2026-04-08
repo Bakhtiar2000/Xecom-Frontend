@@ -93,10 +93,7 @@ export const editProductSchema = z
       .optional(),
   })
   .refine(
-    (data) =>
-      !data.minOrderQty ||
-      !data.maxOrderQty ||
-      data.maxOrderQty >= data.minOrderQty,
+    (data) => !data.minOrderQty || !data.maxOrderQty || data.maxOrderQty >= data.minOrderQty,
     {
       message: "Max quantity must be ≥ min quantity",
       path: ["maxOrderQty"],

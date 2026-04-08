@@ -60,10 +60,21 @@ export type TAttributeInfo = {
   name: string;
   createdAt?: string;
 };
+type TAttributeValues = {
+  id: string;
+  value: string;
+};
+
+export type TAttributeValueId = {
+  id: string;
+  name: string;
+  values: TAttributeValues[];
+};
+
 
 export type TAttributeValueFull = {
   id: string;
-  attributeId: string;
+  attributeId: { id: string, value: string };
   value: string;
   hexCode?: string | null;
   attribute: TAttributeInfo;
@@ -138,6 +149,15 @@ export type TProductAttribute = {
       name: string;
     };
   };
+};
+
+export type TFilterAttribute = {
+  id: string;
+  name: string;
+  values: {
+    id: string;
+    value: string;
+  }[];
 };
 
 // ── Main product type ─────────────────────────────────────────────────────────
@@ -225,7 +245,7 @@ export type TAttribute = {
   id: string;
   name: string;
   values?: TAttributeValue[];
-  createdAt: string;
+  createdAt?: string;
 };
 
 export type TAttributeValue = {
