@@ -23,7 +23,7 @@ import {
   useGetAllProductsQuery,
   useUpdateProductMutation,
 } from "@/redux/features/product/product.api";
-import { TAttribute, TAttributeValueId, TFilterAttribute, TProduct } from "@/types";
+import { TAttribute, TProduct } from "@/types";
 import { Eye, Loader2, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -75,6 +75,19 @@ const AllProductsTable = () => {
   };
 
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+  // const handleStatusChange = async (product: TProduct, newStatus: ProductStatus) => {
+  //   try {
+  //     await updateProduct({
+  //       id: product.id,
+  //       data: { status: newStatus },
+  //     }).unwrap();
+  //     toast.success("Product status updated");
+  //   } catch {
+  //     toast.error("Failed to update status");
+  //   }
+  // };
+
+
   const handleStatusChange = async (product: TProduct, newStatus: ProductStatus) => {
     const formData = new FormData();
 
