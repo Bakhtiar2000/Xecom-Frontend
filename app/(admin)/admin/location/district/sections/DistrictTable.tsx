@@ -50,7 +50,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
-import CustomSelect, { SelectOption } from "@/components/custom/CustomSelect";
+import CustomSelect, { SelectOption } from "@/components/custom/customSelect";
 import { API_URL } from "@/redux/api/baseApi";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
