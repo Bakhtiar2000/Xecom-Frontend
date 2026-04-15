@@ -88,10 +88,10 @@ export default function ProductSummary({
   const { data: BrandData } = useGetSingleBrandQuery(data.brandId);
   const { data: categoryData } = useGetSingleCategoryQuery(data.categoryId);
   const { data: allProductsData } = useGetAllProductsQuery([]);
-  
+
   const brandName = BrandData?.data.name || data.brandId;
   const categoryName = categoryData?.data.name || data.categoryId;
-  
+
   // Get all products and filter by relatedProductIds
   const allProducts = allProductsData?.data || [];
   const relatedProducts = allProducts.filter((product: any) =>
@@ -166,14 +166,17 @@ export default function ProductSummary({
               v ? <SummaryRow key={k} label={k} value={v} /> : null
             )
           )}
-          
+
           {/* Related Products Section */}
           {data.relatedProductIds && data.relatedProductIds.length > 0 && (
             <div className="mt-4 border-t pt-4">
-              <p className="text-muted-foreground text-xs font-semibold mb-3">Related Products ({relatedProducts.length})</p>
+              <p className="text-muted-foreground mb-3 text-xs font-semibold">
+                Related Products ({relatedProducts.length})
+              </p>
               <div className="flex flex-wrap gap-3">
                 {relatedProducts.map((product: any) => {
-                  const productImage = product.images && product.images.length > 0 ? product.images[0].imageUrl : null;
+                  const productImage =
+                    product.images && product.images.length > 0 ? product.images[0].imageUrl : null;
                   return (
                     <div key={product.id} className="flex flex-col items-center gap-2">
                       {productImage ? (
@@ -185,11 +188,13 @@ export default function ProductSummary({
                           className="h-20 w-20 rounded-lg border object-cover"
                         />
                       ) : (
-                        <div className="h-20 w-20 rounded-lg border bg-muted flex items-center justify-center">
-                          <span className="text-xs text-muted-foreground">No image</span>
+                        <div className="bg-muted flex h-20 w-20 items-center justify-center rounded-lg border">
+                          <span className="text-muted-foreground text-xs">No image</span>
                         </div>
                       )}
-                      <span className="text-xs font-medium text-center line-clamp-2 max-w-20">{product.name}</span>
+                      <span className="line-clamp-2 max-w-20 text-center text-xs font-medium">
+                        {product.name}
+                      </span>
                     </div>
                   );
                 })}

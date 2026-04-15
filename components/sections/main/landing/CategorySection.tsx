@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { categories } from "@/data/category-shoes";
 import SectionTitle from "@/components/sections/shared/SectionTitle";
 import CategoryCard from "@/components/sections/main/landing/sections/CategoryCard";
+import { useGetAllCategoriesQuery } from "@/redux/features/product/category.api";
 
 export default function CategorySection() {
   const [isMobile, setIsMobile] = useState(false);
@@ -12,6 +12,16 @@ export default function CategorySection() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+  const { data: apiResponse } = useGetAllCategoriesQuery([]);
+  const categories = apiResponse?.data || [];
+
+  // Transform API data to match CategoryCard expectations
+  const transformedCategories = categories.map((cat: any) => ({
+    id: cat.id,
+    title: cat.name,
+    imageUrl: cat.imageUrl,
+  }));
 
   useEffect(() => {
     const checkMobile = () => {
@@ -23,21 +33,21 @@ export default function CategorySection() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const isScrollable = isMobile || categories.length > 5;
+  const isScrollable = isMobile || transformedCategories.length > 5;
 
   const loopedCategories = isScrollable
-    ? [...categories, ...categories, ...categories]
-    : categories;
+    ? [...transformedCategories, ...transformedCategories, ...transformedCategories]
+    : transformedCategories;
 
-  const totalSlides = categories.length;
+  const totalSlides = transformedCategories.length;
 
   // Initialize scroll position to middle set
   useEffect(() => {
     if (scrollRef.current && isScrollable) {
       const cardWidth = scrollRef.current.scrollWidth / loopedCategories.length;
-      scrollRef.current.scrollLeft = cardWidth * categories.length;
+      scrollRef.current.scrollLeft = cardWidth * transformedCategories.length;
     }
-  }, [isScrollable, loopedCategories.length]);
+  }, [isScrollable, loopedCategories.length, transformedCategories.length]);
 
   // Handle infinite scroll loop and calculate center card
   const handleScroll = () => {
@@ -49,18 +59,18 @@ export default function CategorySection() {
     const containerCenter = container.offsetWidth / 2;
     const scrollCenter = currentScroll + containerCenter;
     const centerCardIndex = Math.round(scrollCenter / cardWidth);
-    const relativeCenterIndex = centerCardIndex % categories.length;
+    const relativeCenterIndex = centerCardIndex % transformedCategories.length;
 
     setActiveSlide(relativeCenterIndex);
 
-    const maxScroll = cardWidth * categories.length * 2;
-    const minScroll = cardWidth * categories.length;
+    const maxScroll = cardWidth * transformedCategories.length * 2;
+    const minScroll = cardWidth * transformedCategories.length;
 
     if (currentScroll >= maxScroll - 10) {
       scrollRef.current.scrollLeft = minScroll;
-    } else if (currentScroll <= cardWidth * (categories.length - 1) + 10) {
+    } else if (currentScroll <= cardWidth * (transformedCategories.length - 1) + 10) {
       scrollRef.current.scrollLeft =
-        minScroll + (currentScroll - cardWidth * (categories.length - 1));
+        minScroll + (currentScroll - cardWidth * (transformedCategories.length - 1));
     }
   };
 
@@ -114,7 +124,7 @@ export default function CategorySection() {
       const containerCenter = scrollRef.current.offsetWidth / 2;
       const cardCenter = cardWidth / 2;
       const targetScroll =
-        cardWidth * (categories.length + slideIndex) + cardCenter - containerCenter;
+        cardWidth * (transformedCategories.length + slideIndex) + cardCenter - containerCenter;
       scrollRef.current.scrollTo({
         left: targetScroll,
         behavior: "smooth",
@@ -146,9 +156,9 @@ export default function CategorySection() {
             {loopedCategories.map((cat, idx) => (
               <div
                 key={`${cat.id}-${idx}`}
-                className="pointer-events-none w-[calc((100%-1.5rem)/2)] shrink-0 sm:w-[calc((100%-3rem)/3)] md:w-[calc((100%-4.5rem)/4)] lg:w-[calc((100%-6rem)/5)]"
+                className="pointer-events-auto w-[calc((100%-1.5rem)/2)] shrink-0 sm:w-[calc((100%-3rem)/3)] md:w-[calc((100%-4.5rem)/4)] lg:w-[calc((100%-6rem)/5)]"
               >
-                <CategoryCard category={cat} active={idx % categories.length === activeSlide} />
+                <CategoryCard category={cat} active={idx % transformedCategories.length === activeSlide} />
               </div>
             ))}
           </div>
@@ -170,7 +180,7 @@ export default function CategorySection() {
       ) : (
         // Normal grid for lg devices with 5 or fewer items
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {categories.map((cat, idx) => (
+          {transformedCategories.map((cat, idx) => (
             <div key={cat.id} className="w-full">
               <CategoryCard category={cat} active={idx === 2} />
             </div>

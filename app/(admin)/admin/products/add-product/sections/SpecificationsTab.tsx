@@ -27,7 +27,7 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
   // Fetch all products
   const { data: allProducts } = useGetAllProductsQuery([]);
   const products = allProducts?.data || [];
-  console.log('products', products);
+  console.log("products", products);
 
   const addSpecification = () => {
     if (fieldName.trim() && fieldValue.trim()) {
@@ -73,7 +73,11 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
     const isAlreadySelected = currentProducts.includes(productId);
 
     if (isAlreadySelected) {
-      form.setValue("relatedProductIds", currentProducts.filter((id) => id !== productId), { shouldDirty: true });
+      form.setValue(
+        "relatedProductIds",
+        currentProducts.filter((id) => id !== productId),
+        { shouldDirty: true }
+      );
     } else {
       form.setValue("relatedProductIds", [...currentProducts, productId], { shouldDirty: true });
     }
@@ -81,7 +85,11 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
 
   const removeRelatedProduct = (productId: string) => {
     const currentProducts: string[] = form.getValues("relatedProductIds") || [];
-    form.setValue("relatedProductIds", currentProducts.filter((id) => id !== productId), { shouldDirty: true });
+    form.setValue(
+      "relatedProductIds",
+      currentProducts.filter((id) => id !== productId),
+      { shouldDirty: true }
+    );
   };
 
   // Get product details by ID
@@ -198,7 +206,7 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
               </Button>
 
               {isDropdownOpen && (
-                <div className="bg-background border-border absolute z-50 mb-1 mt-1 w-full rounded-lg border shadow-lg top-full left-0">
+                <div className="bg-background border-border absolute top-full left-0 z-50 mt-1 mb-1 w-full rounded-lg border shadow-lg">
                   {/* Search input */}
                   <div className="sticky top-0 border-b bg-white p-3">
                     <div className="relative">
@@ -231,15 +239,15 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
                               e.preventDefault();
                               toggleRelatedProduct(product.id);
                             }}
-                            className={`hover:bg-gray-100 flex w-full items-center gap-3 border-b px-4 py-3 text-left transition-colors last:border-b-0 ${isSelected ? "bg-blue-50" : ""
-                              }`}
+                            className={`flex w-full items-center gap-3 border-b px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-gray-100 ${
+                              isSelected ? "bg-blue-50" : ""
+                            }`}
                           >
                             {/* Checkbox */}
                             <div
-                              className={`flex h-5 w-5 items-center justify-center rounded border-2 shrink-0 pointer-events-none ${isSelected
-                                ? "border-blue-500 bg-blue-500"
-                                : "border-gray-300"
-                                }`}
+                              className={`pointer-events-none flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 ${
+                                isSelected ? "border-blue-500 bg-blue-500" : "border-gray-300"
+                              }`}
                             >
                               {isSelected && (
                                 <svg
@@ -276,7 +284,9 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
                             <div className="min-w-0 flex-1">
                               <p className="truncate text-sm font-medium">{product.name}</p>
                               {product.sku && (
-                                <p className="text-muted-foreground truncate text-xs">SKU: {product.sku}</p>
+                                <p className="text-muted-foreground truncate text-xs">
+                                  SKU: {product.sku}
+                                </p>
                               )}
                             </div>
                           </button>
@@ -300,7 +310,10 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
                   if (!product) return null;
 
                   return (
-                    <div key={`related-${productId}-${index}`} className="flex flex-col items-center gap-2 rounded-lg border p-3">
+                    <div
+                      key={`related-${productId}-${index}`}
+                      className="flex flex-col items-center gap-2 rounded-lg border p-3"
+                    >
                       <div className="bg-muted h-40 w-full overflow-hidden rounded-md border">
                         {product.images?.[0]?.imageUrl ? (
                           <Image
@@ -316,15 +329,17 @@ export default function SpecificationsTab({ form }: SpecificationsTabProps) {
                           </div>
                         )}
                       </div>
-                      <p className="line-clamp-2 w-full text-center text-sm font-medium">{product.name}</p>
+                      <p className="line-clamp-2 w-full text-center text-sm font-medium">
+                        {product.name}
+                      </p>
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => removeRelatedProduct(productId)}
-                        className="w-full text-destructive hover:text-destructive"
+                        className="text-destructive hover:text-destructive w-full"
                       >
-                        <X className="h-4 w-4 mr-1" />
+                        <X className="mr-1 h-4 w-4" />
                         Remove
                       </Button>
                     </div>
