@@ -4,6 +4,7 @@ import {
   TChangePasswordDto,
   TForgotPasswordDto,
   TResetPasswordDto,
+  TGoogleLoginDto,
 } from "./dto/auth.dto";
 
 const authApi = baseApi.injectEndpoints({
@@ -16,6 +17,16 @@ const authApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+
+     //-----------------Google login User-----------------
+    googleLogin: builder.mutation({
+      query: (data: TGoogleLoginDto) => ({
+        url: "/auth/google-login",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
 
     //-----------------Refresh Token-----------------
     refreshToken: builder.mutation({
@@ -55,7 +66,8 @@ const authApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useLoginMutation,
+  useLoginMutation, 
+  useGoogleLoginMutation,
   useRefreshTokenMutation,
   useChangePasswordMutation,
   useForgotPasswordMutation,

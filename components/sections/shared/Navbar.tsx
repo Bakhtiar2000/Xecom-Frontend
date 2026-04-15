@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import {
   Menu,
@@ -78,8 +79,9 @@ const Navbar = () => {
   };
 
   // Handle logout
-  const handleLogout = () => {
+  const handleLogout =async () => {
     dispatch(logout());
+    await signOut({ redirect: false });
     toast.success("Logged out successfully");
     router.push("/login");
   };

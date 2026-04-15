@@ -14,7 +14,7 @@ export default function BrandMetadata() {
       colorVariant: "blue" as const,
     },
     {
-      title: "Active Brands",
+      title: "Active Brands", 
       value: metadata?.totalActiveBrands ?? 0,
       icon: FolderCheck,
       colorVariant: "green" as const,

@@ -7,7 +7,7 @@ export const checkoutSchema = z.object({
     .max(50, "Name must not exceed 50 characters")
     .trim(),
 
-  mobileNumber: z
+  mobileNumber: z 
     .string()
     .min(11, "Mobile number is required")
     .regex(
@@ -19,16 +19,20 @@ export const checkoutSchema = z.object({
     message: "Please select a valid shipping location",
   }),
 
-  address: z
-    .string()
-    .min(10, "Address must be at least 10 characters")
-    .max(200, "Address must not exceed 200 characters")
-    .trim(),
+  // address: z
+  //   .string()
+  //   .min(10, "Address must be at least 10 characters")
+  //   .max(200, "Address must not exceed 200 characters")
+  //   .trim(),
+  address: z.string().optional().default(""),
 
   // ✅ Fixed - paymentOption
   paymentOption: z.enum(["cod", "online"], {
     message: "Please select a valid payment option",
   }),
+
+  street: z.string(),
+  postalCode: z.string(),
 
   additionalNote: z
     .string()

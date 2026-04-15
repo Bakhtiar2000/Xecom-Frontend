@@ -51,7 +51,7 @@ import { Switch } from "@/components/ui/switch";
 
 type SortableFields = "name";
 
-interface BrandTableProps {
+interface BrandTableProps { 
   onEdit: (brand: TBrand) => void;
 }
 

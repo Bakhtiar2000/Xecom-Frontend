@@ -1,5 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 
+import { useGoogleLoginMutation } from "@/redux/features/auth/auth.api";
+
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook"; 
 
@@ -19,17 +21,47 @@ export const authOptions: NextAuthOptions = {
 
      callbacks: {
         async signIn({ user, account, profile }) {
-            console.log("=== SIGN IN DATA ===");
-            console.log("user:", user);         
-            console.log("account:", account);   
-            console.log("profile:", profile);   
-            return true; 
+
+            if (account?.provider === "google" || account?.provider === "facebook") {
+              try {
+                  const response = await fetch(
+                    `${process.env.API_URL}/auth/google-login`,
+                  {
+                   method: "POST",
+                   headers: { "Content-Type": "application/json" },
+                   body: JSON.stringify({
+                   email: user.email,
+                    name: user.name,
+                   profilePicture: user.image,
+                    }),
+                  }
+                 );
+
+                  const data = await response.json();
+
+                  if (data.success && data.data.accessToken) {
+
+                  (user as any).backendToken = data.data.accessToken;
+                  return true;
+                 }
+
+                return false; 
+              } catch (error) {
+                  console.error("Backend API error:", error);
+                  return false;
+             }
+            }
+
+         return true;
         },
 
         async session({ session, token }) {
             console.log("=== SESSION DATA ===");
             console.log("session:", session);
             console.log("token:", token);
+            if (token.backendToken) {
+            (session as any).backendToken = token.backendToken;
+            }
             return session;
         },
 
@@ -37,6 +69,9 @@ export const authOptions: NextAuthOptions = {
             console.log("=== JWT DATA ===");
             console.log("token:", token);
             console.log("user:", user);
+            if (user && (user as any).backendToken) {
+             token.backendToken = (user as any).backendToken;
+             }
             return token;
         }
     }

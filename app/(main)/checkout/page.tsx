@@ -19,6 +19,11 @@ import {
 import Image from "next/image";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import { useGetAllCountriesQuery } from "@/redux/features/location/country.api";
+import { useGetAllDistrictQuery } from "@/redux/features/location/district.api";
+import { useGetAllDivisonQuery } from "@/redux/features/location/division.api";
+import { useGetAllThanasQuery } from "@/redux/features/location/thana.api";
+
 import { z } from "zod";
 import { CartData } from "@/data/cart";
 import { checkoutSchema, type CheckoutFormData } from "@/lib/shepping.Schema";
@@ -49,6 +54,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
+import { Label } from "@/components/ui/label";
+import CustomSelect, { SelectOption } from "@/components/custom/customSelect";
+import { API_URL } from "@/redux/api/baseApi";
 
 interface Voucher {
   id: string;
@@ -79,6 +87,36 @@ const CheckoutPage = () => {
 
   const INSIDE_DHAKA_FEE = 100;
   const OUTSIDE_DHAKA_FEE = 150;
+
+  const [selectedCountry, setSelectedCountry] = useState<SelectOption[]>([]);
+  const [selectedDivision, setSelectedDivision] = useState<SelectOption[]>([]);
+  const [selectedDistrict, setSelectedDistrict] = useState<SelectOption[]>([]);
+  const [selectedThana, setSelectedThana] = useState<SelectOption[]>([]);
+  const [thanaId, setThanaId] = useState<string>("");
+
+  const { data: divisionData } = useGetAllDivisonQuery([]);
+  const { data: districtData } = useGetAllDistrictQuery([]);
+  const { data: thanaData } = useGetAllThanasQuery([]);
+
+  const allDivisions = divisionData?.data || [];
+  const allDistricts = districtData?.data || [];
+  const allThanas = thanaData?.data || [];
+
+  // Filter based on selected values:
+  const filteredDivisions =
+    selectedCountry.length > 0
+      ? allDivisions.filter((d) => d.countryId === selectedCountry[0]?.value)
+      : [];
+
+  const filteredDistricts =
+    selectedDivision.length > 0
+      ? allDistricts.filter((d) => d.divisionId === selectedDivision[0]?.value)
+      : [];
+
+  const filteredThanas =
+    selectedDistrict.length > 0
+      ? allThanas.filter((t) => t.districtId === selectedDistrict[0]?.value)
+      : [];
 
   const [formValid, setFormValid] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>(CartData);
@@ -196,6 +234,8 @@ const CheckoutPage = () => {
     address: "",
     paymentOption: "cod",
     additionalNote: "",
+    street: "",
+    postalCode: "",
     selectedPaymentMethod: "bkash",
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof CheckoutFormData, string>>>({});
@@ -473,6 +513,7 @@ const CheckoutPage = () => {
                           <p className="text-danger text-sm font-medium">{formErrors.name}</p>
                         )}
                       </div>
+
                       {/* Mobile Number Field */}
                       <div className="flex-1 space-y-2">
                         <label className="flex items-center text-sm font-medium">
@@ -499,87 +540,124 @@ const CheckoutPage = () => {
                       </div>
                     </div>
 
-                    {/* Shipping Location */}
-                    <div className="my-2 space-y-2">
+                    {/* Address Section - Cascading Location */}
+                    <div className="my-2 space-y-3">
                       <label className="flex items-center text-sm font-medium">
                         <MapPin size={16} className="mr-2" />
-                        Shipping Location *
+                        Delivery Location *
                       </label>
-                      <div className="grid grid-cols-2 gap-4">
-                        <label
-                          className={`flex cursor-pointer items-center rounded-lg border p-4 transition-all ${
-                            formData.shippingLocation === "inside"
-                              ? "border-border bg-success"
-                              : "border-border hover:border-success-foreground"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name="shippingLocation"
-                            value="inside"
-                            checked={formData.shippingLocation === "inside"}
-                            onChange={handleChange}
-                            className="mr-3 h-4 w-4"
-                          />
-                          <div>
-                            <p className="font-medium">Inside Dhaka</p>
-                            <p className="text-muted-foreground text-sm">
-                              Minimum spend 1000 tk then Free Shipping{" "}
-                            </p>
-                          </div>
-                        </label>
 
-                        <label
-                          className={`flex cursor-pointer items-center rounded-lg border p-4 transition-all ${
-                            formData.shippingLocation === "outside"
-                              ? "border-border bg-success"
-                              : "border-border hover:border-success-foreground"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name="shippingLocation"
-                            value="outside"
-                            checked={formData.shippingLocation === "outside"}
-                            onChange={handleChange}
-                            className="text-success-foreground mr-3 h-4 w-4"
+                      {/* Country */}
+                      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                        <div>
+                          <Label>Country</Label>
+                          <CustomSelect
+                            endpoint={`${API_URL}/country`}
+                            fields={["id", "name"]}
+                            mapToOption={(item) => ({ value: String(item.id), label: item.name })}
+                            value={selectedCountry}
+                            onChange={(vals) => {
+                              setSelectedCountry(vals as SelectOption[]);
+                              setSelectedDivision([]);
+                              setSelectedDistrict([]);
+                              setSelectedThana([]);
+                              setThanaId("");
+                            }}
+                            searchable
+                            paginated
+                            placeholder="Select Country"
                           />
-                          <div>
-                            <p className="font-medium">Outside Dhaka</p>
-                            <p className="text-muted-foreground text-sm">
-                              Minimum spend 1000 tk then Shipping 50% off{" "}
-                            </p>
-                          </div>
-                        </label>
+                        </div>
+                        <div>
+                          <Label>Division</Label>
+                          <CustomSelect
+                            endpoint={`${API_URL}/division`}
+                            fields={["id", "name"]}
+                            mapToOption={(item) => ({
+                              value: String(item.id),
+                              label: item.name,
+                            })}
+                            value={selectedDivision}
+                            onChange={(vals) => {
+                              setSelectedDivision(vals as SelectOption[]);
+                              setSelectedDistrict([]);
+                              setSelectedThana([]);
+                              setThanaId("");
+                            }}
+                            searchable
+                            paginated
+                            placeholder="Select Division"
+                          />
+                        </div>
+
+                        <div>
+                          <Label>District *</Label>
+                          <CustomSelect
+                            endpoint={`${API_URL}/district`}
+                            fields={["id", "name"]}
+                            mapToOption={(item) => ({
+                              value: String(item.id),
+                              label: item.name,
+                            })}
+                            value={selectedDistrict}
+                            onChange={(vals) => {
+                              setSelectedDistrict(vals as SelectOption[]);
+                              setSelectedThana([]);
+                              setThanaId("");
+                            }}
+                            searchable
+                            paginated
+                            placeholder="Select District"
+                          />
+                        </div>
+
+                        <div>
+                          <Label>Thana *</Label>
+                          <CustomSelect
+                            endpoint={`${API_URL}/thana`}
+                            fields={["id", "name"]}
+                            mapToOption={(item) => ({
+                              value: String(item.id),
+                              label: item.name,
+                            })}
+                            value={selectedThana}
+                            onChange={(vals) => {
+                              const selected = vals as SelectOption[];
+                              setSelectedThana(selected);
+                              setThanaId(String(selected[0]?.value ?? ""));
+                            }}
+                            searchable
+                            paginated
+                            placeholder="Select Thana"
+                          />
+                        </div>
+
+                        {/* Street */}
+                        <div>
+                          <Label>Street / Area *</Label>
+                          <Input
+                            type="text"
+                            name="street"
+                            value={formData.street ?? ""}
+                            onChange={handleChange}
+                            placeholder="85 West Naddapara"
+                            className="w-full rounded-lg border bg-transparent px-4 py-3"
+                          />
+                        </div>
+
+                        {/* Postal Code */}
+                        <div>
+                          <Label>Postal Code</Label>
+                          <Input
+                            type="text"
+                            name="postalCode"
+                            value={formData.postalCode ?? ""}
+                            onChange={handleChange}
+                            placeholder="1230"
+                            className="w-full rounded-lg border bg-transparent px-4 py-3"
+                          />
+                        </div>
                       </div>
-                      {formErrors.shippingLocation && (
-                        <p className="text-danger text-sm font-medium">
-                          {formErrors.shippingLocation}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Address Field */}
-                    <div className="my-2 space-y-2">
-                      <label className="flex items-center text-sm font-medium">
-                        <MapPin size={16} className="mr-2" />
-                        Your Address *
-                      </label>
-                      <Textarea
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        rows={3}
-                        placeholder="Product delivery address here"
-                        className={`w-full resize-none rounded-lg border px-4 py-3 transition-all focus:ring-2 focus:outline-none ${
-                          formErrors.address
-                            ? "border-danger focus:ring-danger"
-                            : "border-success focus:ring-success"
-                        }`}
-                      />
-                      {formErrors.address && (
-                        <p className="text-danger text-sm font-medium">{formErrors.address}</p>
-                      )}
                     </div>
 
                     {/* Payment Option */}
@@ -1098,6 +1176,8 @@ const CheckoutPage = () => {
                               mobileNumber: "",
                               shippingLocation: "inside",
                               address: "",
+                              street: "",
+                              postalCode: "",
                               paymentOption: "cod",
                               additionalNote: "",
                               selectedPaymentMethod: "bkash",

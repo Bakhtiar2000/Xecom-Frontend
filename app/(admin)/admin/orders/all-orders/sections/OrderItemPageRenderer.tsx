@@ -96,21 +96,43 @@ export default function OrderItemPageRenderer({
 
   const orders = ((data?.data as TOrderWithRelations[]) || []) as TOrderWithRelations[];
 
+  console.log("odrders1: ",orders);
+
+  console.log("status ",orders);
+
   useEffect(() => {
     if (orders.length === 0) {
       setSelectedOrderId(null);
       return;
     }
 
-    const isCurrentSelectionValid = orders.some((order) => order.id === selectedOrderId);
+    const isCurrentSelectionValid = orders?.some((order) => order.id === selectedOrderId);
     if (!selectedOrderId || !isCurrentSelectionValid) {
       setSelectedOrderId(orders[0].id);
     }
   }, [orders, selectedOrderId]);
 
   const selectedOrder = useMemo(() => {
-    return orders.find((order) => order.id === selectedOrderId) || null;
+    return orders?.find((order) => order.id === selectedOrderId) || null;
   }, [orders, selectedOrderId]);
+
+   console.log("selectorOrderId ",selectedOrderId);
+
+    console.log("selectorOrder ",selectedOrder);
+    console.log("Status ",selectedOrder?.status);
+
+    console.log("orderItems", selectedOrder?.orderItems)
+
+
+  const orderItems = selectedOrder?.orderItems?.map((item) =>({
+      productId: item.productId,
+      quantity: item.quantity
+  }));
+
+    orderItems?.forEach(item => {
+     console.log(item.productId);
+     console.log(item.quantity);
+  });
 
   const isMutating = isUpdating || isCancelling;
 
@@ -118,6 +140,7 @@ export default function OrderItemPageRenderer({
     try {
       const result = await updateOrderStatus({ id: orderId, data: { status } }).unwrap();
       toast.success(result?.message || "Order status updated");
+
       refetch();
     } catch (error: any) {
       const message = error?.data?.message || error?.message || "Failed to update order status";
@@ -144,7 +167,7 @@ export default function OrderItemPageRenderer({
     return <p className="text-destructive py-10 text-center">Failed to load orders.</p>;
   }
 
-  if (orders.length === 0) {
+  if (orders?.length === 0) {
     return (
       <p className="text-muted-foreground py-10 text-center">No orders found for this status.</p>
     );
@@ -156,15 +179,15 @@ export default function OrderItemPageRenderer({
     <section className="grid grid-cols-1 gap-5 lg:grid-cols-4">
       <aside className="border-border max-h-[75vh] overflow-y-auto rounded-lg border">
         <div className="bg-muted sticky top-0 flex h-12 items-center justify-center border-b text-sm font-semibold lg:text-base">
-          Items: {orders.length}
+          Items: {orders?.length}
         </div>
 
-        {orders.map((order: TOrderWithRelations) => (
+        {orders?.map((order: TOrderWithRelations) => (
           <div
             key={order.id}
             onClick={() => setSelectedOrderId(order.id)}
             className={`cursor-pointer border-b p-3 transition-colors ${
-              selectedOrder?.id === order.id ? "bg-primary/10 border-primary" : "hover:bg-muted/70"
+              selectedOrder?.id === order?.id ? "bg-primary/10 border-primary" : "hover:bg-muted/70"
             }`}
           >
             <p className="text-sm font-semibold">Order #{order.orderNumber}</p>
@@ -172,12 +195,12 @@ export default function OrderItemPageRenderer({
 
             <div className="mt-2 flex items-center justify-between gap-2">
               <Badge className={paymentColorClass[order.paymentStatus] || "bg-zinc-600"}>
-                {order.paymentStatus}
+                {order?.paymentStatus}
               </Badge>
               <div className="text-right text-sm">
                 <p className="font-semibold">${Number(order.total || 0).toFixed(2)}</p>
                 <p className="text-muted-foreground text-xs">
-                  {order.orderItems?.length || 0} items
+                  {order?.orderItems?.length || 0} items
                 </p>
               </div>
             </div>
@@ -246,18 +269,18 @@ export default function OrderItemPageRenderer({
                 </p>
                 <p>
                   <span className="font-semibold">Thana:</span>{" "}
-                  {selectedOrder.address?.thana?.name || "N/A"}
+                  {selectedOrder?.address?.thana?.name || "N/A"}
                 </p>
                 <p>
                   <span className="font-semibold">District:</span>{" "}
-                  {selectedOrder.address?.thana?.district?.name || "N/A"}
+                  {selectedOrder?.address?.thana?.district?.name || "N/A"}
                 </p>
               </div>
             </div>
 
             <h3 className="mt-5 mb-3 text-base font-semibold">Items</h3>
             <div className="space-y-3">
-              {(selectedOrder.orderItems || []).map((item) => (
+              {(selectedOrder?.orderItems || []).map((item) => (
                 <OrderItemCard key={item.id} item={item} />
               ))}
             </div>

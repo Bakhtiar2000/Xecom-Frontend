@@ -10,6 +10,12 @@ export type TLoginDto = {
   password: string;
 };
 
+export type TGoogleLoginDto = {
+  email: string;
+  name: string;
+  profilePicture: string;
+};
+
 export type TLoginResponse = {
   accessToken: string;
 };
