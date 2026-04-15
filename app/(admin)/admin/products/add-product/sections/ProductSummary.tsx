@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import Title from "@/components/sections/shared/Title";
 import Image from "next/image";
+import { useGetSingleBrandQuery } from "@/redux/features/product/brand.api";
+import { useGetSingleCategoryQuery } from "@/redux/features/product/category.api";
 
 interface ProductSummaryProps {
   data: ProductFormData;
@@ -82,6 +84,11 @@ export default function ProductSummary({
   onConfirm,
   isSubmitting,
 }: ProductSummaryProps) {
+
+  const { data: BrandData } = useGetSingleBrandQuery(data.brandId)
+  const { data: categoryData } = useGetSingleCategoryQuery(data.categoryId)
+  const brandName = BrandData?.data.name || data.brandId;
+  const categoryName = categoryData?.data.name || data.categoryId;
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -111,8 +118,8 @@ export default function ProductSummary({
         <SummaryCard title="Basic Information" tab="basic" onEdit={onEdit}>
           <SummaryRow label="Name" value={data.name} />
           <SummaryRow label="Slug" value={data.slug} mono />
-          <SummaryRow label="Brand" value={BRAND_MAP[data.brandId] || data.brandId} />
-          <SummaryRow label="Category" value={CATEGORY_MAP[data.categoryId] || data.categoryId} />
+          <SummaryRow label="Brand" value={brandName} />
+          <SummaryRow label="Category" value={categoryName} />
           <SummaryRow label="Status" value={<Badge variant="outline">{data.status}</Badge>} />
           <SummaryRow label="Featured" value={data.featured ? "Yes" : "No"} />
           <SummaryRow label="Short Description" value={data.shortDescription} />
@@ -174,6 +181,9 @@ export default function ProductSummary({
         {/* Media */}
         <SummaryCard title="Media" tab="media" onEdit={onEdit}>
           <SummaryRow label="Images" value={`${data.images.length} file(s) uploaded`} />
+          {data.featuredImage && (
+            <SummaryRow label="Featured Image" value={(data.featuredImage as File).name} />
+          )}
           {data.video && <SummaryRow label="Video" value={data.video.name} />}
           {data.manualFile && <SummaryRow label="Manual" value={data.manualFile.name} />}
           {imageFiles.length > 0 && (
@@ -188,6 +198,20 @@ export default function ProductSummary({
                   className="h-14 w-14 rounded-lg border object-cover"
                 />
               ))}
+            </div>
+          )}
+          {data.featuredImage && (
+            <div className="mt-2">
+              <span className="text-muted-foreground text-xs">Featured Image Preview</span>
+              <div className="mt-1">
+                <Image
+                  width={56}
+                  height={56}
+                  src={URL.createObjectURL(data.featuredImage as File)}
+                  alt="Featured"
+                  className="h-14 w-14 rounded-lg border object-cover"
+                />
+              </div>
             </div>
           )}
         </SummaryCard>

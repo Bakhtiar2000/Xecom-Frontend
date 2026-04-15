@@ -27,6 +27,7 @@ export const productSchema = z
 
     // Media
     images: z.array(fileValidator).min(1, "At least one image is required"),
+    featuredImage: optionalFileValidator,
     video: optionalFileValidator,
     manualFile: optionalFileValidator,
 

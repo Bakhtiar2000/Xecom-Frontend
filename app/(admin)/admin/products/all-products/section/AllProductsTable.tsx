@@ -44,7 +44,13 @@ import { Switch } from "@/components/ui/switch";
 import ProductViewModal from "./ProductViewModal";
 import { useRouter } from "next/navigation";
 import { ProductStatus } from "@/constants/enum";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
@@ -86,7 +92,6 @@ const AllProductsTable = () => {
   //     toast.error("Failed to update status");
   //   }
   // };
-
 
   const handleStatusChange = async (product: TProduct, newStatus: ProductStatus) => {
     const formData = new FormData();

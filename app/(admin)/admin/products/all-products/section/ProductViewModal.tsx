@@ -47,13 +47,9 @@ const ProductViewModal = ({ product, open, onClose }: Props) => {
               )}
               <div className="min-w-0 flex-1">
                 <p className="text-lg font-semibold">{product.name}</p>
-                <p className="text-muted-foreground mt-2 text-sm">
-                  {product.shortDescription}
-                </p>
+                <p className="text-muted-foreground mt-2 text-sm">{product.shortDescription}</p>
                 {product.fullDescription && (
-                  <p className="text-muted-foreground mt-3 text-sm">
-                    {product.fullDescription}
-                  </p>
+                  <p className="text-muted-foreground mt-3 text-sm">{product.fullDescription}</p>
                 )}
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Badge variant={product.status === "ACTIVE" ? "default" : "secondary"}>
@@ -88,11 +84,7 @@ const ProductViewModal = ({ product, open, onClose }: Props) => {
                   <Field label="Max order qty" value={product.maxOrderQty ?? "—"} />
                   <Field
                     label="Weight"
-                    value={
-                      product.weight
-                        ? `${product.weight} ${product.weightUnit ?? ""}`
-                        : "—"
-                    }
+                    value={product.weight ? `${product.weight} ${product.weightUnit ?? ""}` : "—"}
                   />
                   <Field label="Warranty" value={product.warranty ?? "—"} />
                 </div>
@@ -113,16 +105,10 @@ const ProductViewModal = ({ product, open, onClose }: Props) => {
                   <Field label="SEO description" value={product.seoDescription} fullWidth />
                 )}
                 {product.metaKeywords && product.metaKeywords.length > 0 && (
-                  <Field
-                    label="Meta keywords"
-                    value={product.metaKeywords.join(", ")}
-                    fullWidth
-                  />
+                  <Field label="Meta keywords" value={product.metaKeywords.join(", ")} fullWidth />
                 )}
               </div>
             </Section>
-
-           
           </div>
         ),
       },
@@ -172,7 +158,7 @@ const ProductViewModal = ({ product, open, onClose }: Props) => {
       title: "FAQ",
       component: (
         <Section title="Frequently Asked Questions">
-          <div className="text-center text-sm text-muted-foreground py-8">
+          <div className="text-muted-foreground py-8 text-center text-sm">
             <p>No FAQs added yet</p>
           </div>
         </Section>
@@ -185,7 +171,7 @@ const ProductViewModal = ({ product, open, onClose }: Props) => {
       title: "Variants",
       component: (
         <Section title="Product Variants">
-          <div className="text-center text-sm text-muted-foreground py-8">
+          <div className="text-muted-foreground py-8 text-center text-sm">
             <p>{product._count?.variants || 0} variant(s) available</p>
           </div>
         </Section>
@@ -199,23 +185,19 @@ const ProductViewModal = ({ product, open, onClose }: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-4xl gap-0 overflow-hidden p-0 flex flex-col max-h-[90vh]">
+      <DialogContent className="flex max-h-[90vh] max-w-4xl flex-col gap-0 overflow-hidden p-0">
         {/* Header */}
         <DialogHeader className="bg-background sticky top-0 z-10 border-b px-6 py-4">
           <DialogTitle>Product Details</DialogTitle>
         </DialogHeader>
 
         {/* Tabs */}
-        <div className="flex-1 overflow-hidden flex flex-col">
-          <Tabs defaultValue={sections[0]?.id} className="flex flex-col flex-1 w-full h-full">
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <Tabs defaultValue={sections[0]?.id} className="flex h-full w-full flex-1 flex-col">
             {/* Tab List */}
-            <TabsList className="w-full rounded-none border-b border-t bg-transparent p-0 h-auto gap-0">
+            <TabsList className="h-auto w-full gap-0 rounded-none border-t border-b bg-transparent p-0">
               {sections.map((section) => (
-                <TabsTrigger
-                  key={section.id}
-                  value={section.id}
-                  className="rounded-none border-r "
-                >
+                <TabsTrigger key={section.id} value={section.id} className="rounded-none border-r">
                   {section.title}
                 </TabsTrigger>
               ))}
@@ -224,7 +206,7 @@ const ProductViewModal = ({ product, open, onClose }: Props) => {
             {/* Tab Content */}
             <div className="flex-1 overflow-y-auto">
               {sections.map((section) => (
-                <TabsContent key={section.id} value={section.id} className="px-6 py-4 mt-0">
+                <TabsContent key={section.id} value={section.id} className="mt-0 px-6 py-4">
                   {section.component}
                 </TabsContent>
               ))}
