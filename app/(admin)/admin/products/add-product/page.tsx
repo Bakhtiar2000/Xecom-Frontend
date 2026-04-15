@@ -51,7 +51,7 @@ const TAB_FIELDS: Record<TabName, string[]> = {
     "seoDescription",
     "metaKeywords",
   ],
-  specifications: ["specifications"],
+  specifications: ["specifications", "relatedProductIds"],
   media: ["images", "featuredImage"],
   faq: ["faqs"],
   variants: ["variants"],
@@ -87,6 +87,7 @@ export default function AddProductPage() {
       fullDescription: "",
       brandId: "",
       categoryId: "",
+      relatedProductIds: [],
       status: "DRAFT",
       featured: false,
       images: [],
@@ -200,10 +201,11 @@ export default function AddProductPage() {
         dimension: data.dimensions,
         specifications: data.specifications,
         variants: data.variants,
+        relatedProductIds: data.relatedProductIds,
       };
       formData.append("featuredImage", data.featuredImage as File);
       formData.append("text", JSON.stringify(payload));
- console.log("Submitting form with data:", payload , "and files:", {
+      console.log("Submitting form with data:", payload, "and files:", {
         featuredImage: data.featuredImage,
         images: data.images,
         video: data.video,

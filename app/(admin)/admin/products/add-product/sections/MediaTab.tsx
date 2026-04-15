@@ -32,7 +32,6 @@ export default function MediaTab({ form, fieldRefs, imageFiles, setImageFiles }:
   const [featuredImagePreview, setFeaturedImagePreview] = useState<string | null>(null);
   const [featuredImageName, setFeaturedImageName] = useState<string | null>(null);
 
-
   return (
     <TabsContent value="media" className="space-y-4">
       <Card className="rounded-lg pt-0 pb-4 lg:pb-6">
@@ -74,7 +73,6 @@ export default function MediaTab({ form, fieldRefs, imageFiles, setImageFiles }:
               </FormItem>
             )}
           />
-
 
           {/* Video */}
           <FormField
@@ -129,8 +127,9 @@ export default function MediaTab({ form, fieldRefs, imageFiles, setImageFiles }:
                             alt="Featured preview"
                             width={40}
                             height={40}
-                            className="rounded object-cover shrink-0"
-                          />) : (
+                            className="shrink-0 rounded object-cover"
+                          />
+                        ) : (
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="text-muted-foreground h-5 w-5 shrink-0"

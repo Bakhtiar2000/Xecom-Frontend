@@ -9,6 +9,7 @@ import Title from "@/components/sections/shared/Title";
 import Image from "next/image";
 import { useGetSingleBrandQuery } from "@/redux/features/product/brand.api";
 import { useGetSingleCategoryQuery } from "@/redux/features/product/category.api";
+import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
 
 interface ProductSummaryProps {
   data: ProductFormData;
@@ -84,11 +85,18 @@ export default function ProductSummary({
   onConfirm,
   isSubmitting,
 }: ProductSummaryProps) {
-
-  const { data: BrandData } = useGetSingleBrandQuery(data.brandId)
-  const { data: categoryData } = useGetSingleCategoryQuery(data.categoryId)
+  const { data: BrandData } = useGetSingleBrandQuery(data.brandId);
+  const { data: categoryData } = useGetSingleCategoryQuery(data.categoryId);
+  const { data: allProductsData } = useGetAllProductsQuery([]);
+  
   const brandName = BrandData?.data.name || data.brandId;
   const categoryName = categoryData?.data.name || data.categoryId;
+  
+  // Get all products and filter by relatedProductIds
+  const allProducts = allProductsData?.data || [];
+  const relatedProducts = allProducts.filter((product: any) =>
+    data.relatedProductIds?.includes(product.id)
+  );
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -157,6 +165,36 @@ export default function ProductSummary({
             Object.entries(data.specifications).map(([k, v]) =>
               v ? <SummaryRow key={k} label={k} value={v} /> : null
             )
+          )}
+          
+          {/* Related Products Section */}
+          {data.relatedProductIds && data.relatedProductIds.length > 0 && (
+            <div className="mt-4 border-t pt-4">
+              <p className="text-muted-foreground text-xs font-semibold mb-3">Related Products ({relatedProducts.length})</p>
+              <div className="flex flex-wrap gap-3">
+                {relatedProducts.map((product: any) => {
+                  const productImage = product.images && product.images.length > 0 ? product.images[0].imageUrl : null;
+                  return (
+                    <div key={product.id} className="flex flex-col items-center gap-2">
+                      {productImage ? (
+                        <Image
+                          width={80}
+                          height={80}
+                          src={productImage}
+                          alt={product.name}
+                          className="h-20 w-20 rounded-lg border object-cover"
+                        />
+                      ) : (
+                        <div className="h-20 w-20 rounded-lg border bg-muted flex items-center justify-center">
+                          <span className="text-xs text-muted-foreground">No image</span>
+                        </div>
+                      )}
+                      <span className="text-xs font-medium text-center line-clamp-2 max-w-20">{product.name}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           )}
         </SummaryCard>
 
