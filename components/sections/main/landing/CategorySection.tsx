@@ -158,7 +158,10 @@ export default function CategorySection() {
                 key={`${cat.id}-${idx}`}
                 className="pointer-events-auto w-[calc((100%-1.5rem)/2)] shrink-0 sm:w-[calc((100%-3rem)/3)] md:w-[calc((100%-4.5rem)/4)] lg:w-[calc((100%-6rem)/5)]"
               >
-                <CategoryCard category={cat} active={idx % transformedCategories.length === activeSlide} />
+                <CategoryCard
+                  category={cat}
+                  active={idx % transformedCategories.length === activeSlide}
+                />
               </div>
             ))}
           </div>
