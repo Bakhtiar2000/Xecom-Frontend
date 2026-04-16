@@ -13,6 +13,8 @@ export default function CategorySection() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [hasDragged, setHasDragged] = useState(false); // Track if user dragged
+  const dragThreshold = 5; // Minimum pixels to consider as drag
 
   const { data: apiResponse, isLoading } = useGetAllCategoriesQuery([]);
   const categories = apiResponse?.data || [];
@@ -79,6 +81,7 @@ export default function CategorySection() {
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
     setIsDragging(true);
+    setHasDragged(false); // Reset drag flag
     setStartX(e.pageX - scrollRef.current.offsetLeft);
     setScrollLeft(scrollRef.current.scrollLeft);
   };
@@ -88,6 +91,12 @@ export default function CategorySection() {
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX) * 1.5;
+    
+    // Check if drag distance exceeds threshold
+    if (Math.abs(walk) > dragThreshold) {
+      setHasDragged(true);
+    }
+    
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
@@ -103,6 +112,7 @@ export default function CategorySection() {
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!scrollRef.current) return;
     setIsDragging(true);
+    setHasDragged(false); // Reset drag flag
     setStartX(e.touches[0].pageX - scrollRef.current.offsetLeft);
     setScrollLeft(scrollRef.current.scrollLeft);
   };
@@ -111,6 +121,12 @@ export default function CategorySection() {
     if (!isDragging || !scrollRef.current) return;
     const x = e.touches[0].pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX) * 1.5;
+    
+    // Check if drag distance exceeds threshold
+    if (Math.abs(walk) > dragThreshold) {
+      setHasDragged(true);
+    }
+    
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
@@ -130,6 +146,14 @@ export default function CategorySection() {
         left: targetScroll,
         behavior: "smooth",
       });
+    }
+  };
+
+  // Handle card click - prevent navigation if dragged
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (hasDragged) {
+      e.preventDefault();
+      e.stopPropagation();
     }
   };
 
@@ -178,6 +202,7 @@ export default function CategorySection() {
               <div
                 key={`${cat.id}-${idx}`}
                 className="pointer-events-auto w-[calc((100%-1.5rem)/2)] shrink-0 sm:w-[calc((100%-3rem)/3)] md:w-[calc((100%-4.5rem)/4)] lg:w-[calc((100%-6rem)/5)]"
+                onClick={handleCardClick}
               >
                 <CategoryCard
                   category={cat}
