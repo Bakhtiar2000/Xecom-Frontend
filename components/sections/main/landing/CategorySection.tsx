@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import SectionTitle from "@/components/sections/shared/SectionTitle";
 import CategoryCard from "@/components/sections/main/landing/sections/CategoryCard";
 import { useGetAllCategoriesQuery } from "@/redux/features/product/category.api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CategorySection() {
   const [isMobile, setIsMobile] = useState(false);
@@ -13,7 +14,7 @@ export default function CategorySection() {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  const { data: apiResponse } = useGetAllCategoriesQuery([]);
+  const { data: apiResponse, isLoading } = useGetAllCategoriesQuery([]);
   const categories = apiResponse?.data || [];
 
   // Transform API data to match CategoryCard expectations
@@ -134,9 +135,29 @@ export default function CategorySection() {
 
   return (
     <div className="container">
-      <SectionTitle subtitle="All Category Shoes Available." title="Our Product Category" />
+      {isLoading ? (
+        <SectionTitle subtitle="Loading Categories..." title="Our Product Category" />
+      ) : (
+        <SectionTitle subtitle="All Category Shoes Available." title="Our Product Category" />
+      )}
+      {isLoading ? (
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              className="relative my-5 flex h-55 max-w-65 flex-col items-center justify-center rounded-full shadow-md lg:my-10 lg:h-85"
+            >
+              {/* Circle Image Skeleton */}
+              <Skeleton className="h-full w-full rounded-full" />
 
-      {isScrollable ? (
+              {/* Text Skeleton */}
+              <div className="absolute bottom-5 lg:bottom-10">
+                <Skeleton className="mx-auto h-5 w-24 rounded-md" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : isScrollable ? (
         <div className="relative">
           {/* Carousel Container */}
           <div

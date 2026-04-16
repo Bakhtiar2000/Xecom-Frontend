@@ -224,9 +224,6 @@ export default function ProductSummary({
         {/* Media */}
         <SummaryCard title="Media" tab="media" onEdit={onEdit}>
           <SummaryRow label="Images" value={`${data.images.length} file(s) uploaded`} />
-          {data.featuredImage && (
-            <SummaryRow label="Featured Image" value={(data.featuredImage as File).name} />
-          )}
           {data.video && <SummaryRow label="Video" value={data.video.name} />}
           {data.manualFile && <SummaryRow label="Manual" value={data.manualFile.name} />}
           {imageFiles.length > 0 && (
@@ -241,20 +238,6 @@ export default function ProductSummary({
                   className="h-14 w-14 rounded-lg border object-cover"
                 />
               ))}
-            </div>
-          )}
-          {data.featuredImage && (
-            <div className="mt-2">
-              <span className="text-muted-foreground text-xs">Featured Image Preview</span>
-              <div className="mt-1">
-                <Image
-                  width={56}
-                  height={56}
-                  src={URL.createObjectURL(data.featuredImage as File)}
-                  alt="Featured"
-                  className="h-14 w-14 rounded-lg border object-cover"
-                />
-              </div>
             </div>
           )}
         </SummaryCard>
