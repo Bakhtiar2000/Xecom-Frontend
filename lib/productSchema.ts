@@ -50,6 +50,9 @@ export const productSchema = z
     // Specifications - Dynamic key-value pairs
     specifications: z.record(z.string(), z.string()).default({}),
 
+    // Related Products
+    relatedProductIds: z.array(z.string()).default([]),
+
     // FAQ
     faqs: z
       .array(

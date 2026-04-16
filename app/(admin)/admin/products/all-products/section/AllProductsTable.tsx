@@ -1,4 +1,4 @@
-import CustomSelect, { SelectOption } from "@/components/custom/CustomSelect";
+import CustomSelect, { SelectOption } from "@/components/custom/customSelect";
 import { SortableTableHead } from "@/components/custom/SortableTableHead";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,7 @@ import {
   useGetAllProductsQuery,
   useUpdateProductMutation,
 } from "@/redux/features/product/product.api";
-import { TAttribute, TAttributeValueId, TFilterAttribute, TProduct } from "@/types";
+import { TAttribute, TProduct } from "@/types";
 import { Eye, Loader2, Package, Pencil, Search, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -43,6 +43,14 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Switch } from "@/components/ui/switch";
 import ProductViewModal from "./ProductViewModal";
 import { useRouter } from "next/navigation";
+import { ProductStatus } from "@/constants/enum";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type SortableFields = "name" | "totalSales" | "viewCount" | "avgRating";
 
@@ -56,14 +64,52 @@ const AllProductsTable = () => {
     {}
   );
 
-  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+  const STATUS_OPTIONS = [
+    { value: ProductStatus.ACTIVE, label: "Active" },
+    { value: ProductStatus.INACTIVE, label: "Inactive" },
+    { value: ProductStatus.DRAFT, label: "Draft" },
+    { value: ProductStatus.OUT_OF_STOCK, label: "Out of Stock" },
+    { value: ProductStatus.DISCONTINUED, label: "Discontinued" },
+  ];
 
-  const handleToggleStatus = async (product: TProduct, checked: boolean) => {
+  const STATUS_STYLES: Record<ProductStatus, string> = {
+    [ProductStatus.ACTIVE]: "text-green-600",
+    [ProductStatus.INACTIVE]: "text-gray-500",
+    [ProductStatus.DRAFT]: "text-yellow-600",
+    [ProductStatus.OUT_OF_STOCK]: "text-orange-500",
+    [ProductStatus.DISCONTINUED]: "text-red-500",
+  };
+
+  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+  // const handleStatusChange = async (product: TProduct, newStatus: ProductStatus) => {
+  //   try {
+  //     await updateProduct({
+  //       id: product.id,
+  //       data: { status: newStatus },
+  //     }).unwrap();
+  //     toast.success("Product status updated");
+  //   } catch {
+  //     toast.error("Failed to update status");
+  //   }
+  // };
+
+  const handleStatusChange = async (product: TProduct, newStatus: ProductStatus) => {
+    const formData = new FormData();
+
+    formData.append(
+      "text",
+      JSON.stringify({
+        id: product.id,
+        status: newStatus,
+      })
+    );
+
     try {
       await updateProduct({
         id: product.id,
-        data: { status: checked ? "ACTIVE" : "INACTIVE" },
+        data: formData,
       }).unwrap();
+
       toast.success("Product status updated");
     } catch {
       toast.error("Failed to update status");
@@ -339,16 +385,28 @@ const AllProductsTable = () => {
                     </TableCell>
                     <TableCell>{product?.maxOrderQty}</TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Switch
-                          checked={product.status === "ACTIVE"}
-                          disabled={isUpdating}
-                          onCheckedChange={(checked) => handleToggleStatus(product, checked)}
-                        />
-                        <span className="text-sm">
-                          {product.status === "ACTIVE" ? "Active" : "Inactive"}
-                        </span>
-                      </div>
+                      <Select
+                        value={product.status}
+                        disabled={isUpdating}
+                        onValueChange={(val) => handleStatusChange(product, val as ProductStatus)}
+                      >
+                        <SelectTrigger
+                          className={`h-8 w-36 text-xs font-medium ${STATUS_STYLES[product.status as ProductStatus] ?? ""}`}
+                        >
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {STATUS_OPTIONS.map((opt) => (
+                            <SelectItem
+                              key={opt.value}
+                              value={opt.value}
+                              className={`text-xs ${STATUS_STYLES[opt.value]}`}
+                            >
+                              {opt.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">

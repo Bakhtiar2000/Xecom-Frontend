@@ -51,7 +51,7 @@ const TAB_FIELDS: Record<TabName, string[]> = {
     "seoDescription",
     "metaKeywords",
   ],
-  specifications: ["specifications"],
+  specifications: ["specifications", "relatedProductIds"],
   media: ["images"],
   faq: ["faqs"],
   variants: ["variants"],
@@ -87,6 +87,7 @@ export default function AddProductPage() {
       fullDescription: "",
       brandId: "",
       categoryId: "",
+      relatedProductIds: [],
       status: "DRAFT",
       featured: false,
       images: [],
@@ -199,18 +200,23 @@ export default function AddProductPage() {
         dimension: data.dimensions,
         specifications: data.specifications,
         variants: data.variants,
+        relatedProductIds: data.relatedProductIds,
       };
-
       formData.append("text", JSON.stringify(payload));
-
+      console.log("Submitting form with data:", payload, "and files:", {
+        images: data.images,
+        video: data.video,
+        manualFile: data.manualFile,
+      });
       const result = await addProduct(formData).unwrap();
+      console.log("API response:", result);
       toast.success(result?.message || "Product created successfully 🎉");
       router.push("/admin/products/all-products");
       form.reset();
       setImageFiles([]);
       setShowSummary(false);
     } catch (error: any) {
-      console.error("Full error:", JSON.stringify(error?.data, null, 2));
+      console.log("Full error:", JSON.stringify(error?.data, null, 2));
       const errorMessage = error?.data?.message || error?.message || "Failed to create product";
       toast.error(errorMessage);
     } finally {

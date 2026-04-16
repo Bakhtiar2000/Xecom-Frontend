@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import Title from "@/components/sections/shared/Title";
 import Image from "next/image";
+import { useGetSingleBrandQuery } from "@/redux/features/product/brand.api";
+import { useGetSingleCategoryQuery } from "@/redux/features/product/category.api";
+import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
 
 interface ProductSummaryProps {
   data: ProductFormData;
@@ -82,6 +85,18 @@ export default function ProductSummary({
   onConfirm,
   isSubmitting,
 }: ProductSummaryProps) {
+  const { data: BrandData } = useGetSingleBrandQuery(data.brandId);
+  const { data: categoryData } = useGetSingleCategoryQuery(data.categoryId);
+  const { data: allProductsData } = useGetAllProductsQuery([]);
+
+  const brandName = BrandData?.data.name || data.brandId;
+  const categoryName = categoryData?.data.name || data.categoryId;
+
+  // Get all products and filter by relatedProductIds
+  const allProducts = allProductsData?.data || [];
+  const relatedProducts = allProducts.filter((product: any) =>
+    data.relatedProductIds?.includes(product.id)
+  );
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -111,8 +126,8 @@ export default function ProductSummary({
         <SummaryCard title="Basic Information" tab="basic" onEdit={onEdit}>
           <SummaryRow label="Name" value={data.name} />
           <SummaryRow label="Slug" value={data.slug} mono />
-          <SummaryRow label="Brand" value={BRAND_MAP[data.brandId] || data.brandId} />
-          <SummaryRow label="Category" value={CATEGORY_MAP[data.categoryId] || data.categoryId} />
+          <SummaryRow label="Brand" value={brandName} />
+          <SummaryRow label="Category" value={categoryName} />
           <SummaryRow label="Status" value={<Badge variant="outline">{data.status}</Badge>} />
           <SummaryRow label="Featured" value={data.featured ? "Yes" : "No"} />
           <SummaryRow label="Short Description" value={data.shortDescription} />
@@ -150,6 +165,41 @@ export default function ProductSummary({
             Object.entries(data.specifications).map(([k, v]) =>
               v ? <SummaryRow key={k} label={k} value={v} /> : null
             )
+          )}
+
+          {/* Related Products Section */}
+          {data.relatedProductIds && data.relatedProductIds.length > 0 && (
+            <div className="mt-4 border-t pt-4">
+              <p className="text-muted-foreground mb-3 text-xs font-semibold">
+                Related Products ({relatedProducts.length})
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {relatedProducts.map((product: any) => {
+                  const productImage =
+                    product.images && product.images.length > 0 ? product.images[0].imageUrl : null;
+                  return (
+                    <div key={product.id} className="flex flex-col items-center gap-2">
+                      {productImage ? (
+                        <Image
+                          width={80}
+                          height={80}
+                          src={productImage}
+                          alt={product.name}
+                          className="h-20 w-20 rounded-lg border object-cover"
+                        />
+                      ) : (
+                        <div className="bg-muted flex h-20 w-20 items-center justify-center rounded-lg border">
+                          <span className="text-muted-foreground text-xs">No image</span>
+                        </div>
+                      )}
+                      <span className="line-clamp-2 max-w-20 text-center text-xs font-medium">
+                        {product.name}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           )}
         </SummaryCard>
 

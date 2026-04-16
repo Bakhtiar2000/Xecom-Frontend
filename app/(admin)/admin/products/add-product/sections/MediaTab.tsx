@@ -17,6 +17,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import { X } from "lucide-react";
 import { MultiImageUpload } from "@/components/custom/MultipleImageUpload";
 import { VideoUpload } from "@/components/custom/VideoUpload";
+import Image from "next/image";
 
 interface MediaTabProps {
   form: UseFormReturn<ProductFormData>;
@@ -99,7 +100,6 @@ export default function MediaTab({ form, fieldRefs, imageFiles, setImageFiles }:
               </FormItem>
             )}
           />
-
           {/* Manual / PDF */}
           <FormField
             control={form.control}

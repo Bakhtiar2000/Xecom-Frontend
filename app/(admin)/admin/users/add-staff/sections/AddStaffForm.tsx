@@ -24,9 +24,8 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 
 import { useRegisterStaffMutation } from "@/redux/features/user/staff.api";
 import { TRegisterStaffDto } from "@/redux/features/user/dto/staff.dto";
-
-import CustomSelect, { SelectOption } from "@/components/custom/CustomSelect";
 import { API_URL } from "@/redux/api/baseApi";
+import CustomSelect, { SelectOption } from "@/components/custom/customSelect";
 
 export default function AddStaffForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
