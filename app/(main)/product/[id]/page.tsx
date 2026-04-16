@@ -34,6 +34,8 @@ import {
   useRemoveFromWishlistMutation,
 } from "@/redux/features/product/wishlist.api";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import ProtectedRoute from "@/route/ProtectedRoute";
+import { UserRole } from "@/constants/enum";
 
 export default function ProductDetails() {
   const params = useParams();
@@ -794,7 +796,8 @@ export default function ProductDetails() {
           {/* Actions */}
           <div className="mb-6">
             <div className="flex w-full flex-col gap-4 md:flex-row">
-              <button
+
+                <button
                 onClick={handleAddToCart}
                 disabled={isAddingToCart || stockQty === 0}
                 className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-black font-semibold text-white transition-all hover:bg-gray-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 md:flex-1"

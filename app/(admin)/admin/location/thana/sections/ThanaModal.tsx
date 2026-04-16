@@ -152,7 +152,7 @@ export default function ThanaModal({ open, onOpenChange, thana }: Props) {
               placeholder="Select Country"
             />
           </div>
-
+ 
           {/* Division */}
           <div>
             <Label>Division</Label>

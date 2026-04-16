@@ -111,7 +111,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       }
     }
 
-    return breadcrumbs;
+    return breadcrumbs; 
   };
 
   const breadcrumbs = generateBreadcrumbs();

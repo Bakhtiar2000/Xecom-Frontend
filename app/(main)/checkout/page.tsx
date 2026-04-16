@@ -8,13 +8,10 @@ import {
   CreditCard,
   ArrowRight,
   Check,
-  User,
-  MapPin,
-  Phone,
   Tag,
   Trash2,
   Lock,
-  FileText,
+  MapPin,
 } from "lucide-react";
 import Image from "next/image";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -39,16 +36,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
+import ShippingInfo from "./sections/ShippingInfo";
+import { useCreateOrderMutation } from "@/redux/features/order/order.api";
 
 interface Voucher {
   id: string;
@@ -77,6 +67,11 @@ interface CartItem {
 const CheckoutPage = () => {
   const [activeStep, setActiveStep] = useState<"items" | "info" | "payment">("items");
 
+  const [touched, setTouched] = useState({
+    thanaId: false,
+    street: false,
+  });
+
   const INSIDE_DHAKA_FEE = 100;
   const OUTSIDE_DHAKA_FEE = 150;
 
@@ -86,16 +81,16 @@ const CheckoutPage = () => {
   const [appliedPromoCode, setAppliedPromoCode] = useState<string>("");
   const [promoError, setPromoError] = useState<string>("");
 
+  const [createOrder, { isLoading: isOrdering }] = useCreateOrderMutation();
+
   const validPromoCodes = ["SAVE10", "DISCOUNT10", "PROMO10"];
 
   const applyPromoCode = (): void => {
     const trimmedCode = promoCode.trim().toUpperCase();
-
     if (!trimmedCode) {
       setPromoError("Please enter a promo code");
       return;
     }
-
     if (validPromoCodes.includes(trimmedCode)) {
       setAppliedPromoCode(trimmedCode);
       setPromoError("");
@@ -115,7 +110,7 @@ const CheckoutPage = () => {
     {
       id: "v1",
       name: "Shipping Discount",
-      description: "Minimum spend  Tk 1000",
+      description: "Minimum spend Tk 1000",
       discount: 145,
       type: "freeShipping",
       minPurchase: 1000,
@@ -138,33 +133,54 @@ const CheckoutPage = () => {
     setCartItems(cartItems.filter((item) => item.id !== id));
   };
 
+  // ── Form state — only location fields ────────────────────────────────────
+  const [formData, setFormData] = useState<CheckoutFormData>({
+    thanaId: "",
+    street: "",
+    postalCode: "",
+  });
+
+  const [formErrors, setFormErrors] = useState<Partial<Record<keyof CheckoutFormData, string>>>({});
+
+  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
+
+  // Called by ShippingInfo whenever any location field changes
+ const handleLocationChange = (data: CheckoutFormData) => {
+    setFormData(data);
+
+    const validation = checkoutSchema.safeParse(data);
+    setFormValid(validation.success);
+
+    const newErrors: Partial<Record<keyof CheckoutFormData, string>> = {};
+
+    if (touched.thanaId && !data.thanaId) {
+      newErrors.thanaId = "Please select a Thana";
+    }
+
+    if (touched.street && (!data.street || data.street.length < 3)) {
+      newErrors.street = "Street / Area is required";
+    }
+
+    setFormErrors(newErrors);
+  };
   const calculateTotals = () => {
     const selectedItems = cartItems.filter((item) => item.selected);
-
     const totalPrice = selectedItems.reduce(
       (sum, item) => sum + item.finalPrice * item.quantity,
       0
     );
-
-    const baseShippingFee =
-      formData.shippingLocation === "inside" ? INSIDE_DHAKA_FEE : OUTSIDE_DHAKA_FEE;
+    // Default to inside Dhaka fee for display; real fee comes from backend
+    const baseShippingFee = INSIDE_DHAKA_FEE;
 
     let shippingFee = baseShippingFee;
     let savedShippingFee = 0;
 
     if (totalPrice >= 1000) {
-      if (formData.shippingLocation === "inside") {
-        savedShippingFee = baseShippingFee;
-        shippingFee = 0;
-      } else {
-        savedShippingFee = baseShippingFee * 0.5;
-        shippingFee = baseShippingFee * 0.5;
-      }
+      savedShippingFee = baseShippingFee;
+      shippingFee = 0;
     }
 
-    // Promo discount (10%)
     const promoDiscount = appliedPromoCode ? totalPrice * 0.1 : 0;
-
     const totalDiscount = promoDiscount + savedShippingFee;
 
     return {
@@ -180,127 +196,67 @@ const CheckoutPage = () => {
 
   const groupedItems = cartItems.reduce(
     (groups, item) => {
-      if (!groups[item.store]) {
-        groups[item.store] = [];
-      }
+      if (!groups[item.store]) groups[item.store] = [];
       groups[item.store].push(item);
       return groups;
     },
     {} as Record<string, CartItem[]>
   );
 
-  const [formData, setFormData] = useState<CheckoutFormData>({
-    name: "",
-    mobileNumber: "",
-    shippingLocation: "inside",
-    address: "",
-    paymentOption: "cod",
-    additionalNote: "",
-    selectedPaymentMethod: "bkash",
-  });
-  const [formErrors, setFormErrors] = useState<Partial<Record<keyof CheckoutFormData, string>>>({});
-  console.log(formData);
-
-  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
-
-  // Validate specific field only
-  const validateField = (fieldName: string, value: string, allData: CheckoutFormData) => {
-    const fieldSchemas: Record<string, z.ZodTypeAny> = {
-      name: checkoutSchema.pick({ name: true }).shape.name,
-      mobileNumber: checkoutSchema.pick({ mobileNumber: true }).shape.mobileNumber,
-      shippingLocation: checkoutSchema.pick({ shippingLocation: true }).shape.shippingLocation,
-      address: checkoutSchema.pick({ address: true }).shape.address,
-      paymentOption: checkoutSchema.pick({ paymentOption: true }).shape.paymentOption,
-      additionalNote: checkoutSchema.pick({ additionalNote: true }).shape.additionalNote,
-      selectedPaymentMethod: checkoutSchema.pick({
-        selectedPaymentMethod: true,
-      }).shape.selectedPaymentMethod,
-    };
-
-    const schema = fieldSchemas[fieldName];
-    if (!schema) return;
-
-    const validation = schema.safeParse(value);
-
-    setFormErrors((prev) => {
-      if (validation.success) {
-        // Clear error for this field
-        const newErrors = { ...prev };
-        delete newErrors[fieldName as keyof CheckoutFormData];
-        return newErrors;
-      } else {
-        // Set error for this field only
-        return {
-          ...prev,
-          [fieldName]: validation.error.issues[0]?.message || "Invalid input",
-        };
-      }
-    });
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => {
-      const updatedData = { ...prev, [name]: value };
-
-      // Validate only the field being changed
-      validateField(name, value, updatedData);
-
-      // Check if entire form is valid for button enabling
-      const validation = checkoutSchema.safeParse(updatedData);
-      setFormValid(validation.success);
-
-      return updatedData;
-    });
-  };
-
   const totals = calculateTotals();
-
-  // shepping discound message
 
   const getOfferMessage = () => {
     const remaining = 1000 - totals.totalPrice;
-
     if (totals.totalPrice < 1000) {
       return {
         status: "locked",
         message: `Spend Tk ${remaining.toLocaleString("en-BD")} more to unlock shipping offer`,
       };
     }
-
-    if (formData.shippingLocation === "inside") {
-      return {
-        status: "active",
-        message: "🎉 Free shipping applied (Inside Dhaka)",
-      };
-    }
-
-    return {
-      status: "active",
-      message: "🎉 50% shipping discount applied (Outside Dhaka)",
-    };
+    return { status: "active", message: "🎉 Free shipping applied (Inside Dhaka)" };
   };
   const offerInfo = getOfferMessage();
+
+  const handlePlaceOrder = async () => {
+    if (!formValid) return;
+
+    try {
+      await createOrder({
+        thanaId: formData.thanaId,
+        street: formData.street,
+        postalCode: formData.postalCode || undefined,
+        couponCode: appliedPromoCode || undefined,
+      }).unwrap();
+
+      setCompletedSteps((prev) => new Set(prev).add("info"));
+      setActiveStep("payment");
+      toast.success("Place Order Successful!");
+
+      // Reset
+      setFormData({ thanaId: "", street: "", postalCode: "" });
+      setFormErrors({});
+      setFormValid(false);
+      setAppliedPromoCode("");
+      setPromoCode("");
+      setPromoError("");
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Order failed. Please try again.");
+    }
+  };
 
   return (
     <div className="cart-bg min-h-screen py-8">
       <div className="mx-auto">
         <div className="mx-auto w-11/12 justify-center gap-3 px-4 lg:flex">
-          {/* Left Column - Checkout Process */}
+          {/* Left Column */}
           <div className={`${activeStep === "payment" ? "lg:w-full" : "lg:w-8/12"}`}>
             <div className="mb-3">
-              {/* Checkout Steps */}
               <Tabs
                 value={activeStep}
                 onValueChange={(value) => {
-                  if (value === "items") {
-                    setActiveStep("items");
-                  } else if (value === "info" && completedSteps.has("items")) {
-                    setActiveStep("info");
-                  } else if (value === "payment" && formValid) {
-                    setActiveStep("payment");
-                  }
+                  if (value === "items") setActiveStep("items");
+                  else if (value === "info" && completedSteps.has("items")) setActiveStep("info");
+                  else if (value === "payment" && formValid) setActiveStep("payment");
                 }}
               >
                 <TabsList className="bg-card-primary flex h-auto w-full flex-wrap items-center gap-2 rounded-lg px-4 py-2 shadow-sm">
@@ -311,36 +267,31 @@ const CheckoutPage = () => {
                     <ShoppingCart size={20} />
                     <span className="hidden font-medium md:inline">Items</span>
                   </TabsTrigger>
-
                   <ArrowRight className="mx-1" />
-
                   <TabsTrigger
                     value="info"
                     disabled={!completedSteps.has("items")}
                     className="data-[state=active]:text-button-secondary flex items-center space-x-2 rounded-lg px-4 py-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <Truck size={20} />
-                    <span className="hidden font-medium md:inline">Shipping</span>
+                    <MapPin size={20} />
+                    <span className="hidden font-medium md:inline">Delivery Address</span>
                   </TabsTrigger>
-
                   <ArrowRight className="mx-1" />
-
                   <TabsTrigger
                     value="payment"
                     disabled={!formValid}
                     className="data-[state=active]:text-button-secondary flex items-center space-x-2 rounded-lg px-4 py-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <CreditCard size={20} />
-                    <span className="hidden font-medium md:inline">Successfully Payment</span>
+                    <span className="hidden font-medium md:inline">Order Placed</span>
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
 
-              {/* Active Step Content */}
               <div className="mt-3">
+                {/* ─────────── ITEMS STEP ─────────── */}
                 {activeStep === "items" && (
                   <div>
-                    {/* Cart Items by Store */}
                     {Object.entries(groupedItems).map(([store, items]) => (
                       <div
                         key={store}
@@ -362,7 +313,6 @@ const CheckoutPage = () => {
                                 {items.map((item) => (
                                   <div key={item.id} className="cursor-pointer p-4">
                                     <div className="flex flex-col gap-4 sm:flex-row">
-                                      {/* Image */}
                                       <div className="cart-img-bg-primary h-24 w-full shrink-0 overflow-hidden rounded-lg sm:w-24">
                                         <div className="flex h-full w-full items-center justify-center">
                                           <Image
@@ -374,10 +324,7 @@ const CheckoutPage = () => {
                                           />
                                         </div>
                                       </div>
-
-                                      {/* Details */}
                                       <div className="flex flex-1 flex-col justify-between">
-                                        {/* Name and Remove Button */}
                                         <div className="flex flex-row justify-between">
                                           <div>
                                             <h4 className="text-sm font-medium lg:text-lg">
@@ -397,8 +344,6 @@ const CheckoutPage = () => {
                                             <Trash2 className="text-muted-foreground hover:text-danger h-5 w-5" />
                                           </button>
                                         </div>
-
-                                        {/* Pricing and Quantity */}
                                         <div className="mt-4 flex flex-row items-start justify-between gap-2 sm:items-center sm:gap-0">
                                           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                                             {item.discountPercentage && (
@@ -415,8 +360,6 @@ const CheckoutPage = () => {
                                               Tk {item.finalPrice.toLocaleString("en-BD")}
                                             </div>
                                           </div>
-
-                                          {/* Quantity Selector */}
                                           <div className="cart-border-sec mt-2 flex items-center rounded-lg border sm:mt-0">
                                             <button
                                               onClick={() => updateQuantity(item.id, false)}
@@ -447,361 +390,50 @@ const CheckoutPage = () => {
                     ))}
                   </div>
                 )}
+
+                {/* ─────────── INFO STEP — only location ─────────── */}
                 {activeStep === "info" && (
                   <div className="bg-card-primary rounded-lg p-4 shadow-sm lg:p-8">
-                    <h2 className="mb-6 text-2xl font-bold">Customer Information</h2>
-                    <div className="my-2 flex gap-2">
-                      {/* Name Field */}
-                      <div className="flex-1 space-y-2">
-                        <label className="flex items-center text-sm font-medium">
-                          <User size={16} className="mr-2" />
-                          Your name *
-                        </label>
-                        <Input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          placeholder="Rahim Abdel"
-                          className={`w-full rounded-lg border bg-transparent px-4 py-3 transition-all ${
-                            formErrors.name
-                              ? "border-danger focus:ring-danger"
-                              : "focus:ring-success"
-                          }`}
-                        />
-                        {formErrors.name && (
-                          <p className="text-danger text-sm font-medium">{formErrors.name}</p>
-                        )}
-                      </div>
-                      {/* Mobile Number Field */}
-                      <div className="flex-1 space-y-2">
-                        <label className="flex items-center text-sm font-medium">
-                          <Phone size={16} className="mr-2" />
-                          <span className="hidden lg:flex">Your Mobile</span> Number *
-                        </label>
-                        <Input
-                          type="tel"
-                          name="mobileNumber"
-                          value={formData.mobileNumber}
-                          onChange={handleChange}
-                          placeholder="017XXXXXXXX"
-                          className={`w-full rounded-lg border bg-transparent px-4 py-3 transition-all focus:outline-none ${
-                            formErrors.mobileNumber
-                              ? "border-danger focus:ring-danger"
-                              : "border-success focus:ring-success"
-                          }`}
-                        />
-                        {formErrors.mobileNumber && (
-                          <p className="text-danger text-sm font-medium">
-                            {formErrors.mobileNumber}
-                          </p>
-                        )}
-                      </div>
-                    </div>
+                    <h2 className="mb-6 text-2xl font-bold">Delivery Address</h2>
 
-                    {/* Shipping Location */}
-                    <div className="my-2 space-y-2">
-                      <label className="flex items-center text-sm font-medium">
-                        <MapPin size={16} className="mr-2" />
-                        Shipping Location *
-                      </label>
-                      <div className="grid grid-cols-2 gap-4">
-                        <label
-                          className={`flex cursor-pointer items-center rounded-lg border p-4 transition-all ${
-                            formData.shippingLocation === "inside"
-                              ? "border-border bg-success"
-                              : "border-border hover:border-success-foreground"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name="shippingLocation"
-                            value="inside"
-                            checked={formData.shippingLocation === "inside"}
-                            onChange={handleChange}
-                            className="mr-3 h-4 w-4"
-                          />
-                          <div>
-                            <p className="font-medium">Inside Dhaka</p>
-                            <p className="text-muted-foreground text-sm">
-                              Minimum spend 1000 tk then Free Shipping{" "}
-                            </p>
-                          </div>
-                        </label>
-
-                        <label
-                          className={`flex cursor-pointer items-center rounded-lg border p-4 transition-all ${
-                            formData.shippingLocation === "outside"
-                              ? "border-border bg-success"
-                              : "border-border hover:border-success-foreground"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name="shippingLocation"
-                            value="outside"
-                            checked={formData.shippingLocation === "outside"}
-                            onChange={handleChange}
-                            className="text-success-foreground mr-3 h-4 w-4"
-                          />
-                          <div>
-                            <p className="font-medium">Outside Dhaka</p>
-                            <p className="text-muted-foreground text-sm">
-                              Minimum spend 1000 tk then Shipping 50% off{" "}
-                            </p>
-                          </div>
-                        </label>
-                      </div>
-                      {formErrors.shippingLocation && (
-                        <p className="text-danger text-sm font-medium">
-                          {formErrors.shippingLocation}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Address Field */}
-                    <div className="my-2 space-y-2">
-                      <label className="flex items-center text-sm font-medium">
-                        <MapPin size={16} className="mr-2" />
-                        Your Address *
-                      </label>
-                      <Textarea
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        rows={3}
-                        placeholder="Product delivery address here"
-                        className={`w-full resize-none rounded-lg border px-4 py-3 transition-all focus:ring-2 focus:outline-none ${
-                          formErrors.address
-                            ? "border-danger focus:ring-danger"
-                            : "border-success focus:ring-success"
-                        }`}
-                      />
-                      {formErrors.address && (
-                        <p className="text-danger text-sm font-medium">{formErrors.address}</p>
-                      )}
-                    </div>
-
-                    {/* Payment Option */}
-                    <div className="my-2 space-y-2">
-                      <label className="flex items-center text-sm font-medium">
-                        Payment Option *
-                      </label>
-
-                      <div className="space-y-4 lg:flex lg:gap-4">
-                        {/* Cash on Delivery Card */}
-                        <div className="flex-1">
-                          <label
-                            className={`flex cursor-pointer items-center rounded-lg border p-4 transition-all ${
-                              formData.paymentOption === "cod"
-                                ? "border-border bg-success"
-                                : "border-border hover:border-success-foreground"
-                            }`}
-                          >
-                            <input
-                              type="radio"
-                              name="paymentOption"
-                              value="cod"
-                              checked={formData.paymentOption === "cod"}
-                              onChange={handleChange}
-                              className="text-tag mr-3 h-4 w-4"
-                            />
-                            <div>
-                              <p className="font-medium">Cash On Delivery</p>
-                              <p className="text-muted-foreground text-sm">
-                                Additional fee may apply
-                              </p>
-                            </div>
-                          </label>
-                        </div>
-
-                        {/* Online Payment Dropdown Card */}
-                        <div
-                          className={`mb-4 flex-1 cursor-pointer rounded-lg border p-4 transition-all ${
-                            formData.paymentOption === "online"
-                              ? "border-border bg-success"
-                              : "border-border hover:border-success-foreground"
-                          }`}
-                        >
-                          <div className="flex items-center justify-start">
-                            <input
-                              type="radio"
-                              name="paymentOption"
-                              value="online"
-                              checked={formData.paymentOption === "online"}
-                              onChange={handleChange}
-                              className="text-tag mt-4 mr-3 h-4 w-4"
-                            />
-                            <div className="mb-4 h-1">
-                              <div className="mb-4 h-1 flex-1">
-                                <Select
-                                  value={formData.selectedPaymentMethod}
-                                  onValueChange={(
-                                    value: "bkash" | "nagad" | "rocket" | "upay" | "bank" | "card"
-                                  ) => {
-                                    setFormData((prev) => {
-                                      const updatedData: CheckoutFormData = {
-                                        ...prev,
-                                        paymentOption: "online",
-                                        selectedPaymentMethod: value,
-                                      };
-
-                                      // Validate the entire form with updated data
-                                      const validation = checkoutSchema.safeParse(updatedData);
-                                      if (validation.success) {
-                                        setFormErrors({});
-                                        setFormValid(true);
-                                      } else {
-                                        const errors: Partial<
-                                          Record<keyof CheckoutFormData, string>
-                                        > = {};
-                                        validation.error.issues.forEach((error) => {
-                                          const field = error.path[0] as keyof CheckoutFormData;
-                                          errors[field] = error.message;
-                                        });
-                                        setFormErrors(errors);
-                                        setFormValid(false);
-                                      }
-
-                                      return updatedData;
-                                    });
-                                  }}
-                                >
-                                  <SelectTrigger
-                                    className={`w-full ${
-                                      formErrors.selectedPaymentMethod
-                                        ? "border-danger focus:ring-danger"
-                                        : ""
-                                    }`}
-                                  >
-                                    <SelectValue placeholder="Select payment method" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="bkash">
-                                      <div>
-                                        <p className="font-medium">Bkash</p>
-                                        <p className="text-muted-foreground text-xs">
-                                          Mobile Payment
-                                        </p>
-                                      </div>
-                                    </SelectItem>
-                                    <SelectItem value="nagad">
-                                      <div>
-                                        <p className="font-medium">Nagad</p>
-                                        <p className="text-muted-foreground text-xs">
-                                          Mobile payment
-                                        </p>
-                                      </div>
-                                    </SelectItem>
-                                    <SelectItem value="rocket">
-                                      <div>
-                                        <p className="font-medium">Rocket</p>
-                                        <p className="text-muted-foreground text-xs">
-                                          Mobile payment
-                                        </p>
-                                      </div>
-                                    </SelectItem>
-                                    <SelectItem value="upay">
-                                      <div>
-                                        <p className="font-medium">Upay</p>
-                                        <p className="text-muted-foreground text-xs">
-                                          Digital wallet
-                                        </p>
-                                      </div>
-                                    </SelectItem>
-                                    <SelectItem value="bank">
-                                      <div>
-                                        <p className="font-medium">Bank Transfer</p>
-                                        <p className="text-muted-foreground text-xs">
-                                          Direct transfer
-                                        </p>
-                                      </div>
-                                    </SelectItem>
-                                    <SelectItem value="card">
-                                      <div>
-                                        <p className="font-medium">Credit/Debit Card</p>
-                                        <p className="text-muted-foreground text-xs">
-                                          Visa, Mastercard, Amex
-                                        </p>
-                                      </div>
-                                    </SelectItem>
-                                  </SelectContent>
-                                </Select>
-                                {formErrors.selectedPaymentMethod && (
-                                  <p className="text-danger mt-1 text-sm font-medium">
-                                    {formErrors.selectedPaymentMethod}
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      {formErrors.paymentOption && (
-                        <p className="text-danger text-sm font-medium">
-                          {formErrors.paymentOption}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Additional Note */}
-                    <div className="my-2 space-y-2">
-                      <label className="flex items-center text-sm font-medium">
-                        <FileText size={16} className="mr-2" />
-                        Additional Note
-                      </label>
-                      <Textarea
-                        name="additionalNote"
-                        value={formData.additionalNote}
-                        onChange={handleChange}
-                        rows={4}
-                        placeholder="Write your instruction here"
-                        className="border-success focus:ring-success w-full resize-none rounded-lg border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
-                      />
-                    </div>
+                    <ShippingInfo
+                      street={formData.street}
+                      postalCode={formData.postalCode}
+                      onLocationChange={handleLocationChange}
+                      errors={formErrors}
+                      setTouched={setTouched}
+                    />
                   </div>
                 )}
 
+                {/* ─────────── PAYMENT SUCCESS STEP ─────────── */}
                 {activeStep === "payment" && (
                   <div className="bg-card-primary flex items-center justify-center py-10">
                     <div className="w-full max-w-md p-6 text-center">
                       <p className="text-muted-foreground mb-2 text-sm">🎉 Thank You</p>
-
                       <h1 className="mb-2 text-2xl font-semibold">Your order has been received</h1>
-
                       <p className="text-muted-foreground mb-6 text-sm">
-                        Thanks for your order at . Your order will be processed as soon as possible.
-                        Make sure you check your order ID. You will be receiving an email shortly
-                        with invoice number.
+                        Thanks for your order. Your order will be processed as soon as possible. You
+                        will be receiving an email shortly with your invoice number.
                       </p>
-
                       <div className="mb-6 text-center text-sm">
                         <div className="inline-block space-y-3 text-left">
-                          <p>
-                            <strong>Order ID:</strong> #T9639048
-                          </p>
-                          <p>
-                            <strong>Order Date:</strong> 10 May, 2025
-                          </p>
                           <p>
                             <strong>Order Status:</strong> Order Submitted
                           </p>
                           <p>
-                            <strong>Order Value:</strong> Tk. 1,297
+                            <strong>Order Value:</strong> Tk.{" "}
+                            {totals.grandTotal.toLocaleString("en-BD")}
                           </p>
                         </div>
                       </div>
-
                       <div className="mt-6 flex justify-center gap-4">
-                        {/* Track Order Button */}
                         <Link href="/track-order">
                           <button className="bg-success text-success-foreground flex cursor-pointer items-center gap-2 rounded-lg px-5 py-2 transition">
                             <Truck size={18} />
                             <span>Track Order</span>
                           </button>
                         </Link>
-
-                        {/* Continue Shopping Button */}
                         <Link href="/">
                           <button className="border-success text-success-foreground flex cursor-pointer items-center gap-2 rounded-lg border px-5 py-2 transition">
                             <ShoppingCart size={18} />
@@ -817,31 +449,29 @@ const CheckoutPage = () => {
 
             {/* Security Badge */}
             <div className="bg-card-primary flex items-center justify-center space-x-4 rounded-xl p-4 shadow">
-              <Shield className="" size={24} />
+              <Shield size={24} />
               <span className="text-muted-foreground text-center text-sm font-medium sm:text-base">
                 Secure Checkout • 256-bit SSL Encryption • Your information is safe
               </span>
             </div>
           </div>
-          {/* Right Column - Order Summary */}
+
+          {/* ─────────── Right Column - Order Summary ─────────── */}
           <div className={`mt-3 lg:mt-0 lg:w-4/12 ${activeStep === "payment" ? "hidden" : ""}`}>
             <div>
               <div className="bg-primary mb-3 rounded-xl p-4">
                 <div className="flex items-center text-white">
                   <Truck className="mr-3 h-6 w-6" />
-                  <div>
-                    <p className="font-semibold">Order Details</p>
-                  </div>
+                  <p className="font-semibold">Order Details</p>
                 </div>
               </div>
 
-              {/* Promo Code Section */}
+              {/* Promo Code */}
               <div className="bg-card-primary mb-3 rounded-xl p-5 shadow-sm">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="text-sm font-semibold lg:text-lg">Discount Code</h3>
                   <Tag className="text-button-secondary h-5 w-5" />
                 </div>
-
                 {!appliedPromoCode ? (
                   <div>
                     <div className="flex gap-2">
@@ -885,20 +515,18 @@ const CheckoutPage = () => {
                 )}
               </div>
 
+              {/* Vouchers */}
               <div className="bg-card-primary mb-3 rounded-xl p-5 shadow-sm">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="text-sm font-semibold lg:text-lg">Available Offers</h3>
                   <Tag className="text-button-secondary h-5 w-5" />
                 </div>
-
                 <div className="space-y-3">
                   <p className="text-sm font-medium lg:text-lg">
                     There are {vouchers.length} Vouchers for you
                   </p>
-
                   {vouchers.map((voucher) => {
                     const canApply = totals.totalPrice >= voucher.minPurchase;
-
                     return (
                       <div key={voucher.id}>
                         {canApply ? (
@@ -917,21 +545,10 @@ const CheckoutPage = () => {
                             <span>{offerInfo.message}</span>
                           </div>
                         ) : (
-                          // Show AlertDialog if minimum purchase not met
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
-                              <div
-                                className={`mb-4 flex items-center gap-2 rounded-lg p-3 text-sm ${
-                                  offerInfo.status === "active"
-                                    ? "bg-success/10 text-success-foreground border-success/30 border"
-                                    : "bg-muted text-muted-foreground border-border border"
-                                }`}
-                              >
-                                {offerInfo.status === "active" ? (
-                                  <Check size={16} />
-                                ) : (
-                                  <Lock size={16} />
-                                )}
+                              <div className="bg-muted text-muted-foreground border-border mb-4 flex cursor-pointer items-center gap-2 rounded-lg border p-3 text-sm">
+                                <Lock size={16} />
                                 <span>{offerInfo.message}</span>
                               </div>
                             </AlertDialogTrigger>
@@ -942,14 +559,11 @@ const CheckoutPage = () => {
                                   You need to spend at least Tk{" "}
                                   {voucher.minPurchase.toLocaleString("en-BD")} to use this voucher.
                                   Your current total is Tk{" "}
-                                  {totals.totalPrice.toLocaleString("en-BD")}.
-                                  <br />
-                                  <br />
-                                  Please add Tk{" "}
+                                  {totals.totalPrice.toLocaleString("en-BD")}. Please add Tk{" "}
                                   {(voucher.minPurchase - totals.totalPrice).toLocaleString(
                                     "en-BD"
                                   )}{" "}
-                                  more to your cart to unlock this voucher.
+                                  more to unlock.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
@@ -963,19 +577,19 @@ const CheckoutPage = () => {
                   })}
                 </div>
               </div>
+
+              {/* Order Summary */}
               <div className="bg-card-primary rounded-xl p-5 shadow-sm">
                 <h3 className="mb-4 text-sm font-semibold lg:text-lg">Order Summary</h3>
-
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">
-                      Total Price ({cartItems.filter((item) => item.selected).length} products)
+                      Total Price ({cartItems.filter((i) => i.selected).length} products)
                     </span>
                     <span className="text-sm font-medium lg:text-lg">
                       Tk {totals.totalPrice.toLocaleString("en-BD")}
                     </span>
                   </div>
-
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Shipping Fee</span>
                     <div className="text-right">
@@ -1007,7 +621,6 @@ const CheckoutPage = () => {
                       )}
                     </div>
                   </div>
-
                   {appliedPromoCode && (
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Promo Code Discount</span>
@@ -1016,14 +629,12 @@ const CheckoutPage = () => {
                       </span>
                     </div>
                   )}
-
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Total Discount</span>
                     <span className="text-danger font-medium">
                       - Tk {totals.totalDiscount.toLocaleString("en-BD")}
                     </span>
                   </div>
-
                   <div className="cart-border-primary mt-3 border-t pt-3">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-bold lg:text-lg">Total</span>
@@ -1036,7 +647,7 @@ const CheckoutPage = () => {
                     </div>
                   </div>
 
-                  {/* Button remains same */}
+                  {/* Action Button */}
                   {activeStep === "info" && !formValid ? (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
@@ -1045,14 +656,15 @@ const CheckoutPage = () => {
                           className="border-border mt-6 flex w-full cursor-not-allowed items-center justify-center rounded-lg border bg-black/10 px-4 py-3 font-semibold opacity-50 shadow-sm"
                         >
                           <Lock className="mr-2" size={20} />
-                          Proceed to Payment
+                          Place Order
                         </button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Make Sure Complete to Fill This Form</AlertDialogTitle>
+                          <AlertDialogTitle>Complete the Address</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Please complete all required fields before proceeding to payment.
+                            Please select Country, Division, District, Thana and fill in your Street
+                            before placing the order.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
@@ -1062,65 +674,21 @@ const CheckoutPage = () => {
                     </AlertDialog>
                   ) : (
                     <button
-                      onClick={(e) => {
+                      onClick={async (e) => {
                         e.preventDefault();
-
                         if (activeStep === "items") {
                           setCompletedSteps((prev) => new Set(prev).add("items"));
                           setActiveStep("info");
                         } else if (activeStep === "info") {
-                          if (formValid) {
-                            setCompletedSteps((prev) => new Set(prev).add("info"));
-                            setActiveStep("payment");
-                            const orderData = {
-                              customer: {
-                                name: formData.name,
-                                phone: formData.mobileNumber,
-                              },
-                              shipping: {
-                                location: formData.shippingLocation,
-                                address: formData.address,
-                              },
-                              payment: {
-                                method: formData.paymentOption,
-                                selectedMethod: formData.selectedPaymentMethod,
-                              },
-                              note: formData.additionalNote,
-                              items: cartItems.filter((item) => item.selected),
-                              total: totals.grandTotal,
-                            };
-                            console.log("orderData", orderData);
-                            toast.success("Place Order Successful!");
-
-                            // Clear the form after successful order
-                            setFormData({
-                              name: "",
-                              mobileNumber: "",
-                              shippingLocation: "inside",
-                              address: "",
-                              paymentOption: "cod",
-                              additionalNote: "",
-                              selectedPaymentMethod: "bkash",
-                            });
-
-                            // Clear form validation states
-                            setFormErrors({});
-                            setFormValid(false);
-
-                            // Clear other states
-                            setAppliedPromoCode("");
-                            setPromoCode("");
-                            setPromoError("");
-                          }
-                        } else if (activeStep === "payment") {
+                          await handlePlaceOrder();
                         }
                       }}
-                      className="bg-button-primary mt-6 w-full transform cursor-pointer rounded-lg px-4 py-3 font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      disabled={isOrdering}
+                      className="bg-button-primary mt-6 w-full transform cursor-pointer rounded-lg px-4 py-3 font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70"
                     >
                       {activeStep === "items" &&
-                        `Proceed to Shipping (${cartItems.filter((item) => item.selected).length})`}
-                      {activeStep === "info" && "Proceed to Payment"}
-                      {activeStep === "payment" && "Place Order"}
+                        `Proceed to Address (${cartItems.filter((i) => i.selected).length})`}
+                      {activeStep === "info" && (isOrdering ? "Placing Order..." : "Place Order")}
                     </button>
                   )}
                 </div>
