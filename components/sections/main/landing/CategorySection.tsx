@@ -91,12 +91,12 @@ export default function CategorySection() {
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX) * 1.5;
-    
+
     // Check if drag distance exceeds threshold
     if (Math.abs(walk) > dragThreshold) {
       setHasDragged(true);
     }
-    
+
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
@@ -121,12 +121,12 @@ export default function CategorySection() {
     if (!isDragging || !scrollRef.current) return;
     const x = e.touches[0].pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX) * 1.5;
-    
+
     // Check if drag distance exceeds threshold
     if (Math.abs(walk) > dragThreshold) {
       setHasDragged(true);
     }
-    
+
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
