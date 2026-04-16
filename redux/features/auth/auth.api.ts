@@ -18,7 +18,7 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-     //-----------------Google login User-----------------
+    //-----------------Google login User-----------------
     googleLogin: builder.mutation({
       query: (data: TGoogleLoginDto) => ({
         url: "/auth/google-login",
@@ -26,7 +26,6 @@ const authApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
-
 
     //-----------------Refresh Token-----------------
     refreshToken: builder.mutation({
@@ -66,7 +65,7 @@ const authApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useLoginMutation, 
+  useLoginMutation,
   useGoogleLoginMutation,
   useRefreshTokenMutation,
   useChangePasswordMutation,

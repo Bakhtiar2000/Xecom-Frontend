@@ -64,11 +64,7 @@ export const CustomSelect = ({
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const selectedArray: SelectOption[] = value
-    ? Array.isArray(value)
-      ? value
-      : [value]
-    : [];
+  const selectedArray: SelectOption[] = value ? (Array.isArray(value) ? value : [value]) : [];
 
   // ── Fetch ──────────────────────────────────────────────────────────────────
 
@@ -102,9 +98,7 @@ export const CustomSelect = ({
           }
 
           // ← NEW: extraParams prop থেকে append করো
-          Object.entries(extraParams).forEach(([k, v]) =>
-            params.set(k, String(v))
-          );
+          Object.entries(extraParams).forEach(([k, v]) => params.set(k, String(v)));
 
           // endpoint URL-এ existing query params থাকলে সেগুলোও append করো
           const [baseUrl, existingQuery] = endpoint.split("?");
@@ -214,12 +208,10 @@ export const CustomSelect = ({
   // ── Infinite scroll ────────────────────────────────────────────────────────
 
   const handleScroll = useCallback(() => {
-    if (!paginated || !listRef.current || loadingRef.current || !hasMore)
-      return;
+    if (!paginated || !listRef.current || loadingRef.current || !hasMore) return;
 
     const el = listRef.current;
-    const distanceFromBottom =
-      el.scrollHeight - el.scrollTop - el.clientHeight;
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
 
     if (distanceFromBottom < 100) {
       load(searchTerm, pageNumber + 1, false);
@@ -228,8 +220,7 @@ export const CustomSelect = ({
 
   // ── Selection ──────────────────────────────────────────────────────────────
 
-  const isSelected = (opt: SelectOption) =>
-    selectedArray.some((s) => s.value === opt.value);
+  const isSelected = (opt: SelectOption) => selectedArray.some((s) => s.value === opt.value);
 
   const toggleOption = (opt: SelectOption) => {
     if (!multiSelect) {
@@ -266,19 +257,12 @@ export const CustomSelect = ({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   const triggerLabel =
-    selectedArray.length === 0
-      ? placeholder
-      : !multiSelect
-        ? selectedArray[0].label
-        : null;
+    selectedArray.length === 0 ? placeholder : !multiSelect ? selectedArray[0].label : null;
 
   return (
     <div ref={containerRef} className={`relative w-full ${className}`}>
       {label && (
-        <label
-          htmlFor={uid}
-          className="text-foreground mb-1.5 block text-sm font-medium"
-        >
+        <label htmlFor={uid} className="text-foreground mb-1.5 block text-sm font-medium">
           {label}
         </label>
       )}
@@ -294,9 +278,7 @@ export const CustomSelect = ({
           "bg-background rounded-md border text-left text-sm",
           "focus-visible:ring-ring transition-colors focus:outline-none focus-visible:ring-2",
           open ? "border-ring shadow-sm" : "border-input",
-          disabled
-            ? "cursor-not-allowed opacity-50"
-            : "hover:border-ring/70 cursor-pointer",
+          disabled ? "cursor-not-allowed opacity-50" : "hover:border-ring/70 cursor-pointer",
           error ? "border-destructive" : "",
         ].join(" ")}
       >
@@ -323,13 +305,7 @@ export const CustomSelect = ({
         ) : null}
 
         {triggerLabel && (
-          <span
-            className={
-              selectedArray.length === 0
-                ? "text-muted-foreground flex-1"
-                : "flex-1"
-            }
-          >
+          <span className={selectedArray.length === 0 ? "text-muted-foreground flex-1" : "flex-1"}>
             {triggerLabel}
           </span>
         )}
@@ -369,9 +345,7 @@ export const CustomSelect = ({
                 placeholder="Search..."
                 className="placeholder:text-muted-foreground flex-1 bg-transparent text-sm outline-none"
               />
-              {loading && (
-                <Loader2 className="text-muted-foreground h-3.5 w-3.5 animate-spin" />
-              )}
+              {loading && <Loader2 className="text-muted-foreground h-3.5 w-3.5 animate-spin" />}
             </div>
           )}
 
@@ -386,9 +360,7 @@ export const CustomSelect = ({
                 Loading...
               </div>
             ) : options.length === 0 ? (
-              <div className="text-muted-foreground py-8 text-center text-sm">
-                No results found
-              </div>
+              <div className="text-muted-foreground py-8 text-center text-sm">No results found</div>
             ) : (
               <>
                 {options.map((opt) => {
@@ -415,12 +387,8 @@ export const CustomSelect = ({
                               : "",
                         ].join(" ")}
                       >
-                        {selected && multiSelect && (
-                          <Check className="h-3 w-3" />
-                        )}
-                        {selected && !multiSelect && (
-                          <Check className="text-primary h-4 w-4" />
-                        )}
+                        {selected && multiSelect && <Check className="h-3 w-3" />}
+                        {selected && !multiSelect && <Check className="text-primary h-4 w-4" />}
                       </span>
                       <span className="flex-1 truncate">{opt.label}</span>
                     </button>

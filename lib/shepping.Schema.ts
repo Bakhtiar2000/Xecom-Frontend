@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const checkoutSchema = z.object({
-
   thanaId: z.string().min(1, "Please select a Thana"),
   street: z.string().min(3, "Street / Area is required"),
   postalCode: z.string().optional().default(""),

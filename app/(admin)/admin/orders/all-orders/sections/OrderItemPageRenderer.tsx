@@ -96,9 +96,9 @@ export default function OrderItemPageRenderer({
 
   const orders = ((data?.data as TOrderWithRelations[]) || []) as TOrderWithRelations[];
 
-  console.log("odrders1: ",orders);
+  console.log("odrders1: ", orders);
 
-  console.log("status ",orders);
+  console.log("status ", orders);
 
   useEffect(() => {
     if (orders.length === 0) {
@@ -116,22 +116,21 @@ export default function OrderItemPageRenderer({
     return orders?.find((order) => order.id === selectedOrderId) || null;
   }, [orders, selectedOrderId]);
 
-   console.log("selectorOrderId ",selectedOrderId);
+  console.log("selectorOrderId ", selectedOrderId);
 
-    console.log("selectorOrder ",selectedOrder);
-    console.log("Status ",selectedOrder?.status);
+  console.log("selectorOrder ", selectedOrder);
+  console.log("Status ", selectedOrder?.status);
 
-    console.log("orderItems", selectedOrder?.orderItems)
+  console.log("orderItems", selectedOrder?.orderItems);
 
-
-  const orderItems = selectedOrder?.orderItems?.map((item) =>({
-      productId: item.productId,
-      quantity: item.quantity
+  const orderItems = selectedOrder?.orderItems?.map((item) => ({
+    productId: item.productId,
+    quantity: item.quantity,
   }));
 
-    orderItems?.forEach(item => {
-     console.log(item.productId);
-     console.log(item.quantity);
+  orderItems?.forEach((item) => {
+    console.log(item.productId);
+    console.log(item.quantity);
   });
 
   const isMutating = isUpdating || isCancelling;

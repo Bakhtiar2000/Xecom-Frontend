@@ -10,12 +10,8 @@ import CustomSelect, { SelectOption } from "@/components/custom/CustomSelect";
 interface ShippingInfoProps {
   street: string;
   postalCode: string;
-  onLocationChange: (data: {
-    thanaId: string;
-    street: string;
-    postalCode: string;
-  }) => void;
-  setTouched: React.Dispatch<any>; 
+  onLocationChange: (data: { thanaId: string; street: string; postalCode: string }) => void;
+  setTouched: React.Dispatch<any>;
   errors?: {
     thanaId?: string;
     street?: string;
@@ -39,16 +35,9 @@ const ShippingInfo = ({
   const divisionId = selectedDivision[0]?.value ?? "";
   const districtId = selectedDistrict[0]?.value ?? "";
 
-
-  const notify = (overrides?: {
-    thanaId?: string;
-    street?: string;
-    postalCode?: string;
-  }) => {
+  const notify = (overrides?: { thanaId?: string; street?: string; postalCode?: string }) => {
     onLocationChange({
-      thanaId:
-        overrides?.thanaId ??
-        String(selectedThana[0]?.value ?? ""),
+      thanaId: overrides?.thanaId ?? String(selectedThana[0]?.value ?? ""),
       street: overrides?.street ?? street,
       postalCode: overrides?.postalCode ?? postalCode,
     });
@@ -91,7 +80,6 @@ const ShippingInfo = ({
 
   const handleStreetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     notify({ street: e.target.value });
-
 
     setTouched((prev: any) => ({ ...prev, street: true }));
   };
@@ -176,10 +164,7 @@ const ShippingInfo = ({
             searchable
             paginated
           />
-          {errors.thanaId && (
-            <p className="text-danger mt-1 text-sm">{errors.thanaId}</p>
-          )}
-
+          {errors.thanaId && <p className="text-danger mt-1 text-sm">{errors.thanaId}</p>}
         </div>
 
         <div>
@@ -189,9 +174,7 @@ const ShippingInfo = ({
             onChange={handleStreetChange}
             className={errors.street ? "border-danger" : ""}
           />
-          {errors.street && (
-            <p className="text-danger mt-1 text-sm">{errors.street}</p>
-          )}
+          {errors.street && <p className="text-danger mt-1 text-sm">{errors.street}</p>}
         </div>
 
         <div>

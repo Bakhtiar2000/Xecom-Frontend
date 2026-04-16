@@ -79,7 +79,7 @@ const Navbar = () => {
   };
 
   // Handle logout
-  const handleLogout =async () => {
+  const handleLogout = async () => {
     dispatch(logout());
     await signOut({ redirect: false });
     toast.success("Logged out successfully");

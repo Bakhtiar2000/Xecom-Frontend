@@ -290,10 +290,16 @@ export default function CartContent({
 
         <Link href="/checkout" onClick={onClose}>
           <button className="bg-button-primary mt-4 w-full cursor-pointer rounded-lg py-3 text-white">
-              <ProtectedRoute allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.STAFF,UserRole.CUSTOMER]}>
-                Checkout ({selectedCount})
-              </ProtectedRoute>
-            
+            <ProtectedRoute
+              allowedRoles={[
+                UserRole.SUPER_ADMIN,
+                UserRole.ADMIN,
+                UserRole.STAFF,
+                UserRole.CUSTOMER,
+              ]}
+            >
+              Checkout ({selectedCount})
+            </ProtectedRoute>
           </button>
         </Link>
       </div>

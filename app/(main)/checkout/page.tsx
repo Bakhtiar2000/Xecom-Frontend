@@ -145,7 +145,7 @@ const CheckoutPage = () => {
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
   // Called by ShippingInfo whenever any location field changes
- const handleLocationChange = (data: CheckoutFormData) => {
+  const handleLocationChange = (data: CheckoutFormData) => {
     setFormData(data);
 
     const validation = checkoutSchema.safeParse(data);

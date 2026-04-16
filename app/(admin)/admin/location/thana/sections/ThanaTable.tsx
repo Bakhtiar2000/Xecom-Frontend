@@ -277,7 +277,7 @@ export default function ThanaTable({ onEdit }: ThanaTableProps) {
             </TableRow>
           </TableHeader>
 
-          <TableBody> 
+          <TableBody>
             {isLoading ? (
               <TableLoading colSpan={5} rows={5} />
             ) : isError ? (

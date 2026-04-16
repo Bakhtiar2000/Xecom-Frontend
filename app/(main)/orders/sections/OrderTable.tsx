@@ -30,12 +30,12 @@ import {
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter, 
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-export default function OrderTable({onEdit}) {
+export default function OrderTable({ onEdit }) {
   // cancel mutation
   const [cancelOrder, { isLoading: isCancelling }] = useCancelOrderMutation();
 

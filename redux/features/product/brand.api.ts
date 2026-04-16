@@ -106,7 +106,7 @@ export const {
   useGetAllBrandsQuery,
   useGetSingleBrandQuery,
   useAddBrandMutation,
-  useUpdateBrandMutation, 
+  useUpdateBrandMutation,
   useDeleteBrandMutation,
   useGetBrandMetadataQuery,
   useUpdatebrandFieldMutation,
