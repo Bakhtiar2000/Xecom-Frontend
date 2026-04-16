@@ -14,7 +14,7 @@ export default function MyOrderPage() {
 
   return (
     <>
-      <div className="p-5">
+      <div className="container space-y-8 py-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <Title mainTitle="My Order" subTitle="Manage all your Order in one place." />
         </div>

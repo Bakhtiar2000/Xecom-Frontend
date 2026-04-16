@@ -3,8 +3,6 @@
 import { useState, useRef, useEffect, useCallback, useId } from "react";
 import { Check, ChevronDown, X, Search, Loader2 } from "lucide-react";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 export interface SelectOption {
   value: string | number;
   label: string;
@@ -20,6 +18,7 @@ export interface CustomSelectProps {
     fields?: string[];
   }) => Promise<{ data: SelectOption[]; hasMore: boolean; meta?: any }>;
   fields?: string[];
+  extraParams?: Record<string, string | number>; // ← NEW
   mapToOption?: (item: any) => SelectOption;
   value?: SelectOption | SelectOption[] | null;
   onChange?: (value: SelectOption | SelectOption[] | null) => void;
@@ -33,12 +32,11 @@ export interface CustomSelectProps {
   error?: string;
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export const CustomSelect = ({
   endpoint,
   fetchOptions,
   fields,
+  extraParams = {}, // ← NEW
   mapToOption,
   value,
   onChange,
@@ -66,7 +64,11 @@ export const CustomSelect = ({
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const selectedArray: SelectOption[] = value ? (Array.isArray(value) ? value : [value]) : [];
+  const selectedArray: SelectOption[] = value
+    ? Array.isArray(value)
+      ? value
+      : [value]
+    : [];
 
   // ── Fetch ──────────────────────────────────────────────────────────────────
 
@@ -99,7 +101,12 @@ export const CustomSelect = ({
             fields.forEach((field) => params.append("fields", field));
           }
 
-          // ✅ Append extra params from endpoint URL if any (e.g. ?countryId=xxx)
+          // ← NEW: extraParams prop থেকে append করো
+          Object.entries(extraParams).forEach(([k, v]) =>
+            params.set(k, String(v))
+          );
+
+          // endpoint URL-এ existing query params থাকলে সেগুলোও append করো
           const [baseUrl, existingQuery] = endpoint.split("?");
           const existingParams = new URLSearchParams(existingQuery || "");
           existingParams.forEach((v, k) => params.set(k, v));
@@ -143,10 +150,9 @@ export const CustomSelect = ({
         loadingRef.current = false;
       }
     },
-    [endpoint, fetchOptions, fields, mapToOption, paginated]
+    [endpoint, fetchOptions, fields, extraParams, mapToOption, paginated] // ← extraParams added
   );
 
-  // Always keep latest load fn in a ref so effects don't stale-close over it
   const loadRef = useRef(load);
   useEffect(() => {
     loadRef.current = load;
@@ -161,28 +167,40 @@ export const CustomSelect = ({
     }
   }, [open, searchable]);
 
-  // KEY FIX: endpoint change → reset options + re-fetch immediately (don't wait for open)
+  // endpoint পরিবর্তন হলে reset + re-fetch
   const prevEndpointRef = useRef<string | undefined>(undefined);
   useEffect(() => {
-    // Skip very first render
     if (prevEndpointRef.current === undefined) {
       prevEndpointRef.current = endpoint;
       return;
     }
-    // Only act when endpoint actually changed
     if (prevEndpointRef.current === endpoint) return;
     prevEndpointRef.current = endpoint;
 
-    // Reset stale options immediately so dropdown doesn't flash old data
     setOptions([]);
     setPageNumber(1);
     setHasMore(true);
     setSearchTerm("");
-    loadingRef.current = false; // release any in-flight lock
+    loadingRef.current = false;
 
-    // Always pre-fetch so data is ready when user opens dropdown
     loadRef.current("", 1, true);
   }, [endpoint]);
+
+  // ← NEW: extraParams পরিবর্তন হলে reset + re-fetch
+  const extraParamsKey = JSON.stringify(extraParams);
+  const prevExtraParamsRef = useRef<string>("");
+  useEffect(() => {
+    if (prevExtraParamsRef.current === extraParamsKey) return;
+    prevExtraParamsRef.current = extraParamsKey;
+
+    setOptions([]);
+    setPageNumber(1);
+    setHasMore(true);
+    setSearchTerm("");
+    loadingRef.current = false;
+
+    loadRef.current("", 1, true);
+  }, [extraParamsKey]);
 
   // ── Debounced search ───────────────────────────────────────────────────────
 
@@ -196,10 +214,12 @@ export const CustomSelect = ({
   // ── Infinite scroll ────────────────────────────────────────────────────────
 
   const handleScroll = useCallback(() => {
-    if (!paginated || !listRef.current || loadingRef.current || !hasMore) return;
+    if (!paginated || !listRef.current || loadingRef.current || !hasMore)
+      return;
 
     const el = listRef.current;
-    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    const distanceFromBottom =
+      el.scrollHeight - el.scrollTop - el.clientHeight;
 
     if (distanceFromBottom < 100) {
       load(searchTerm, pageNumber + 1, false);
@@ -208,7 +228,8 @@ export const CustomSelect = ({
 
   // ── Selection ──────────────────────────────────────────────────────────────
 
-  const isSelected = (opt: SelectOption) => selectedArray.some((s) => s.value === opt.value);
+  const isSelected = (opt: SelectOption) =>
+    selectedArray.some((s) => s.value === opt.value);
 
   const toggleOption = (opt: SelectOption) => {
     if (!multiSelect) {
@@ -245,12 +266,19 @@ export const CustomSelect = ({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   const triggerLabel =
-    selectedArray.length === 0 ? placeholder : !multiSelect ? selectedArray[0].label : null;
+    selectedArray.length === 0
+      ? placeholder
+      : !multiSelect
+        ? selectedArray[0].label
+        : null;
 
   return (
     <div ref={containerRef} className={`relative w-full ${className}`}>
       {label && (
-        <label htmlFor={uid} className="text-foreground mb-1.5 block text-sm font-medium">
+        <label
+          htmlFor={uid}
+          className="text-foreground mb-1.5 block text-sm font-medium"
+        >
           {label}
         </label>
       )}
@@ -266,7 +294,9 @@ export const CustomSelect = ({
           "bg-background rounded-md border text-left text-sm",
           "focus-visible:ring-ring transition-colors focus:outline-none focus-visible:ring-2",
           open ? "border-ring shadow-sm" : "border-input",
-          disabled ? "cursor-not-allowed opacity-50" : "hover:border-ring/70 cursor-pointer",
+          disabled
+            ? "cursor-not-allowed opacity-50"
+            : "hover:border-ring/70 cursor-pointer",
           error ? "border-destructive" : "",
         ].join(" ")}
       >
@@ -293,7 +323,13 @@ export const CustomSelect = ({
         ) : null}
 
         {triggerLabel && (
-          <span className={selectedArray.length === 0 ? "text-muted-foreground flex-1" : "flex-1"}>
+          <span
+            className={
+              selectedArray.length === 0
+                ? "text-muted-foreground flex-1"
+                : "flex-1"
+            }
+          >
             {triggerLabel}
           </span>
         )}
@@ -333,7 +369,9 @@ export const CustomSelect = ({
                 placeholder="Search..."
                 className="placeholder:text-muted-foreground flex-1 bg-transparent text-sm outline-none"
               />
-              {loading && <Loader2 className="text-muted-foreground h-3.5 w-3.5 animate-spin" />}
+              {loading && (
+                <Loader2 className="text-muted-foreground h-3.5 w-3.5 animate-spin" />
+              )}
             </div>
           )}
 
@@ -348,7 +386,9 @@ export const CustomSelect = ({
                 Loading...
               </div>
             ) : options.length === 0 ? (
-              <div className="text-muted-foreground py-8 text-center text-sm">No results found</div>
+              <div className="text-muted-foreground py-8 text-center text-sm">
+                No results found
+              </div>
             ) : (
               <>
                 {options.map((opt) => {
@@ -375,8 +415,12 @@ export const CustomSelect = ({
                               : "",
                         ].join(" ")}
                       >
-                        {selected && multiSelect && <Check className="h-3 w-3" />}
-                        {selected && !multiSelect && <Check className="text-primary h-4 w-4" />}
+                        {selected && multiSelect && (
+                          <Check className="h-3 w-3" />
+                        )}
+                        {selected && !multiSelect && (
+                          <Check className="text-primary h-4 w-4" />
+                        )}
                       </span>
                       <span className="flex-1 truncate">{opt.label}</span>
                     </button>

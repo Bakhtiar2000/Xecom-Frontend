@@ -248,7 +248,7 @@ export default function MyReviewsPage() {
     }
   };
 
-  console.log("m,y re", myReviews);
+  console.log("m,y re", myReviews); 
 
   return (
     <section className="container space-y-8 py-10">
